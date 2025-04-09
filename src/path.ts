@@ -1,7 +1,7 @@
-const ticketsPath = () => '/tickets'
+const ticketsPath = () => "/tickets";
 
-function ticketPath(tickeId: string):string {
-    return `${ticketPath}/${tickeId}`
+function ticketPath(tickeId: string): string {
+  return `${ticketsPath()}/${tickeId}`;
 }
 
-export {ticketPath,ticketsPath}
+export { ticketPath, ticketsPath };
