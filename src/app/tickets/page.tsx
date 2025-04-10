@@ -1,23 +1,17 @@
-import Link from "next/link";
-import { initialTickets } from "@/data";
-import { ticketPath } from "@/path";
-
+import { Suspense } from "react";
+import Heading from "@/components/heading";
+import Spinner from "@/components/Spinner";
+import TicketList from "@/features/ticket/components/ticket-list";
 const TicketsPage = () => {
-  const tickets = initialTickets.map((ticket) => (
-    <article key={ticket.id}>
-      <h4>{ticket.title}</h4>
-      <p>{ticket.status}</p>
-      <Link className="underline cursor-pointer " href={ticketPath(ticket.id)}>
-        Go to ticket
-      </Link>
-    </article>
-  ));
   return (
-    <main>
-      <h2 className="text-3xl">Tickets Page</h2>
-      <Link href={"/"}>Home</Link>
-      <section>{tickets}</section>
-    </main>
+    <div className="flex-1 flex flex-col gap-y-8">
+      <Heading title="Tickets" description="All your tickets at one place" />
+      <div className="flex-1 flex flex-col items-center gap-y-4">
+        <Suspense fallback={<Spinner />}>
+          <TicketList />
+        </Suspense>
+      </div>
+    </div>
   );
 };
 
