@@ -1,9 +1,6 @@
-import Link from "next/link";
-import Placeholder from "@/components/Placeholder";
-import { Button } from "@/components/ui/button";
+import { notFound } from "next/navigation";
 import { getTicket } from "@/features/queries/get-ticket";
-import TicketItem from "@/features/ticket/components/ticket-item";
-import { ticketsPath } from "@/path";
+import TicketItem from "@/features/ticket/ticket-item";
 
 type TicketParams = {
   params: Promise<{
@@ -16,22 +13,23 @@ const Ticket = async ({ params }: TicketParams) => {
 
   const ticket = await getTicket(param.ticketId);
 
-  if (!ticket)
-    return (
-      <Placeholder
-        label="Ticket Not Found"
-        button={
-          <Button variant="outline">
-            <Link href={ticketsPath()}>Go to tickets</Link>
-          </Button>
-        }
-      />
-    );
+  if (!ticket) notFound();
+
   return (
-    <div className="flex justify-center animate-fade-from-top">
-      <TicketItem ticket={ticket} isDetail={true} />
-    </div>
+    <>
+      <div className="flex justify-center animate-fade-from-top">
+        <TicketItem ticket={ticket} isDetail={true} />
+      </div>
+    </>
   );
 };
+
+// export async function generateStaticParams() {
+//   const tickets = await getTickets();
+
+//   return tickets.map((ticket) => ({
+//     ticketId: ticket.id,
+//   }));
+// }
 
 export default Ticket;

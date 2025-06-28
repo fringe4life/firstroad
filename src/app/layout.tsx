@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Toaster } from "sonner";
 import Header from "@/components/Header";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 const inter = Inter({
@@ -25,6 +26,9 @@ export default function RootLayout({
           <main className=" flex flex-col flex-1 min-h-screen overflow-y-auto overflow-x-hidden px-8 py-24">
             {children}
           </main>
+          <Toaster expand />
+
+         
         </ThemeProvider>
       </body>
     </html>
