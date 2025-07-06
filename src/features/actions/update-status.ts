@@ -5,7 +5,7 @@ import {
   fromErrorToActionState,
   toActionState,
 } from "@/features/utils/to-action-state";
-import { TicketStatus } from "@/generated/prisma";
+import { TicketStatus } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 import { ticketsPath } from "@/path";
 

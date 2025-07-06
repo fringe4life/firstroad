@@ -13,7 +13,7 @@ import {
   ActionState,
   EMPTY_ACTION_STATE,
 } from "@/features/utils/to-action-state";
-import { Ticket } from "@/generated/prisma";
+import type { Ticket } from "@/generated/prisma/client";
 import { fromCent } from "@/utils/currency";
 import DatePicker, { type DateReset } from "../../components/date-picker";
 type TicketUpsertForm = {

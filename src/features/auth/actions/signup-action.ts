@@ -2,7 +2,7 @@
 import { hash } from "@node-rs/argon2";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { z } from "zod";
+import { z } from "zod/v4";
 import {
   ActionState,
   fromErrorToActionState,
@@ -21,18 +21,13 @@ const signUpSchema = z
         (value) => !value.includes(" "),
         "Username cannot contain spaces"
       ),
-    email: z.string().min(1, { message: "Is required" }).max(191).email(),
+    email: z.email().min(1, { message: "Is required" }).max(191),
     password: z.string().min(6).max(191),
     confirmPassword: z.string().min(6).max(191),
   })
-  .superRefine(({ password, confirmPassword }, ctx) => {
-    if (password !== confirmPassword) {
-      ctx.addIssue({
-        code: "custom",
-        message: "Passwords do not match",
-        path: ["confirmPassword"],
-      });
-    }
+  .refine((data) => data.password === data.confirmPassword, {
+    error: "Passwords must match",
+    path: ["confirmPassword"],
   });
 
 export const signUp = async (_actionState: ActionState, formData: FormData) => {
