@@ -1,22 +1,16 @@
-// import type { User  } from "@prisma/client/";
-// import { usePathname } from "next/navigation";
-// import { useEffect, useState } from "react";
-// import { getAuth } from "@/features/queries/get-auth";
-// const useAuth = () => {
-//   const [user, setUser] = useState<User | null>(null);
-//   const [isFetched, setIsFetched] = useState<boolean>(false);
+"use client";
 
-//   const pathname = usePathname();
+import { useSession } from "next-auth/react";
 
-//   useEffect(() => {
-//     const fetchUser = async () => {
-//       const { user } = await getAuth();
-//       setUser(user);
-//       setIsFetched(true);
-//     };
-//     fetchUser();
-//   }, [pathname]);
+const useAuth = () => {
+  const { data: session, status } = useSession();
+  
+  return {
+    user: session?.user ?? null,
+    session: session,
+    isFetched: status !== "loading",
+    isLoading: status === "loading",
+  };
+};
 
-//   return { user, isFetched };
-// };
-// export default useAuth;
+export default useAuth;

@@ -2,7 +2,7 @@
 
 import { Kanban, LucideLogOut } from "lucide-react";
 import Link from "next/link";
-import { signOut } from "@/features/auth/actions/signout";
+import { signOutAction } from "@/features/auth/actions/signout";
 import useAuth from "@/features/auth/hooks/get-auth";
 import { homePath, signInPath, signUpPath, ticketsPath } from "@/path";
 import SubmitButton from "./form/SubmitButton";
@@ -20,7 +20,7 @@ const Header = () => {
       >
         Tickets
       </Link>
-      <form action={signOut}>
+      <form action={signOutAction}>
         <SubmitButton label="Sign Out" icon={<LucideLogOut />} />
       </form>
     </>

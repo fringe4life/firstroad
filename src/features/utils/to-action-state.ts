@@ -1,4 +1,4 @@
-import { ZodError } from "zod";
+import { ZodError } from "zod/v4";
 
 export type ActionState = {
   message: string;
