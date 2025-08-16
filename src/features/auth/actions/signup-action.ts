@@ -73,6 +73,15 @@ export const signUp = async (_actionState: ActionState, formData: FormData) => {
     });
     console.log("✅ User created successfully:", { id: user.id, email: user.email });
 
+    // Create UserInfo for the new user
+    console.log("📋 Creating UserInfo for new user...");
+    const userInfo = await prisma.userInfo.create({
+      data: {
+        userId: user.id,
+      },
+    });
+    console.log("✅ UserInfo created successfully:", { userId: userInfo.userId });
+
     // Sign in the user
     console.log("🔑 Attempting to sign in user...");
     const result = await signIn("credentials", {

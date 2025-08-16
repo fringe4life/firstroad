@@ -1,15 +1,18 @@
 model User {
-  id            String          @id @default(cuid())
+  id            String    @id @default(cuid())
   name          String?
-  email         String          @unique
+  email         String?   @unique
   emailVerified DateTime?
   image         String?
-  password      String?         // For credentials provider
+  password      String?   // For credentials provider
+  
+  // Relations
   accounts      Account[]
   sessions      Session[]
-  // Optional for WebAuthn support
-  Authenticator Authenticator[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  authenticators Authenticator[]
+  userInfo      UserInfo? // One-to-one relationship with UserInfo
+  
+  // Timestamps
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }

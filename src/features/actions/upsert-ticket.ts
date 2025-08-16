@@ -4,18 +4,19 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod/v4";
 import {
-  ActionState,
+  type ActionState,
   fromErrorToActionState,
   toActionState,
 } from "@/features/utils/to-action-state";
 import { prisma } from "@/lib/prisma";
-import { ticketsPath } from "@/path";
+import { signInPath, ticketsPath } from "@/path";
 import { toCent } from "@/utils/currency";
 import { setCookieByKey } from "./cookies";
+import { auth } from "@/app/auth";
 
 const upsertSchema = z.object({
   title: z.string().min(1).max(191),
-  content: z.string().min(1).max(1024),
+  description: z.string().min(1).max(1024),
   deadline: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Is required"),
   bounty: z.coerce.number().positive(),
 });
@@ -26,16 +27,23 @@ const upsertTicket = async (
   formData: FormData
 ): Promise<ActionState> => {
   try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return redirect(signInPath());
+    }
+
     const data = upsertSchema.parse({
       title: formData.get("title"),
-      content: formData.get("content"),
+      description: formData.get("description"),
       deadline: formData.get("deadline"),
       bounty: formData.get("bounty"),
     });
 
     const dbData = {
       ...data,
+      deadline: new Date(data.deadline),
       bounty: toCent(data.bounty),
+      userId: session.user.id,
     };
     await prisma.ticket.upsert({
       where: {

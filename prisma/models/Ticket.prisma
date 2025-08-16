@@ -1,10 +1,16 @@
 model Ticket {
-  id        String       @id @default(cuid())
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
-  title     String
-  content   String       @db.VarChar(1024)
-  status    TicketStatus @default(OPEN)
-  deadline  String
-  bounty    Int
+  id          String      @id @default(cuid())
+  title       String
+  description String      @default("No description provided")
+  status      TicketStatus @default(OPEN)
+  bounty      Int
+  
+  // Relations
+  userId      String
+  userInfo    UserInfo @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  
+  // Timestamps
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  deadline    DateTime    
 }

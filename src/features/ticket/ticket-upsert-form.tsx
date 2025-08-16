@@ -48,15 +48,15 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertForm) => {
         defaultValue={(state?.payload?.get("title") as string) ?? ticket?.title}
       />
       <FieldError actionState={state} name="title" />
-      <Label htmlFor="content">Content</Label>
+      <Label htmlFor="description">Description</Label>
       <Textarea
-        name="content"
-        id="content"
+        name="description"
+        id="description"
         defaultValue={
-          (state.payload?.get("content") as string) ?? ticket?.content
+          (state.payload?.get("description") as string) ?? ticket?.description
         }
       />
-      <FieldError actionState={state} name="content" />
+      <FieldError actionState={state} name="description" />
       <div className="flex gap-x-2 mb-1">
         <div className="flex-1">
           <Label htmlFor="deadline" className="mb-1">
@@ -90,7 +90,6 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertForm) => {
           <FieldError actionState={state} name="bounty" />
         </div>
       </div>
-      <FieldError actionState={state} name="content" />
       <SubmitButton label={ticket ? "Edit ticket" : "Create ticket"} />
     </Form>
   );

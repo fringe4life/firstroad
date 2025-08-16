@@ -15,19 +15,24 @@ const signInSchema = z.object({
 
 const signin = async (state: ActionState | undefined, formData: FormData) => {
   console.log("🚀 Sign-in process started");
+  console.log("📅 Timestamp:", new Date().toISOString());
   
   try {
     console.log("📝 Parsing form data...");
     const formDataObj = Object.fromEntries(formData);
     console.log("📋 Form data received:", { 
       email: formDataObj.email,
-      hasPassword: !!formDataObj.password
+      hasPassword: !!formDataObj.password,
+      formDataKeys: Array.from(formData.keys())
     });
 
     const { email, password } = signInSchema.parse(formDataObj);
     console.log("✅ Form data validation passed");
+    console.log("📧 Email being used:", email);
+    console.log("🔐 Password length:", password.length);
 
     console.log("🔑 Attempting to sign in with Auth.js...");
+    console.log("🎯 Redirect target:", ticketsPath());
     
     try {
       // Use redirect: true to let Auth.js handle the redirect properly
@@ -42,18 +47,26 @@ const signin = async (state: ActionState | undefined, formData: FormData) => {
       console.log("✅ Sign-in successful");
     } catch (error) {
       console.log("📊 Sign-in result:", error);
+      console.log("📊 Error type:", typeof error);
+      console.log("📊 Error constructor:", error?.constructor?.name);
       
       // Check if this is a successful redirect (not an error)
       if (error && typeof error === 'object' && 'digest' in error) {
         const digest = error.digest as string;
+        console.log("📊 Error digest:", digest);
         if (digest.includes('NEXT_REDIRECT')) {
           console.log("✅ Sign-in successful - redirect detected");
+          console.log("🔄 Returning early due to redirect");
           // This is a successful redirect, not an error
           return;
         }
       }
       
       console.log("❌ Sign-in failed:", error);
+      console.log("❌ Error details:", {
+        message: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : "No stack trace"
+      });
       return toActionState("Incorrect email or password", "ERROR", formData);
     }
   } catch (err) {

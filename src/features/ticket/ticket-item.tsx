@@ -14,12 +14,24 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { TICKET_ICONS } from "@/features/constants";
-import { Ticket } from "@/generated/prisma";
+import type { Prisma } from "@prisma/client";
 import { ticketEditPath, ticketPath } from "@/path";
 import { toCurrencyFromCent } from "@/utils/currency";
 import TicketMoreMenu from "./ticket-more-menu";
 export type TicketItemProps = {
-  ticket: Ticket;
+  ticket: Prisma.TicketGetPayload<{
+    include: {
+      userInfo: {
+        include: {
+          user: {
+            select: {
+              name: true;
+            };
+          };
+        };
+      };
+    };
+  }>;
   isDetail?: boolean;
 };
 const TicketItem = async ({ ticket, isDetail = false }: TicketItemProps) => {
@@ -67,11 +79,11 @@ const TicketItem = async ({ ticket, isDetail = false }: TicketItemProps) => {
               "line-clamp-3": !isDetail,
             })}
           >
-            {ticket.content}
+            {ticket.description}
           </span>
         </CardContent>
         <CardFooter className="flex justify-between">
-          <p className="text-sm text-muted-foreground">{ticket.deadline}</p>
+          <p className="text-sm text-muted-foreground">{ticket.deadline.toLocaleDateString()} by {ticket.userInfo.user.name}</p>
           <p className="text-sm text-muted-foreground">
             {toCurrencyFromCent(ticket.bounty)}
           </p>
