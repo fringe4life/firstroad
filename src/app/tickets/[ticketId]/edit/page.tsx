@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { CardCompact } from "@/components/card-compact";
 import { getTicket } from "@/features/queries/get-ticket";
 import TicketUpsertForm from "@/features/ticket/ticket-upsert-form";
+import { auth } from "@/app/auth";
+import { isOwner } from "@/features/auth/utils/owner";
 
 type TicketEditPageProps = {
   params: Promise<{
@@ -11,10 +13,12 @@ type TicketEditPageProps = {
 
 const TicketEditPage = async ({ params }: TicketEditPageProps) => {
   const param = await params;
+  const session = await auth();
   const ticket = await getTicket(param.ticketId);
-  console.log(ticket);
+  const isTicketOwner = isOwner(session, {userId: ticket?.userId})
 
-  if (!ticket) notFound();
+  if (!ticket || !isTicketOwner) notFound();
+  
   return (
     <div className="flex-1 flex flex-col justfy-center items-center">
       <CardCompact

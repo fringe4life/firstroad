@@ -21,6 +21,6 @@ export async function getAuthOrRedirect(){
     console.log("🎯 Redirect target:", signInPath());
     redirect(signInPath());
   }
-  
   console.log("✅ getAuthOrRedirect - Authentication successful");
+  return session
 }

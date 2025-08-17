@@ -1,8 +1,12 @@
 import { getTickets } from "@/features/queries/get-tickets";
 import TicketItem from "./ticket-item";
 
-const TicketList = async () => {
-  const tickets = await getTickets();
+interface TicketListProps {
+  userId?: string;
+}
+
+const TicketList = async ({ userId }: TicketListProps) => {
+  const tickets = await getTickets(userId);
   return (
     <>
       {tickets.map((ticket) => (

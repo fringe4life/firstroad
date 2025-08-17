@@ -13,6 +13,8 @@ import { signInPath, ticketsPath } from "@/path";
 import { toCent } from "@/utils/currency";
 import { setCookieByKey } from "./cookies";
 import { auth } from "@/app/auth";
+import { getAuthOrRedirect } from "../auth/queries/get-auth-or-redirect";
+import { isOwner } from "../auth/utils/owner";
 
 const upsertSchema = z.object({
   title: z.string().min(1).max(191),
@@ -26,10 +28,17 @@ const upsertTicket = async (
   _state: ActionState,
   formData: FormData
 ): Promise<ActionState> => {
+  const session = await getAuthOrRedirect();
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return redirect(signInPath());
+
+    if(id){
+      const ticket = await prisma.ticket.findUnique({
+          where: {
+            id
+          }
+      })
+
+      if(!ticket || !isOwner(session, ticket)) return toActionState("Ticket Not Found", "ERROR");
     }
 
     const data = upsertSchema.parse({
@@ -43,7 +52,7 @@ const upsertTicket = async (
       ...data,
       deadline: new Date(data.deadline),
       bounty: toCent(data.bounty),
-      userId: session.user.id,
+      userId: session.user?.id,
     };
     await prisma.ticket.upsert({
       where: {

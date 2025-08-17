@@ -18,6 +18,8 @@ import type { Prisma } from "@prisma/client";
 import { ticketEditPath, ticketPath } from "@/path";
 import { toCurrencyFromCent } from "@/utils/currency";
 import TicketMoreMenu from "./ticket-more-menu";
+import { isOwner } from "../auth/utils/owner";
+import { auth } from "@/app/auth";
 export type TicketItemProps = {
   ticket: Prisma.TicketGetPayload<{
     include: {
@@ -35,6 +37,11 @@ export type TicketItemProps = {
   isDetail?: boolean;
 };
 const TicketItem = async ({ ticket, isDetail = false }: TicketItemProps) => {
+
+  const session = await auth()
+
+  const isTicketOwner = isOwner(session, ticket)
+
   const detailButton = (
     <Button variant="outline" size="icon" asChild>
       <Link prefetch href={ticketPath(ticket.id)}>
@@ -43,13 +50,13 @@ const TicketItem = async ({ ticket, isDetail = false }: TicketItemProps) => {
     </Button>
   );
 
-  const editButton = (
+  const editButton = isTicketOwner ? (
     <Button variant="outline" size="icon" asChild>
       <Link prefetch href={ticketEditPath(ticket.id)}>
         <LucidePencil className="size-4" />
       </Link>
     </Button>
-  );
+  ) : null;
 
   const trigger = (
     <Button variant="outline" size="icon">
@@ -57,7 +64,7 @@ const TicketItem = async ({ ticket, isDetail = false }: TicketItemProps) => {
     </Button>
   );
 
-  const moreMenu = <TicketMoreMenu ticket={ticket} trigger={trigger} />;
+  const moreMenu = isTicketOwner ? <TicketMoreMenu ticket={ticket} trigger={trigger} /> : null;
 
   return (
     <div

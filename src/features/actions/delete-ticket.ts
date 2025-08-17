@@ -6,14 +6,31 @@ import { fromErrorToActionState } from "@/features/utils/to-action-state";
 import { prisma } from "@/lib/prisma";
 import { ticketsPath } from "@/path";
 import { setCookieByKey } from "./cookies";
+import { getAuthOrRedirect } from "../auth/queries/get-auth-or-redirect";
+import { isOwner } from "../auth/utils/owner";
 
 export const deleteTicket = async (id: string) => {
+  const session = await getAuthOrRedirect();
+  
   try {
-    await prisma.ticket.delete({ where: { id } });
+    await prisma.$transaction(async (tx) => {
+      const ticket = await tx.ticket.findUnique({
+        where: {
+          id,
+        }
+      });
+
+      if(!ticket || !isOwner(session, ticket)) {
+        throw new Error("Ticket Not Found");
+      }
+
+      await tx.ticket.delete({ where: { id } });
+    });
   } catch (err) {
     return fromErrorToActionState(err);
   }
+  
   revalidatePath(ticketsPath());
-  await setCookieByKey("toast", "Ticket deleted");
+  setCookieByKey("toast", "Ticket deleted");
   redirect(ticketsPath());
 };
