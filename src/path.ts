@@ -13,6 +13,9 @@ const ticketEditPath = (ticketId: string): string => {
 const signInPath = () => "/sign-in";
 const signUpPath = () => "/sign-up";
 const passwordForgotPath = () => "/password-forgot";
+
+const accountProfilePath = () => '/account/profile'
+const accountPasswordPath = () => '/account/password'
 export {
   homePath,
   passwordForgotPath,
@@ -21,4 +24,6 @@ export {
   ticketEditPath,
   ticketPath,
   ticketsPath,
+  accountProfilePath,
+  accountPasswordPath,
 };

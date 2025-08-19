@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "sonner";
-import Header from "@/components/Header";
+import Header from "@/app/_navigation/header";
 import { ThemeProvider } from "@/components/theme/theme-provider";
-import { auth } from "./auth";
+import Sidebar from "@/app/_navigation/sidebar/components/sidebar";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -21,17 +21,18 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
-
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} antialiased`}>
-        <SessionProvider session={session}>
+        <SessionProvider>
           <ThemeProvider>
             <Header />
-            <main className=" flex flex-col flex-1 min-h-screen overflow-y-auto overflow-x-hidden px-8 py-24">
-              {children}
-            </main>
+            <div className="flex h-screen overflow-hidden border-collapse">
+              <Sidebar />
+              <main className="flex flex-col flex-1 min-h-screen overflow-y-auto overflow-x-hidden px-8 py-24">
+                {children}
+              </main>
+            </div>
             <Toaster expand />
           </ThemeProvider>
         </SessionProvider>
