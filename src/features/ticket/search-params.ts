@@ -2,5 +2,8 @@
 
 
 export type SearchParams = {
-    searchParams: Promise<{ search: string | undefined }>
+    searchParams: Promise<{ 
+        search: string | undefined;
+        sort: string | undefined;
+    }>
 }

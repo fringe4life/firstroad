@@ -31,11 +31,11 @@ const SortSelect = ({ options, defaultValue }: SortSelectProps) => {
         })
     }
 
-    return  <Select defaultValue={searchParams.get('sort') ?? defaultValue} onValueChange={handleChange}>
-    <SelectTrigger className="w-[180px]">
+    return  <Select defaultValue={searchParams.get('sort')?.toString() ?? defaultValue} onValueChange={handleChange}>
+    <SelectTrigger className="w-full">
       <SelectValue placeholder="Sort by" />
     </SelectTrigger>
-    <SelectContent>
+    <SelectContent >
       <SelectGroup>
         {options.map((option) => (
             <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>

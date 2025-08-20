@@ -7,14 +7,14 @@ import SortSelect from "@/components/sort-select";
 
 interface TicketListProps {
   userId?: string;
-  search?: Awaited<SearchParams["searchParams"]>["search"];
+  searchParams?: Awaited<SearchParams["searchParams"]>;
 }
 
-const TicketList = async ({ userId, search }: TicketListProps) => {
-  const tickets = await getTickets(userId, search);
+const TicketList = async ({ userId, searchParams }: TicketListProps) => {
+  const tickets = await getTickets(userId, searchParams);
   return (
     <div className='grid flex-1 justify-items-center gap-y-4 animate-fade-from-top'>
-      <div className="w-full max-w-105 grid grid-flow-col gap-x-2">
+      <div className="w-full max-w-105 grid grid-flow-col gap-x-2 grid-cols-2">
         <SearchInput placeholder="Search tickets ..." />
         <SortSelect 
         defaultValue="newest"

@@ -7,12 +7,13 @@ import Spinner from "@/components/Spinner";
 import TicketList from "@/features/ticket/ticket-list";
 import TicketUpsertForm from "@/features/ticket/ticket-upsert-form";
 import { auth } from "@/app/auth";
+import type { SearchParams } from "@/features/ticket/search-params";
 
-const TicketsPage = async () => {
+const TicketsPage = async ({ searchParams }: SearchParams) => {
   const session = await auth();
+  const params = await searchParams;
   
   return (
-    <>
       <div className="flex-1 flex flex-col gap-y-8">
         <Heading title="My Tickets" description="All your tickets at one place" />
         <CardCompact
@@ -26,13 +27,11 @@ const TicketsPage = async () => {
             fallback={<Placeholder label={"please try again later"} />}
           >
             <Suspense fallback={<Spinner />}>
-              <TicketList userId={session?.user?.id} />
+              <TicketList userId={session?.user?.id} searchParams={params} />
             </Suspense>
           </ErrorBoundary>
         </div>
       </div>
-      {/* <RedirectToast /> */}
-    </>
   );
 };
 
