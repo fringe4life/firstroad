@@ -59,6 +59,15 @@ const signin = async (state: ActionState | undefined, formData: FormData) => {
     console.log("💥 Error type:", typeof err);
     console.log("💥 Error message:", err instanceof Error ? err.message : String(err));
     console.log("💥 Error stack:", err instanceof Error ? err.stack : "No stack trace");
+    
+    // Handle specific Auth.js credential errors
+    if (err && typeof err === "object" && "type" in err) {
+      const authError = err as any;
+      if (authError.type === "CredentialsSignin") {
+        return toActionState("Invalid email or password", "ERROR", formData);
+      }
+    }
+    
     return fromErrorToActionState(err, formData);
   }
 };

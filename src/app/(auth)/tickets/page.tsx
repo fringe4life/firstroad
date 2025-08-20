@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { CardCompact } from "@/components/card-compact";
 import Heading from "@/components/heading";
-import Placeholder from "@/components/Placeholder";
+import Placeholder from "@/components/placeholder";
 import Spinner from "@/components/Spinner";
 import TicketList from "@/features/ticket/ticket-list";
 import TicketUpsertForm from "@/features/ticket/ticket-upsert-form";

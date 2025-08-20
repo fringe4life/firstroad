@@ -1,7 +1,7 @@
 "use client";
 
 import { TicketX } from "lucide-react";
-import Placeholder from "@/components/Placeholder";
+import Placeholder from "@/components/placeholder";
 export default function Error({ error }: { error: Error }) {
   return (
     <Placeholder
