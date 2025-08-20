@@ -1,22 +1,25 @@
-import Heading from "@/components/heading";
+import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
-import TicketList from "@/features/ticket/ticket-list";
+import Heading from "@/components/heading";
 import Spinner from "@/components/Spinner";
-import type { SearchParams } from "@/features/ticket/search-params";
+import TicketList from "@/features/ticket/ticket-list";
 
-const HomePage = async ({searchParams}: SearchParams) => {
-
-  const params = await searchParams;
-  console.log(params);
-  
-  return (
-    <div className="flex flex-col gap-y-8">
-      <Heading title="All Tickets" description="Tickets by everyone at one place" />
-      <Suspense fallback={<Spinner />}>
-          <TicketList searchParams={params} />
-      </Suspense>
-    </div>
-  );
+const HomePage = async ({
+	searchParams,
+}: {
+	searchParams: Promise<SearchParams>;
+}) => {
+	return (
+		<div className="flex flex-col gap-y-8">
+			<Heading
+				title="All Tickets"
+				description="Tickets by everyone at one place"
+			/>
+			<Suspense fallback={<Spinner />}>
+				<TicketList searchParams={searchParams} />
+			</Suspense>
+		</div>
+	);
 };
 
 export default HomePage;

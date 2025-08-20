@@ -1,48 +1,58 @@
-'use client'
+"use client";
 
-import type { ChangeEvent } from "react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./ui/select"
+import { useQueryState } from "nuqs";
+import { useTransition } from "react";
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "./ui/select";
 
 interface Option {
-    label: string;
-    value: string;
+	label: string;
+	value: string;
 }
 
 interface SortSelectProps {
-    options: Option[];
-    defaultValue: string;
+	options: Option[];
+	defaultValue: string;
 }
 
 const SortSelect = ({ options, defaultValue }: SortSelectProps) => {
-    const searchParams = useSearchParams();
-    const pathName = usePathname();
-    const router = useRouter()
-    const handleChange = (value: string): void => {
-        const params = new URLSearchParams(searchParams)
+	const [isPending, startTransition] = useTransition();
+	const [sort, setSort] = useQueryState("sort", {
+		defaultValue,
+		clearOnDefault: false,
+		shallow: false,
+		startTransition,
+	});
 
-        if(value !== defaultValue){
-            params.set('sort', value)
-        } else {
-            params.delete('sort')
-        }
-        router.replace(`${pathName}?${params.toString()}`, {
-            scroll: false
-        })
-    }
+	const handleChange = (value: string): void => {
+		setSort(value === defaultValue ? null : value);
+	};
 
-    return  <Select defaultValue={searchParams.get('sort')?.toString() ?? defaultValue} onValueChange={handleChange}>
-    <SelectTrigger className="w-full">
-      <SelectValue placeholder="Sort by" />
-    </SelectTrigger>
-    <SelectContent >
-      <SelectGroup>
-        {options.map((option) => (
-            <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-        ))}
-      </SelectGroup>
-    </SelectContent>
-  </Select>
-}
+	return (
+		<Select
+			value={sort || defaultValue}
+			onValueChange={handleChange}
+		>
+			<SelectTrigger className="w-full">
+				<SelectValue placeholder="Sort by" />
+			</SelectTrigger>
+			<SelectContent>
+				<SelectGroup>
+					{options.map((option) => (
+						<SelectItem key={option.value} value={option.value}>
+							{option.label}
+						</SelectItem>
+					))}
+				</SelectGroup>
+			</SelectContent>
+		</Select>
+	);
+};
 
 export default SortSelect;

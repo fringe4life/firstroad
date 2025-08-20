@@ -1,40 +1,44 @@
+import type { Prisma } from "@prisma/client";
+import type { SearchParams } from "nuqs/server";
 import { prisma } from "@/lib/prisma";
-import type { SearchParams } from "../ticket/search-params";
+import { searchParamsCache } from "../ticket/search-params";
 
 export const getTickets = async (
-  userId?: string, 
-  searchParams?: Awaited<SearchParams["searchParams"]>
+	userId?: string,
+	searchParams?: Promise<SearchParams>,
 ) => {
-  const { search, sort } = searchParams || {};
-  
-  // Build orderBy based on sort parameter
-  let orderBy: any = { createdAt: "desc" }; // default
-  
-  if (sort === "bounty") {
-    orderBy = { bounty: "desc" };
-  } else if (sort === "newest") {
-    orderBy = { createdAt: "desc" };
-  }
+	const { search, sort } = searchParams
+		? await searchParamsCache.parse(searchParams)
+		: { search: "", sort: "newest" };
 
-  return await prisma.ticket.findMany({
-    where: {
-      userId: userId,
-      title:  {
-        contains: search,
-        mode: "insensitive",
-      },
-    },
-    include: {
-      userInfo: {
-        include: {
-          user: {
-            select: {
-              name: true,
-            },
-          },
-        },
-      },
-    },
-    orderBy,
-  });
+	// Build orderBy based on sort parameter
+	let orderBy: Prisma.TicketOrderByWithRelationInput = { createdAt: "desc" }; // default
+
+	if (sort === "bounty") {
+		orderBy = { bounty: "desc" };
+	}
+
+	return await prisma.ticket.findMany({
+		where: {
+			userId: userId,
+			...(search && {
+				title: {
+					contains: search,
+					mode: "insensitive",
+				},
+			}),
+		},
+		include: {
+			userInfo: {
+				include: {
+					user: {
+						select: {
+							name: true,
+						},
+					},
+				},
+			},
+		},
+		orderBy,
+	});
 };
