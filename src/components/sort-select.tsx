@@ -22,7 +22,7 @@ interface SortSelectProps {
 }
 
 const SortSelect = ({ options, defaultValue }: SortSelectProps) => {
-	const [isPending, startTransition] = useTransition();
+	const [_, startTransition] = useTransition();
 	const [sort, setSort] = useQueryState("sort", {
 		defaultValue,
 		clearOnDefault: false,

@@ -6,7 +6,7 @@ import { useTransition } from "react";
 import { Input } from "./ui/input";
 
 const SearchInput = (props: React.ComponentProps<typeof Input>) => {
-	const [isPending, startTransition] = useTransition();
+	const [_, startTransition] = useTransition();
 	const [search, setSearch] = useQueryState("search", {
 		defaultValue: "",
 		clearOnDefault: false,

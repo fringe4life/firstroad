@@ -1,6 +1,3 @@
-
-
-
 import { createSearchParamsCache, parseAsString } from "nuqs/server";
 
 export const searchParamsParsers = {
@@ -9,10 +6,3 @@ export const searchParamsParsers = {
 };
 
 export const searchParamsCache = createSearchParamsCache(searchParamsParsers);
-
-export type SearchParams = {
-	searchParams: Promise<{ 
-		search: string;
-		sort: string;
-	}>;
-};
