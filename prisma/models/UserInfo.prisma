@@ -1,7 +1,8 @@
 model UserInfo {
-  userId    String   @id
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @id
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Relations
-  tickets   Ticket[] // One-to-many relationship with tickets
+  tickets  Ticket[] // One-to-many relationship with tickets
+  comments Comment[]
 }
