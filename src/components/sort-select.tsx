@@ -20,10 +20,13 @@ interface SortSelectProps {
 	options: SortOption[];
 	value: SortObject;
 	onValueChange: (sort: SortObject) => void;
-	placeholder?: string;
 }
 
-const SortSelect = ({ options, value, onValueChange, placeholder = "Sort by" }: SortSelectProps) => {
+function createKey(option: SortOption | SortObject){
+	return `${option.sortKey}_${option.sortValue}`;
+}	
+
+const SortSelect = ({ options, value, onValueChange }: SortSelectProps) => {
 
 	const handleSortChange = (compositeKey: string) => {
 		const [sortKey, sortValue] = compositeKey.split("_");
@@ -31,14 +34,14 @@ const SortSelect = ({ options, value, onValueChange, placeholder = "Sort by" }: 
 	};
 
 	return (
-		<Select value={`${value.sortKey}_${value.sortValue}`} onValueChange={handleSortChange}>
+		<Select value={createKey(value)} onValueChange={handleSortChange}>
 			<SelectTrigger className="w-full">
-				<SelectValue placeholder={placeholder} />
+				<SelectValue />
 			</SelectTrigger>
 			<SelectContent>
 				<SelectGroup>
 						{options.map((option) => (
-							<SelectItem key={`${option.sortKey}_${option.sortValue}`} value={`${option.sortKey}_${option.sortValue}`}>
+							<SelectItem key={createKey(option)} value={createKey(option)}>
 							{option.label}
 						</SelectItem>
 					))}
