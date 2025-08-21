@@ -1,7 +1,5 @@
 "use client";
 
-import { useQueryState } from "nuqs";
-import { useTransition } from "react";
 import {
 	Select,
 	SelectContent,
@@ -9,43 +7,38 @@ import {
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "./ui/select";
+} from "@/components/ui/select";
 
-interface Option {
+export interface SortOption {
 	label: string;
-	value: string;
+	sortKey: string;
+	sortValue: string;
 }
 
+export type SortObject = Omit<SortOption, "label">;
 interface SortSelectProps {
-	options: Option[];
-	defaultValue: string;
+	options: SortOption[];
+	value: SortObject;
+	onValueChange: (sort: SortObject) => void;
+	placeholder?: string;
 }
 
-const SortSelect = ({ options, defaultValue }: SortSelectProps) => {
-	const [_, startTransition] = useTransition();
-	const [sort, setSort] = useQueryState("sort", {
-		defaultValue,
-		clearOnDefault: false,
-		shallow: false,
-		startTransition,
-	});
+const SortSelect = ({ options, value, onValueChange, placeholder = "Sort by" }: SortSelectProps) => {
 
-	const handleChange = (value: string): void => {
-		setSort(value === defaultValue ? null : value);
+	const handleSortChange = (compositeKey: string) => {
+		const [sortKey, sortValue] = compositeKey.split("_");
+		onValueChange({ sortKey, sortValue });
 	};
 
 	return (
-		<Select
-			value={sort || defaultValue}
-			onValueChange={handleChange}
-		>
+		<Select value={`${value.sortKey}_${value.sortValue}`} onValueChange={handleSortChange}>
 			<SelectTrigger className="w-full">
-				<SelectValue placeholder="Sort by" />
+				<SelectValue placeholder={placeholder} />
 			</SelectTrigger>
 			<SelectContent>
 				<SelectGroup>
-					{options.map((option) => (
-						<SelectItem key={option.value} value={option.value}>
+						{options.map((option) => (
+							<SelectItem key={`${option.sortKey}_${option.sortValue}`} value={`${option.sortKey}_${option.sortValue}`}>
 							{option.label}
 						</SelectItem>
 					))}

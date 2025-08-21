@@ -1,0 +1,13 @@
+{
+	"options": {
+		"attributes": ["classList"],
+		"functions": ["clsx", "cva", "tw", "tw.*"]
+	},
+	"linter": {
+		"rules": {
+			"nursery": {
+				"useSortedClasses": "error"
+			}
+		}
+	}
+}

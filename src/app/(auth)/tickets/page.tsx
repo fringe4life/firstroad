@@ -5,8 +5,8 @@ import { auth } from "@/app/auth";
 import { CardCompact } from "@/components/card-compact";
 import Heading from "@/components/heading";
 import Placeholder from "@/components/placeholder";
-import Spinner from "@/components/Spinner";
-import TicketList from "@/features/ticket/ticket-list";
+import Spinner from "@/components/spinner";
+import TicketList from "@/features/ticket/components/ticket-list";
 import TicketUpsertForm from "@/features/ticket/ticket-upsert-form";
 
 const TicketsPage = async ({

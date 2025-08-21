@@ -9,12 +9,11 @@ import {
   toActionState,
 } from "@/features/utils/to-action-state";
 import { prisma } from "@/lib/prisma";
-import { signInPath, ticketsPath } from "@/path";
+import { ticketsPath } from "@/path";
 import { toCent } from "@/utils/currency";
-import { setCookieByKey } from "./cookies";
-import { auth } from "@/app/auth";
-import { getAuthOrRedirect } from "../auth/queries/get-auth-or-redirect";
-import { isOwner } from "../auth/utils/owner";
+import { setCookieByKey } from "@/features/utils/cookies";
+import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
+import { isOwner } from "@/features/auth/utils/owner";
 
 const upsertSchema = z.object({
   title: z.string().min(1).max(191),
@@ -46,13 +45,14 @@ const upsertTicket = async (
       description: formData.get("description"),
       deadline: formData.get("deadline"),
       bounty: formData.get("bounty"),
+      
     });
 
     const dbData = {
       ...data,
       deadline: new Date(data.deadline),
       bounty: toCent(data.bounty),
-      userId: session.user?.id,
+      userId: session.user?.id as string,
     };
     await prisma.ticket.upsert({
       where: {

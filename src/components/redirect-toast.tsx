@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { toast } from "sonner";
-import { consumeCookieByKey } from "@/features/actions/cookies";
+import { consumeCookieByKey } from "@/features/utils/cookies";
 
 const RedirectToast = () => {
   //   const pathname = usePathname();

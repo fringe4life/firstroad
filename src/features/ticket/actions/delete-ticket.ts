@@ -1,17 +1,15 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import {
-  fromErrorToActionState,
-  toActionState,
-  } from "@/features/utils/to-action-state";
-  import type { TicketStatus } from "@prisma/client";
+import { redirect } from "next/navigation";
+import { fromErrorToActionState } from "@/features/utils/to-action-state";
 import { prisma } from "@/lib/prisma";
 import { ticketsPath } from "@/path";
-import { getAuthOrRedirect } from "../auth/queries/get-auth-or-redirect";
-import { isOwner } from "../auth/utils/owner";
+import { setCookieByKey } from "@/features/utils/cookies";
+import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
+import { isOwner } from "@/features/auth/utils/owner";
 
-export const updateStatus = async (newValue: TicketStatus, id: string) => {
+export const deleteTicket = async (id: string) => {
   const session = await getAuthOrRedirect();
   
   try {
@@ -26,17 +24,13 @@ export const updateStatus = async (newValue: TicketStatus, id: string) => {
         throw new Error("Ticket Not Found");
       }
 
-      await tx.ticket.update({
-        where: { id },
-        data: {
-          status: newValue,
-        },
-      });
+      await tx.ticket.delete({ where: { id } });
     });
   } catch (err) {
     return fromErrorToActionState(err);
   }
   
   revalidatePath(ticketsPath());
-  return toActionState("Status updated", "SUCCESS");
+  setCookieByKey("toast", "Ticket deleted");
+  redirect(ticketsPath());
 };

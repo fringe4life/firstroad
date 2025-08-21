@@ -1,8 +1,8 @@
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 import Heading from "@/components/heading";
-import Spinner from "@/components/Spinner";
-import TicketList from "@/features/ticket/ticket-list";
+import Spinner from "@/components/spinner";
+import TicketList from "@/features/ticket/components/ticket-list";
 
 const HomePage = async ({
 	searchParams,
