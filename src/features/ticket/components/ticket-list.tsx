@@ -8,11 +8,11 @@ import TicketSortSelect from "@/features/ticket/components/ticket-select-sort";
 
 interface TicketListProps {
 	userId?: string;
-	searchParams?: Promise<SearchParams>;
+	searchParams: Promise<SearchParams>;
 }
 
 const TicketList = async ({ userId, searchParams }: TicketListProps) => {
-	const tickets = await getTickets(userId, searchParams);
+	const {list: tickets, metadata } = await getTickets(searchParams, userId);
 	return (
 		<div className="grid flex-1 justify-items-center gap-y-4 animate-fade-from-top">
 			<div className="w-full max-w-105 grid grid-flow-col gap-x-2 grid-cols-2">
@@ -38,7 +38,7 @@ const TicketList = async ({ userId, searchParams }: TicketListProps) => {
 				<Placeholder label="No tickets found" />
 			)}
 			<div className="max-w-105 w-full">
-				<TicketPagination />
+				<TicketPagination metadata={metadata} />
 			</div>
 		</div>
 	);

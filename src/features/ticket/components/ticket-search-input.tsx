@@ -1,9 +1,8 @@
 "use client";
 
 import { useQueryState } from "nuqs";
-import type { ChangeEvent } from "react";
 import SearchInput from "@/components/search-input";
-import { searchParser } from "../search-params";
+import { searchParser } from "@/features/ticket/search-params";
 
 interface TicketSearchInputProps {
 	placeholder?: string;
@@ -14,15 +13,10 @@ const TicketSearchInput = ({
 }: TicketSearchInputProps) => {
 	const [search, setSearch] = useQueryState("search", searchParser);
 
-	const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
-		const value = event.target.value;
-		setSearch(value);
-	};
-
 	return (
 		<SearchInput
 			value={search}
-			onChange={handleChange}
+			onChange={setSearch}
 			placeholder={placeholder}
 		/>
 	);

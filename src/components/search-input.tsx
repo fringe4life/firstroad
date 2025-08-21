@@ -1,11 +1,10 @@
 "use client";
 
-import type { ChangeEvent } from "react";
 import { Input } from "./ui/input";
 
 interface SearchInputProps  {
 	value?: string;
-	onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+	onChange: (value: string) => void;
 	placeholder: string;
 }
 
@@ -17,7 +16,7 @@ const SearchInput = ({
 	return (
 		<Input
 			value={value}
-			onChange={onChange}
+			onChange={(event) => onChange(event.target.value)}
 			placeholder={placeholder}
 		/>
 	);
