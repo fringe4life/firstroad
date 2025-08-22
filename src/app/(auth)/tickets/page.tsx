@@ -7,7 +7,7 @@ import Heading from "@/components/heading";
 import Placeholder from "@/components/placeholder";
 import Spinner from "@/components/spinner";
 import TicketList from "@/features/ticket/components/ticket-list";
-import TicketUpsertForm from "@/features/ticket/ticket-upsert-form";
+import TicketUpsertForm from "@/features/ticket/components/ticket-upsert-form";
 
 const TicketsPage = async ({
 	searchParams,

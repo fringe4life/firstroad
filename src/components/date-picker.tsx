@@ -10,7 +10,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Calendar } from "./ui/calendar";
+import { Calendar } from "@/components/ui/calendar";
 
 export type DateReset = {
   reset: () => void;

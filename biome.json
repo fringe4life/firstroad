@@ -1,4 +1,7 @@
 {
+	"organizeImports": {
+		"enabled": true
+	},
 	"options": {
 		"attributes": ["classList"],
 		"functions": ["clsx", "cva", "tw", "tw.*"]

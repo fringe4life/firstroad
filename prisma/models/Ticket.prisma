@@ -1,18 +1,24 @@
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  DONE
+}
+
 model Ticket {
-  id          String      @id @default(cuid())
+  id          String       @id @default(cuid())
   title       String
-  description String      @default("No description provided")
+  description String       @default("No description provided")
   status      TicketStatus @default(OPEN)
   bounty      Int
-  
+
   // Relations
-  userId      String
-  userInfo    UserInfo @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  
+  userId   String
+  userInfo UserInfo @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
   // Timestamps
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  deadline    DateTime    
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deadline  DateTime
 
   comments Comment[]
 }

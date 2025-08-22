@@ -17,14 +17,5 @@ export default defineConfig([
       "simple-import-sort": simpleImportSort,
     },
     files: ["./src/**/*.{ts,tsx}"],
-    rules: {
-      "simple-import-sort/imports": [
-        "error",
-        {
-          groups: [["^\\u0000", "^@?\\w", "^[^.]", "^\\."]],
-        },
-      ],
-      "simple-import-sort/exports": "error",
-    },
   },
 ]);

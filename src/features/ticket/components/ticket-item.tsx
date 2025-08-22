@@ -18,8 +18,10 @@ import {
 import { TICKET_ICONS } from "@/features/constants";
 import { ticketEditPath, ticketPath } from "@/path";
 import { toCurrencyFromCent } from "@/utils/currency";
-import { isOwner } from "../../auth/utils/owner";
-import TicketMoreMenu from "./ticket-more-menu";
+import { isOwner } from "@/features/auth/utils/owner";
+import Comments from "@/features/comment/components/comments";
+import TicketMoreMenu from "@/features/ticket/components/ticket-more-menu";
+
 export type TicketItemProps = {
 	ticket: Prisma.TicketGetPayload<{
 		include: {
@@ -68,12 +70,11 @@ const TicketItem = async ({ ticket, isDetail = false }: TicketItemProps) => {
 	) : null;
 
 	return (
-		<div
-			className={clsx("w-full   flex gap-x-1", {
-				"max-w-120": isDetail,
-				"max-w-105": !isDetail,
-			})}
-		>
+		<div className={clsx("w-full   grid gap-y-4", {
+			"max-w-120": isDetail,
+			"max-w-105": !isDetail,
+		})}>
+		<div className="flex gap-x-2">
 			<Card className="w-full overflow-hidden">
 				<CardHeader>
 					<CardTitle className="flex gap-x-2 items-center">
@@ -114,6 +115,8 @@ const TicketItem = async ({ ticket, isDetail = false }: TicketItemProps) => {
 					</>
 				)}
 			</div>
+			</div>
+			{isDetail ? <Comments ticketId={ticket.id} /> : null}
 		</div>
 	);
 };
