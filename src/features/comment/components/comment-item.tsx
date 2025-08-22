@@ -1,22 +1,16 @@
-"use client";
-
 import { getComments } from "@/features/comment/queries/get-comments";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { formatDistanceToNow } from "date-fns";
-import { Button } from "@/components/ui/button";
-import { LucideTrash } from "lucide-react";
-import useConfirmDialog from "@/components/confirm-dialog";
-import { deleteComment } from "@/features/comment/actions/delete-comment";
-import { useSession } from "next-auth/react";
-import { isOwner } from "@/features/auth/utils/owner";
+import CommentDeleteButton from "./comment-delete-button";
 
-type CommentItemProps ={ comment:    Awaited<ReturnType<typeof getComments>>[number]};
+type CommentItemProps = {
+  comment: Awaited<ReturnType<typeof getComments>>[number];
+  buttons?: React.ReactNode[];
+};
 
-const CommentItem = ({ comment }: CommentItemProps) => {
-  const { data: session } = useSession();
-  const { updatedAt, createdAt, content, userInfo, id } = comment;
-  const isCommentOwner = isOwner(session, comment);
+const CommentItem = ({ comment, buttons = [] }: CommentItemProps) => {
+  const { updatedAt, createdAt, content, userInfo } = comment;
   
   const userName = userInfo?.user?.name || "Anonymous";
   const userInitials = userName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
@@ -28,17 +22,6 @@ const CommentItem = ({ comment }: CommentItemProps) => {
     ? formatDistanceToNow(createdDate, { addSuffix: true })
     : "Unknown time";
   const isEdited = !isNaN(updatedDate.getTime()) && updatedDate.getTime() !== createdDate.getTime();
-
-  const [deleteButton, deleteDialog] = useConfirmDialog({
-    action: deleteComment.bind(null, id),
-    trigger: (
-      <Button variant="outline" size="icon">
-        <LucideTrash className="w-4 aspect-square" />
-      </Button>
-    ),
-    title: "Delete comment",
-    description: "Are you sure you want to delete this comment? This action cannot be undone.",
-  });
 
   return (
     <div className="flex gap-2">
@@ -68,12 +51,10 @@ const CommentItem = ({ comment }: CommentItemProps) => {
          {content}
         </CardContent>
       </Card>
-      {isCommentOwner && (
-        <>
-          {deleteButton}
-          {deleteDialog}
-        </>
-      )}
+      <div className="flex flex-col gap-1">
+        {buttons}
+        
+      </div>
     </div>
   );
 };

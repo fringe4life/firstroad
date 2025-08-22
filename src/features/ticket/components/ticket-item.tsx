@@ -20,6 +20,7 @@ import { ticketEditPath, ticketPath } from "@/path";
 import { toCurrencyFromCent } from "@/utils/currency";
 import { isOwner } from "@/features/auth/utils/owner";
 import Comments from "@/features/comment/components/comments";
+import { getComments } from "@/features/comment/queries/get-comments";
 import TicketMoreMenu from "@/features/ticket/components/ticket-more-menu";
 
 export type TicketItemProps = {
@@ -40,6 +41,7 @@ export type TicketItemProps = {
 };
 const TicketItem = async ({ ticket, isDetail = false }: TicketItemProps) => {
 	const session = await auth();
+	const comments = isDetail ? await getComments(ticket.id) : [];
 
 	const isTicketOwner = isOwner(session, ticket);
 
@@ -116,7 +118,7 @@ const TicketItem = async ({ ticket, isDetail = false }: TicketItemProps) => {
 				)}
 			</div>
 			</div>
-			{isDetail ? <Comments ticketId={ticket.id} /> : null}
+			{isDetail ? <Comments ticketId={ticket.id} comments={comments} /> : null}
 		</div>
 	);
 };
