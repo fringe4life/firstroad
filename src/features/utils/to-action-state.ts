@@ -1,11 +1,12 @@
-import { ZodError } from "zod/v4";
+import z, { ZodError } from "zod/v4";
 
-export type ActionState = {
+export type ActionState<T = unknown> = {
   message: string;
   payload?: FormData;
   fieldErrors: Record<string, string[] | undefined>;
   status?: "SUCCESS" | "ERROR";
   timestamp: number;
+  data?: T;
 };
 
 export const EMPTY_ACTION_STATE: ActionState = {
@@ -14,14 +15,14 @@ export const EMPTY_ACTION_STATE: ActionState = {
   timestamp: Date.now(),
 };
 
-const fromErrorToActionState = (
+const fromErrorToActionState = <T = unknown>(
   err: unknown,
   formData?: FormData
-): ActionState => {
+): ActionState<T> => {
   if (err instanceof ZodError) {
     return {
       message: "",
-      fieldErrors: err.flatten().fieldErrors,
+      fieldErrors: z.treeifyError(err),
       payload: formData,
       status: "ERROR",
       timestamp: Date.now(),
@@ -44,17 +45,21 @@ const fromErrorToActionState = (
     timestamp: Date.now(),
   };
 };
-const toActionState = (
+
+const toActionState = <T = unknown>(
   message: string,
   status: ActionState["status"],
-  formData?: FormData
-): ActionState => {
+  formData?: FormData,
+  data?: T
+): ActionState<T> => {
   return {
     message,
     fieldErrors: {},
     status,
     timestamp: Date.now(),
     payload: formData,
+    data,
   };
 };
+
 export { fromErrorToActionState, toActionState };

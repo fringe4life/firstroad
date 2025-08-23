@@ -7,13 +7,11 @@ import {
 	paginationParser,
 	searchParser,
 } from "@/features/ticket/search-params";
+import type { PaginationMetadata } from "@/features/types/pagination";
 import { useEffect, useRef } from "react";
 
 export interface TicketPaginationProps {
-	metadata: {
-		count: number;
-		hasNextPage: boolean;
-	};
+	metadata: PaginationMetadata;
 }
 const TicketPagination = ({ metadata }: TicketPaginationProps) => {
 	const [pagination, setPagination] = useQueryStates(
@@ -34,7 +32,7 @@ const TicketPagination = ({ metadata }: TicketPaginationProps) => {
 			})
 			prevSearch.current = search;
 		}
-	}, [search])
+	}, [search, pagination, setPagination])
 
 	return <Pagination pagination={pagination} setPagination={setPagination} metadata={metadata} 	/>;
 };

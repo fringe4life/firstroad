@@ -16,12 +16,28 @@ const upsertCommentSchema = z.object({
   content: z.string().min(1, "Comment cannot be empty").max(1024, "Comment is too long"),
 });
 
-const upsertComment = async (
+type CommentWithUserInfo = {
+  id: string;
+  content: string;
+  createdAt: Date;
+  updatedAt: Date;
+  userId: string | null;
+  ticketId: string;
+  isOwner: boolean;
+  userInfo: {
+    userId: string;
+    user: {
+      name: string | null;
+    };
+  } | null;
+};
+
+export const upsertComment = async (
   commentId: string | undefined,
   ticketId: string,
-  _state: ActionState,
+  _state: ActionState<CommentWithUserInfo>,
   formData: FormData
-): Promise<ActionState> => {
+): Promise<ActionState<CommentWithUserInfo>> => {
   const session = await getAuthOrRedirect();
   
   try {
@@ -56,7 +72,7 @@ const upsertComment = async (
       create: { userId: session.user?.id as string },
     });
 
-    await prisma.comment.upsert({
+    const comment = await prisma.comment.upsert({
       where: {
         id: commentId || "",
       },
@@ -68,19 +84,36 @@ const upsertComment = async (
         ticketId,
         userId: session.user?.id as string,
       },
+      include: {
+        userInfo: {
+          include: {
+            user: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     // Revalidate the ticket page to show the updated comment
     revalidatePath(ticketEditPath(ticketId));
     
+    // Add isOwner property to the comment
+    const commentWithOwnership = {
+      ...comment,
+      isOwner: isOwner(session, comment),
+    };
+    
     return toActionState(
       commentId ? "Comment updated successfully" : "Comment created successfully", 
-      "SUCCESS"
+      "SUCCESS",
+      undefined,
+      commentWithOwnership
     );
   } catch (err: unknown) {
     console.error("Error upserting comment:", err);
     return fromErrorToActionState(err, formData);
   }
 };
-
-export { upsertComment };

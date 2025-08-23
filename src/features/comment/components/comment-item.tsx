@@ -9,6 +9,7 @@ type Comment = {
   updatedAt: Date;
   userId: string | null;
   ticketId: string;
+  isOwner: boolean;
   userInfo?: {
     userId: string;
     user: {
@@ -38,7 +39,7 @@ const CommentItem = ({ comment, buttons = [] }: CommentItemProps) => {
 
   return (
     <div className="flex gap-2">
-      <Card className="w-full max-w-105">
+      <Card className="w-full max-w-105 gap-0">
         <CardHeader className="pb-3">
           <div className="flex items-center gap-3">
             <Avatar className="h-8 w-8">

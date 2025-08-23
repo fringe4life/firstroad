@@ -7,7 +7,7 @@ import { prisma } from "@/lib/prisma";
 import { env } from "@/lib/env";
 
 const signInSchema = z.object({
-  email: z.string().min(1, { message: "Is required" }).max(191).email(),
+  email: z.email(),
   password: z.string().min(6).max(191),
 });
 
@@ -60,7 +60,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             name: user.name,
             image: user.image,
           };
-        } catch (error) {
+        } catch {
           return null;
         }
       },

@@ -6,8 +6,10 @@ import { CardCompact } from "@/components/card-compact";
 import CommentCreateForm from "@/features/comment/components/comment-create-form";
 import CommentEditButton from "@/features/comment/components/comment-edit-button";
 import CommentDeleteButton from "@/features/comment/components/comment-delete-button";
-import { useSession } from "next-auth/react";
-import { isOwner } from "@/features/auth/utils/owner";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { PaginationMetadata } from "@/features/types/pagination";
+import { getMoreComments } from "@/features/ticket/queries/get-ticket";
 
 type Comment = {
   id: string;
@@ -16,6 +18,7 @@ type Comment = {
   updatedAt: Date;
   userId: string | null;
   ticketId: string;
+  isOwner: boolean;
   userInfo?: {
     userId: string;
     user: {
@@ -27,18 +30,41 @@ type Comment = {
 type CommentsProps = {
     ticketId: string;
     comments: Comment[];
+    commentMetadata?: PaginationMetadata;
 }
 
-const Comments = ({ ticketId, comments }: CommentsProps) => {
-  const { data: session } = useSession();
+const CommentSkeleton = () => (
+  <div className="flex gap-2">
+    <div className="w-full max-w-105">
+      <div className="p-4 border rounded-lg">
+        <div className="flex items-center gap-3 mb-3">
+          <Skeleton className="h-8 w-8 rounded-full" />
+          <div className="space-y-1">
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-3 w-16" />
+          </div>
+        </div>
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-3/4" />
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const Comments = ({ ticketId, comments: initialComments, commentMetadata }: CommentsProps) => {
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editingContent, setEditingContent] = useState<string>("");
+  const [comments, setComments] = useState<Comment[]>(initialComments);
+  const [hasMore, setHasMore] = useState(commentMetadata?.hasNextPage ?? false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [skip, setSkip] = useState(3);
   const formRef = useRef<HTMLDivElement>(null);
 
   const handleEdit = (commentId: string, content: string) => {
     setEditingCommentId(commentId);
     setEditingContent(content);
-    // Scroll to the form using ref
     if (formRef.current) {
       formRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
@@ -49,15 +75,31 @@ const Comments = ({ ticketId, comments }: CommentsProps) => {
     setEditingContent("");
   };
 
+  const handleLoadMore = async () => {
+    if (isLoading || !hasMore) return;
+    
+    setIsLoading(true);
+    try {
+      const result = await getMoreComments(ticketId, skip);
+      setComments(prev => [...prev, ...result.comments]);
+      setHasMore(result.hasMore);
+      setSkip(prev => prev + 3);
+    } catch (error) {
+      console.error('Failed to load more comments:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
-      <CardCompact 
+      <CardCompact
         title={editingCommentId ? "Edit Comment" : "Create Comment"}
         description={editingCommentId ? "Update your comment" : "Add a comment to the ticket"}
         content={
           <div ref={formRef}>
-            <CommentCreateForm 
-              ticketId={ticketId} 
+            <CommentCreateForm
+              ticketId={ticketId}
               commentId={editingCommentId || undefined}
               initialContent={editingContent}
               onCancel={handleCancelEdit}
@@ -67,14 +109,12 @@ const Comments = ({ ticketId, comments }: CommentsProps) => {
       />
       <div className="grid gap-y-2">
         {comments.map((comment) => {
-          const isCommentOwner = isOwner(session, comment);
-          
           return (
-            <CommentItem 
-              key={comment.id} 
+            <CommentItem
+              key={comment.id}
               comment={comment}
               buttons={
-                isCommentOwner ? [
+                comment.isOwner ? [
                   <CommentEditButton
                     key="edit"
                     comment={comment}
@@ -86,6 +126,25 @@ const Comments = ({ ticketId, comments }: CommentsProps) => {
             />
           );
         })}
+        {isLoading && (
+          <>
+            <CommentSkeleton />
+            <CommentSkeleton />
+            <CommentSkeleton />
+          </>
+        )}
+        {hasMore && (
+          <div className="flex justify-center pt-2">
+            <Button
+              variant="ghost"
+              onClick={handleLoadMore}
+              disabled={isLoading}
+              className="w-full"
+            >
+              {isLoading ? "Loading..." : "Load More Comments"}
+            </Button>
+          </div>
+        )}
       </div>
     </>
   );

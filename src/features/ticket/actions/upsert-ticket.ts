@@ -40,13 +40,7 @@ const upsertTicket = async (
       if(!ticket || !isOwner(session, ticket)) return toActionState("Ticket Not Found", "ERROR");
     }
 
-    const data = upsertSchema.parse({
-      title: formData.get("title"),
-      description: formData.get("description"),
-      deadline: formData.get("deadline"),
-      bounty: formData.get("bounty"),
-      
-    });
+    const data = upsertSchema.parse(Object.fromEntries(formData.entries()));
 
     const dbData = {
       ...data,

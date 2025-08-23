@@ -1,3 +1,4 @@
+"use server"
 import type { Prisma } from "@prisma/client";
 import clsx from "clsx";
 import {
@@ -17,6 +18,7 @@ import {
 import { TICKET_ICONS } from "@/features/constants";
 import { ticketEditPath, ticketPath } from "@/path";
 import { toCurrencyFromCent } from "@/utils/currency";
+import type { PaginationMetadata } from "@/features/types/pagination";
 import Comments from "@/features/comment/components/comments";
 import TicketMoreMenu from "@/features/ticket/components/ticket-more-menu";
 
@@ -43,6 +45,7 @@ type Comment = {
 	updatedAt: Date;
 	userId: string | null;
 	ticketId: string;
+	isOwner: boolean;
 	userInfo?: {
 		userId: string;
 		user: {
@@ -55,7 +58,7 @@ type Comment = {
 type TicketItemListProps = {
 	isDetail: false;
 	ticket: BaseTicket & {
-		isOwner?: boolean;
+		isOwner: boolean;
 	};
 };
 
@@ -65,6 +68,7 @@ type TicketItemDetailProps = {
 	ticket: BaseTicket & {
 		isOwner: boolean;
 		comments: Comment[];
+		commentMetadata: PaginationMetadata;
 	};
 };
 
@@ -146,7 +150,11 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
 			</div>
 			</div>
 			{isDetail && (
-				<Comments ticketId={ticket.id} comments={ticket.comments} />
+				<Comments 
+					ticketId={ticket.id} 
+					comments={ticket.comments} 
+					commentMetadata={ticket.commentMetadata}
+				/>
 			)}
 		</div>
 	);
