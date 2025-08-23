@@ -16,11 +16,9 @@ type TicketEditPageProps = {
 
 const TicketEditPage = async ({ params }: TicketEditPageProps) => {
 	const param = await params;
-	const session = await auth();
 	const ticket = await getTicket(param.ticketId);
-	const isTicketOwner = isOwner(session, { userId: ticket?.userId });
 
-	if (!ticket || !isTicketOwner) notFound();
+	if (!ticket || !ticket.isOwner) notFound();
 
 	return (
 		<>

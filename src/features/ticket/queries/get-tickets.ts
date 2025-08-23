@@ -1,6 +1,8 @@
 import type { Prisma } from "@prisma/client";
 import type { SearchParams } from "nuqs/server";
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/app/auth";
+import { isOwner } from "@/features/auth/utils/owner";
 import { searchParamsCache } from "@/features/ticket/search-params";
 
 export const getTickets = async (
@@ -8,6 +10,7 @@ export const getTickets = async (
 	userId?: string,
 ) => {
 	const { search, sortKey, sortValue, page, limit } =  await searchParamsCache.parse(searchParams);
+	const session = await auth();
 
 	// Build orderBy based on sort parameter
 	let orderBy: Prisma.TicketOrderByWithRelationInput = {
@@ -50,8 +53,13 @@ export const getTickets = async (
 		prisma.ticket.count({ where, orderBy }),
 	])
 
+	const ticketsWithOwnership = tickets.map(ticket => ({
+		...ticket,
+		isOwner: isOwner(session, ticket),
+	}));
+
 	return {
-		list: tickets,
+		list: ticketsWithOwnership,
 		metadata: {
 			count,
 			hasNextPage: count > skip + take

@@ -1,11 +1,24 @@
-import { getComments } from "@/features/comment/queries/get-comments";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { formatDistanceToNow } from "date-fns";
-import CommentDeleteButton from "./comment-delete-button";
+
+type Comment = {
+  id: string;
+  content: string;
+  createdAt: Date;
+  updatedAt: Date;
+  userId: string | null;
+  ticketId: string;
+  userInfo?: {
+    userId: string;
+    user: {
+      name: string | null;
+    };
+  } | null;
+};
 
 type CommentItemProps = {
-  comment: Awaited<ReturnType<typeof getComments>>[number];
+  comment: Comment;
   buttons?: React.ReactNode[];
 };
 

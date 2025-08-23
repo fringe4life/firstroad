@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { getComments } from "@/features/comment/queries/get-comments";
 import CommentItem from "@/features/comment/components/comment-item";
 import { CardCompact } from "@/components/card-compact";
 import CommentCreateForm from "@/features/comment/components/comment-create-form";
@@ -10,9 +9,24 @@ import CommentDeleteButton from "@/features/comment/components/comment-delete-bu
 import { useSession } from "next-auth/react";
 import { isOwner } from "@/features/auth/utils/owner";
 
+type Comment = {
+  id: string;
+  content: string;
+  createdAt: Date;
+  updatedAt: Date;
+  userId: string | null;
+  ticketId: string;
+  userInfo?: {
+    userId: string;
+    user: {
+      name: string | null;
+    };
+  } | null;
+};
+
 type CommentsProps = {
     ticketId: string;
-    comments: Awaited<ReturnType<typeof getComments>>;
+    comments: Comment[];
 }
 
 const Comments = ({ ticketId, comments }: CommentsProps) => {

@@ -6,7 +6,6 @@ import {
 	SquareArrowOutUpRight,
 } from "lucide-react";
 import Link from "next/link";
-import { auth } from "@/app/auth";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -18,33 +17,61 @@ import {
 import { TICKET_ICONS } from "@/features/constants";
 import { ticketEditPath, ticketPath } from "@/path";
 import { toCurrencyFromCent } from "@/utils/currency";
-import { isOwner } from "@/features/auth/utils/owner";
 import Comments from "@/features/comment/components/comments";
-import { getComments } from "@/features/comment/queries/get-comments";
 import TicketMoreMenu from "@/features/ticket/components/ticket-more-menu";
 
-export type TicketItemProps = {
-	ticket: Prisma.TicketGetPayload<{
-		include: {
-			userInfo: {
-				include: {
-					user: {
-						select: {
-							name: true;
-						};
+// Base ticket type with common properties
+type BaseTicket = Prisma.TicketGetPayload<{
+	include: {
+		userInfo: {
+			include: {
+				user: {
+					select: {
+						name: true;
 					};
 				};
 			};
 		};
-	}>;
-	isDetail?: boolean;
+	};
+}>;
+
+// Comment type for detail view
+type Comment = {
+	id: string;
+	content: string;
+	createdAt: Date;
+	updatedAt: Date;
+	userId: string | null;
+	ticketId: string;
+	userInfo?: {
+		userId: string;
+		user: {
+			name: string | null;
+		};
+	} | null;
 };
-const TicketItem = async ({ ticket, isDetail = false }: TicketItemProps) => {
-	const session = await auth();
-	const comments = isDetail ? await getComments(ticket.id) : [];
 
-	const isTicketOwner = isOwner(session, ticket);
+// List view props (isDetail: false)
+type TicketItemListProps = {
+	isDetail: false;
+	ticket: BaseTicket & {
+		isOwner?: boolean;
+	};
+};
 
+// Detail view props (isDetail: true)
+type TicketItemDetailProps = {
+	isDetail: true;
+	ticket: BaseTicket & {
+		isOwner: boolean;
+		comments: Comment[];
+	};
+};
+
+// Discriminated union type
+type TicketItemProps = TicketItemListProps | TicketItemDetailProps;
+
+const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
 	const detailButton = (
 		<Button variant="outline" size="icon" asChild>
 			<Link prefetch href={ticketPath(ticket.id)}>
@@ -53,7 +80,7 @@ const TicketItem = async ({ ticket, isDetail = false }: TicketItemProps) => {
 		</Button>
 	);
 
-	const editButton = isTicketOwner ? (
+	const editButton = ticket.isOwner ? (
 		<Button variant="outline" size="icon" asChild>
 			<Link prefetch href={ticketEditPath(ticket.id)}>
 				<LucidePencil className="size-4" />
@@ -67,7 +94,7 @@ const TicketItem = async ({ ticket, isDetail = false }: TicketItemProps) => {
 		</Button>
 	);
 
-	const moreMenu = isTicketOwner ? (
+	const moreMenu = ticket.isOwner ? (
 		<TicketMoreMenu ticket={ticket} trigger={trigger} />
 	) : null;
 
@@ -118,7 +145,9 @@ const TicketItem = async ({ ticket, isDetail = false }: TicketItemProps) => {
 				)}
 			</div>
 			</div>
-			{isDetail ? <Comments ticketId={ticket.id} comments={comments} /> : null}
+			{isDetail && (
+				<Comments ticketId={ticket.id} comments={ticket.comments} />
+			)}
 		</div>
 	);
 };
