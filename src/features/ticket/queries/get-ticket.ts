@@ -1,12 +1,12 @@
 "use server"
 
+import { cache } from "react";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/app/auth";
 import { isOwner } from "@/features/auth/utils/owner";
 import { PaginationMetadata } from "@/features/types/pagination";
-import { getCommentCount } from "@/features/comment/queries/get-comment-count";
 
-export const getTicket = async (id: string) => {
+export const getTicket = cache(async (id: string) => {
   const session = await auth();
   
   const ticket = await prisma.ticket.findUnique({
@@ -36,9 +36,9 @@ export const getTicket = async (id: string) => {
           },
         },
         orderBy: {
-          createdAt: "desc",
+          id: "desc", // Use id for cursor-based pagination
         },
-        take: 3,
+        take: 4, // Take one extra to check if there are more
       },
     },
   });
@@ -47,27 +47,28 @@ export const getTicket = async (id: string) => {
     return null;
   }
 
-  // Get total comment count for pagination
-  const totalComments = await getCommentCount(id);
+  // Check if there are more comments using cursor-based logic
+  const hasMore = ticket.comments.length > 3;
+  const commentsToReturn = hasMore ? ticket.comments.slice(0, 3) : ticket.comments;
 
   // Add isOwner property to each comment
-  const commentsWithOwnership = ticket.comments.map(comment => ({
+  const commentsWithOwnership = commentsToReturn.map(comment => ({
     ...comment,
     isOwner: isOwner(session, comment),
   }));
 
   return {
     ...ticket,
-    comments: commentsWithOwnership,
+    list: commentsWithOwnership,
     isOwner: isOwner(session, ticket),
     commentMetadata: {
-      count: totalComments,
-      hasNextPage: totalComments > 3,
-    } as PaginationMetadata,
+      count: commentsToReturn.length, // This is just the count of loaded comments
+      hasNextPage: hasMore,
+    } satisfies PaginationMetadata,
   };
-};
+});
 
-export const getMoreComments = async (ticketId: string, skip: number, take: number = 3) => {
+export const getMoreComments = cache(async (ticketId: string, cursor?: string, take: number = 3) => {
   const session = await auth();
   
   const comments = await prisma.comment.findMany({
@@ -86,22 +87,29 @@ export const getMoreComments = async (ticketId: string, skip: number, take: numb
       },
     },
     orderBy: {
+      id: "desc", // Use id for cursor-based pagination
       createdAt: "desc",
     },
-    skip,
-    take,
+    take: take + 1, // Take one extra to check if there are more
+    cursor: cursor ? {
+      id: cursor,
+    } : undefined,
+    skip: cursor ? 1 : undefined, // Skip the cursor record itself
   });
 
-  const totalComments = await getCommentCount(ticketId);
+  // Check if there are more comments
+  const hasMore = comments.length > take;
+  const commentsToReturn = hasMore ? comments.slice(0, take) : comments;
 
   // Add isOwner property to each comment
-  const commentsWithOwnership = comments.map(comment => ({
+  const commentsWithOwnership = commentsToReturn.map(comment => ({
     ...comment,
     isOwner: isOwner(session, comment),
   }));
 
   return {
-    comments: commentsWithOwnership,
-    hasMore: skip + take < totalComments,
+    list: commentsWithOwnership,
+    hasMore,
+    nextCursor: hasMore ? commentsToReturn.at(-1)?.id : null,
   };
-};
+});

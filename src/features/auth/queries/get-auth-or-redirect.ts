@@ -18,8 +18,8 @@ export async function getAuthOrRedirect(){
   
   if (!session?.user?.id) {
     console.log("❌ getAuthOrRedirect - No valid session, redirecting to sign-in");
-    console.log("🎯 Redirect target:", signInPath());
-    redirect(signInPath());
+    console.log("🎯 Redirect target:", signInPath);
+    redirect(signInPath);
   }
   console.log("✅ getAuthOrRedirect - Authentication successful");
   return session

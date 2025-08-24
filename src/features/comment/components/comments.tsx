@@ -9,7 +9,7 @@ import CommentDeleteButton from "@/features/comment/components/comment-delete-bu
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
-import { PaginationMetadata } from "@/features/types/pagination";
+
 import { getMoreComments } from "@/features/ticket/queries/get-ticket";
 
 type Comment = {
@@ -29,12 +29,16 @@ type Comment = {
   } | null;
 };
 
-
+type CommentMetadata = {
+  count: number;
+  hasNextPage: boolean;
+  nextCursor?: string | null;
+};
 
 type CommentsProps = {
     ticketId: string;
-    comments: Comment[];
-    commentMetadata?: PaginationMetadata;
+    list: Comment[];
+    commentMetadata?: CommentMetadata;
 }
 
 const CommentSkeleton = () => (
@@ -57,13 +61,12 @@ const CommentSkeleton = () => (
   </div>
 );
 
-const Comments = ({ ticketId, comments: initialComments, commentMetadata }: CommentsProps) => {
+const Comments = ({ ticketId, list: initialComments, commentMetadata }: CommentsProps) => {
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editingContent, setEditingContent] = useState<string>("");
-  const [comments, setComments] = useState<Comment[]>(initialComments);
-  const [hasMore, setHasMore] = useState(commentMetadata?.hasNextPage ?? false);
+  const [comments, setComments] = useState(initialComments);
+  const [metadata, setMetadata] = useState(commentMetadata);
   const [isLoading, setIsLoading] = useState(false);
-  const [skip, setSkip] = useState(3);
   const formRef = useRef<HTMLDivElement>(null);
 
   const handleEdit = (commentId: string, content: string) => {
@@ -77,6 +80,34 @@ const Comments = ({ ticketId, comments: initialComments, commentMetadata }: Comm
   const handleCancelEdit = () => {
     setEditingCommentId(null);
     setEditingContent("");
+  };
+
+  const handleMore = async () => {
+    if (isLoading || !metadata?.hasNextPage) return;
+    
+    setIsLoading(true);
+    try {
+      const morePaginatedComments = await getMoreComments(ticketId, metadata.nextCursor || undefined);
+      const moreComments = morePaginatedComments.list;
+
+      setComments([...comments, ...moreComments]);
+      setMetadata({
+        hasNextPage: morePaginatedComments.hasMore,
+        nextCursor: morePaginatedComments.nextCursor,
+        count: (metadata?.count || 0) + moreComments.length,
+      });
+    } catch (error) {
+      console.error('Failed to load more comments:', error);
+      toast.error('Failed to load more comments');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDeleteComment = (id: string) => {
+    setComments((prevComments) =>
+      prevComments.filter((comment) => comment.id !== id)
+    );
   };
 
 
@@ -108,7 +139,7 @@ const Comments = ({ ticketId, comments: initialComments, commentMetadata }: Comm
         if (result.status === 'SUCCESS') {
           toast.success('Comment deleted successfully');
           // Remove the comment from the list
-          setComments(prev => prev.filter(comment => comment.id !== commentId));
+          handleDeleteComment(commentId);
         } else {
           toast.error(result.message || 'Failed to delete comment');
           // Revert optimistic update on error
@@ -134,23 +165,6 @@ const Comments = ({ ticketId, comments: initialComments, commentMetadata }: Comm
         throw error;
       }
     };
-  };
-
-  const handleLoadMore = async () => {
-    if (isLoading || !hasMore) return;
-    
-    setIsLoading(true);
-    try {
-      const result = await getMoreComments(ticketId, skip);
-      // Add new comments to the state
-      setComments(prev => [...prev, ...result.comments]);
-      setHasMore(result.hasMore);
-      setSkip(prev => prev + 3);
-    } catch (error) {
-      console.error('Failed to load more comments:', error);
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   return (
@@ -198,11 +212,11 @@ const Comments = ({ ticketId, comments: initialComments, commentMetadata }: Comm
             <CommentSkeleton />
           </>
         )}
-        {hasMore && (
+        {metadata?.hasNextPage && (
           <div className="flex justify-center pt-2">
             <Button
               variant="ghost"
-              onClick={handleLoadMore}
+              onClick={handleMore}
               disabled={isLoading}
               className="w-full"
             >

@@ -37,6 +37,6 @@ export const updateStatus = async (newValue: TicketStatus, id: string) => {
     return fromErrorToActionState(err);
   }
   
-  revalidatePath(ticketsPath());
+  revalidatePath(ticketsPath);
   return toActionState("Status updated", "SUCCESS");
 };

@@ -26,7 +26,7 @@ const SidebarItem = ({ isOpen, navItem, isActive }: SidebarItemProps) => {
       )}
     >
       {cloneElement(navItem.icon, {
-        className: "size-5",
+        className: "w-5 aspect-square",
       } as React.HTMLAttributes<HTMLElement>)}
       <span
         className={cn(

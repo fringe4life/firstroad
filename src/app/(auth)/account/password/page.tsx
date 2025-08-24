@@ -1,6 +1,11 @@
+import type { Metadata } from "next";
 import Heading from "@/components/heading"
 import AccountTabs from "@/app/(auth)/account/_components/account-tabs"
 
+export const metadata: Metadata = {
+	title: "Password | First Road",
+	description: "Update your password to keep your account secure. Change your password regularly for better security.",
+};
 
 const PasswordPage = () => {
     return (

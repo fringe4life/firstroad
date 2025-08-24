@@ -32,14 +32,14 @@ const signin = async (state: ActionState | undefined, formData: FormData) => {
     console.log("🔐 Password length:", password.length);
 
     console.log("🔑 Attempting to sign in with Auth.js...");
-    console.log("🎯 Redirect target:", ticketsPath());
+    console.log("🎯 Redirect target:", ticketsPath);
 
     // Let Auth.js/Next.js handle the redirect by not catching NEXT_REDIRECT
     await signIn("credentials", {
       email,
       password,
       redirect: true,
-      redirectTo: ticketsPath(),
+      redirectTo: ticketsPath,
     });
 
     // If signIn does not redirect (unlikely), return a generic success

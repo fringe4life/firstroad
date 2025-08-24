@@ -13,8 +13,27 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-	title: "First Road",
-	description: "A guided Nextjs Journey",
+	title: {
+		default: "First Road",
+		template: "%s | First Road",
+	},
+	description: "A collaborative platform for creating and managing tickets. Connect with developers, share knowledge, and build amazing projects together.",
+	keywords: ["tickets", "collaboration", "development", "projects", "community"],
+	authors: [{ name: "First Road Team" }],
+	creator: "First Road",
+	openGraph: {
+		type: "website",
+		locale: "en_US",
+		url: "https://firstroad.com",
+		title: "First Road",
+		description: "A collaborative platform for creating and managing tickets. Connect with developers, share knowledge, and build amazing projects together.",
+		siteName: "First Road",
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: "First Road",
+		description: "A collaborative platform for creating and managing tickets. Connect with developers, share knowledge, and build amazing projects together.",
+	},
 };
 
 export default async function RootLayout({

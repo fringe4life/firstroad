@@ -18,6 +18,7 @@ export const getComments = async (ticketId: string) => {
     },
     orderBy: {
       createdAt: "desc",
+      ticketId: "desc",
     },
   });
 };

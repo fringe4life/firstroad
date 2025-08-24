@@ -12,7 +12,11 @@ interface TicketListProps {
 }
 
 const TicketList = async ({ userId, searchParams }: TicketListProps) => {
+	console.log("🎯 TicketList - userId:", userId);
+	console.log("🎯 TicketList - searchParams:", searchParams);
 	const {list: tickets, metadata } = await getTickets(searchParams, userId);
+	console.log("🎯 TicketList - tickets:", tickets);
+	console.log("🎯 TicketList - metadata:", metadata);
 	return (
 		<div className="grid flex-1 justify-items-center gap-y-4 animate-fade-from-top">
 			<div className="w-full max-w-105 grid grid-flow-col gap-x-2 grid-cols-2">

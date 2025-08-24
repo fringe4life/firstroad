@@ -10,6 +10,8 @@ import { buttonVariants } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { cloneElement } from "react"
 
+export const dynamic = "force-dynamic";
+
 const Sidebar = () => {
 	const { isFetched, user } = useAuth()
 	const pathname = usePathname()
@@ -49,7 +51,7 @@ const Sidebar = () => {
 							<div key={item.title}>
 								{item.seperator && <Separator />}
 								<Link
-									href={item.href}
+									href={item.href }
 									className={cn(
 										buttonVariants({ variant: "ghost" }),
 										"group relative flex h-12 justify-start w-full",
@@ -57,7 +59,7 @@ const Sidebar = () => {
 									)}
 								>
 									{cloneElement(item.icon, {
-										className: "size-5",
+										className: "w-5 aspect-square",
 									} as React.HTMLAttributes<HTMLElement>)}
 									<span
 										className={cn(

@@ -6,5 +6,5 @@ import { signInPath } from "@/path";
 
 export const signOutAction = async () => {
   await signOut({ redirect: false });
-  redirect(signInPath());
+  redirect(signInPath);
 };

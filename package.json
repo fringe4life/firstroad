@@ -4,12 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "next build --turbopack",
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
     "type": "tsgo --noEmit",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "typegen": "next typegen"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
@@ -26,6 +27,7 @@
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-tabs": "^1.1.13",
     "@radix-ui/react-tooltip": "^1.2.8",
+    "babel-plugin-react-compiler": "^19.1.0-rc.2",
     "big.js": "^6.2.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

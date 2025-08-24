@@ -1,4 +1,5 @@
 
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { auth } from "@/app/auth";
@@ -8,6 +9,11 @@ import Placeholder from "@/components/placeholder";
 import Spinner from "@/components/spinner";
 import TicketList from "@/features/ticket/components/ticket-list";
 import TicketUpsertForm from "@/features/ticket/components/ticket-upsert-form";
+
+export const metadata: Metadata = {
+	title: "My Tickets | First Road",
+	description: "Manage your tickets, create new ones, and track your progress. View all tickets you've created and collaborated on.",
+};
 
 const TicketsPage = async ({ searchParams }: PageProps<"/tickets">) => {
 	const session = await auth();

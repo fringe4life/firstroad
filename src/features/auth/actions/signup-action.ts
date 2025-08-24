@@ -99,7 +99,7 @@ export const signUp = async (_actionState: ActionState, formData: FormData) => {
 
     if (result?.ok) {
       console.log("✅ Sign-in successful, redirecting to tickets");
-      redirect(ticketsPath());
+      redirect(ticketsPath);
     }
   } catch (err) {
     console.log("💥 Error during sign-up process:", err);

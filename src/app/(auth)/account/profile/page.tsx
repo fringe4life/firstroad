@@ -1,6 +1,11 @@
+import type { Metadata } from "next";
 import Heading from "@/components/heading"
 import AccountTabs from "@/app/(auth)/account/_components/account-tabs"
 
+export const metadata: Metadata = {
+	title: "Profile | First Road",
+	description: "Manage your profile information, update your details, and customize your account settings.",
+};
 
 const ProfilePage = () => {
     return (

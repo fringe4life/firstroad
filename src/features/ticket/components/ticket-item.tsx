@@ -16,7 +16,6 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { TICKET_ICONS } from "@/features/constants";
-import { ticketEditPath, ticketPath } from "@/path";
 import { toCurrencyFromCent } from "@/utils/currency";
 import type { PaginationMetadata } from "@/features/types/pagination";
 import Comments from "@/features/comment/components/comments";
@@ -67,7 +66,7 @@ type TicketItemDetailProps = {
 	isDetail: true;
 	ticket: BaseTicket & {
 		isOwner: boolean;
-		comments: Comment[];
+		list: Comment[];
 		commentMetadata: PaginationMetadata;
 	};
 };
@@ -78,7 +77,7 @@ type TicketItemProps = TicketItemListProps | TicketItemDetailProps;
 const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
 	const detailButton = (
 		<Button variant="outline" size="icon" asChild>
-			<Link prefetch href={ticketPath(ticket.id)}>
+			<Link prefetch href={`/tickets/${ticket.id}`}>
 				<SquareArrowOutUpRight className="size-4" />
 			</Link>
 		</Button>
@@ -86,7 +85,7 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
 
 	const editButton = ticket.isOwner ? (
 		<Button variant="outline" size="icon" asChild>
-			<Link prefetch href={ticketEditPath(ticket.id)}>
+			<Link prefetch href={`/tickets/${ticket.id}/edit`}>
 				<LucidePencil className="size-4" />
 			</Link>
 		</Button>
@@ -152,7 +151,7 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
 			{isDetail && (
 				<Comments 
 					ticketId={ticket.id} 
-					comments={ticket.comments} 
+					list={ticket.list} 
 					commentMetadata={ticket.commentMetadata}
 				/>
 			)}

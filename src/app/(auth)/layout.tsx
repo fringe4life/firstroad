@@ -1,17 +1,11 @@
-import type { Metadata } from "next";
+
 import { RedirectToast } from "@/components/redirect-toast";
 import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
 
-export const metadata: Metadata = {
-  title: "First Road",
-  description: "A guided Nextjs Journey",
-};
 
 export default async function TicketLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: LayoutProps<"/">) {
   console.log("🎫 Tickets layout - Starting authentication check");
   console.log("📅 Layout timestamp:", new Date().toISOString());
   

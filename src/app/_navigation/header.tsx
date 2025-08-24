@@ -3,10 +3,12 @@
 import { Kanban } from "lucide-react";
 import Link from "next/link";
 import useAuth from "@/features/auth/hooks/use-auth";
-import { homePath, signInPath, signUpPath } from "@/path";
 import AccountDropdown from "@/app/_navigation/account-dropwdown";
 import { ThemeSwitcher } from "@/components/theme/theme-switcher";
 import { buttonVariants } from "@/components/ui/button";
+
+
+export const dynamic = "force-dynamic";
 
 const Header = () => {
   const { isFetched, user } = useAuth();
@@ -19,13 +21,13 @@ const Header = () => {
     <>
       <Link
         className={buttonVariants({ variant: "outline" })}
-        href={signUpPath()}
+        href="/sign-up"
       >
         Sign Up
       </Link>
       <Link
         className={buttonVariants({ variant: "default" })}
-        href={signInPath()}
+        href="/sign-in"
       >
         Sign In
       </Link>
@@ -36,7 +38,7 @@ const Header = () => {
       <div>
         <Link
           className={buttonVariants({ variant: "ghost", size: "lg" })}
-          href={homePath()}
+          href="/"
         >
           <Kanban />
           <h1 className="text-lg font-semibold">TicketBounty</h1>

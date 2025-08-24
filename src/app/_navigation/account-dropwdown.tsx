@@ -3,7 +3,6 @@ import { LucideLock, LucideLogOut, LucideUser } from "lucide-react"
 import type { User } from "next-auth"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { accountPasswordPath, accountProfilePath } from "@/path"
 import Link from "next/link"
 
 
@@ -26,13 +25,13 @@ const AccountDropdown = ({user}: AccountDropdownProps) => {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href={accountProfilePath()}>
+          <Link href="/account/profile">
             <LucideUser className="mr-2 h-4 aspect-square" />
             <span>Profile</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href={accountPasswordPath()}>
+          <Link href="/account/password">
             <LucideLock className="mr-2 h-4 aspect-square" />
             <span>Password</span>
           </Link>

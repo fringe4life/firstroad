@@ -1,8 +1,14 @@
 import type { SearchParams } from "nuqs/server";
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import Heading from "@/components/heading";
 import Spinner from "@/components/spinner";
 import TicketList from "@/features/ticket/components/ticket-list";
+
+export const metadata: Metadata = {
+	title: "All Tickets | First Road",
+	description: "Browse and discover all tickets from the community. Find opportunities, share knowledge, and collaborate with others.",
+};
 
 const HomePage = async ({
 	searchParams,

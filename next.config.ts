@@ -1,12 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  //   experimental: {
-  //     staleTimes: {
-  //       dynamic: 30,
-  //     },
-  //   },
-  typedRoutes: true
+  typedRoutes: true,
+  experimental: {
+    browserDebugInfoInTerminal: true,
+    reactCompiler: true,
+    devtoolSegmentExplorer: true,
+    clientSegmentCache: true
+  }
 };
 
 export default nextConfig;

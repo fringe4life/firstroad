@@ -30,7 +30,7 @@ export const deleteTicket = async (id: string) => {
     return fromErrorToActionState(err);
   }
   
-  revalidatePath(ticketsPath());
+  revalidatePath(ticketsPath);
   setCookieByKey("toast", "Ticket deleted");
-  redirect(ticketsPath());
+  redirect(ticketsPath);
 };
