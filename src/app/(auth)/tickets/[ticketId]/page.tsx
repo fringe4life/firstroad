@@ -5,13 +5,7 @@ import { getTicket } from "@/features/ticket/queries/get-ticket";
 import TicketItem from "@/features/ticket/components/ticket-item";
 import { homePath } from "@/path";
 
-type TicketParams = {
-	params: Promise<{
-		ticketId: string;
-	}>;
-};
-
-const Ticket = async ({ params }: TicketParams) => {
+const Ticket = async ({ params }: PageProps<"/tickets/[ticketId]">) => {
 	const param = await params;
 
 	const ticket = await getTicket(param.ticketId);

@@ -1,4 +1,4 @@
-import type { SearchParams } from "nuqs/server";
+
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { auth } from "@/app/auth";
@@ -9,11 +9,7 @@ import Spinner from "@/components/spinner";
 import TicketList from "@/features/ticket/components/ticket-list";
 import TicketUpsertForm from "@/features/ticket/components/ticket-upsert-form";
 
-const TicketsPage = async ({
-	searchParams,
-}: {
-	searchParams: Promise<SearchParams>;
-}) => {
+const TicketsPage = async ({ searchParams }: PageProps<"/tickets">) => {
 	const session = await auth();
 
 	return (

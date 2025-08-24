@@ -11,7 +11,7 @@ import { upsertTicket } from "../actions/upsert-ticket";
 import { EMPTY_ACTION_STATE } from "@/features/utils/to-action-state";
 import Form from "@/components/form/form";
 import FieldError from "@/components/form/field-error";
-import SubmitButton from "@/components/form/SubmitButton";
+import SubmitButton from "@/components/form/submit-button";
 
 type TicketUpsertFormProps = {
   ticket?: Ticket;

@@ -1,20 +1,14 @@
 import { notFound } from "next/navigation";
-import { auth } from "@/app/auth";
 import Breadcrumbs from "@/components/breadcrumbs";
 import { CardCompact } from "@/components/card-compact";
 import { Separator } from "@/components/ui/separator";
-import { isOwner } from "@/features/auth/utils/owner";
 import { getTicket } from "@/features/ticket/queries/get-ticket";
 import TicketUpsertForm from "@/features/ticket/components/ticket-upsert-form";
 import { homePath, ticketPath } from "@/path";
 
-type TicketEditPageProps = {
-	params: Promise<{
-		ticketId: string;
-	}>;
-};
-
-const TicketEditPage = async ({ params }: TicketEditPageProps) => {
+const TicketEditPage = async ({
+	params,
+}: PageProps<"/tickets/[ticketId]/edit">) => {
 	const param = await params;
 	const ticket = await getTicket(param.ticketId);
 

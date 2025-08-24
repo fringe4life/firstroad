@@ -4,7 +4,7 @@
 import { useActionState, useEffect, useRef } from "react";
 import FieldError from "@/components/form/field-error";
 import Form from "@/components/form/form";
-import SubmitButton from "@/components/form/SubmitButton";
+import SubmitButton from "@/components/form/submit-button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { upsertComment } from "@/features/comment/actions/upsert-comment";

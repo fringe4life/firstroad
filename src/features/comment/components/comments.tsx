@@ -8,6 +8,7 @@ import CommentEditButton from "@/features/comment/components/comment-edit-button
 import CommentDeleteButton from "@/features/comment/components/comment-delete-button";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
 import { PaginationMetadata } from "@/features/types/pagination";
 import { getMoreComments } from "@/features/ticket/queries/get-ticket";
 
@@ -19,6 +20,7 @@ type Comment = {
   userId: string | null;
   ticketId: string;
   isOwner: boolean;
+  isDeleting?: boolean;
   userInfo?: {
     userId: string;
     user: {
@@ -26,6 +28,8 @@ type Comment = {
     };
   } | null;
 };
+
+
 
 type CommentsProps = {
     ticketId: string;
@@ -75,12 +79,70 @@ const Comments = ({ ticketId, comments: initialComments, commentMetadata }: Comm
     setEditingContent("");
   };
 
+
+
+  const createOptimisticDeleteAction = (commentId: string) => {
+    return async () => {
+      console.log("🎯 createOptimisticDeleteAction - Starting action for commentId:", commentId);
+      
+      // Optimistically update the UI
+      setComments(prev => prev.map(comment => 
+        comment.id === commentId 
+          ? { ...comment, isDeleting: true }
+          : comment
+      ));
+      
+      // Show loading toast
+      const loadingToastId = toast.loading('Deleting comment...');
+      
+      try {
+        // Call the server action
+        const { deleteComment } = await import('@/features/comment/actions/delete-comment');
+        console.log("🎯 createOptimisticDeleteAction - Calling deleteComment");
+        const result = await deleteComment(commentId);
+        console.log("🎯 createOptimisticDeleteAction - deleteComment result:", result);
+        
+        // Dismiss loading toast
+        toast.dismiss(loadingToastId);
+        
+        if (result.status === 'SUCCESS') {
+          toast.success('Comment deleted successfully');
+          // Remove the comment from the list
+          setComments(prev => prev.filter(comment => comment.id !== commentId));
+        } else {
+          toast.error(result.message || 'Failed to delete comment');
+          // Revert optimistic update on error
+          setComments(prev => prev.map(comment => 
+            comment.id === commentId 
+              ? { ...comment, isDeleting: false }
+              : comment
+          ));
+        }
+        
+        return result;
+      } catch (error) {
+        console.error('Failed to delete comment:', error);
+        // Dismiss loading toast
+        toast.dismiss(loadingToastId);
+        toast.error('Failed to delete comment');
+        // Revert optimistic update on error
+        setComments(prev => prev.map(comment => 
+          comment.id === commentId 
+            ? { ...comment, isDeleting: false }
+            : comment
+        ));
+        throw error;
+      }
+    };
+  };
+
   const handleLoadMore = async () => {
     if (isLoading || !hasMore) return;
     
     setIsLoading(true);
     try {
       const result = await getMoreComments(ticketId, skip);
+      // Add new comments to the state
       setComments(prev => [...prev, ...result.comments]);
       setHasMore(result.hasMore);
       setSkip(prev => prev + 3);
@@ -114,13 +176,16 @@ const Comments = ({ ticketId, comments: initialComments, commentMetadata }: Comm
               key={comment.id}
               comment={comment}
               buttons={
-                comment.isOwner ? [
+                comment.isOwner && !comment.isDeleting ? [
                   <CommentEditButton
                     key="edit"
                     comment={comment}
                     onEdit={handleEdit}
                   />,
-                  <CommentDeleteButton key="delete" comment={comment} />
+                  <CommentDeleteButton 
+                    key="delete" 
+                    deleteAction={createOptimisticDeleteAction(comment.id)}
+                  />
                 ] : []
               }
             />

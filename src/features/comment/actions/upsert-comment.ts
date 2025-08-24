@@ -61,16 +61,7 @@ export const upsertComment = async (
       }
     }
 
-    const data = upsertCommentSchema.parse({
-      content: formData.get("content"),
-    });
-
-    // Ensure UserInfo exists for the user
-    await prisma.userInfo.upsert({
-      where: { userId: session.user?.id as string },
-      update: {},
-      create: { userId: session.user?.id as string },
-    });
+    const data = upsertCommentSchema.parse(Object.fromEntries(formData.entries()));
 
     const comment = await prisma.comment.upsert({
       where: {

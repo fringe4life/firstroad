@@ -1,7 +1,7 @@
 "use client";
 
 import type { Ticket, TicketStatus } from "@prisma/client";
-import { LucideTrash } from "lucide-react";
+import { LucideTrash, LucideLoaderCircle } from "lucide-react";
 import { toast } from "sonner";
 import useConfirmDialog from "@/components/confirm-dialog";
 import {
@@ -24,11 +24,15 @@ type TicketMoreMenuProps = {
 const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
 	// const deleteButton = <ConfirmDialog action={} trigger={} />;
 
-	const [deleteButton, deleteDialog] = useConfirmDialog({
+	const [getDeleteButton, deleteDialog, isPending] = useConfirmDialog({
 		action: deleteTicket.bind(null, ticket.id),
-		trigger: (
-			<DropdownMenuItem className="flex justify-between px-4">
-				<LucideTrash className="size-4" />
+		trigger: (isPending: boolean) => (
+			<DropdownMenuItem className="flex justify-between px-4" disabled={isPending}>
+				{isPending ? (
+					<LucideLoaderCircle className="w-4 aspect-square animate-spin" />
+				) : (
+					<LucideTrash className="w-4 aspect-square" />
+				)}
 				<span>Delete</span>
 			</DropdownMenuItem>
 		),
@@ -74,7 +78,7 @@ const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
 				<DropdownMenuContent className="w-56" side="left">
 					{radioOptions}
 
-					{deleteButton}
+					{getDeleteButton(isPending)}
 				</DropdownMenuContent>
 			</DropdownMenu>
 		</>

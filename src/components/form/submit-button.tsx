@@ -9,14 +9,8 @@ import { Button } from "@/components/ui/button";
 type SubmitButtonProps = {
   label?: string;
   icon?: React.ReactElement<SVGAElement>;
-  variant?:
-    | "default"
-    | "destructive"
-    | "outline"
-    | "secondary"
-    | "ghost"
-    | "link";
-  size?: "default" | "sm" | "lg" | "icon";
+  variant?: React.ComponentProps<typeof Button>['variant'];
+  size?: React.ComponentProps<typeof Button>['size'];
 };
 
 const SubmitButton = ({ label, icon, variant, size }: SubmitButtonProps) => {
