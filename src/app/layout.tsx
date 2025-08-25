@@ -7,6 +7,7 @@ import { Toaster } from "sonner";
 import Header from "@/app/_navigation/header";
 import Sidebar from "@/app/_navigation/sidebar/components/sidebar";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import { ReactQueryProvider } from "@/app/_providers/react-query-provider";
 
 const inter = Inter({
 	subsets: ["latin"],
@@ -29,11 +30,6 @@ export const metadata: Metadata = {
 		description: "A collaborative platform for creating and managing tickets. Connect with developers, share knowledge, and build amazing projects together.",
 		siteName: "First Road",
 	},
-	twitter: {
-		card: "summary_large_image",
-		title: "First Road",
-		description: "A collaborative platform for creating and managing tickets. Connect with developers, share knowledge, and build amazing projects together.",
-	},
 };
 
 export default async function RootLayout({
@@ -45,14 +41,16 @@ export default async function RootLayout({
 				<NuqsAdapter>
 					<SessionProvider>
 						<ThemeProvider>
-							<Header />
-							<div className="flex h-screen overflow-hidden border-collapse">
-								<Sidebar />
-								<main className="flex flex-col flex-1 min-h-screen overflow-y-auto overflow-x-hidden px-8 py-24">
-									{children}
-								</main>
-							</div>
-							<Toaster expand />
+							<ReactQueryProvider>
+								<Header />
+								<div className="flex h-screen overflow-hidden border-collapse">
+									<Sidebar />
+									<main className="flex flex-col flex-1 min-h-screen overflow-y-auto overflow-x-hidden px-8 py-24">
+										{children}
+									</main>
+								</div>
+								<Toaster expand />
+							</ReactQueryProvider>
 						</ThemeProvider>
 					</SessionProvider>
 				</NuqsAdapter>

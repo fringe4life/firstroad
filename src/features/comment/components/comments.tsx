@@ -8,43 +8,48 @@ import CommentEditButton from "@/features/comment/components/comment-edit-button
 import CommentDeleteButton from "@/features/comment/components/comment-delete-button";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { toast } from "sonner";
 
 import { getMoreComments } from "@/features/ticket/queries/get-ticket";
 import type { Comment } from "@/features/comment/types";
 import type { PaginatedResult } from "@/features/types/pagination";
 
-const CommentSkeleton = () => (
-  <div className="flex gap-2">
-    <div className="w-full max-w-105">
-      <div className="p-4 border rounded-lg">
-        <div className="flex items-center gap-3 mb-3">
-          <Skeleton className="h-8 w-8 rounded-full" />
-          <div className="space-y-1">
-            <Skeleton className="h-4 w-24" />
-            <Skeleton className="h-3 w-16" />
-          </div>
-        </div>
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-3/4" />
-        </div>
-      </div>
-    </div>
-  </div>
-);
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 
 type CommentsProps = {
   ticketId: string;
 } & PaginatedResult<Comment>;
 
-const Comments = ({ ticketId, list: initialComments, metadata }: CommentsProps) => {
+const Comments = ({ ticketId, list, metadata }: CommentsProps) => {
+  const queryKey = ['comments', ticketId];
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    error
+  } = useInfiniteQuery({
+    queryKey,
+    queryFn: ({ pageParam }) => getMoreComments(ticketId, pageParam),
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
+    initialData: {
+      pages: [{
+        list,
+        hasMore: metadata?.hasNextPage ?? false,
+        nextCursor: metadata?.nextCursor ?? null,
+      }],
+      pageParams: [undefined],
+    },
+  });
+
+  const queryClient = useQueryClient()
+
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editingContent, setEditingContent] = useState<string>("");
-  const [comments, setComments] = useState(initialComments);
-  const [metadataState, setMetadata] = useState(metadata);
-  const [isLoading, setIsLoading] = useState(false);
   const formRef = useRef<HTMLDivElement>(null);
+
+  // Flatten all comments from all pages
+  const allComments = data.pages.flatMap(page => page.list);
 
   const handleEdit = (commentId: string, content: string) => {
     setEditingCommentId(commentId);
@@ -59,90 +64,11 @@ const Comments = ({ ticketId, list: initialComments, metadata }: CommentsProps) 
     setEditingContent("");
   };
 
-  const handleMore = async () => {
-    if (isLoading || !metadataState?.hasNextPage) return;
-    
-    setIsLoading(true);
-    try {
-      const morePaginatedComments = await getMoreComments(ticketId, metadataState.nextCursor || undefined);
-      const moreComments = morePaginatedComments.list;
+  const deleteAction = () => queryClient.invalidateQueries({queryKey});
 
-      setComments([...comments, ...moreComments]);
-      setMetadata({
-        hasNextPage: morePaginatedComments.hasMore,
-        nextCursor: morePaginatedComments.nextCursor,
-        count: (metadataState?.count || 0) + moreComments.length,
-      });
-    } catch (error) {
-      console.error('Failed to load more comments:', error);
-      toast.error('Failed to load more comments');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleDeleteComment = (id: string) => {
-    setComments((prevComments) =>
-      prevComments.filter((comment) => comment.id !== id)
-    );
-  };
-
-
-
-  const createOptimisticDeleteAction = (commentId: string) => {
-    return async () => {
-      console.log("🎯 createOptimisticDeleteAction - Starting action for commentId:", commentId);
-      
-      // Optimistically update the UI
-      setComments(prev => prev.map(comment => 
-        comment.id === commentId 
-          ? { ...comment, isDeleting: true }
-          : comment
-      ));
-      
-      // Show loading toast
-      const loadingToastId = toast.loading('Deleting comment...');
-      
-      try {
-        // Call the server action
-        const { deleteComment } = await import('@/features/comment/actions/delete-comment');
-        console.log("🎯 createOptimisticDeleteAction - Calling deleteComment");
-        const result = await deleteComment(commentId);
-        console.log("🎯 createOptimisticDeleteAction - deleteComment result:", result);
-        
-        // Dismiss loading toast
-        toast.dismiss(loadingToastId);
-        
-        if (result.status === 'SUCCESS') {
-          toast.success('Comment deleted successfully');
-          // Remove the comment from the list
-          handleDeleteComment(commentId);
-        } else {
-          toast.error(result.message || 'Failed to delete comment');
-          // Revert optimistic update on error
-          setComments(prev => prev.map(comment => 
-            comment.id === commentId 
-              ? { ...comment, isDeleting: false }
-              : comment
-          ));
-        }
-        
-        return result;
-      } catch (error) {
-        console.error('Failed to delete comment:', error);
-        // Dismiss loading toast
-        toast.dismiss(loadingToastId);
-        toast.error('Failed to delete comment');
-        // Revert optimistic update on error
-        setComments(prev => prev.map(comment => 
-          comment.id === commentId 
-            ? { ...comment, isDeleting: false }
-            : comment
-        ));
-        throw error;
-      }
-    };
-  };
+  if (error) {
+    return <div>Error loading comments: {error.message}</div>;
+  }
 
   return (
     <>
@@ -161,13 +87,13 @@ const Comments = ({ ticketId, list: initialComments, metadata }: CommentsProps) 
         }
       />
       <div className="grid gap-y-2">
-        {comments.map((comment) => {
+        {allComments.map((comment) => {
           return (
             <CommentItem
               key={comment.id}
               comment={comment}
               buttons={
-                comment.isOwner && !comment.isDeleting ? [
+                comment.isOwner ? [
                   <CommentEditButton
                     key="edit"
                     comment={comment}
@@ -175,29 +101,30 @@ const Comments = ({ ticketId, list: initialComments, metadata }: CommentsProps) 
                   />,
                   <CommentDeleteButton 
                     key="delete" 
-                    deleteAction={createOptimisticDeleteAction(comment.id)}
+                    id={comment.id}
+                    onDeleteComment={deleteAction}
                   />
                 ] : []
               }
             />
           );
         })}
-        {isLoading && (
+        {isFetchingNextPage && (
           <>
-            <CommentSkeleton />
-            <CommentSkeleton />
-            <CommentSkeleton />
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
           </>
         )}
-        {metadataState?.hasNextPage && (
+        {hasNextPage && (
           <div className="flex justify-center pt-2">
             <Button
               variant="ghost"
-              onClick={handleMore}
-              disabled={isLoading}
+              onClick={() => fetchNextPage()}
+              disabled={isFetchingNextPage}
               className="w-full"
             >
-              {isLoading ? "Loading..." : "Load More Comments"}
+              {isFetchingNextPage ? "Loading..." : "Load More Comments"}
             </Button>
           </div>
         )}
