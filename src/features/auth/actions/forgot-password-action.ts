@@ -1,22 +1,23 @@
 "use server";
 
 import { headers } from "next/headers";
-import { z } from "zod/v4";
+import { z } from "zod";
 import {
   type ActionState,
   fromErrorToActionState,
   toActionState,
 } from "@/features/utils/to-action-state";
 import { auth } from "@/lib/auth";
-import { ticketsPath } from "@/path";
 
-const signInSchema = z.object({
+const forgotPasswordSchema = z.object({
   email: z.email().min(1, { message: "Email is required" }).max(191),
-  password: z.string().min(6).max(191),
 });
 
-const signin = async (_state: ActionState | undefined, formData: FormData) => {
-  console.log("🚀 Sign-in process started");
+const forgotPassword = async (
+  _state: ActionState | undefined,
+  formData: FormData,
+) => {
+  console.log("🚀 Forgot password process started");
   console.log("📅 Timestamp:", new Date().toISOString());
 
   try {
@@ -24,30 +25,30 @@ const signin = async (_state: ActionState | undefined, formData: FormData) => {
     const formDataObj = Object.fromEntries(formData);
     console.log("📋 Form data received:", {
       email: formDataObj.email,
-      hasPassword: !!formDataObj.password,
       formDataKeys: Array.from(formData.keys()),
     });
 
-    const { email, password } = signInSchema.parse(formDataObj);
+    const { email } = forgotPasswordSchema.parse(formDataObj);
     console.log("✅ Form data validation passed");
-    console.log("📧 Email being used:", email);
-    console.log("🔐 Password length:", password.length);
+    console.log("📧 Email being processed:", email);
 
-    console.log("🔑 Attempting to sign in with Better Auth...");
-    console.log("🎯 Redirect target:", ticketsPath);
+    console.log("🔑 Attempting to request password reset with Better Auth...");
 
-    await auth.api.signInEmail({
+    await auth.api.requestPasswordReset({
       body: {
         email,
-        password,
+        redirectTo: `${process.env.AUTH_URL || process.env.NEXTAUTH_URL || "http://localhost:3000"}/reset-password`,
       },
       headers: await headers(),
     });
 
-    console.log("✅ Sign-in completed successfully");
-    return toActionState("Signed in successfully", "SUCCESS");
+    console.log("✅ Password reset email sent successfully");
+    return toActionState(
+      "If an account with that email exists, a password reset link has been sent.",
+      "SUCCESS",
+    );
   } catch (err: unknown) {
-    console.log("💥 Error during sign-in process:", err);
+    console.log("💥 Error during forgot password process:", err);
     console.log("💥 Error type:", typeof err);
     console.log(
       "💥 Error message:",
@@ -58,4 +59,4 @@ const signin = async (_state: ActionState | undefined, formData: FormData) => {
   }
 };
 
-export { signin };
+export { forgotPassword };

@@ -1,10 +1,11 @@
 import type { Prisma } from "@prisma/client";
+import { headers } from "next/headers";
 import type { SearchParams } from "nuqs/server";
-import { auth } from "@/app/auth";
 import { isOwner } from "@/features/auth/utils/owner";
 import { searchParamsCache } from "@/features/ticket/search-params";
 import type { BaseTicket } from "@/features/ticket/types";
 import type { PaginatedResult } from "@/features/types/pagination";
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 export const getTickets = async (
@@ -13,7 +14,9 @@ export const getTickets = async (
 ): Promise<PaginatedResult<BaseTicket>> => {
   const { search, sortKey, sortValue, page, limit } =
     await searchParamsCache.parse(searchParams);
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
   // Build orderBy based on sort parameter
   let orderBy: Prisma.TicketOrderByWithRelationInput = {

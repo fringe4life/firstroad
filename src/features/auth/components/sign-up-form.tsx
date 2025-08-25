@@ -1,54 +1,51 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useId } from "react";
 import FieldError from "@/components/form/field-error";
 import Form from "@/components/form/form";
 import SubmitButton from "@/components/form/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { signup } from "@/features/auth/actions/signup-action";
 import { EMPTY_ACTION_STATE } from "@/features/utils/to-action-state";
-import { signUp } from "../actions/signup-action";
 
 const SignUpForm = () => {
-  const [state, action] = useActionState(signUp, EMPTY_ACTION_STATE);
+  const [state, action] = useActionState(signup, EMPTY_ACTION_STATE);
+  const nameId = useId();
+  const emailId = useId();
+  const passwordId = useId();
 
   return (
-    <Form action={action} state={state}>
-      <Label htmlFor="username">Username</Label>
+    <Form action={action} state={state || EMPTY_ACTION_STATE}>
+      <Label htmlFor={nameId}>Name</Label>
       <Input
-        name="username"
-        placeholder="username"
-        id="username"
-        defaultValue={state.payload?.get("username") as string}
+        name="name"
+        placeholder="Enter your name"
+        id={nameId}
+        defaultValue={state?.payload?.get("name")?.toString() || ""}
       />
-      <FieldError actionState={state} name="username" />
-      <Label htmlFor="email">Email</Label>
+      <FieldError actionState={state || EMPTY_ACTION_STATE} name="name" />
+
+      <Label htmlFor={emailId}>Email</Label>
       <Input
         name="email"
-        placeholder="email"
-        id="email"
-        defaultValue={state.payload?.get("email") as string}
+        placeholder="Enter your email"
+        id={emailId}
+        defaultValue={state?.payload?.get("email")?.toString() || ""}
       />
-      <FieldError actionState={state} name="email" />
-      <Label htmlFor="password">Password</Label>
+      <FieldError actionState={state || EMPTY_ACTION_STATE} name="email" />
+
+      <Label htmlFor={passwordId}>Password</Label>
       <Input
         type="password"
         name="password"
-        placeholder="password"
-        id="password"
-        defaultValue={state.payload?.get("password") as string}
+        placeholder="Enter your password"
+        id={passwordId}
+        defaultValue={state?.payload?.get("password")?.toString() || ""}
       />
-      <FieldError actionState={state} name="password" />
-      <Label htmlFor="confirmPassword">Confirm Password</Label>
-      <Input
-        type="password"
-        name="confirmPassword"
-        placeholder="password"
-        id="confirmPassword"
-        defaultValue={state.payload?.get("confirmPassword") as string}
-      />
-      <FieldError actionState={state} name="confirmPassword" />
-      <SubmitButton label={"Sign up"} />
+      <FieldError actionState={state || EMPTY_ACTION_STATE} name="password" />
+
+      <SubmitButton label="Sign up" />
     </Form>
   );
 };

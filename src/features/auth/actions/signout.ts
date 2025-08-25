@@ -1,10 +1,10 @@
 "use server";
 
-import { redirect } from "next/navigation";
-import { signOut } from "@/app/auth";
-import { signInPath } from "@/path";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 
-export const signOutAction = async () => {
-  await signOut({ redirect: false });
-  redirect(signInPath);
+export const signOut = async () => {
+  await auth.api.signOut({
+    headers: await headers(),
+  });
 };

@@ -2,7 +2,7 @@
 
 import { TicketX } from "lucide-react";
 import Placeholder from "@/components/placeholder";
-export default function Error({ error }: { error: Error }) {
+export default function TicketError({ error }: { error: Error }) {
   return (
     <Placeholder
       icon={<TicketX />}

@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { auth } from "@/app/auth";
 import { CardCompact } from "@/components/card-compact";
 import Heading from "@/components/heading";
 import Placeholder from "@/components/placeholder";
 import Spinner from "@/components/spinner";
 import TicketList from "@/features/ticket/components/ticket-list";
 import TicketUpsertForm from "@/features/ticket/components/ticket-upsert-form";
+import { auth } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "My Tickets | First Road",
@@ -16,7 +17,9 @@ export const metadata: Metadata = {
 };
 
 const TicketsPage = async ({ searchParams }: PageProps<"/tickets">) => {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
   return (
     <div className="flex flex-1 flex-col gap-y-8">

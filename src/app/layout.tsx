@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { SessionProvider } from "next-auth/react";
+
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "sonner";
 import Header from "@/app/_navigation/header";
@@ -45,20 +45,18 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} antialiased`}>
         <NuqsAdapter>
-          <SessionProvider>
-            <ThemeProvider>
-              <ReactQueryProvider>
-                <Header />
-                <div className="flex h-screen border-collapse overflow-hidden">
-                  <Sidebar />
-                  <main className="flex min-h-screen flex-1 flex-col overflow-y-auto overflow-x-hidden px-8 py-24">
-                    {children}
-                  </main>
-                </div>
-                <Toaster expand />
-              </ReactQueryProvider>
-            </ThemeProvider>
-          </SessionProvider>
+          <ThemeProvider>
+            <ReactQueryProvider>
+              <Header />
+              <div className="flex h-screen border-collapse overflow-hidden">
+                <Sidebar />
+                <main className="flex min-h-screen flex-1 flex-col overflow-y-auto overflow-x-hidden px-8 py-24">
+                  {children}
+                </main>
+              </div>
+              <Toaster expand />
+            </ReactQueryProvider>
+          </ThemeProvider>
         </NuqsAdapter>
       </body>
     </html>
