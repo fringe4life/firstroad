@@ -1,30 +1,36 @@
-# TicketBounty - A Modern Ticket Management System
+# First Road - A Collaborative Ticket Management Platform
 
-A full-stack ticket management application built with Next.js 15, featuring authentication, real-time updates, and a modern UI. Users can create, manage, and track tickets with bounty rewards.
+A full-stack collaborative platform built with Next.js 15, featuring authentication, real-time updates, and a modern UI. Users can create, manage, and track tickets with comments and collaboration features.
 
 ## 🚀 Features
 
-- **🔐 Authentication**: Secure user authentication with Auth.js (NextAuth)
+- **🔐 Authentication**: Secure user authentication with Auth.js (NextAuth v5)
 - **🎫 Ticket Management**: Create, edit, and manage tickets with status tracking
-- **💰 Bounty System**: Set and manage bounty rewards for tickets
+- **💬 Comments System**: Add, edit, and delete comments on tickets with infinite pagination
 - **🌙 Dark Mode**: Beautiful light/dark theme with smooth transitions
 - **📱 Responsive Design**: Optimized for desktop and mobile devices
 - **⚡ Real-time Updates**: Server-side rendering with React Suspense
 - **🔍 Search & Filter**: Advanced search and filtering capabilities
 - **🎨 Modern UI**: Built with shadcn/ui components and Tailwind CSS
+- **📊 Infinite Pagination**: Efficient cursor-based pagination for comments
+- **🔒 Ownership System**: Users can only edit their own tickets and comments
+- **🎯 Type Safety**: Full TypeScript support with typed routes
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 15 (App Router)
-- **Language**: TypeScript
+- **Framework**: Next.js 15 (App Router) with Turbopack
+- **Language**: TypeScript with strict type checking
 - **Database**: PostgreSQL with Prisma ORM
-- **Authentication**: Auth.js (NextAuth v5)
-- **Styling**: Tailwind CSS v4 with shadcn/ui
+- **Authentication**: Auth.js (NextAuth v5) with credential provider
+- **Styling**: Tailwind CSS v4 with shadcn/ui components
 - **Icons**: Lucide React
 - **Forms**: React Hook Form with Zod validation
+- **State Management**: TanStack React Query for server state
 - **Notifications**: Sonner toast notifications
 - **Theme**: next-themes for dark/light mode
+- **URL Search Params**: nuqs for type-safe URL parameters
 - **Package Manager**: Bun (recommended)
+- **Linting**: Biome for fast formatting and linting
 
 ## 📋 Prerequisites
 
@@ -101,40 +107,58 @@ src/
 │   │   ├── tickets/       # Ticket management pages
 │   │   └── account/       # User account pages
 │   ├── api/               # API routes
+│   ├── _navigation/       # Navigation components
+│   ├── _providers/        # React providers
 │   └── auth.ts            # Auth.js configuration
 ├── components/            # Reusable UI components
 │   ├── ui/               # shadcn/ui components
+│   ├── form/             # Form components
 │   └── theme/            # Theme configuration
 ├── features/             # Feature-based modules
 │   ├── auth/             # Authentication logic
+│   │   ├── actions/      # Server actions
+│   │   └── components/   # Auth components
 │   ├── ticket/           # Ticket management
-│   └── queries/          # Data fetching
+│   ├── comment/          # Comment system
+│   └── utils/            # Shared utilities
 ├── lib/                  # Utility libraries
 └── prisma/              # Database schema and migrations
+    ├── models/          # Individual model files
+    └── seed-data/       # Database seeding data
 ```
 
 ## 🔐 Authentication
 
-The application uses Auth.js (NextAuth) with credential authentication:
+The application uses Auth.js (NextAuth v5) with credential authentication:
 
-- **Sign Up**: Create new accounts with email/password
+- **Sign Up**: Create new accounts with username, email, and password
 - **Sign In**: Secure login with credential validation
 - **Protected Routes**: Automatic redirection for unauthenticated users
 - **User Sessions**: JWT-based session management
+- **Password Hashing**: Argon2 for secure password storage
 
 ## 🎫 Ticket System
 
 ### Features
-- **Create Tickets**: Users can create tickets with title, description, and bounty
-- **Status Management**: Track ticket status (Open, In Progress, Completed, etc.)
-- **Bounty System**: Set monetary rewards for ticket completion
+- **Create Tickets**: Users can create tickets with title, description, and deadline
+- **Status Management**: Track ticket status (Open, In Progress, Done)
 - **Ownership**: Users can only edit their own tickets
 - **Search & Filter**: Find tickets by title, description, or status
+- **Deadline Tracking**: Set and manage ticket deadlines
 
 ### Sample Data
 The database is seeded with sample users and tickets for testing:
 - **Users**: john@example.com, jane@example.com, bob@example.com
 - **Password**: password123 (for all test accounts)
+
+## 💬 Comment System
+
+### Features
+- **Add Comments**: Users can add comments to tickets
+- **Edit Comments**: Comment owners can edit their comments
+- **Delete Comments**: Comment owners can delete their comments
+- **Infinite Pagination**: Efficient cursor-based pagination for large comment lists
+- **Real-time Updates**: Comments update immediately after actions
 
 ## 🎨 UI Components
 
@@ -143,6 +167,7 @@ Built with shadcn/ui and Tailwind CSS:
 - **Dark Mode**: Toggle between light and dark themes
 - **Accessible**: WCAG compliant components
 - **Customizable**: Easy to modify and extend
+- **Loading States**: Skeleton components for better UX
 
 ## 🚀 Available Scripts
 
@@ -151,9 +176,9 @@ Built with shadcn/ui and Tailwind CSS:
 bun run dev              # Start development server with Turbopack
 bun run build            # Build for production
 bun run start            # Start production server
-bun run lint             # Run ESLint
-bun run lint-fix         # Fix ESLint issues
-bun run type             # Run TypeScript type checking
+bun run lint             # Run Biome linting
+bun run format           # Format code with Biome
+bun run type             # Run TypeScript type checking with tsgo
 
 # Database
 bun run prisma generate  # Generate Prisma client
@@ -167,10 +192,16 @@ bun run prisma db seed   # Seed database with sample data
 The project uses Tailwind CSS v4 with custom configuration for dark mode and theme variables.
 
 ### Database
-PostgreSQL with Prisma ORM for type-safe database operations.
+PostgreSQL with Prisma ORM for type-safe database operations. The schema is split into individual model files for better organization.
 
 ### Authentication
 Auth.js configured with credential provider and Prisma adapter.
+
+### Type Safety
+- Full TypeScript support with strict configuration
+- Typed routes with Next.js 15
+- Type-safe URL search parameters with nuqs
+- Generic type utilities for better code reuse
 
 ## 🚀 Deployment
 
@@ -205,3 +236,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Auth.js](https://authjs.dev/) - Authentication
 - [Prisma](https://www.prisma.io/) - Database ORM
 - [Tailwind CSS](https://tailwindcss.com/) - CSS framework
+- [TanStack Query](https://tanstack.com/query) - Server state management
+- [nuqs](https://nuqs.vercel.app/) - Type-safe URL search params
