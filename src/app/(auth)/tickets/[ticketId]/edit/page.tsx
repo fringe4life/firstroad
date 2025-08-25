@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import type { Route } from "next";
 import Breadcrumbs from "@/components/breadcrumbs";
 import { CardCompact } from "@/components/card-compact";
 import { Separator } from "@/components/ui/separator";
@@ -38,7 +39,7 @@ const TicketEditPage = async ({
 				<Breadcrumbs
 					breadcrumbs={[
 						{ title: "Tickets", href: homePath },
-						{ title: ticket.title, href: ticketPath(ticket.id) },
+						{ title: ticket.title, href: ticketPath(ticket.id) as Route },
 						{ title: "Edit" },
 					]}
 				/>

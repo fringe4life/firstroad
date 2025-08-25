@@ -1,22 +1,7 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { formatDistanceToNow } from "date-fns";
-
-type Comment = {
-  id: string;
-  content: string;
-  createdAt: Date;
-  updatedAt: Date;
-  userId: string | null;
-  ticketId: string;
-  isOwner: boolean;
-  userInfo?: {
-    userId: string;
-    user: {
-      name: string | null;
-    };
-  } | null;
-};
+import type { Comment } from "@/features/comment/types";
 
 type CommentItemProps = {
   comment: Comment;

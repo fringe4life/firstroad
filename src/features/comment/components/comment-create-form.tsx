@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { upsertComment } from "@/features/comment/actions/upsert-comment";
 import {
 	EMPTY_ACTION_STATE,
+	type ActionState,
 } from "@/features/utils/to-action-state";
 
 type CommentCreateFormProps = {
@@ -25,8 +26,16 @@ const CommentCreateForm = ({
 	initialContent = "", 
 	onCancel 
 }: CommentCreateFormProps) => {
+	// Create a wrapper function that matches useActionState signature
+	const commentAction = async (
+		state: ActionState<unknown>,
+		formData: FormData
+	): Promise<ActionState<unknown>> => {
+		return upsertComment(commentId, ticketId, state, formData);
+	};	
+
 	const [state, formAction] = useActionState(
-		upsertComment.bind(null, commentId, ticketId),
+		commentAction,
 		EMPTY_ACTION_STATE,
 	);
 

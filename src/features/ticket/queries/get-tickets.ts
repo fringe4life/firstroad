@@ -3,12 +3,28 @@ import type { SearchParams } from "nuqs/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/app/auth";
 import { isOwner } from "@/features/auth/utils/owner";
+import type { IsOwner } from "@/features/auth/utils/owner";
 import { searchParamsCache } from "@/features/ticket/search-params";
+import type { PaginatedResult } from "@/features/types/pagination";
+
+type TicketWithUserInfo = Prisma.TicketGetPayload<{
+  include: {
+    userInfo: {
+      include: {
+        user: {
+          select: {
+            name: true;
+          };
+        };
+      };
+    };
+  };
+}> & IsOwner;
 
 export const getTickets = async (
 	searchParams: Promise<SearchParams>,
 	userId?: string,
-) => {
+): Promise<PaginatedResult<TicketWithUserInfo>> => {
 	const { search, sortKey, sortValue, page, limit } =  await searchParamsCache.parse(searchParams);
 	const session = await auth();
 

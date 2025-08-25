@@ -10,9 +10,7 @@ export const getTicket = cache(async (id: string) => {
   const session = await auth();
   
   const ticket = await prisma.ticket.findUnique({
-    where: {
-      id,
-    },
+    where: { id },
     include: {
       userInfo: {
         include: {
@@ -61,7 +59,7 @@ export const getTicket = cache(async (id: string) => {
     ...ticket,
     list: commentsWithOwnership,
     isOwner: isOwner(session, ticket),
-    commentMetadata: {
+    metadata: {
       count: commentsToReturn.length, // This is just the count of loaded comments
       hasNextPage: hasMore,
     } satisfies PaginationMetadata,

@@ -1,6 +1,7 @@
 import { LucideSlash } from "lucide-react";
 import Link from "next/link";
 import { Fragment } from "react";
+import type { Route } from "next";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,7 +14,7 @@ import {
 type BreadcrumbsProps = {
   breadcrumbs: {
     title: string;
-    href?: string;
+    href?: Route;
   }[];
 };
 

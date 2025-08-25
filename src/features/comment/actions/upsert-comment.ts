@@ -11,31 +11,16 @@ import { prisma } from "@/lib/prisma";
 import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
 import { ticketEditPath } from "@/path";
+import type { CommentWithUserInfo } from "@/features/comment/types";
 
 const upsertCommentSchema = z.object({
   content: z.string().min(1, "Comment cannot be empty").max(1024, "Comment is too long"),
 });
 
-type CommentWithUserInfo = {
-  id: string;
-  content: string;
-  createdAt: Date;
-  updatedAt: Date;
-  userId: string | null;
-  ticketId: string;
-  isOwner: boolean;
-  userInfo: {
-    userId: string;
-    user: {
-      name: string | null;
-    };
-  } | null;
-};
-
 export const upsertComment = async (
   commentId: string | undefined,
   ticketId: string,
-  _state: ActionState<CommentWithUserInfo>,
+  _state: ActionState<unknown>,
   formData: FormData
 ): Promise<ActionState<CommentWithUserInfo>> => {
   const session = await getAuthOrRedirect();

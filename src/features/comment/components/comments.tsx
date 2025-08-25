@@ -11,35 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 
 import { getMoreComments } from "@/features/ticket/queries/get-ticket";
-
-type Comment = {
-  id: string;
-  content: string;
-  createdAt: Date;
-  updatedAt: Date;
-  userId: string | null;
-  ticketId: string;
-  isOwner: boolean;
-  isDeleting?: boolean;
-  userInfo?: {
-    userId: string;
-    user: {
-      name: string | null;
-    };
-  } | null;
-};
-
-type CommentMetadata = {
-  count: number;
-  hasNextPage: boolean;
-  nextCursor?: string | null;
-};
-
-type CommentsProps = {
-    ticketId: string;
-    list: Comment[];
-    commentMetadata?: CommentMetadata;
-}
+import type { CommentsProps } from "@/features/comment/types";
 
 const CommentSkeleton = () => (
   <div className="flex gap-2">
@@ -61,11 +33,11 @@ const CommentSkeleton = () => (
   </div>
 );
 
-const Comments = ({ ticketId, list: initialComments, commentMetadata }: CommentsProps) => {
+const Comments = ({ ticketId, list: initialComments, metadata }: CommentsProps) => {
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editingContent, setEditingContent] = useState<string>("");
   const [comments, setComments] = useState(initialComments);
-  const [metadata, setMetadata] = useState(commentMetadata);
+  const [metadataState, setMetadata] = useState(metadata);
   const [isLoading, setIsLoading] = useState(false);
   const formRef = useRef<HTMLDivElement>(null);
 
@@ -83,18 +55,18 @@ const Comments = ({ ticketId, list: initialComments, commentMetadata }: Comments
   };
 
   const handleMore = async () => {
-    if (isLoading || !metadata?.hasNextPage) return;
+    if (isLoading || !metadataState?.hasNextPage) return;
     
     setIsLoading(true);
     try {
-      const morePaginatedComments = await getMoreComments(ticketId, metadata.nextCursor || undefined);
+      const morePaginatedComments = await getMoreComments(ticketId, metadataState.nextCursor || undefined);
       const moreComments = morePaginatedComments.list;
 
       setComments([...comments, ...moreComments]);
       setMetadata({
         hasNextPage: morePaginatedComments.hasMore,
         nextCursor: morePaginatedComments.nextCursor,
-        count: (metadata?.count || 0) + moreComments.length,
+        count: (metadataState?.count || 0) + moreComments.length,
       });
     } catch (error) {
       console.error('Failed to load more comments:', error);
@@ -212,7 +184,7 @@ const Comments = ({ ticketId, list: initialComments, commentMetadata }: Comments
             <CommentSkeleton />
           </>
         )}
-        {metadata?.hasNextPage && (
+        {metadataState?.hasNextPage && (
           <div className="flex justify-center pt-2">
             <Button
               variant="ghost"

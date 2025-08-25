@@ -6,6 +6,10 @@ type Entity = {
     userId: string | null | undefined
 }
 
+export type IsOwner = {
+    isOwner: boolean;
+};
+
 export const isOwner = (session: Session | null, {userId}: Entity) => {
     if(!userId) return false
 

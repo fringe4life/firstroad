@@ -17,7 +17,9 @@ import {
 } from "@/components/ui/card";
 import { TICKET_ICONS } from "@/features/constants";
 import { toCurrencyFromCent } from "@/utils/currency";
-import type { PaginationMetadata } from "@/features/types/pagination";
+import type { PaginatedResult } from "@/features/types/pagination";
+import type { Comment } from "@/features/comment/types";
+import type { IsOwner } from "@/features/auth/utils/owner";
 import Comments from "@/features/comment/components/comments";
 import TicketMoreMenu from "@/features/ticket/components/ticket-more-menu";
 
@@ -34,41 +36,18 @@ type BaseTicket = Prisma.TicketGetPayload<{
 			};
 		};
 	};
-}>;
-
-// Comment type for detail view
-type Comment = {
-	id: string;
-	content: string;
-	createdAt: Date;
-	updatedAt: Date;
-	userId: string | null;
-	ticketId: string;
-	isOwner: boolean;
-	userInfo?: {
-		userId: string;
-		user: {
-			name: string | null;
-		};
-	} | null;
-};
+}> & IsOwner;
 
 // List view props (isDetail: false)
 type TicketItemListProps = {
 	isDetail: false;
-	ticket: BaseTicket & {
-		isOwner: boolean;
-	};
+	ticket: BaseTicket;
 };
 
 // Detail view props (isDetail: true)
 type TicketItemDetailProps = {
 	isDetail: true;
-	ticket: BaseTicket & {
-		isOwner: boolean;
-		list: Comment[];
-		commentMetadata: PaginationMetadata;
-	};
+	ticket: BaseTicket & PaginatedResult<Comment>;
 };
 
 // Discriminated union type
@@ -152,7 +131,7 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
 				<Comments 
 					ticketId={ticket.id} 
 					list={ticket.list} 
-					commentMetadata={ticket.commentMetadata}
+					metadata={ticket.metadata}
 				/>
 			)}
 		</div>
