@@ -1,10 +1,6 @@
 "use client";
 
-import { cloneElement, useActionState, useState, useEffect } from "react";
-import {
-  ActionState,
-  EMPTY_ACTION_STATE,
-} from "@/features/utils/to-action-state";
+import { cloneElement, useActionState, useEffect, useState } from "react";
 import Form from "@/components/form/form";
 import SubmitButton from "@/components/form/submit-button";
 import {
@@ -17,6 +13,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  type ActionState,
+  EMPTY_ACTION_STATE,
+} from "@/features/utils/to-action-state";
 
 type UseConfirmDialogProps = {
   action: () => Promise<ActionState>;
@@ -40,10 +40,11 @@ const useConfirmDialog = ({
   onIsPending,
 }: UseConfirmDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  
+
   // Handle both React element and callback function triggers
   const getTriggerElement = (isPending: boolean) => {
-    const triggerElement = typeof trigger === 'function' ? trigger(isPending) : trigger;
+    const triggerElement =
+      typeof trigger === "function" ? trigger(isPending) : trigger;
     return cloneElement(triggerElement, {
       onClick: () => setIsOpen((prevOpen) => !prevOpen),
     } as React.HTMLAttributes<HTMLElement>);
@@ -57,27 +58,32 @@ const useConfirmDialog = ({
     onError?.(result);
   };
 
-  const [actionState, formAction, isPending] = useActionState(action, EMPTY_ACTION_STATE);
-  
+  const [actionState, formAction, isPending] = useActionState(
+    action,
+    EMPTY_ACTION_STATE,
+  );
+
   // Track isPending changes and call onIsPending callback
   useEffect(() => {
     console.log("🔧 useConfirmDialog - isPending changed to:", isPending);
     console.log("🔧 useConfirmDialog - actionState:", actionState);
-    
+
     // Close dialog when action starts (isPending becomes true) if closeOnSubmit is true
     if (isPending && closeOnSubmit) {
       setIsOpen(false);
     }
-    
+
     onIsPending?.(isPending);
-    
+
     // Cleanup function to handle component unmount (e.g., redirects)
     return () => {
       console.log("🧹 useConfirmDialog - Component unmounting, cleaning up");
       // If component unmounts while action is pending, we should clean up any ongoing operations
       // This prevents memory leaks and ensures toasts are properly dismissed
       if (isPending) {
-        console.log("🧹 useConfirmDialog - Action was pending, triggering cleanup");
+        console.log(
+          "🧹 useConfirmDialog - Action was pending, triggering cleanup",
+        );
         // Call onIsPending with false to signal cleanup
         onIsPending?.(false);
       }
@@ -107,7 +113,7 @@ const useConfirmDialog = ({
       </AlertDialogContent>
     </AlertDialog>
   );
-  
+
   // Return a function that takes isPending to render the trigger, and the dialog
   return [getTriggerElement, dialog, isPending] as const;
 };

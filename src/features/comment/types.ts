@@ -14,7 +14,8 @@ type BaseComment = Prisma.CommentGetPayload<{
       };
     };
   };
-}> & IsOwner;
+}> &
+  IsOwner;
 
 // Comment type with additional properties for UI
 export type Comment = BaseComment & {
@@ -23,5 +24,3 @@ export type Comment = BaseComment & {
 
 // Comment type with required user info (for actions)
 export type CommentWithUserInfo = BaseComment;
-
-

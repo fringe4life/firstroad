@@ -85,15 +85,23 @@
   --animate-header-from-top: --header-from-top 250ms ease-out;
 
   @keyframes --header-from-top {
-    from {transform:translateY(-100%); }
-    to {transform:translateY(0);}
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(0);
+    }
   }
 
   --animate-sidebar-from-left: --sidebar-from-left 500ms ease-out;
 
   @keyframes --sidebar-from-left {
-    from {translate: -100% 0;}
-    to {translate: 0 0;}
+    from {
+      translate: -100% 0;
+    }
+    to {
+      translate: 0 0;
+    }
   }
 
   --radius-sm: calc(var(--radius) - 4px);
@@ -102,7 +110,7 @@
 
   --radius-lg: var(--radius);
 
-  --radius-xl: calc(var(--radius) + 4px)
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
 @layer base {

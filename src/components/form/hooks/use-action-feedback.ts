@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { ActionState } from "../../../features/utils/to-action-state";
+import type { ActionState } from "../../../features/utils/to-action-state";
 
 type onArgs = {
   state: ActionState;
@@ -14,7 +14,7 @@ export type FeedBackOption = {
 
 const useActionFeedback = (
   state: ActionState,
-  { onSuccess, onError }: FeedBackOption
+  { onSuccess, onError }: FeedBackOption,
 ) => {
   const prevTimeStamp = useRef(state.timestamp);
   const isNewAction = prevTimeStamp.current !== state.timestamp;

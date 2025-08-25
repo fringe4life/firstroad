@@ -1,7 +1,7 @@
 import { LucideSlash } from "lucide-react";
+import type { Route } from "next";
 import Link from "next/link";
 import { Fragment } from "react";
-import type { Route } from "next";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -56,4 +56,4 @@ const Breadcrumbs = ({ breadcrumbs }: BreadcrumbsProps) => {
   );
 };
 
-export default Breadcrumbs
+export default Breadcrumbs;

@@ -2,29 +2,32 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod/v4";
+import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
+import { isOwner } from "@/features/auth/utils/owner";
+import type { CommentWithUserInfo } from "@/features/comment/types";
 import {
   type ActionState,
   fromErrorToActionState,
   toActionState,
 } from "@/features/utils/to-action-state";
 import { prisma } from "@/lib/prisma";
-import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
-import { isOwner } from "@/features/auth/utils/owner";
 import { ticketEditPath } from "@/path";
-import type { CommentWithUserInfo } from "@/features/comment/types";
 
 const upsertCommentSchema = z.object({
-  content: z.string().min(1, "Comment cannot be empty").max(1024, "Comment is too long"),
+  content: z
+    .string()
+    .min(1, "Comment cannot be empty")
+    .max(1024, "Comment is too long"),
 });
 
 export const upsertComment = async (
   commentId: string | undefined,
   ticketId: string,
   _state: ActionState<unknown>,
-  formData: FormData
+  formData: FormData,
 ): Promise<ActionState<CommentWithUserInfo>> => {
   const session = await getAuthOrRedirect();
-  
+
   try {
     // Verify the ticket exists
     const ticket = await prisma.ticket.findUnique({
@@ -42,11 +45,16 @@ export const upsertComment = async (
       });
 
       if (!comment || !isOwner(session, comment)) {
-        return toActionState("Comment not found or you don't have permission to edit it", "ERROR");
+        return toActionState(
+          "Comment not found or you don't have permission to edit it",
+          "ERROR",
+        );
       }
     }
 
-    const data = upsertCommentSchema.parse(Object.fromEntries(formData.entries()));
+    const data = upsertCommentSchema.parse(
+      Object.fromEntries(formData.entries()),
+    );
 
     const comment = await prisma.comment.upsert({
       where: {
@@ -75,18 +83,20 @@ export const upsertComment = async (
 
     // Revalidate the ticket page to show the updated comment
     revalidatePath(ticketEditPath(ticketId));
-    
+
     // Add isOwner property to the comment
     const commentWithOwnership = {
       ...comment,
       isOwner: isOwner(session, comment),
     };
-    
+
     return toActionState(
-      commentId ? "Comment updated successfully" : "Comment created successfully", 
+      commentId
+        ? "Comment updated successfully"
+        : "Comment created successfully",
       "SUCCESS",
       undefined,
-      commentWithOwnership
+      commentWithOwnership,
     );
   } catch (err: unknown) {
     console.error("Error upserting comment:", err);

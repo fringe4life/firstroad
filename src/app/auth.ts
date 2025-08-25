@@ -3,8 +3,8 @@ import { verify } from "@node-rs/argon2";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
-import { prisma } from "@/lib/prisma";
 import { env } from "@/lib/env";
+import { prisma } from "@/lib/prisma";
 
 const signInSchema = z.object({
   email: z.email(),
@@ -22,12 +22,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       async authorize(credentials) {
         try {
-          const { email, password } = await signInSchema.parseAsync(credentials);
+          const { email, password } =
+            await signInSchema.parseAsync(credentials);
 
           // Add retry mechanism for database connection issues
           let user = null;
           let retries = 3;
-          
+
           while (retries > 0) {
             try {
               user = await prisma.user.findUnique({
@@ -40,7 +41,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 throw dbError;
               }
               // Wait a bit before retrying
-              await new Promise(resolve => setTimeout(resolve, 1000));
+              await new Promise((resolve) => setTimeout(resolve, 1000));
             }
           }
 

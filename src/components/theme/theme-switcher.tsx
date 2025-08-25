@@ -17,9 +17,9 @@ const ThemeSwitcher = () => {
       variant="outline"
       onClick={handleClick}
     >
-      <Moon className="duration-150 absolute rotate-90 scale-0 transition-transform dark:rotate-0 dark:scale-110 size-4" />
+      <Moon className="absolute size-4 rotate-90 scale-0 transition-transform duration-150 dark:rotate-0 dark:scale-110" />
 
-      <Sun className="duration-150 size-4 rotate-0 scale-110 transition-all dark:rotate-90 dark:scale-0" />
+      <Sun className="size-4 rotate-0 scale-110 transition-all duration-150 dark:rotate-90 dark:scale-0" />
     </Button>
   );
 };

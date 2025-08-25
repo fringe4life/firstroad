@@ -14,8 +14,8 @@ const signInPath = "/sign-in";
 const signUpPath = "/sign-up";
 const passwordForgotPath = "/password-forgot";
 
-const accountProfilePath = '/account/profile';
-const accountPasswordPath = '/account/password';
+const accountProfilePath = "/account/profile";
+const accountPasswordPath = "/account/password";
 
 export {
   homePath,

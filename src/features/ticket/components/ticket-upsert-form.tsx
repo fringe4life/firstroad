@@ -1,17 +1,17 @@
 "use client";
 
-import { Ticket } from "@prisma/client";
+import type { Ticket } from "@prisma/client";
 import { useActionState, useRef } from "react";
 import DatePicker, { type DateReset } from "@/components/date-picker";
+import FieldError from "@/components/form/field-error";
+import Form from "@/components/form/form";
+import SubmitButton from "@/components/form/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { EMPTY_ACTION_STATE } from "@/features/utils/to-action-state";
 import { fromCent } from "@/utils/currency";
 import { upsertTicket } from "../actions/upsert-ticket";
-import { EMPTY_ACTION_STATE } from "@/features/utils/to-action-state";
-import Form from "@/components/form/form";
-import FieldError from "@/components/form/field-error";
-import SubmitButton from "@/components/form/submit-button";
 
 type TicketUpsertFormProps = {
   ticket?: Ticket;
@@ -20,22 +20,17 @@ type TicketUpsertFormProps = {
 const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
   const [actionState, action] = useActionState(
     upsertTicket.bind(null, ticket?.id),
-    EMPTY_ACTION_STATE
+    EMPTY_ACTION_STATE,
   );
 
-  const datePickerImperativeHandleRef =
-    useRef<DateReset>(null);
+  const datePickerImperativeHandleRef = useRef<DateReset>(null);
 
   const handleSuccess = () => {
     datePickerImperativeHandleRef.current?.reset();
   };
 
   return (
-    <Form
-      state={actionState}
-      action={action}
-      onSuccessState={handleSuccess}
-    >
+    <Form state={actionState} action={action} onSuccessState={handleSuccess}>
       <Label htmlFor="title">Title</Label>
       <Input
         id="title"
@@ -52,12 +47,13 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
         id="description"
         name="description"
         defaultValue={
-          (actionState.payload?.get("description") as string) ?? ticket?.description
+          (actionState.payload?.get("description") as string) ??
+          ticket?.description
         }
       />
       <FieldError actionState={actionState} name="description" />
 
-      <div className="flex gap-x-2 mb-1">
+      <div className="mb-1 flex gap-x-2">
         <div className="w-1/2">
           <Label htmlFor="deadline">Deadline</Label>
           <DatePicker
@@ -92,4 +88,4 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
   );
 };
 
-export default TicketUpsertForm ;
+export default TicketUpsertForm;

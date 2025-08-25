@@ -1,17 +1,15 @@
-
 import type { Session } from "next-auth";
 
-
 type Entity = {
-    userId: string | null | undefined
-}
-
-export type IsOwner = {
-    isOwner: boolean;
+  userId: string | null | undefined;
 };
 
-export const isOwner = (session: Session | null, {userId}: Entity) => {
-    if(!userId) return false
+export type IsOwner = {
+  isOwner: boolean;
+};
 
-    return session?.user?.id === userId
-}
+export const isOwner = (session: Session | null, { userId }: Entity) => {
+  if (!userId) return false;
+
+  return session?.user?.id === userId;
+};

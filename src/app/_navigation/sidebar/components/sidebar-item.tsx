@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { cloneElement } from "react";
 import { buttonVariants } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { closedClassName } from "../constants";
 import type { NavItem } from "../types";
-import { Separator } from "@/components/ui/separator";
 
 type SidebarItemProps = {
   isOpen: boolean;
@@ -13,33 +13,32 @@ type SidebarItemProps = {
 };
 
 const SidebarItem = ({ isOpen, navItem, isActive }: SidebarItemProps) => {
-
   return (
     <>
-    {navItem.seperator && <Separator />}
-    <Link
-      href={navItem.href}
-      className={cn(
-        buttonVariants({ variant: "ghost" }),
-        "group relative flex h-12 justify-start",
-        isActive && "bg-muted font-bold hover:bg-muted"
-      )}
-    >
-      {cloneElement(navItem.icon, {
-        className: "w-5 aspect-square",
-      } as React.HTMLAttributes<HTMLElement>)}
-      <span
+      {navItem.seperator && <Separator />}
+      <Link
+        href={navItem.href}
         className={cn(
-          "absolute left-12 text-base duration-200",
-          isOpen ? "md:block hidden" : "w-19.5",
-          !isOpen && closedClassName
+          buttonVariants({ variant: "ghost" }),
+          "group relative flex h-12 justify-start",
+          isActive && "bg-muted font-bold hover:bg-muted",
         )}
       >
-        {navItem.title}
-      </span>
-    </Link>
+        {cloneElement(navItem.icon, {
+          className: "w-5 aspect-square",
+        } as React.HTMLAttributes<HTMLElement>)}
+        <span
+          className={cn(
+            "absolute left-12 text-base duration-200",
+            isOpen ? "hidden md:block" : "w-19.5",
+            !isOpen && closedClassName,
+          )}
+        >
+          {navItem.title}
+        </span>
+      </Link>
     </>
   );
 };
 
-export default SidebarItem
+export default SidebarItem;

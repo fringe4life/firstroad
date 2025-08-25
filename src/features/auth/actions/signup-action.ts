@@ -19,7 +19,7 @@ const signUpSchema = z
       .max(191)
       .refine(
         (value) => !value.includes(" "),
-        "Username cannot contain spaces"
+        "Username cannot contain spaces",
       ),
     email: z.email().min(1, { message: "Is required" }).max(191),
     password: z.string().min(6).max(191),
@@ -32,15 +32,15 @@ const signUpSchema = z
 
 export const signUp = async (_actionState: ActionState, formData: FormData) => {
   console.log("🚀 Sign-up process started");
-  
+
   try {
     console.log("📝 Parsing form data...");
     const formDataObj = Object.fromEntries(formData);
-    console.log("📋 Form data received:", { 
-      username: formDataObj.username, 
+    console.log("📋 Form data received:", {
+      username: formDataObj.username,
       email: formDataObj.email,
       hasPassword: !!formDataObj.password,
-      hasConfirmPassword: !!formDataObj.confirmPassword
+      hasConfirmPassword: !!formDataObj.confirmPassword,
     });
 
     const { username, email, password } = signUpSchema.parse(formDataObj);
@@ -71,7 +71,10 @@ export const signUp = async (_actionState: ActionState, formData: FormData) => {
         password: hashedPassword,
       },
     });
-    console.log("✅ User created successfully:", { id: user.id, email: user.email });
+    console.log("✅ User created successfully:", {
+      id: user.id,
+      email: user.email,
+    });
 
     // Create UserInfo for the new user
     console.log("📋 Creating UserInfo for new user...");
@@ -80,7 +83,9 @@ export const signUp = async (_actionState: ActionState, formData: FormData) => {
         userId: user.id,
       },
     });
-    console.log("✅ UserInfo created successfully:", { userId: userInfo.userId });
+    console.log("✅ UserInfo created successfully:", {
+      userId: userInfo.userId,
+    });
 
     // Sign in the user
     console.log("🔑 Attempting to sign in user...");
@@ -94,7 +99,11 @@ export const signUp = async (_actionState: ActionState, formData: FormData) => {
 
     if (result?.error) {
       console.log("❌ Sign-in failed after registration:", result.error);
-      return toActionState("Failed to sign in after registration", "ERROR", formData);
+      return toActionState(
+        "Failed to sign in after registration",
+        "ERROR",
+        formData,
+      );
     }
 
     if (result?.ok) {

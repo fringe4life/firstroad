@@ -2,8 +2,8 @@ import { LoaderCircle } from "lucide-react";
 
 const Spinner = () => {
   return (
-    <div className="flex-1 flex items-center justify-center">
-      <LoaderCircle className="animate-spin size-10" />
+    <div className="flex flex-1 items-center justify-center">
+      <LoaderCircle className="size-10 animate-spin" />
     </div>
   );
 };

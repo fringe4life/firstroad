@@ -3,14 +3,14 @@
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useImperativeHandle, useState } from "react";
-import { SelectSingleEventHandler } from "react-day-picker";
+import type { SelectSingleEventHandler } from "react-day-picker";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
 
 export type DateReset = {
   reset: () => void;
@@ -25,7 +25,7 @@ type DatePickerProps = {
 
 const DatePicker = ({ id, name, defaultValue, ref }: DatePickerProps) => {
   const [date, setDate] = useState<Date | undefined>(
-    defaultValue ? new Date(defaultValue) : new Date()
+    defaultValue ? new Date(defaultValue) : new Date(),
   );
   const [open, setOpen] = useState<boolean>(false);
   const formattedDate = date ? format(date, "yyyy-MM-dd") : "";
@@ -35,8 +35,8 @@ const DatePicker = ({ id, name, defaultValue, ref }: DatePickerProps) => {
   }));
 
   const handleSelect: SelectSingleEventHandler = (
-    date: Date | undefined,
-    selectedDay: Date
+    _date: Date | undefined,
+    selectedDay: Date,
   ) => {
     setDate(selectedDay);
     setOpen(false);

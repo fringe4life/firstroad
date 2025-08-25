@@ -1,40 +1,45 @@
 "use client";
 
 import { useQueryState, useQueryStates } from "nuqs";
+import { useEffect, useRef } from "react";
 import Pagination from "@/components/pagination";
 import {
-	options as PaginationOptions,
-	paginationParser,
-	searchParser,
+  options as PaginationOptions,
+  paginationParser,
+  searchParser,
 } from "@/features/ticket/search-params";
 import type { PaginationMetadata } from "@/features/types/pagination";
-import { useEffect, useRef } from "react";
 
 export interface TicketPaginationProps {
-	metadata: PaginationMetadata;
+  metadata: PaginationMetadata;
 }
 const TicketPagination = ({ metadata }: TicketPaginationProps) => {
-	const [pagination, setPagination] = useQueryStates(
-		paginationParser,
-		PaginationOptions,
-	);
+  const [pagination, setPagination] = useQueryStates(
+    paginationParser,
+    PaginationOptions,
+  );
 
-	
-	const [search] = useQueryState("search", searchParser);
-	
-	const prevSearch = useRef(search);
+  const [search] = useQueryState("search", searchParser);
 
-	useEffect(() => {
-		if (prevSearch.current !== search) {
-			setPagination({
-				...pagination,
-				page: 0,
-			})
-			prevSearch.current = search;
-		}
-	}, [search, pagination, setPagination])
+  const prevSearch = useRef(search);
 
-	return <Pagination pagination={pagination} setPagination={setPagination} metadata={metadata} 	/>;
+  useEffect(() => {
+    if (prevSearch.current !== search) {
+      setPagination({
+        ...pagination,
+        page: 0,
+      });
+      prevSearch.current = search;
+    }
+  }, [search, pagination, setPagination]);
+
+  return (
+    <Pagination
+      pagination={pagination}
+      setPagination={setPagination}
+      metadata={metadata}
+    />
+  );
 };
 
 export default TicketPagination;

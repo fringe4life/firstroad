@@ -14,4 +14,5 @@ export type BaseTicket = Prisma.TicketGetPayload<{
       };
     };
   };
-}> & IsOwner;
+}> &
+  IsOwner;

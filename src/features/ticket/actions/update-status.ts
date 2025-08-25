@@ -1,28 +1,28 @@
 "use server";
 
+import type { TicketStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
+import { isOwner } from "@/features/auth/utils/owner";
 import {
   fromErrorToActionState,
   toActionState,
-  } from "@/features/utils/to-action-state";
-  import type { TicketStatus } from "@prisma/client";
+} from "@/features/utils/to-action-state";
 import { prisma } from "@/lib/prisma";
 import { ticketsPath } from "@/path";
-import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
-import { isOwner } from "@/features/auth/utils/owner";
 
 export const updateStatus = async (newValue: TicketStatus, id: string) => {
   const session = await getAuthOrRedirect();
-  
+
   try {
     await prisma.$transaction(async (tx) => {
       const ticket = await tx.ticket.findUnique({
         where: {
           id,
-        }
+        },
       });
 
-      if(!ticket || !isOwner(session, ticket)) {
+      if (!ticket || !isOwner(session, ticket)) {
         throw new Error("Ticket Not Found");
       }
 
@@ -36,7 +36,7 @@ export const updateStatus = async (newValue: TicketStatus, id: string) => {
   } catch (err) {
     return fromErrorToActionState(err);
   }
-  
+
   revalidatePath(ticketsPath);
   return toActionState("Status updated", "SUCCESS");
 };

@@ -13,17 +13,17 @@ const signInSchema = z.object({
   password: z.string().min(6).max(191),
 });
 
-const signin = async (state: ActionState | undefined, formData: FormData) => {
+const signin = async (_state: ActionState | undefined, formData: FormData) => {
   console.log("🚀 Sign-in process started");
   console.log("📅 Timestamp:", new Date().toISOString());
-  
+
   try {
     console.log("📝 Parsing form data...");
     const formDataObj = Object.fromEntries(formData);
-    console.log("📋 Form data received:", { 
+    console.log("📋 Form data received:", {
       email: formDataObj.email,
       hasPassword: !!formDataObj.password,
-      formDataKeys: Array.from(formData.keys())
+      formDataKeys: Array.from(formData.keys()),
     });
 
     const { email, password } = signInSchema.parse(formDataObj);
@@ -57,9 +57,15 @@ const signin = async (state: ActionState | undefined, formData: FormData) => {
 
     console.log("💥 Error during sign-in process:", err);
     console.log("💥 Error type:", typeof err);
-    console.log("💥 Error message:", err instanceof Error ? err.message : String(err));
-    console.log("💥 Error stack:", err instanceof Error ? err.stack : "No stack trace");
-    
+    console.log(
+      "💥 Error message:",
+      err instanceof Error ? err.message : String(err),
+    );
+    console.log(
+      "💥 Error stack:",
+      err instanceof Error ? err.stack : "No stack trace",
+    );
+
     // Handle specific Auth.js credential errors
     if (err && typeof err === "object" && "type" in err) {
       const authError = err as any;
@@ -67,7 +73,7 @@ const signin = async (state: ActionState | undefined, formData: FormData) => {
         return toActionState("Invalid email or password", "ERROR", formData);
       }
     }
-    
+
     return fromErrorToActionState(err, formData);
   }
 };

@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { LucidePencil } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import type { Comment } from "@/features/comment/types";
 
 type CommentEditButtonProps = {
@@ -16,7 +16,7 @@ const CommentEditButton = ({ comment, onEdit }: CommentEditButtonProps) => {
 
   return (
     <Button variant="outline" size="icon" onClick={handleEdit}>
-      <LucidePencil className="w-4 aspect-square" />
+      <LucidePencil className="aspect-square w-4" />
     </Button>
   );
 };

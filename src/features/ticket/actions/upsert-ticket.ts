@@ -3,6 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod/v4";
+import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
+import { isOwner } from "@/features/auth/utils/owner";
+import { setCookieByKey } from "@/features/utils/cookies";
 import {
   type ActionState,
   fromErrorToActionState,
@@ -11,9 +14,6 @@ import {
 import { prisma } from "@/lib/prisma";
 import { ticketsPath } from "@/path";
 import { toCent } from "@/utils/currency";
-import { setCookieByKey } from "@/features/utils/cookies";
-import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
-import { isOwner } from "@/features/auth/utils/owner";
 
 const upsertSchema = z.object({
   title: z.string().min(1).max(191),
@@ -25,19 +25,19 @@ const upsertSchema = z.object({
 const upsertTicket = async (
   id: string | undefined,
   _state: ActionState,
-  formData: FormData
+  formData: FormData,
 ): Promise<ActionState> => {
   const session = await getAuthOrRedirect();
   try {
-
-    if(id){
+    if (id) {
       const ticket = await prisma.ticket.findUnique({
-          where: {
-            id
-          }
-      })
+        where: {
+          id,
+        },
+      });
 
-      if(!ticket || !isOwner(session, ticket)) return toActionState("Ticket Not Found", "ERROR");
+      if (!ticket || !isOwner(session, ticket))
+        return toActionState("Ticket Not Found", "ERROR");
     }
 
     const data = upsertSchema.parse(Object.fromEntries(formData.entries()));

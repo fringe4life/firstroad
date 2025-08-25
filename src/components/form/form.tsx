@@ -1,6 +1,6 @@
-import React from "react";
+import type React from "react";
 import { toast } from "sonner";
-import { ActionState } from "../../features/utils/to-action-state";
+import type { ActionState } from "../../features/utils/to-action-state";
 import { useActionFeedback } from "./hooks/use-action-feedback";
 
 type FormProps = React.ComponentPropsWithoutRef<"form"> & {
