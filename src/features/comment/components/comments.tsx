@@ -11,7 +11,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 
 import { getMoreComments } from "@/features/ticket/queries/get-ticket";
-import type { CommentsProps } from "@/features/comment/types";
+import type { Comment } from "@/features/comment/types";
+import type { PaginatedResult } from "@/features/types/pagination";
 
 const CommentSkeleton = () => (
   <div className="flex gap-2">
@@ -32,6 +33,10 @@ const CommentSkeleton = () => (
     </div>
   </div>
 );
+
+type CommentsProps = {
+  ticketId: string;
+} & PaginatedResult<Comment>;
 
 const Comments = ({ ticketId, list: initialComments, metadata }: CommentsProps) => {
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);

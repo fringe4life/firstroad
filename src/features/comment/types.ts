@@ -1,4 +1,3 @@
-import type { PaginatedResult } from "@/features/types/pagination";
 import type { Prisma } from "@prisma/client";
 import type { IsOwner } from "@/features/auth/utils/owner";
 
@@ -25,6 +24,4 @@ export type Comment = BaseComment & {
 // Comment type with required user info (for actions)
 export type CommentWithUserInfo = BaseComment;
 
-export type CommentsProps = {
-  ticketId: string;
-} & PaginatedResult<Comment>;
+

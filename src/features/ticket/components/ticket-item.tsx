@@ -1,5 +1,4 @@
 "use server"
-import type { Prisma } from "@prisma/client";
 import clsx from "clsx";
 import {
 	LucideMoreVertical,
@@ -19,24 +18,9 @@ import { TICKET_ICONS } from "@/features/constants";
 import { toCurrencyFromCent } from "@/utils/currency";
 import type { PaginatedResult } from "@/features/types/pagination";
 import type { Comment } from "@/features/comment/types";
-import type { IsOwner } from "@/features/auth/utils/owner";
+import type { BaseTicket } from "@/features/ticket/types";
 import Comments from "@/features/comment/components/comments";
 import TicketMoreMenu from "@/features/ticket/components/ticket-more-menu";
-
-// Base ticket type with common properties
-type BaseTicket = Prisma.TicketGetPayload<{
-	include: {
-		userInfo: {
-			include: {
-				user: {
-					select: {
-						name: true;
-					};
-				};
-			};
-		};
-	};
-}> & IsOwner;
 
 // List view props (isDetail: false)
 type TicketItemListProps = {
