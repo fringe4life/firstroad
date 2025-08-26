@@ -1,28 +1,29 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { CardCompact } from "@/components/card-compact";
 import ForgotPasswordForm from "@/features/auth/components/forgot-password-form";
+import { signInPath } from "@/path";
+
+export const metadata: Metadata = {
+  title: "Forgot Password | First Road",
+  description:
+    "Reset your First Road account password. Enter your email address and we'll send you a link to reset your password.",
+};
 
 const ForgotPasswordPage = () => {
   return (
-    <div className="container mx-auto max-w-md py-8">
-      <div className="space-y-6">
-        <div className="text-center">
-          <h1 className="font-bold text-2xl">Forgot Password</h1>
-          <p className="mt-2 text-muted-foreground">
-            Enter your email address and we'll send you a link to reset your
-            password.
-          </p>
-        </div>
-
-        <ForgotPasswordForm />
-
-        <div className="text-center">
-          <a
-            href="/sign-in"
-            className="text-muted-foreground text-sm underline hover:text-foreground"
-          >
+    <div className="justfy-center flex flex-1 flex-col items-center">
+      <CardCompact
+        title="Forgot Password"
+        description="Enter your email address and we'll send you a link to reset your password"
+        className="w-full max-w-120 animate-fade-from-top self-center"
+        content={<ForgotPasswordForm />}
+        footer={
+          <Link className="text-muted-foreground text-sm" href={signInPath}>
             Back to Sign In
-          </a>
-        </div>
-      </div>
+          </Link>
+        }
+      />
     </div>
   );
 };

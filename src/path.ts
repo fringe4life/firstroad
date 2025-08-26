@@ -1,25 +1,31 @@
-const ticketsPath = "/tickets";
+import type { Route } from "next";
 
-const homePath = "/";
+const ticketsPath: Route = "/tickets";
 
-const ticketPath = (ticketId: string): string => {
-  return `${ticketsPath}/${ticketId}`;
+const homePath: Route = "/";
+
+const ticketPath = (ticketId: string): Route => {
+  return `${ticketsPath}/${ticketId}` as Route;
 };
 
-const ticketEditPath = (ticketId: string): string => {
-  return `${ticketPath(ticketId)}/edit`;
+const ticketEditPath = (ticketId: string): Route => {
+  return `${ticketPath(ticketId)}/edit` as Route;
 };
 
-const signInPath = "/sign-in";
-const signUpPath = "/sign-up";
-const passwordForgotPath = "/password-forgot";
+const signInPath: Route = "/sign-in";
+const signUpPath: Route = "/sign-up";
+const forgotPasswordPath: Route = "/forgot-password";
+const resetPasswordPath: Route = "/reset-password";
+const verifyEmailPath: Route = "/verify-email";
 
-const accountProfilePath = "/account/profile";
-const accountPasswordPath = "/account/password";
+const accountProfilePath: Route = "/account/profile";
+const accountPasswordPath: Route = "/account/password";
 
 export {
   homePath,
-  passwordForgotPath,
+  forgotPasswordPath,
+  resetPasswordPath,
+  verifyEmailPath,
   signInPath,
   signUpPath,
   ticketEditPath,

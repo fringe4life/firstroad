@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { signOut } from "@/features/auth/actions/signout";
 import type { User } from "@/features/auth/types";
+import { accountPasswordPath, accountProfilePath } from "@/path";
 
 type AccountDropdownProps = {
   user: User;
@@ -30,13 +31,13 @@ const AccountDropdown = ({ user }: AccountDropdownProps) => {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href="/account/profile">
+          <Link href={accountProfilePath}>
             <LucideUser className="mr-2 aspect-square h-4" />
             <span>Profile</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/account/password">
+          <Link href={accountPasswordPath}>
             <LucideLock className="mr-2 aspect-square h-4" />
             <span>Password</span>
           </Link>

@@ -6,6 +6,7 @@ import AccountDropdown from "@/app/_navigation/account-dropwdown";
 import { ThemeSwitcher } from "@/components/theme/theme-switcher";
 import { buttonVariants } from "@/components/ui/button";
 import useAuth from "@/features/auth/hooks/use-auth";
+import { homePath, signInPath, signUpPath } from "@/path";
 
 export const dynamic = "force-dynamic";
 
@@ -18,10 +19,16 @@ const Header = () => {
     <AccountDropdown user={user} />
   ) : (
     <>
-      <Link className={buttonVariants({ variant: "outline" })} href="/sign-up">
+      <Link
+        className={buttonVariants({ variant: "outline" })}
+        href={signUpPath}
+      >
         Sign Up
       </Link>
-      <Link className={buttonVariants({ variant: "default" })} href="/sign-in">
+      <Link
+        className={buttonVariants({ variant: "default" })}
+        href={signInPath}
+      >
         Sign In
       </Link>
     </>
@@ -31,7 +38,7 @@ const Header = () => {
       <div>
         <Link
           className={buttonVariants({ variant: "ghost", size: "lg" })}
-          href="/"
+          href={homePath}
         >
           <Kanban />
           <h1 className="font-semibold text-lg">TicketBounty</h1>

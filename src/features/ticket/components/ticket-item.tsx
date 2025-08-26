@@ -20,6 +20,7 @@ import { TICKET_ICONS } from "@/features/constants";
 import TicketMoreMenu from "@/features/ticket/components/ticket-more-menu";
 import type { BaseTicket } from "@/features/ticket/types";
 import type { PaginatedResult } from "@/features/types/pagination";
+import { ticketEditPath, ticketPath } from "@/path";
 import { toCurrencyFromCent } from "@/utils/currency";
 
 // List view props (isDetail: false)
@@ -40,7 +41,7 @@ type TicketItemProps = TicketItemListProps | TicketItemDetailProps;
 const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
   const detailButton = (
     <Button variant="outline" size="icon" asChild>
-      <Link prefetch href={`/tickets/${ticket.id}`}>
+      <Link prefetch href={ticketPath(ticket.id)}>
         <SquareArrowOutUpRight className="size-4" />
       </Link>
     </Button>
@@ -48,7 +49,7 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
 
   const editButton = ticket.isOwner ? (
     <Button variant="outline" size="icon" asChild>
-      <Link prefetch href={`/tickets/${ticket.id}/edit`}>
+      <Link prefetch href={ticketEditPath(ticket.id)}>
         <LucidePencil className="size-4" />
       </Link>
     </Button>

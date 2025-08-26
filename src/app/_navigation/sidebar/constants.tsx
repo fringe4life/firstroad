@@ -1,23 +1,23 @@
 import { LucideBook, LucideCircleUser, LucideLibrary } from "lucide-react";
-import type { Route } from "next";
+import { accountProfilePath, homePath, ticketsPath } from "@/path";
 import type { NavItem } from "./types";
 
 export const navItems: NavItem[] = [
   {
     title: "All Tickets",
     icon: <LucideLibrary />,
-    href: "/" as Route,
+    href: homePath,
   },
   {
     title: "My Tickets",
     icon: <LucideBook />,
-    href: "/tickets" as Route,
+    href: ticketsPath,
   },
   {
     seperator: true,
     title: "Account",
     icon: <LucideCircleUser />,
-    href: "/account" as Route,
+    href: accountProfilePath,
   },
 ];
 

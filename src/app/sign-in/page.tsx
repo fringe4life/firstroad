@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CardCompact } from "@/components/card-compact";
 import SignInForm from "@/features/auth/components/sign-in-form";
+import { forgotPasswordPath, signUpPath } from "@/path";
 
 export const metadata: Metadata = {
   title: "Sign In | First Road",
@@ -19,12 +20,12 @@ const SignInPage = () => {
         content={<SignInForm />}
         footer={
           <div className="flex w-full justify-between">
-            <Link className="text-muted-foreground text-sm" href="/sign-up">
+            <Link className="text-muted-foreground text-sm" href={signUpPath}>
               No account yet?
             </Link>
             <Link
               className="text-muted-foreground text-sm"
-              href="/forgot-password"
+              href={forgotPasswordPath}
             >
               Forgot Password?
             </Link>
