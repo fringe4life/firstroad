@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod/v4";
-import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
+import { getSessionOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
 import { setCookieByKey } from "@/features/utils/cookies";
 import {
@@ -27,7 +27,7 @@ const upsertTicket = async (
   _state: ActionState,
   formData: FormData,
 ): Promise<ActionState> => {
-  const session = await getAuthOrRedirect();
+  const session = await getSessionOrRedirect();
   try {
     if (id) {
       const ticket = await prisma.ticket.findUnique({

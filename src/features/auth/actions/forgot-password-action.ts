@@ -1,7 +1,7 @@
 "use server";
 
 import { headers } from "next/headers";
-import { z } from "zod";
+import { z } from "zod/v4";
 import {
   type ActionState,
   fromErrorToActionState,

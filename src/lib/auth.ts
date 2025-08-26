@@ -9,6 +9,22 @@ export const auth = betterAuth({
 
   plugins: [nextCookies()],
 
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (user) => {
+          try {
+            await prisma.userInfo.create({
+              data: { userId: user.id },
+            });
+          } catch {
+            // Ignore if already exists or any race during parallel creations
+          }
+        },
+      },
+    },
+  },
+
   emailAndPassword: {
     enabled: true,
     sendResetPassword: async ({ user, url }, _request) => {

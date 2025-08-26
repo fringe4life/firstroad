@@ -2,7 +2,7 @@
 
 import type { TicketStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
+import { getSessionOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
 import {
   fromErrorToActionState,
@@ -12,7 +12,7 @@ import { prisma } from "@/lib/prisma";
 import { ticketsPath } from "@/path";
 
 export const updateStatus = async (newValue: TicketStatus, id: string) => {
-  const session = await getAuthOrRedirect();
+  const session = await getSessionOrRedirect();
 
   try {
     await prisma.$transaction(async (tx) => {

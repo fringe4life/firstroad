@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod/v4";
-import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
+import { getSessionOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
 import type { CommentWithUserInfo } from "@/features/comment/types";
 import {
@@ -26,7 +26,7 @@ export const upsertComment = async (
   _state: ActionState<unknown>,
   formData: FormData,
 ): Promise<ActionState<CommentWithUserInfo>> => {
-  const session = await getAuthOrRedirect();
+  const session = await getSessionOrRedirect();
 
   try {
     // Verify the ticket exists

@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useActionState, useId } from "react";
 import FieldError from "@/components/form/field-error";
 import Form from "@/components/form/form";
@@ -9,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signin } from "@/features/auth/actions/signin-action";
 import { EMPTY_ACTION_STATE } from "@/features/utils/to-action-state";
-import { forgotPasswordPath } from "@/path";
 
 const SignInForm = () => {
   const [state, action] = useActionState(signin, EMPTY_ACTION_STATE);
@@ -35,15 +33,6 @@ const SignInForm = () => {
         defaultValue={state?.payload?.get("password")?.toString() || ""}
       />
       <FieldError actionState={state || EMPTY_ACTION_STATE} name="password" />
-
-      <div className="text-right">
-        <Link
-          href={forgotPasswordPath}
-          className="text-muted-foreground text-sm underline hover:text-foreground"
-        >
-          Forgot password?
-        </Link>
-      </div>
 
       <SubmitButton label="Sign in" />
     </Form>

@@ -396,7 +396,7 @@
 
     "@types/react": ["@types/react@19.1.11", "", { "dependencies": { "csstype": "^3.0.2" } }, "sha512-lr3jdBw/BGj49Eps7EvqlUaoeA0xpj3pc0RoJkHpYaCHkVK7i28dKyImLQb3JVlqs3aYSXf7qYuWOW/fgZnTXQ=="],
 
-    "@types/react-dom": ["@types/react-dom@19.1.7", "", { "peerDependencies": { "@types/react": "^19.0.0" } }, "sha512-i5ZzwYpqjmrKenzkoLM2Ibzt6mAsM7pxB6BCIouEVVmgiqaMj1TjaK7hnA36hbW5aZv20kx7Lw6hWzPWg0Rurw=="],
+    "@types/react-dom": ["@types/react-dom@19.1.8", "", { "peerDependencies": { "@types/react": "^19.0.0" } }, "sha512-xG7xaBMJCpcK0RpN8jDbAACQo54ycO6h4dSSmgv8+fu6ZIAdANkx/WsawASUjVXYfy+J9AbUpRMNNEsXCDfDBQ=="],
 
     "@typescript/native-preview": ["@typescript/native-preview@7.0.0-dev.20250825.1", "", { "optionalDependencies": { "@typescript/native-preview-darwin-arm64": "7.0.0-dev.20250825.1", "@typescript/native-preview-darwin-x64": "7.0.0-dev.20250825.1", "@typescript/native-preview-linux-arm": "7.0.0-dev.20250825.1", "@typescript/native-preview-linux-arm64": "7.0.0-dev.20250825.1", "@typescript/native-preview-linux-x64": "7.0.0-dev.20250825.1", "@typescript/native-preview-win32-arm64": "7.0.0-dev.20250825.1", "@typescript/native-preview-win32-x64": "7.0.0-dev.20250825.1" }, "bin": { "tsgo": "bin/tsgo.js" } }, "sha512-DQB0+7nluvRjON/qc/4k6eYxbHII5sMCvMzUX1OOyT6h8nBXATfogBtqQ/NJ3193p+U/9cEgN0uIR+WBcBOuDw=="],
 

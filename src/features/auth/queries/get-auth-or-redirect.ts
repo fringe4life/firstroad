@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { signInPath } from "@/path";
 
-export const getAuthOrRedirect = async () => {
+export const getSessionOrRedirect = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
