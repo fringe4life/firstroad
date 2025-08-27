@@ -4,7 +4,7 @@ A full-stack collaborative platform built with Next.js 15, featuring authenticat
 
 ## 🚀 Features
 
-- **🔐 Authentication**: Secure user authentication with Auth.js (NextAuth v5)
+- **🔐 Authentication**: Secure user authentication with Better Auth (email/password)
 - **🎫 Ticket Management**: Create, edit, and manage tickets with status tracking
 - **💬 Comments System**: Add, edit, and delete comments on tickets with infinite pagination
 - **🌙 Dark Mode**: Beautiful light/dark theme with smooth transitions
@@ -15,13 +15,15 @@ A full-stack collaborative platform built with Next.js 15, featuring authenticat
 - **📊 Infinite Pagination**: Efficient cursor-based pagination for comments
 - **🔒 Ownership System**: Users can only edit their own tickets and comments
 - **🎯 Type Safety**: Full TypeScript support with typed routes
+- **📧 Email Features**: Password reset and email verification out-of-the-box
+- **🔄 Database Hooks**: Automatic UserInfo creation on user registration
 
 ## 🛠️ Tech Stack
 
 - **Framework**: Next.js 15 (App Router) with Turbopack
 - **Language**: TypeScript with strict type checking
 - **Database**: PostgreSQL with Prisma ORM
-- **Authentication**: Auth.js (NextAuth v5) with credential provider
+- **Authentication**: Better Auth with email/password provider
 - **Styling**: Tailwind CSS v4 with shadcn/ui components
 - **Icons**: Lucide React
 - **Forms**: React Hook Form with Zod validation
@@ -31,6 +33,7 @@ A full-stack collaborative platform built with Next.js 15, featuring authenticat
 - **URL Search Params**: nuqs for type-safe URL parameters
 - **Package Manager**: Bun (recommended)
 - **Linting**: Biome for fast formatting and linting
+- **Type Checking**: tsgo for fast TypeScript checking
 
 ## 📋 Prerequisites
 
@@ -72,7 +75,7 @@ Update `.env.local` with your configuration:
 DATABASE_URL="postgresql://username:password@localhost:5432/your_database"
 DIRECT_URL="postgresql://username:password@localhost:5432/your_database"
 
-# Auth.js
+# Better Auth
 AUTH_SECRET="your-secret-key-here"
 AUTH_URL="http://localhost:3000"
 ```
@@ -109,7 +112,11 @@ src/
 │   ├── api/               # API routes
 │   ├── _navigation/       # Navigation components
 │   ├── _providers/        # React providers
-│   └── auth.ts            # Auth.js configuration
+│   ├── forgot-password/   # Password reset pages
+│   ├── reset-password/    # Password reset confirmation
+│   ├── sign-in/          # Authentication pages
+│   ├── sign-up/          # User registration
+│   └── verify-email/     # Email verification
 ├── components/            # Reusable UI components
 │   ├── ui/               # shadcn/ui components
 │   ├── form/             # Form components
@@ -117,11 +124,20 @@ src/
 ├── features/             # Feature-based modules
 │   ├── auth/             # Authentication logic
 │   │   ├── actions/      # Server actions
-│   │   └── components/   # Auth components
+│   │   ├── components/   # Auth components
+│   │   ├── hooks/        # Client-side hooks
+│   │   ├── queries/      # Server-side queries
+│   │   ├── types.ts      # Centralized auth types
+│   │   └── utils/        # Auth utilities
 │   ├── ticket/           # Ticket management
 │   ├── comment/          # Comment system
 │   └── utils/            # Shared utilities
 ├── lib/                  # Utility libraries
+│   ├── auth.ts          # Better Auth configuration
+│   ├── auth-client.ts   # Client-side auth instance
+│   ├── email.ts         # Email utility
+│   ├── path.ts          # Type-safe route definitions
+│   └── prisma.ts        # Database client
 └── prisma/              # Database schema and migrations
     ├── models/          # Individual model files
     └── seed-data/       # Database seeding data
@@ -129,13 +145,22 @@ src/
 
 ## 🔐 Authentication
 
-The application uses Auth.js (NextAuth v5) with credential authentication:
+The application uses Better Auth with email/password authentication:
 
-- **Sign Up**: Create new accounts with username, email, and password
+- **Sign Up**: Create new accounts with email and password
 - **Sign In**: Secure login with credential validation
+- **Password Reset**: Built-in password reset functionality
+- **Email Verification**: Automatic email verification on signup
 - **Protected Routes**: Automatic redirection for unauthenticated users
-- **User Sessions**: JWT-based session management
-- **Password Hashing**: Argon2 for secure password storage
+- **User Sessions**: Secure session management
+- **Database Hooks**: Automatic UserInfo creation on user registration
+
+### Authentication Flow
+1. **Registration**: Users sign up with email/password
+2. **Email Verification**: Verification email sent automatically
+3. **Login**: Users sign in with verified credentials
+4. **Password Reset**: Users can request password reset via email
+5. **Session Management**: Secure sessions with automatic UserInfo creation
 
 ## 🎫 Ticket System
 
@@ -147,9 +172,9 @@ The application uses Auth.js (NextAuth v5) with credential authentication:
 - **Deadline Tracking**: Set and manage ticket deadlines
 
 ### Sample Data
-The database is seeded with sample users and tickets for testing:
-- **Users**: john@example.com, jane@example.com, bob@example.com
-- **Password**: password123 (for all test accounts)
+The database is seeded with sample tickets and comments for existing users:
+- **Seeding**: Only creates tickets and comments, preserves existing users
+- **User Creation**: Users must be created through the application's sign-up flow
 
 ## 💬 Comment System
 
@@ -168,6 +193,7 @@ Built with shadcn/ui and Tailwind CSS:
 - **Accessible**: WCAG compliant components
 - **Customizable**: Easy to modify and extend
 - **Loading States**: Skeleton components for better UX
+- **Card Components**: Consistent card layouts for auth pages
 
 ## 🚀 Available Scripts
 
@@ -177,7 +203,9 @@ bun run dev              # Start development server with Turbopack
 bun run build            # Build for production
 bun run start            # Start production server
 bun run lint             # Run Biome linting
+bun run lint:fix         # Fix linting issues
 bun run format           # Format code with Biome
+bun run check            # Run linting and formatting
 bun run type             # Run TypeScript type checking with tsgo
 
 # Database
@@ -192,16 +220,35 @@ bun run prisma db seed   # Seed database with sample data
 The project uses Tailwind CSS v4 with custom configuration for dark mode and theme variables.
 
 ### Database
-PostgreSQL with Prisma ORM for type-safe database operations. The schema is split into individual model files for better organization.
+PostgreSQL with Prisma ORM for type-safe database operations. The schema is split into individual model files for better organization:
+- **User**: Better Auth user model
+- **Account**: Better Auth account model
+- **Session**: Better Auth session model
+- **VerificationToken**: Better Auth verification tokens
+- **UserInfo**: Extended user information
+- **Ticket**: Ticket management
+- **Comment**: Comment system
 
 ### Authentication
-Auth.js configured with credential provider and Prisma adapter.
+Better Auth configured with:
+- Email/password authentication
+- Password reset functionality
+- Email verification
+- Database hooks for UserInfo creation
+- Prisma adapter for PostgreSQL
 
 ### Type Safety
 - Full TypeScript support with strict configuration
-- Typed routes with Next.js 15
+- Typed routes with Next.js 15 (`typedRoutes: true`)
 - Type-safe URL search parameters with nuqs
+- Centralized auth types in `src/features/auth/types.ts`
 - Generic type utilities for better code reuse
+
+### Path Management
+Centralized type-safe route definitions in `src/path.ts`:
+- Static routes with `Route` type
+- Dynamic routes with `as Route` assertions
+- Consistent path usage across the application
 
 ## 🚀 Deployment
 
@@ -233,8 +280,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - [Next.js](https://nextjs.org/) - React framework
 - [shadcn/ui](https://ui.shadcn.com/) - UI components
-- [Auth.js](https://authjs.dev/) - Authentication
+- [Better Auth](https://better-auth.com/) - Authentication
 - [Prisma](https://www.prisma.io/) - Database ORM
 - [Tailwind CSS](https://tailwindcss.com/) - CSS framework
 - [TanStack Query](https://tanstack.com/query) - Server state management
 - [nuqs](https://nuqs.vercel.app/) - Type-safe URL search params
+- [Biome](https://biomejs.dev/) - Fast formatting and linting
