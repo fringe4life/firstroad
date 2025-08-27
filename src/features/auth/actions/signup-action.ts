@@ -9,11 +9,19 @@ import {
 } from "@/features/utils/to-action-state";
 import { auth } from "@/lib/auth";
 
-const signUpSchema = z.object({
-  name: z.string().min(1, { message: "Name is required" }).max(191),
-  email: z.email().min(1, { message: "Email is required" }).max(191),
-  password: z.string().min(6).max(191),
-});
+const signUpSchema = z
+  .object({
+    name: z.string().min(1, { message: "Name is required" }).max(191),
+    email: z.email().min(1, { message: "Email is required" }).max(191),
+    password: z.string().min(6).max(191),
+    confirmPassword: z
+      .string()
+      .min(1, { message: "Please confirm your password" }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"], // This will show the error on the confirmPassword field
+  });
 
 const signup = async (_state: ActionState | undefined, formData: FormData) => {
   console.log("🚀 Sign-up process started");
@@ -26,6 +34,7 @@ const signup = async (_state: ActionState | undefined, formData: FormData) => {
       name: formDataObj.name,
       email: formDataObj.email,
       hasPassword: !!formDataObj.password,
+      hasConfirmPassword: !!formDataObj.confirmPassword,
       formDataKeys: Array.from(formData.keys()),
     });
 

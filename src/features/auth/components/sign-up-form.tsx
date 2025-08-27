@@ -14,6 +14,7 @@ const SignUpForm = () => {
   const nameId = useId();
   const emailId = useId();
   const passwordId = useId();
+  const confirmPasswordId = useId();
 
   return (
     <Form action={action} state={state || EMPTY_ACTION_STATE}>
@@ -44,6 +45,19 @@ const SignUpForm = () => {
         defaultValue={state?.payload?.get("password")?.toString() || ""}
       />
       <FieldError actionState={state || EMPTY_ACTION_STATE} name="password" />
+
+      <Label htmlFor={confirmPasswordId}>Confirm Password</Label>
+      <Input
+        type="password"
+        name="confirmPassword"
+        placeholder="Confirm your password"
+        id={confirmPasswordId}
+        defaultValue={state?.payload?.get("confirmPassword")?.toString() || ""}
+      />
+      <FieldError
+        actionState={state || EMPTY_ACTION_STATE}
+        name="confirmPassword"
+      />
 
       <SubmitButton label="Sign up" />
     </Form>
