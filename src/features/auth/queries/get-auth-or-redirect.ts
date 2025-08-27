@@ -1,16 +1,46 @@
-import { headers } from "next/headers";
+import type { Route } from "next";
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
+import { getSession } from "@/features/auth/queries/get-session";
+import type { ServerSession } from "@/features/auth/types";
 import { signInPath } from "@/path";
 
-export const getSessionOrRedirect = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+// Discriminated union for explicit behavior control
+// - when: "no-session" (default) → redirect to sign-in when session is missing
+// - when: "has-session" → redirect to provided path when session exists
+export type GetSessionRedirectOptions =
+  | {
+      when?: "no-session";
+    }
+  | {
+      when: "has-session";
+      redirectPath: Route;
+    };
 
-  if (!session) {
-    redirect(signInPath);
+// Overloads
+export function getSessionOrRedirect(): Promise<ServerSession>;
+export function getSessionOrRedirect(
+  options: Extract<GetSessionRedirectOptions, { when?: "no-session" }>,
+): Promise<ServerSession>;
+export function getSessionOrRedirect(
+  options: Extract<GetSessionRedirectOptions, { when: "has-session" }>,
+): Promise<ServerSession | null>;
+
+export async function getSessionOrRedirect(
+  options?: GetSessionRedirectOptions,
+): Promise<ServerSession | null> {
+  const session = await getSession();
+
+  // has-session branch (narrowed: redirectPath is required)
+  if (options?.when === "has-session") {
+    if (session) {
+      throw redirect(options.redirectPath);
+    }
+    return session;
   }
 
-  return session;
-};
+  // default: no-session branch
+  if (!session) {
+    throw redirect(signInPath);
+  }
+  return session as ServerSession;
+}

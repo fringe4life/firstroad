@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CardCompact } from "@/components/card-compact";
 import SignInForm from "@/features/auth/components/sign-in-form";
-import { forgotPasswordPath, signUpPath } from "@/path";
+import { getSessionOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
+import { forgotPasswordPath, signUpPath, ticketsPath } from "@/path";
 
 export const metadata: Metadata = {
   title: "Sign In | First Road",
@@ -10,7 +11,12 @@ export const metadata: Metadata = {
     "Sign in to your First Road account to access tickets, manage your profile, and collaborate with the community.",
 };
 
-const SignInPage = () => {
+const SignInPage = async () => {
+  await getSessionOrRedirect({
+    when: "has-session",
+    redirectPath: ticketsPath,
+  });
+
   return (
     <div className="justfy-center flex flex-1 flex-col items-center">
       <CardCompact

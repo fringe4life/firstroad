@@ -1,3 +1,5 @@
+"use server";
+
 import { headers } from "next/headers";
 import type { ServerSession } from "@/features/auth/types";
 import { auth } from "@/lib/auth";
