@@ -17,6 +17,8 @@ A full-stack collaborative platform built with Next.js 15, featuring authenticat
 - **🎯 Type Safety**: Full TypeScript support with typed routes
 - **📧 Email Features**: Password reset and email verification out-of-the-box
 - **🔄 Database Hooks**: Automatic UserInfo creation on user registration
+- **🔄 Parallel Routes**: Next.js 15 parallel routes for enhanced user experience
+- **⚡ React Compiler**: Experimental React compiler for improved performance
 
 ## 🛠️ Tech Stack
 
@@ -34,6 +36,7 @@ A full-stack collaborative platform built with Next.js 15, featuring authenticat
 - **Package Manager**: Bun (recommended)
 - **Linting**: Biome for fast formatting and linting
 - **Type Checking**: tsgo for fast TypeScript checking
+- **React Compiler**: Experimental React compiler for performance optimization
 
 ## 📋 Prerequisites
 
@@ -108,40 +111,81 @@ src/
 ├── app/                    # Next.js App Router pages
 │   ├── (auth)/            # Protected routes
 │   │   ├── tickets/       # Ticket management pages
-│   │   └── account/       # User account pages
-│   ├── api/               # API routes
-│   ├── _navigation/       # Navigation components
-│   ├── _providers/        # React providers
-│   ├── forgot-password/   # Password reset pages
-│   ├── reset-password/    # Password reset confirmation
-│   ├── sign-in/          # Authentication pages
-│   ├── sign-up/          # User registration
-│   └── verify-email/     # Email verification
-├── components/            # Reusable UI components
-│   ├── ui/               # shadcn/ui components
-│   ├── form/             # Form components
-│   └── theme/            # Theme configuration
-├── features/             # Feature-based modules
-│   ├── auth/             # Authentication logic
-│   │   ├── actions/      # Server actions
-│   │   ├── components/   # Auth components
-│   │   ├── hooks/        # Client-side hooks
-│   │   ├── queries/      # Server-side queries
-│   │   ├── types.ts      # Centralized auth types
-│   │   └── utils/        # Auth utilities
-│   ├── ticket/           # Ticket management
-│   ├── comment/          # Comment system
-│   └── utils/            # Shared utilities
-├── lib/                  # Utility libraries
-│   ├── auth.ts          # Better Auth configuration
-│   ├── auth-client.ts   # Client-side auth instance
-│   ├── email.ts         # Email utility
-│   ├── path.ts          # Type-safe route definitions
-│   └── prisma.ts        # Database client
-└── prisma/              # Database schema and migrations
-    ├── models/          # Individual model files
-    └── seed-data/       # Database seeding data
+│   │   │   ├── @tickets/  # Parallel route for ticket list
+│   │   │   │   ├── page.tsx      # Main ticket list component
+│   │   │   │   ├── loading.tsx   # Loading state
+│   │   │   │   ├── error.tsx     # Error handling
+│   │   │   │   └── default.tsx   # Default fallback
+│   │   │   ├── [ticketId]/ # Dynamic ticket routes
+│   │   │   ├── page.tsx    # Ticket creation form
+│   │   │   └── layout.tsx  # Layout with parallel routes
+│   │   └── account/        # User account pages
+│   ├── (password)/         # Public auth routes
+│   │   ├── sign-in/        # Sign in page
+│   │   ├── sign-up/        # Sign up page
+│   │   ├── forgot-password/ # Password reset request
+│   │   └── reset-password/  # Password reset confirmation
+│   ├── api/                # API routes
+│   ├── _navigation/        # Navigation components
+│   ├── _providers/         # React providers
+│   └── verify-email/       # Email verification
+├── components/             # Reusable UI components
+│   ├── ui/                # shadcn/ui components
+│   ├── form/              # Form components
+│   └── theme/             # Theme configuration
+├── features/              # Feature-based modules
+│   ├── auth/              # Authentication logic
+│   │   ├── actions/       # Server actions
+│   │   ├── components/    # Auth components
+│   │   ├── hooks/         # Client-side hooks
+│   │   ├── queries/       # Server-side queries
+│   │   ├── types.ts       # Centralized auth types
+│   │   └── utils/         # Auth utilities
+│   ├── ticket/            # Ticket management
+│   ├── comment/           # Comment system
+│   └── utils/             # Shared utilities
+├── lib/                   # Utility libraries
+│   ├── auth.ts           # Better Auth configuration
+│   ├── auth-client.ts    # Client-side auth instance
+│   ├── email.ts          # Email utility
+│   ├── path.ts           # Type-safe route definitions
+│   └── prisma.ts         # Database client
+└── prisma/               # Database schema and migrations
+    ├── models/           # Individual model files
+    └── seed-data/        # Database seeding data
 ```
+
+## 🔄 Parallel Routes
+
+The project leverages Next.js 15's parallel routes feature for enhanced user experience:
+
+### Ticket Management Parallel Routes
+
+- **Main Route** (`/tickets`): Displays the ticket creation form and main content
+- **Parallel Route** (`@tickets`): Renders the ticket list alongside the main content
+- **Layout Integration**: Both routes are rendered simultaneously in the layout
+- **Enhanced UX**: Users can create tickets while viewing their existing tickets
+
+### Parallel Route Structure
+
+```
+src/app/(auth)/tickets/
+├── layout.tsx           # Renders both main and parallel routes
+├── page.tsx            # Main route: ticket creation form
+├── @tickets/           # Parallel route slot
+│   ├── page.tsx        # Ticket list component
+│   ├── loading.tsx     # Loading state
+│   ├── error.tsx       # Error handling
+│   └── default.tsx     # Default fallback
+└── [ticketId]/         # Dynamic ticket routes
+```
+
+### Benefits
+
+- **Simultaneous Rendering**: Both routes render at the same time
+- **Independent Loading States**: Each route can have its own loading and error states
+- **Better User Experience**: Users see both creation form and ticket list
+- **Performance**: Parallel rendering improves perceived performance
 
 ## 🔐 Authentication
 
@@ -156,6 +200,7 @@ The application uses Better Auth with email/password authentication:
 - **Database Hooks**: Automatic UserInfo creation on user registration
 
 ### Authentication Flow
+
 1. **Registration**: Users sign up with email/password
 2. **Email Verification**: Verification email sent automatically
 3. **Login**: Users sign in with verified credentials
@@ -165,20 +210,25 @@ The application uses Better Auth with email/password authentication:
 ## 🎫 Ticket System
 
 ### Features
+
 - **Create Tickets**: Users can create tickets with title, description, and deadline
 - **Status Management**: Track ticket status (Open, In Progress, Done)
 - **Ownership**: Users can only edit their own tickets
 - **Search & Filter**: Find tickets by title, description, or status
 - **Deadline Tracking**: Set and manage ticket deadlines
+- **Parallel Display**: View ticket creation form and list simultaneously
 
 ### Sample Data
+
 The database is seeded with sample tickets and comments for existing users:
+
 - **Seeding**: Only creates tickets and comments, preserves existing users
 - **User Creation**: Users must be created through the application's sign-up flow
 
 ## 💬 Comment System
 
 ### Features
+
 - **Add Comments**: Users can add comments to tickets
 - **Edit Comments**: Comment owners can edit their comments
 - **Delete Comments**: Comment owners can delete their comments
@@ -188,6 +238,7 @@ The database is seeded with sample tickets and comments for existing users:
 ## 🎨 UI Components
 
 Built with shadcn/ui and Tailwind CSS:
+
 - **Responsive Design**: Works on all device sizes
 - **Dark Mode**: Toggle between light and dark themes
 - **Accessible**: WCAG compliant components
@@ -200,13 +251,14 @@ Built with shadcn/ui and Tailwind CSS:
 ```bash
 # Development
 bun run dev              # Start development server with Turbopack
-bun run build            # Build for production
+bun run build            # Build for production with Turbopack
 bun run start            # Start production server
 bun run lint             # Run Biome linting
 bun run lint:fix         # Fix linting issues
 bun run format           # Format code with Biome
 bun run check            # Run linting and formatting
 bun run type             # Run TypeScript type checking with tsgo
+bun run typegen          # Generate Next.js type definitions
 
 # Database
 bun run prisma generate  # Generate Prisma client
@@ -216,11 +268,21 @@ bun run prisma db seed   # Seed database with sample data
 
 ## 🔧 Configuration
 
+### Next.js 15 Features
+
+- **Typed Routes**: Full type safety for all routes (`typedRoutes: true`)
+- **Turbopack**: Fast bundling for development and production
+- **React Compiler**: Experimental compiler for performance optimization
+- **Parallel Routes**: Enhanced routing with simultaneous route rendering
+
 ### Tailwind CSS
+
 The project uses Tailwind CSS v4 with custom configuration for dark mode and theme variables.
 
 ### Database
+
 PostgreSQL with Prisma ORM for type-safe database operations. The schema is split into individual model files for better organization:
+
 - **User**: Better Auth user model
 - **Account**: Better Auth account model
 - **Session**: Better Auth session model
@@ -230,7 +292,9 @@ PostgreSQL with Prisma ORM for type-safe database operations. The schema is spli
 - **Comment**: Comment system
 
 ### Authentication
+
 Better Auth configured with:
+
 - Email/password authentication
 - Password reset functionality
 - Email verification
@@ -238,6 +302,7 @@ Better Auth configured with:
 - Prisma adapter for PostgreSQL
 
 ### Type Safety
+
 - Full TypeScript support with strict configuration
 - Typed routes with Next.js 15 (`typedRoutes: true`)
 - Type-safe URL search parameters with nuqs
@@ -245,7 +310,9 @@ Better Auth configured with:
 - Generic type utilities for better code reuse
 
 ### Path Management
+
 Centralized type-safe route definitions in `src/path.ts`:
+
 - Static routes with `Route` type
 - Dynamic routes with `as Route` assertions
 - Consistent path usage across the application
@@ -253,12 +320,15 @@ Centralized type-safe route definitions in `src/path.ts`:
 ## 🚀 Deployment
 
 ### Vercel (Recommended)
+
 1. Connect your GitHub repository to Vercel
 2. Configure environment variables in Vercel dashboard
 3. Deploy automatically on push to main branch
 
 ### Other Platforms
+
 The application can be deployed to any platform that supports Next.js:
+
 - Netlify
 - Railway
 - DigitalOcean App Platform
@@ -286,3 +356,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [TanStack Query](https://tanstack.com/query) - Server state management
 - [nuqs](https://nuqs.vercel.app/) - Type-safe URL search params
 - [Biome](https://biomejs.dev/) - Fast formatting and linting
+- [React Compiler](https://react.dev/blog/2024/02/15/react-labs-what-we-have-been-working-on-february-2024) - Performance optimization

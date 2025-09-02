@@ -1,7 +1,9 @@
-import { getSessionOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
+import { connection } from "next/server";
+import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
 import TicketList from "@/features/ticket/components/ticket-list";
 
 export default async function Tickets({ searchParams }: PageProps<"/tickets">) {
+  await connection();
   const session = await getSessionOrRedirect();
 
   return (

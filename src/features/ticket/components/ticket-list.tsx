@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import type { SearchParams } from "nuqs/server";
 import Placeholder from "@/components/placeholder";
 import TicketItem from "@/features/ticket/components/ticket-item";
@@ -12,6 +13,8 @@ interface TicketListProps {
 }
 
 const TicketList = async ({ userId, searchParams }: TicketListProps) => {
+  await connection(); // Prevent static generation during build time
+
   console.log("🎯 TicketList - userId:", userId);
   console.log("🎯 TicketList - searchParams:", searchParams);
   const { list: tickets, metadata } = await getTickets(searchParams, userId);

@@ -1,12 +1,16 @@
 {
-	"typescript.tsdk": "node_modules/typescript/lib",
-	"editor.codeActionsOnSave": {
-		"source.organizeImports.biome": "explicit",
-		"source.fixAll.biome": "explicit"
-	},
-	"editor.formatOnSave": true,
-	"editor.defaultFormatter": "biomejs.biome",
-	"[prisma]": {
-		"editor.defaultFormatter": "Prisma.prisma"
-	}
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports.biome": "explicit",
+    "source.fixAll.biome": "explicit"
+  },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "biomejs.biome",
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "markdown.validate.enabled": true
 }

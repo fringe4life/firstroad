@@ -1,16 +1,13 @@
 "use server";
 
-import { headers } from "next/headers";
 import { cache } from "react";
+import { getSession } from "@/features/auth/queries/get-session";
 import { isOwner } from "@/features/auth/utils/owner";
 import type { PaginationMetadata } from "@/features/types/pagination";
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 export const getTicket = cache(async (id: string) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await getSession();
 
   const ticket = await prisma.ticket.findUnique({
     where: { id },
@@ -73,9 +70,7 @@ export const getTicket = cache(async (id: string) => {
 
 export const getMoreComments = cache(
   async (ticketId: string, cursor?: string, take: number = 3) => {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
+    const session = await getSession();
 
     const comments = await prisma.comment.findMany({
       where: {

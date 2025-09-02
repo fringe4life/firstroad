@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod/v4";
-import { getSessionOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
+import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
 import type { CommentWithUserInfo } from "@/features/comment/types";
 import {

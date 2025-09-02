@@ -2,7 +2,7 @@
 
 import type { TicketStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { getSessionOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
+import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
 import {
   fromErrorToActionState,
