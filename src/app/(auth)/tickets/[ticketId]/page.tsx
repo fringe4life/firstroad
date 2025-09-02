@@ -8,9 +8,7 @@ import { homePath } from "@/path";
 
 export const generateMetadata = async ({
   params,
-}: {
-  params: Promise<{ ticketId: string }>;
-}): Promise<Metadata> => {
+}: PageProps<"/tickets/[ticketId]">): Promise<Metadata> => {
   const { ticketId } = await params;
   const ticket = await getTicket(ticketId);
 
