@@ -80,20 +80,28 @@ DIRECT_URL="postgresql://username:password@localhost:5432/your_database"
 
 # Better Auth
 AUTH_SECRET="your-secret-key-here"
-AUTH_URL="http://localhost:3000"
+# Optional, used by frameworks/integrations expecting a public app URL
+NEXTAUTH_URL="http://localhost:3000"
+
+# Email (Resend)
+# Docs: https://resend.com/
+RESEND_API_KEY="your-resend-api-key"
+# RESEND_FROM should be an email address, not an HTTP URL
+# Format: "Your App Name <your-email@domain.com>" or just "your-email@domain.com"
+RESEND_FROM="Your App <onboarding@resend.dev>"
 ```
 
 ### 4. Set up the database
 
 ```bash
 # Generate Prisma client
-bun run prisma generate
+bunx prisma generate
 
-# Run database migrations
-bun run prisma db push
+# Run database migrations (push schema to dev DB)
+bunx prisma db push
 
 # Seed the database with sample data
-bun run prisma db seed
+bunx prisma db seed
 ```
 
 ### 5. Start the development server
@@ -294,7 +302,7 @@ The project uses Tailwind CSS v4 with custom configuration for dark mode and the
 
 ### Database
 
-PostgreSQL with Prisma ORM for type-safe database operations. The schema is split into individual model files for better organization:
+PostgreSQL with Prisma ORM for type-safe database operations. Uses Neon serverless adapter in `src/lib/prisma.ts` for efficient, edge-friendly connections. The schema is split into individual model files for better organization:
 
 - **User**: Better Auth user model
 - **Account**: Better Auth account model
@@ -312,7 +320,7 @@ Better Auth configured with:
 - Password reset functionality
 - Email verification
 - Database hooks for UserInfo creation
-- Prisma adapter for PostgreSQL
+- Prisma adapter for PostgreSQL (Neon driver adapter)
 
 ### Type Safety
 

@@ -18,4 +18,5 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: ["/tickets", "/account/:path*"],
+  runtime: "nodejs",
 };
