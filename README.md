@@ -148,6 +148,7 @@ src/
 │   ├── auth.ts           # Better Auth configuration
 │   ├── auth-client.ts    # Client-side auth instance
 │   ├── email.ts          # Email utility
+│   ├── is-redirect-error.ts # Helper to detect Next.js redirects
 │   ├── path.ts           # Type-safe route definitions
 │   └── prisma.ts         # Database client
 └── prisma/               # Database schema and migrations
@@ -206,6 +207,18 @@ The application uses Better Auth with email/password authentication:
 3. **Login**: Users sign in with verified credentials
 4. **Password Reset**: Users can request password reset via email
 5. **Session Management**: Secure sessions with automatic UserInfo creation
+
+### Redirect Handling
+
+- Framework redirects (e.g., `redirect()` from `next/navigation`) are preserved by rethrowing redirect errors.
+- Helper: `src/lib/is-redirect-error.ts` centralizes detection of Next.js redirect errors.
+- Example usage: Sign-up action rethrows redirect errors to avoid surfacing `NEXT_REDIRECT` in UI and properly navigate to `/tickets`.
+
+## 🔄 Dynamic Rendering (Next.js 15)
+
+- Use of `connection()` from `next/server` opts routes/components into dynamic rendering as needed.
+- Applied in session queries and sensitive components (e.g., ticket list) to avoid build-time prerender issues.
+- Centralized `getSession()` reads request `headers()` only after awaiting `connection()` to ensure request context.
 
 ## 🎫 Ticket System
 

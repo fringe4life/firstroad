@@ -8,6 +8,7 @@ import {
   fromErrorToActionState,
 } from "@/features/utils/to-action-state";
 import { auth } from "@/lib/auth";
+import { isRedirectError } from "@/lib/is-redirect-error";
 import { ticketsPath } from "@/path";
 
 const signUpSchema = z
@@ -40,6 +41,7 @@ const signup = async (_state: ActionState | undefined, formData: FormData) => {
 
     redirect(ticketsPath);
   } catch (err: unknown) {
+    if (isRedirectError(err)) throw err;
     return fromErrorToActionState(err, formData);
   }
 };

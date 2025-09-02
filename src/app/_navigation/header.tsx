@@ -53,11 +53,11 @@ const Header = () => {
           <h1 className="font-semibold text-lg">TicketBounty</h1>
         </Link>
       </div>
-      <div className="hidden md:flex items-center gap-x-1">
+      <div className="hidden items-center gap-x-1 md:flex">
         <ThemeSwitcher />
         {navItems}
       </div>
-      <div className="flex md:hidden items-center gap-x-1">
+      <div className="flex items-center gap-x-1 md:hidden">
         <ThemeSwitcher />
       </div>
     </nav>

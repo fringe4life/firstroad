@@ -1,7 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "sonner";
 import Header from "@/app/_navigation/header";
@@ -41,7 +40,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children, tickets }: LayoutProps<"/">) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} antialiased`}>
@@ -54,6 +53,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
                   <Sidebar />
                   <main className="flex min-h-screen flex-1 flex-col overflow-y-auto overflow-x-hidden px-8 py-24">
                     {children}
+                    {tickets}
                   </main>
                 </div>
               </MobileSidebarProvider>

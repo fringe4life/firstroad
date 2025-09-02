@@ -82,44 +82,44 @@ export const auth = betterAuth({
     resetPasswordTokenExpiresIn: 3600, // 1 hour
   },
 
-  emailVerification: {
-    sendVerificationEmail: async ({ user, url }, _request) => {
-      await sendEmail({
-        to: user.email,
-        subject: "Verify your email address",
-        html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2 style="color: #333;">Verify Your Email Address</h2>
-            <p>Hello,</p>
-            <p>Please verify your email address by clicking the button below:</p>
-            <div style="text-align: center; margin: 30px 0;">
-              <a href="${url}" 
-                 style="background-color: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">
-                Verify Email
-              </a>
-            </div>
-            <p>If you didn't create an account, you can safely ignore this email.</p>
-            <p>Best regards,<br>Your App Team</p>
-          </div>
-        `,
-        text: `
-          Verify Your Email Address
-          
-          Hello,
-          
-          Please verify your email address by clicking the link below:
-          
-          ${url}
-          
-          If you didn't create an account, you can safely ignore this email.
-          
-          Best regards,
-          Your App Team
-        `,
-      });
-    },
-    sendOnSignUp: true,
-    autoSignInAfterVerification: true,
-    expiresIn: 3600, // 1 hour
-  },
+  // emailVerification: {
+  //   sendVerificationEmail: async ({ user, url }, _request) => {
+  //     await sendEmail({
+  //       to: user.email,
+  //       subject: "Verify your email address",
+  //       html: `
+  //         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+  //           <h2 style="color: #333;">Verify Your Email Address</h2>
+  //           <p>Hello,</p>
+  //           <p>Please verify your email address by clicking the button below:</p>
+  //           <div style="text-align: center; margin: 30px 0;">
+  //             <a href="${url}"
+  //                style="background-color: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">
+  //               Verify Email
+  //             </a>
+  //           </div>
+  //           <p>If you didn't create an account, you can safely ignore this email.</p>
+  //           <p>Best regards,<br>Your App Team</p>
+  //         </div>
+  //       `,
+  //       text: `
+  //         Verify Your Email Address
+
+  //         Hello,
+
+  //         Please verify your email address by clicking the link below:
+
+  //         ${url}
+
+  //         If you didn't create an account, you can safely ignore this email.
+
+  //         Best regards,
+  //         Your App Team
+  //       `,
+  //     });
+  //   },
+  //   sendOnSignUp: true,
+  //   autoSignInAfterVerification: true,
+  //   expiresIn: 3600, // 1 hour
+  // },
 });
