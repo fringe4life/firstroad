@@ -5,9 +5,9 @@ import ForgotPasswordForm from "@/features/auth/components/forgot-password-form"
 import { signInPath } from "@/path";
 
 export const metadata: Metadata = {
-  title: "Forgot Password | First Road",
+  title: "Forgot Password",
   description:
-    "Reset your First Road account password. Enter your email address and we'll send you a link to reset your password.",
+    "Reset your First Road account password. Enter your email address and we'll send you a reset link.",
 };
 
 const ForgotPasswordPage = () => {

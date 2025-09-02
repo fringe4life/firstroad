@@ -18,7 +18,7 @@ export default async function TicketLayout({ children }: LayoutProps<"/">) {
     throw error;
   }
 
-  console.log("🎫 Tickets layout - Rendering children");
+  console.log("🎫 Tickets layout - Rendering children and tickets slot");
   return (
     <>
       {children}

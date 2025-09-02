@@ -4,9 +4,8 @@ import { CardCompact } from "@/components/card-compact";
 import { signInPath } from "@/path";
 
 export const metadata: Metadata = {
-  title: "Verify Email | First Road",
-  description:
-    "Check your email to verify your First Road account. We've sent you a verification email to complete your registration.",
+  title: "Verify Email",
+  description: "Verify your email address to complete your account setup.",
 };
 
 const VerifyEmailPage = () => {

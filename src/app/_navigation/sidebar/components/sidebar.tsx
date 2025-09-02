@@ -81,7 +81,7 @@ const Sidebar = () => {
   return (
     <Sheet open={isMobileOpen} onOpenChange={close}>
       <SheetContent side="left" className="w-80 p-0">
-        <SheetHeader className="px-6 py-4 border-b">
+        <SheetHeader className="border-b px-6 py-4">
           <SheetTitle>Navigation</SheetTitle>
         </SheetHeader>
         <div className="px-3 py-2">

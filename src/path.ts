@@ -15,7 +15,8 @@ const ticketEditPath = (ticketId: string): Route => {
 const signInPath: Route = "/sign-in";
 const signUpPath: Route = "/sign-up";
 const forgotPasswordPath: Route = "/forgot-password";
-const resetPasswordPath: Route = "/reset-password";
+const resetPasswordPath = (token: string): Route =>
+  `/reset-password/${token}` as Route;
 const verifyEmailPath: Route = "/verify-email";
 
 const accountProfilePath: Route = "/account/profile";

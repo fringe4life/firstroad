@@ -6,17 +6,17 @@ import ResetPasswordForm from "@/features/auth/components/reset-password-form";
 import { forgotPasswordPath, signInPath } from "@/path";
 
 export const metadata: Metadata = {
-  title: "Reset Password | First Road",
+  title: "Reset Password",
   description:
     "Set a new password for your First Road account. Enter your new password below.",
 };
 
 interface ResetPasswordPageProps {
-  searchParams: { token?: string };
+  params: Promise<{ token: string }>;
 }
 
-const ResetPasswordPage = ({ searchParams }: ResetPasswordPageProps) => {
-  const { token } = searchParams;
+const ResetPasswordPage = async ({ params }: ResetPasswordPageProps) => {
+  const { token } = await params;
 
   if (!token) {
     redirect(forgotPasswordPath);

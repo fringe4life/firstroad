@@ -6,9 +6,9 @@ import { getSessionOrRedirect } from "@/features/auth/queries/get-auth-or-redire
 import { forgotPasswordPath, signUpPath, ticketsPath } from "@/path";
 
 export const metadata: Metadata = {
-  title: "Sign In | First Road",
+  title: "Sign In",
   description:
-    "Sign in to your First Road account to access tickets, manage your profile, and collaborate with the community.",
+    "Sign in to your First Road account to access your tickets and manage your profile.",
 };
 
 const SignInPage = async () => {

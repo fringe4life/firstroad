@@ -27,7 +27,18 @@ export const auth = betterAuth({
 
   emailAndPassword: {
     enabled: true,
-    sendResetPassword: async ({ user, url }, _request) => {
+    sendResetPassword: async ({ user, url, token }, _request) => {
+      // Extract the token from the URL and construct a dynamic route URL
+      const urlObj = new URL(url);
+      const tokenParam = urlObj.searchParams.get("token");
+      const baseUrl =
+        process.env.AUTH_URL ||
+        process.env.NEXTAUTH_URL ||
+        "http://localhost:3000";
+      const dynamicRouteUrl = tokenParam
+        ? `${baseUrl}/reset-password/${tokenParam}`
+        : url;
+
       await sendEmail({
         to: user.email,
         subject: "Reset your password",
@@ -37,7 +48,7 @@ export const auth = betterAuth({
             <p>Hello,</p>
             <p>You requested to reset your password. Click the button below to create a new password:</p>
             <div style="text-align: center; margin: 30px 0;">
-              <a href="${url}" 
+              <a href="${dynamicRouteUrl}" 
                  style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">
                 Reset Password
               </a>
@@ -54,7 +65,7 @@ export const auth = betterAuth({
           
           You requested to reset your password. Click the link below to create a new password:
           
-          ${url}
+          ${dynamicRouteUrl}
           
           If you didn't request this password reset, you can safely ignore this email.
           

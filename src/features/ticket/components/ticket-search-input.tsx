@@ -1,6 +1,6 @@
 "use client";
 
-import { useQueryState } from "nuqs";
+import { debounce, useQueryState } from "nuqs";
 import SearchInput from "@/components/search-input";
 import { searchParser } from "@/features/ticket/search-params";
 
@@ -16,7 +16,7 @@ const TicketSearchInput = ({
   return (
     <SearchInput
       value={search}
-      onChange={setSearch}
+      onChange={(value) => setSearch(value, { limitUrlUpdates: debounce(250) })}
       placeholder={placeholder}
     />
   );

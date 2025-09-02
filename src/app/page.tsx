@@ -6,9 +6,9 @@ import Spinner from "@/components/spinner";
 import TicketList from "@/features/ticket/components/ticket-list";
 
 export const metadata: Metadata = {
-  title: "All Tickets | First Road",
+  title: "All Tickets",
   description:
-    "Browse and discover all tickets from the community. Find opportunities, share knowledge, and collaborate with others.",
+    "View and manage all tickets in the First Road system. Track progress, update status, and collaborate with your team.",
 };
 
 const HomePage = async ({

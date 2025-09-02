@@ -17,9 +17,7 @@ export function MobileSidebarProvider({
   const toggleState = useToggle(false);
 
   return (
-    <MobileSidebarContext value={toggleState}>
-      {children}
-    </MobileSidebarContext>
+    <MobileSidebarContext value={toggleState}>{children}</MobileSidebarContext>
   );
 }
 

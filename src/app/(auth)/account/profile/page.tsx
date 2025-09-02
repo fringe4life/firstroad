@@ -3,9 +3,8 @@ import AccountTabs from "@/app/(auth)/account/_components/account-tabs";
 import Heading from "@/components/heading";
 
 export const metadata: Metadata = {
-  title: "Profile | First Road",
-  description:
-    "Manage your profile information, update your details, and customize your account settings.",
+  title: "Profile",
+  description: "Manage your First Road profile and account settings.",
 };
 
 const ProfilePage = () => {

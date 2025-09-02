@@ -13,16 +13,16 @@ export async function generateMetadata({
   const param = await params;
   const ticket = await getTicket(param.ticketId);
 
-  if (!ticket || !ticket.isOwner) {
+  if (!ticket) {
     return {
-      title: "Access Denied | First Road",
-      description: "You don't have permission to edit this ticket.",
+      title: "Ticket Not Found",
+      description: "The requested ticket could not be found.",
     };
   }
 
   return {
-    title: `Edit ${ticket.title} | First Road`,
-    description: `Edit ticket: ${ticket.title}. Update the title, description, status, bounty, and deadline.`,
+    title: `Edit ${ticket.title}`,
+    description: `Edit ticket: ${ticket.title}`,
   };
 }
 

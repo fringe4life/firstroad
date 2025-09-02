@@ -5,9 +5,9 @@ import SignUpForm from "@/features/auth/components/sign-up-form";
 import { signInPath } from "@/path";
 
 export const metadata: Metadata = {
-  title: "Sign Up | First Road",
+  title: "Sign Up",
   description:
-    "Create a new First Road account to start creating tickets, collaborating with others, and building your portfolio.",
+    "Create a new First Road account to start creating and managing tickets.",
 };
 
 const SignUpPage = () => {
