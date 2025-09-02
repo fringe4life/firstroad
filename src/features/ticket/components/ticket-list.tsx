@@ -15,11 +15,7 @@ interface TicketListProps {
 const TicketList = async ({ userId, searchParams }: TicketListProps) => {
   await connection(); // Prevent static generation during build time
 
-  console.log("🎯 TicketList - userId:", userId);
-  console.log("🎯 TicketList - searchParams:", searchParams);
   const { list: tickets, metadata } = await getTickets(searchParams, userId);
-  console.log("🎯 TicketList - tickets:", tickets);
-  console.log("🎯 TicketList - metadata:", metadata);
   return (
     <div className="grid flex-1 animate-fade-from-top justify-items-center gap-y-4">
       <div className="grid w-full max-w-105 grid-flow-col grid-cols-2 gap-x-2">

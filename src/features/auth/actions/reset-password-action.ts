@@ -29,23 +29,9 @@ const resetPassword = async (
   _state: ActionState | undefined,
   formData: FormData,
 ) => {
-  console.log("🚀 Reset password process started");
-  console.log("📅 Timestamp:", new Date().toISOString());
-
   try {
-    console.log("📝 Parsing form data...");
     const formDataObj = Object.fromEntries(formData);
-    console.log("📋 Form data received:", {
-      hasToken: !!formDataObj.token,
-      hasPassword: !!formDataObj.password,
-      hasConfirmPassword: !!formDataObj.confirmPassword,
-      formDataKeys: Array.from(formData.keys()),
-    });
-
     const { token, password } = resetPasswordSchema.parse(formDataObj);
-    console.log("✅ Form data validation passed");
-
-    console.log("🔑 Attempting to reset password with Better Auth...");
 
     await auth.api.resetPassword({
       body: {
@@ -55,19 +41,11 @@ const resetPassword = async (
       headers: await headers(),
     });
 
-    console.log("✅ Password reset completed successfully");
     return toActionState(
       "Password has been reset successfully. You can now sign in with your new password.",
       "SUCCESS",
     );
   } catch (err: unknown) {
-    console.log("💥 Error during reset password process:", err);
-    console.log("💥 Error type:", typeof err);
-    console.log(
-      "💥 Error message:",
-      err instanceof Error ? err.message : String(err),
-    );
-
     return fromErrorToActionState(err, formData);
   }
 };

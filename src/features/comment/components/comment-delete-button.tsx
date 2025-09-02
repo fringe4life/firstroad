@@ -14,8 +14,6 @@ const CommentDeleteButton = ({
   id,
   onDeleteComment,
 }: CommentDeleteButtonProps) => {
-  console.log("🔄 CommentDeleteButton rendered");
-
   const [getDeleteButton, deleteDialog, isPending] = useConfirmDialog({
     action: deleteComment.bind(null, id),
     trigger: (isPending: boolean) => (
@@ -34,14 +32,10 @@ const CommentDeleteButton = ({
     onSuccess: () => {
       onDeleteComment(id);
     },
-    onError: (result) => {
-      console.log("❌ onError called with result:", result);
+    onError: () => {
+      // Error is handled by the form's onError callback
     },
-    onIsPending: (isPending) => {
-      console.log(
-        "⏳ CommentDeleteButton - onIsPending called with:",
-        isPending,
-      );
+    onIsPending: () => {
       // Note: We don't need to handle toast management here since it's done in the action
       // This callback is mainly for the cleanup function when component unmounts
     },

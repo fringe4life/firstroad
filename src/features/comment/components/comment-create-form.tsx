@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/correctness/useUniqueElementIds: small file should be ok */
 "use client";
 
 import { useActionState, useEffect, useRef } from "react";

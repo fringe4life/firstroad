@@ -11,44 +11,32 @@ import { prisma } from "@/lib/prisma";
 import { ticketEditPath } from "@/path";
 
 export const deleteComment = async (commentId: string) => {
-  console.log("🗑️ deleteComment - Starting deletion for commentId:", commentId);
-  const session = await getSessionOrRedirect();
-
   try {
-    console.log("🗑️ deleteComment - Starting transaction");
-    await prisma.$transaction(async (tx) => {
-      const comment = await tx.comment.findUnique({
-        where: {
-          id: commentId,
-        },
-        include: {
-          ticket: true,
-        },
-      });
-
-      if (!comment) {
-        throw new Error("Comment not found");
-      }
-
-      if (!isOwner(session, comment)) {
-        throw new Error("You can only delete your own comments");
-      }
-
-      console.log("🗑️ deleteComment - Deleting comment from database");
-      await tx.comment.delete({ where: { id: commentId } });
-
-      // Revalidate after successful deletion
-      console.log(
-        "🗑️ deleteComment - Revalidating path:",
-        ticketEditPath(comment.ticketId),
-      );
-      revalidatePath(ticketEditPath(comment.ticketId));
+    const session = await getSessionOrRedirect();
+    const comment = await prisma.comment.findUnique({
+      where: { id: commentId },
+      include: {
+        ticket: true,
+      },
     });
 
-    console.log("🗑️ deleteComment - Transaction completed successfully");
+    if (!comment) {
+      return fromErrorToActionState("Comment not found");
+    }
+
+    if (!isOwner(session, comment)) {
+      return fromErrorToActionState("You can only delete your own comments");
+    }
+
+    await prisma.$transaction(async (tx) => {
+      await tx.comment.delete({
+        where: { id: commentId },
+      });
+    });
+
+    revalidatePath(ticketEditPath(comment.ticketId));
     return toActionState("Comment deleted successfully", "SUCCESS");
   } catch (err) {
-    console.log("🗑️ deleteComment - Error occurred:", err);
     return fromErrorToActionState(err);
   }
 };

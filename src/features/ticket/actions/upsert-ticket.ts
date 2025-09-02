@@ -66,5 +66,4 @@ const upsertTicket = async (
   }
   return toActionState("Ticket created", "SUCCESS");
 };
-
 export { upsertTicket };

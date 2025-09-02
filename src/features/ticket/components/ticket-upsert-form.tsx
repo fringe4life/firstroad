@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/correctness/useUniqueElementIds: should not be used */
 "use client";
 
 import type { Ticket } from "@prisma/client";

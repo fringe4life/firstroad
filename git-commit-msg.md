@@ -1,12 +1,12 @@
 # Git Commit Message Template
 
 ## Usage
-Supply this file to the AI to generate a 120-character git commit message based on changes since the last commit.
+Supply this file to the AI to generate a 140-character git commit message based on changes since the last commit.
 
 ## Format
 The AI should:
 1. Analyze the git diff to understand changes
-2. Create a concise commit message under 120 characters
+2. Create a concise commit message under 140 characters
 3. Use conventional commit format: `type: description`
 4. Focus on the most significant changes
 5. Use commas instead of dashes between items (per user preference)
@@ -33,6 +33,6 @@ The AI should:
 2. Run `git diff --cached` to see staged changes
 3. Analyze the changes and categorize them
 4. Generate a concise, descriptive commit message
-5. Ensure the message is under 120 characters
+5. Ensure the message is under 140 characters
 6. Use conventional commit format with appropriate type
 7. Focus on the most impactful changes

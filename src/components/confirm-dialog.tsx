@@ -65,9 +65,6 @@ const useConfirmDialog = ({
 
   // Track isPending changes and call onIsPending callback
   useEffect(() => {
-    console.log("🔧 useConfirmDialog - isPending changed to:", isPending);
-    console.log("🔧 useConfirmDialog - actionState:", actionState);
-
     // Close dialog when action starts (isPending becomes true) if closeOnSubmit is true
     if (isPending && closeOnSubmit) {
       setIsOpen(false);
@@ -77,18 +74,14 @@ const useConfirmDialog = ({
 
     // Cleanup function to handle component unmount (e.g., redirects)
     return () => {
-      console.log("🧹 useConfirmDialog - Component unmounting, cleaning up");
       // If component unmounts while action is pending, we should clean up any ongoing operations
       // This prevents memory leaks and ensures toasts are properly dismissed
       if (isPending) {
-        console.log(
-          "🧹 useConfirmDialog - Action was pending, triggering cleanup",
-        );
         // Call onIsPending with false to signal cleanup
         onIsPending?.(false);
       }
     };
-  }, [isPending, onIsPending, actionState, closeOnSubmit]);
+  }, [isPending, onIsPending, closeOnSubmit]);
 
   const dialog = (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>

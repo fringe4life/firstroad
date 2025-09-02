@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/correctness/noNestedComponentDefinitions: shadcn ui component */
 "use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
