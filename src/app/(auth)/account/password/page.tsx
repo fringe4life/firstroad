@@ -4,6 +4,8 @@ import { CardCompact } from "@/components/card-compact";
 import Heading from "@/components/heading";
 import ChangePasswordForm from "@/features/auth/components/change-password-form";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Password",
   description: "Change your First Road account password securely.",

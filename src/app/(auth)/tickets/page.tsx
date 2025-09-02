@@ -3,6 +3,8 @@ import { CardCompact } from "@/components/card-compact";
 import Heading from "@/components/heading";
 import TicketUpsertForm from "@/features/ticket/components/ticket-upsert-form";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "My Tickets",
   description:

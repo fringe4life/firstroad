@@ -27,7 +27,7 @@ export const auth = betterAuth({
 
   emailAndPassword: {
     enabled: true,
-    sendResetPassword: async ({ user, url, token }, _request) => {
+    sendResetPassword: async ({ user, url }, _request) => {
       // Extract the token from the URL and construct a dynamic route URL
       const urlObj = new URL(url);
       const tokenParam = urlObj.searchParams.get("token");
