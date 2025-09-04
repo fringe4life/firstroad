@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CardCompact } from "@/components/card-compact";
-import SignInForm from "@/features/auth/components/sign-in-form";
+import SignInForm from "@/features/password/components/sign-in-form";
 import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
 import { forgotPasswordPath, signUpPath, ticketsPath } from "@/path";
 

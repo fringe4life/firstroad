@@ -6,7 +6,7 @@ import Form from "@/components/form/form";
 import SubmitButton from "@/components/form/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { forgotPassword } from "@/features/auth/actions/forgot-password-action";
+import { forgotPassword } from "@/features/password/actions/forgot-password-action";
 import { EMPTY_ACTION_STATE } from "@/features/utils/to-action-state";
 
 const ForgotPasswordForm = () => {

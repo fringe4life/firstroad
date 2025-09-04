@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CardCompact } from "@/components/card-compact";
-import SignUpForm from "@/features/auth/components/sign-up-form";
+import SignUpForm from "@/features/password/components/sign-up-form";
 import { signInPath } from "@/path";
 
 export const metadata: Metadata = {

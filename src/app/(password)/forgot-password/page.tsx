@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CardCompact } from "@/components/card-compact";
-import ForgotPasswordForm from "@/features/auth/components/forgot-password-form";
+import ForgotPasswordForm from "@/features/password/components/forgot-password-form";
 import { signInPath } from "@/path";
 
 export const metadata: Metadata = {
