@@ -62,7 +62,7 @@
     "@types/react": "^19.1.12",
     "@types/react-dom": "^19.1.9",
     "@types/ws": "^8.18.1",
-    "@typescript/native-preview": "^7.0.0-dev.20250903.1",
+    "@typescript/native-preview": "^7.0.0-dev.20250904.1",
     "prisma": "^6.15.0",
     "tailwindcss": "^4.1.12",
     "tsx": "^4.20.5",

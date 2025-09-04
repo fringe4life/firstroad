@@ -1,13 +1,17 @@
 "use server";
 
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { z } from "zod/v4";
 import type { ActionState } from "@/features/utils/to-action-state";
 import {
   fromErrorToActionState,
   toActionState,
 } from "@/features/utils/to-action-state";
+import { setCookieByKey } from "@/features/utils/cookies";
 import { auth } from "@/lib/auth";
+import { isRedirectError } from "@/lib/is-redirect-error";
+import { accountProfilePath } from "@/path";
 
 // Zod schema for password change validation
 const schema = z
@@ -68,8 +72,12 @@ export async function changePassword(
       },
     });
 
-    return toActionState("Password updated successfully", "SUCCESS");
+    setCookieByKey("toast", "Password successfully changed");
+    redirect(accountProfilePath);
   } catch (error: unknown) {
+    if (isRedirectError(error)) {
+      throw error;
+    }
     return fromErrorToActionState(error, formData);
   }
 }

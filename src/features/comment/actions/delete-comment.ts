@@ -35,6 +35,7 @@ export const deleteComment = async (commentId: string) => {
     });
 
     revalidatePath(ticketEditPath(comment.ticketId));
+    
     return toActionState("Comment deleted successfully", "SUCCESS");
   } catch (err) {
     return fromErrorToActionState(err);

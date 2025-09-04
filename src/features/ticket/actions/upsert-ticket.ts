@@ -59,9 +59,11 @@ const upsertTicket = async (
     console.log(err);
     return fromErrorToActionState(err, formData);
   }
+  
   revalidatePath(ticketsPath);
+  
   if (id) {
-    await setCookieByKey("toast", "Ticket updated");
+    setCookieByKey("toast", "Ticket updated");
     redirect(ticketsPath);
   }
   return toActionState("Ticket created", "SUCCESS");

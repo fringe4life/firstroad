@@ -1,12 +1,13 @@
-"use server";
-
+"use server"
 import { cookies } from "next/headers";
 
-export const setCookieByKey = async (key: string, value: string) => {
+type Key = "toast" | string & {}
+
+export const setCookieByKey = async (key: Key, value: string) => {
   (await cookies()).set(key, value);
 };
 
-export const getCookieByKey = async (key: string) => {
+export const getCookieByKey = async (key: Key) => {
   const cookie = (await cookies()).get(key);
 
   if (!cookie) return null;
@@ -14,11 +15,11 @@ export const getCookieByKey = async (key: string) => {
   return cookie.value;
 };
 
-export const deleteCookieByKey = async (key: string) => {
+export const deleteCookieByKey = async (key: Key) => {
   (await cookies()).delete(key);
 };
 
-export const consumeCookieByKey = async (key: string) => {
+export const consumeCookieByKey = async (key: Key) => {
   const message = await getCookieByKey(key);
 
   await deleteCookieByKey(key);

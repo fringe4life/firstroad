@@ -38,5 +38,6 @@ export const updateStatus = async (newValue: TicketStatus, id: string) => {
   }
 
   revalidatePath(ticketsPath);
+  
   return toActionState("Status updated", "SUCCESS");
 };
