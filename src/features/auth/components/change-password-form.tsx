@@ -4,6 +4,7 @@ import { useActionState, useId } from "react";
 import FieldError from "@/components/form/field-error";
 import Form from "@/components/form/form";
 import SubmitButton from "@/components/form/submit-button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { changePassword } from "@/features/auth/actions/change-password-action";
@@ -57,11 +58,11 @@ const ChangePasswordForm = () => {
         name="confirmPassword"
       />
 
-      <div className="flex items-center gap-x-2 py-2">
-        <input id={revokeId} name="revokeOtherSessions" type="checkbox" />
-        <label htmlFor={revokeId} className="text-sm">
+      <div className="flex items-center space-x-2 py-2">
+        <Checkbox id={revokeId} name="revokeOtherSessions" value="on" />
+        <Label htmlFor={revokeId} className="font-normal text-sm">
           Sign out other devices
-        </label>
+        </Label>
       </div>
 
       <SubmitButton label={"Update password"} />

@@ -7,7 +7,7 @@ import { prisma } from "@/lib/prisma";
 export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "postgresql" }),
 
-  plugins: [nextCookies()],
+  plugins: [nextCookies()], // nextCookies should be the last plugin
 
   databaseHooks: {
     user: {

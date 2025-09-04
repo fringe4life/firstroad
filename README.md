@@ -24,11 +24,11 @@ A full-stack collaborative platform built with Next.js 15, featuring authenticat
 
 - **Framework**: Next.js 15 (App Router) with Turbopack
 - **Language**: TypeScript with strict type checking
-- **Database**: PostgreSQL with Prisma ORM
+- **Database**: PostgreSQL with Prisma ORM (Neon adapter)
 - **Authentication**: Better Auth with email/password provider
 - **Styling**: Tailwind CSS v4 with shadcn/ui components
 - **Icons**: Lucide React
-- **Forms**: React Hook Form with Zod validation
+- **Forms**: React Hook Form with Zod v4 validation
 - **State Management**: TanStack React Query for server state
 - **Notifications**: Sonner toast notifications
 - **Theme**: next-themes for dark/light mode
@@ -37,6 +37,7 @@ A full-stack collaborative platform built with Next.js 15, featuring authenticat
 - **Linting**: Biome for fast formatting and linting
 - **Type Checking**: tsgo for fast TypeScript checking
 - **React Compiler**: Experimental React compiler for performance optimization
+- **Partial Prerendering**: Next.js 15 PPR for enhanced performance
 
 ## 📋 Prerequisites
 
@@ -82,10 +83,13 @@ DIRECT_URL="postgresql://username:password@localhost:5432/your_database"
 AUTH_SECRET="your-secret-key-here"
 # Optional, used by frameworks/integrations expecting a public app URL
 NEXTAUTH_URL="http://localhost:3000"
+# Public app URL for client-side auth
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
 
 # Email (Resend)
 # Docs: https://resend.com/
 RESEND_API_KEY="your-resend-api-key"
+# Resend Email Configuration
 # RESEND_FROM should be an email address, not an HTTP URL
 # Format: "Your App Name <your-email@domain.com>" or just "your-email@domain.com"
 RESEND_FROM="Your App <onboarding@resend.dev>"
@@ -295,6 +299,8 @@ bun run prisma db seed   # Seed database with sample data
 - **Turbopack**: Fast bundling for development and production
 - **React Compiler**: Experimental compiler for performance optimization
 - **Parallel Routes**: Enhanced routing with simultaneous route rendering
+- **Partial Prerendering (PPR)**: Experimental feature for enhanced performance
+- **Client Segment Cache**: Improved caching for better performance
 
 ### Tailwind CSS
 

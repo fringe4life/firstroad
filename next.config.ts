@@ -5,9 +5,10 @@ const nextConfig: NextConfig = {
   experimental: {
     browserDebugInfoInTerminal: true,
     reactCompiler: true,
-    devtoolSegmentExplorer: true,
-    clientSegmentCache: true
-  }
+    // devtoolSegmentExplorer: true,
+    clientSegmentCache: true,
+    ppr: true,
+  },
 };
 
 export default nextConfig;

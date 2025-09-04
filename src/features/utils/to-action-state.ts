@@ -20,12 +20,13 @@ const fromErrorToActionState = <T = unknown>(
   formData?: FormData,
 ): ActionState<T> => {
   if (err instanceof ZodError) {
+    const flattened = z.flattenError(err);
     return {
       message: "",
-      fieldErrors: z.treeifyError(err),
+      timestamp: Date.now(),
+      fieldErrors: flattened.fieldErrors,
       payload: formData,
       status: "ERROR",
-      timestamp: Date.now(),
     };
   }
   if (err instanceof Error) {
