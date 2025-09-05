@@ -8,6 +8,7 @@ import {
   toActionState,
 } from "@/utils/to-action-state";
 import { auth } from "@/lib/auth";
+import { tryCatch } from "@/utils/try-catch";
 
 const forgotPasswordSchema = z.object({
   email: z.email().min(1, { message: "Email is required" }).max(191),
@@ -17,7 +18,7 @@ const forgotPassword = async (
   _state: ActionState | undefined,
   formData: FormData,
 ) => {
-  try {
+  const { error } = await tryCatch(async () => {
     const formDataObj = Object.fromEntries(formData);
     const { email } = forgotPasswordSchema.parse(formDataObj);
 
@@ -33,8 +34,10 @@ const forgotPassword = async (
       "If an account with that email exists, a password reset link has been sent.",
       "SUCCESS",
     );
-  } catch (err: unknown) {
-    return fromErrorToActionState(err, formData);
+  });
+
+  if (error) {
+    return fromErrorToActionState(error, formData);
   }
 };
 

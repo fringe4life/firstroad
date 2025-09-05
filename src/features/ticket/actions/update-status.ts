@@ -7,11 +7,12 @@ import { isOwner } from "@/features/auth/utils/owner";
 import { fromErrorToActionState, toActionState } from "@/utils/to-action-state";
 import { prisma } from "@/lib/prisma";
 import { ticketsPath } from "@/path";
+import { tryCatch } from "@/utils/try-catch";
 
 export const updateStatus = async (newValue: TicketStatus, id: string) => {
   const session = await getSessionOrRedirect();
 
-  try {
+  const { error } = await tryCatch(async () => {
     await prisma.$transaction(async (tx) => {
       const ticket = await tx.ticket.findUnique({
         where: {
@@ -30,8 +31,10 @@ export const updateStatus = async (newValue: TicketStatus, id: string) => {
         },
       });
     });
-  } catch (err) {
-    return fromErrorToActionState(err);
+  });
+
+  if (error) {
+    return fromErrorToActionState(error);
   }
 
   revalidatePath(ticketsPath);

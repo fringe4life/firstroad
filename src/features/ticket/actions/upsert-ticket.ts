@@ -14,6 +14,7 @@ import {
 import { prisma } from "@/lib/prisma";
 import { ticketsPath } from "@/path";
 import { toCent } from "@/utils/currency";
+import { tryCatch } from "@/utils/try-catch";
 
 const upsertSchema = z.object({
   title: z.string().min(1).max(191),
@@ -28,7 +29,8 @@ const upsertTicket = async (
   formData: FormData,
 ): Promise<ActionState> => {
   const session = await getSessionOrRedirect();
-  try {
+
+  const { error } = await tryCatch(async () => {
     if (id) {
       const ticket = await prisma.ticket.findUnique({
         where: {
@@ -55,9 +57,11 @@ const upsertTicket = async (
       update: dbData,
       create: dbData,
     });
-  } catch (err: unknown) {
-    console.log(err);
-    return fromErrorToActionState(err, formData);
+  });
+
+  if (error) {
+    console.log(error);
+    return fromErrorToActionState(error, formData);
   }
 
   revalidatePath(ticketsPath);

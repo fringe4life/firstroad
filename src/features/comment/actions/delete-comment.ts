@@ -6,9 +6,10 @@ import { isOwner } from "@/features/auth/utils/owner";
 import { fromErrorToActionState, toActionState } from "@/utils/to-action-state";
 import { prisma } from "@/lib/prisma";
 import { ticketEditPath } from "@/path";
+import { tryCatch } from "@/utils/try-catch";
 
 export const deleteComment = async (commentId: string) => {
-  try {
+  const { data, error } = await tryCatch(async () => {
     const session = await getSessionOrRedirect();
     const comment = await prisma.comment.findUnique({
       where: { id: commentId },
@@ -34,7 +35,11 @@ export const deleteComment = async (commentId: string) => {
     revalidatePath(ticketEditPath(comment.ticketId));
 
     return toActionState("Comment deleted successfully", "SUCCESS");
-  } catch (err) {
-    return fromErrorToActionState(err);
+  });
+
+  if (error) {
+    return fromErrorToActionState(error);
   }
+
+  return data!;
 };

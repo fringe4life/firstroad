@@ -9,6 +9,7 @@ import { setCookieByKey } from "@/utils/cookies";
 import { auth } from "@/lib/auth";
 import { isRedirectError } from "@/utils/is-redirect-error";
 import { accountProfilePath } from "@/path";
+import { tryCatch } from "@/utils/try-catch";
 
 // Zod schema for password change validation
 const schema = z
@@ -59,7 +60,7 @@ export async function changePassword(
     return fromErrorToActionState(parsed.error, formData);
   }
 
-  try {
+  const { error } = await tryCatch(async () => {
     await auth.api.changePassword({
       headers: await headers(),
       body: {
@@ -70,11 +71,16 @@ export async function changePassword(
     });
 
     setCookieByKey("toast", "Password successfully changed");
-    redirect(accountProfilePath);
-  } catch (error: unknown) {
+    throw redirect(accountProfilePath);
+  });
+
+  if (error) {
     if (isRedirectError(error)) {
       throw error;
     }
     return fromErrorToActionState(error, formData);
   }
+
+  // This should never be reached due to redirect, but satisfies TypeScript
+  return toActionState("Password changed successfully", "SUCCESS");
 }

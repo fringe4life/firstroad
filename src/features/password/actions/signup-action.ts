@@ -10,6 +10,7 @@ import {
 import { auth } from "@/lib/auth";
 import { isRedirectError } from "@/utils/is-redirect-error";
 import { ticketsPath } from "@/path";
+import { tryCatch } from "@/utils/try-catch";
 
 const signUpSchema = z
   .object({
@@ -26,7 +27,7 @@ const signUpSchema = z
   });
 
 const signup = async (_state: ActionState | undefined, formData: FormData) => {
-  try {
+  const { error } = await tryCatch(async () => {
     const formDataObj = Object.fromEntries(formData);
     const { name, email, password } = signUpSchema.parse(formDataObj);
 
@@ -39,10 +40,12 @@ const signup = async (_state: ActionState | undefined, formData: FormData) => {
       headers: await headers(),
     });
 
-    redirect(ticketsPath);
-  } catch (err: unknown) {
-    if (isRedirectError(err)) throw err;
-    return fromErrorToActionState(err, formData);
+    throw redirect(ticketsPath);
+  });
+
+  if (error) {
+    if (isRedirectError(error)) throw error;
+    return fromErrorToActionState(error, formData);
   }
 };
 

@@ -8,11 +8,12 @@ import { setCookieByKey } from "@/utils/cookies";
 import { fromErrorToActionState } from "@/utils/to-action-state";
 import { prisma } from "@/lib/prisma";
 import { ticketsPath } from "@/path";
+import { tryCatch } from "@/utils/try-catch";
 
 export const deleteTicket = async (id: string) => {
   const session = await getSessionOrRedirect();
 
-  try {
+  const { error } = await tryCatch(async () => {
     await prisma.$transaction(async (tx) => {
       const ticket = await tx.ticket.findUnique({
         where: {
@@ -26,8 +27,10 @@ export const deleteTicket = async (id: string) => {
 
       await tx.ticket.delete({ where: { id } });
     });
-  } catch (err) {
-    return fromErrorToActionState(err);
+  });
+
+  if (error) {
+    return fromErrorToActionState(error);
   }
 
   revalidatePath(ticketsPath);

@@ -8,6 +8,7 @@ import {
   toActionState,
 } from "@/utils/to-action-state";
 import { auth } from "@/lib/auth";
+import { tryCatch } from "@/utils/try-catch";
 
 const resetPasswordSchema = z
   .object({
@@ -29,7 +30,7 @@ const resetPassword = async (
   _state: ActionState | undefined,
   formData: FormData,
 ) => {
-  try {
+  const { error } = await tryCatch(async () => {
     const formDataObj = Object.fromEntries(formData);
     const { token, password } = resetPasswordSchema.parse(formDataObj);
 
@@ -45,8 +46,10 @@ const resetPassword = async (
       "Password has been reset successfully. You can now sign in with your new password.",
       "SUCCESS",
     );
-  } catch (err: unknown) {
-    return fromErrorToActionState(err, formData);
+  });
+
+  if (error) {
+    return fromErrorToActionState(error, formData);
   }
 };
 

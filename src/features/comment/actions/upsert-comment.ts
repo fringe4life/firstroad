@@ -12,6 +12,7 @@ import {
 } from "@/utils/to-action-state";
 import { prisma } from "@/lib/prisma";
 import { ticketEditPath } from "@/path";
+import { tryCatch } from "@/utils/try-catch";
 
 const upsertCommentSchema = z.object({
   content: z
@@ -29,7 +30,10 @@ export const upsertComment = async (
 ): Promise<ActionState<CommentWithUserInfo>> => {
   const session = await getSessionOrRedirect();
 
-  try {
+  const { data, error } = await tryCatch<
+    ActionState<CommentWithUserInfo>,
+    unknown
+  >(async () => {
     // Verify the ticket exists
     const ticket = await prisma.ticket.findUnique({
       where: { id: ticketId },
@@ -99,8 +103,11 @@ export const upsertComment = async (
       undefined,
       commentWithOwnership,
     );
-  } catch (err: unknown) {
-    console.error("Error upserting comment:", err);
-    return fromErrorToActionState(err, formData);
+  });
+
+  if (error) {
+    return fromErrorToActionState(error, formData);
   }
+
+  return data!;
 };
