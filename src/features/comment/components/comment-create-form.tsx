@@ -8,10 +8,7 @@ import SubmitButton from "@/components/form/submit-button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { upsertComment } from "@/features/comment/actions/upsert-comment";
-import {
-  type ActionState,
-  EMPTY_ACTION_STATE,
-} from "@/features/utils/to-action-state";
+import { type ActionState, EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 
 type CommentCreateFormProps = {
   ticketId: string;

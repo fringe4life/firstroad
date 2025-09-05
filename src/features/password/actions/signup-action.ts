@@ -6,9 +6,9 @@ import { z } from "zod/v4";
 import {
   type ActionState,
   fromErrorToActionState,
-} from "@/features/utils/to-action-state";
+} from "@/utils/to-action-state";
 import { auth } from "@/lib/auth";
-import { isRedirectError } from "@/lib/is-redirect-error";
+import { isRedirectError } from "@/utils/is-redirect-error";
 import { ticketsPath } from "@/path";
 
 const signUpSchema = z

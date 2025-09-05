@@ -9,6 +9,28 @@ export const auth = betterAuth({
 
   plugins: [nextCookies()], // nextCookies should be the last plugin
 
+  rateLimit: {
+    enabled: process.env.NODE_ENV === "production",
+    window: 60, // 1 minute
+    max: 100, // 100 requests per minute (global)
+    customRules: {
+      // Stricter limits for password reset
+      "/request-password-reset": {
+        window: 60, // 1 minute
+        max: 3, // 3 password reset requests per minute
+      },
+      "/reset-password": {
+        window: 300, // 5 minutes
+        max: 5, // 5 reset attempts per 5 minutes
+      },
+      // Stricter limits for sign-in attempts
+      "/sign-in/email": {
+        window: 60, // 1 minute
+        max: 5, // 5 sign-in attempts per minute
+      },
+    },
+  },
+
   databaseHooks: {
     user: {
       create: {

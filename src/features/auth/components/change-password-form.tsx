@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { changePassword } from "@/features/auth/actions/change-password-action";
-import { EMPTY_ACTION_STATE } from "@/features/utils/to-action-state";
+import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 
 const ChangePasswordForm = () => {
   const [state, action] = useActionState(changePassword, EMPTY_ACTION_STATE);

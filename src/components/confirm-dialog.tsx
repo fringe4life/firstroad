@@ -13,10 +13,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import {
-  type ActionState,
-  EMPTY_ACTION_STATE,
-} from "@/features/utils/to-action-state";
+import { type ActionState, EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 
 type UseConfirmDialogProps = {
   action: () => Promise<ActionState>;

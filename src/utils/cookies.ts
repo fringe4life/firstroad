@@ -1,7 +1,7 @@
-"use server"
+"use server";
 import { cookies } from "next/headers";
 
-type Key = "toast" | string & {}
+type Key = "toast" | (string & {});
 
 export const setCookieByKey = async (key: Key, value: string) => {
   (await cookies()).set(key, value);

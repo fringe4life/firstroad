@@ -4,10 +4,7 @@ import type { TicketStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
-import {
-  fromErrorToActionState,
-  toActionState,
-} from "@/features/utils/to-action-state";
+import { fromErrorToActionState, toActionState } from "@/utils/to-action-state";
 import { prisma } from "@/lib/prisma";
 import { ticketsPath } from "@/path";
 
@@ -38,6 +35,6 @@ export const updateStatus = async (newValue: TicketStatus, id: string) => {
   }
 
   revalidatePath(ticketsPath);
-  
+
   return toActionState("Status updated", "SUCCESS");
 };

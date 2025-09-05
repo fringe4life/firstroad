@@ -7,7 +7,7 @@ import SubmitButton from "@/components/form/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { resetPassword } from "@/features/password/actions/reset-password-action";
-import { EMPTY_ACTION_STATE } from "@/features/utils/to-action-state";
+import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 
 interface ResetPasswordFormProps {
   token: string;

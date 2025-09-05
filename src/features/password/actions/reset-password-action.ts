@@ -6,7 +6,7 @@ import {
   type ActionState,
   fromErrorToActionState,
   toActionState,
-} from "@/features/utils/to-action-state";
+} from "@/utils/to-action-state";
 import { auth } from "@/lib/auth";
 
 const resetPasswordSchema = z

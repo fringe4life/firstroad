@@ -5,12 +5,12 @@ import { redirect } from "next/navigation";
 import { z } from "zod/v4";
 import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
-import { setCookieByKey } from "@/features/utils/cookies";
+import { setCookieByKey } from "@/utils/cookies";
 import {
   type ActionState,
   fromErrorToActionState,
   toActionState,
-} from "@/features/utils/to-action-state";
+} from "@/utils/to-action-state";
 import { prisma } from "@/lib/prisma";
 import { ticketsPath } from "@/path";
 import { toCent } from "@/utils/currency";
@@ -59,9 +59,9 @@ const upsertTicket = async (
     console.log(err);
     return fromErrorToActionState(err, formData);
   }
-  
+
   revalidatePath(ticketsPath);
-  
+
   if (id) {
     setCookieByKey("toast", "Ticket updated");
     redirect(ticketsPath);

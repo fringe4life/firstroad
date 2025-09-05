@@ -3,10 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
-import {
-  fromErrorToActionState,
-  toActionState,
-} from "@/features/utils/to-action-state";
+import { fromErrorToActionState, toActionState } from "@/utils/to-action-state";
 import { prisma } from "@/lib/prisma";
 import { ticketEditPath } from "@/path";
 
@@ -35,7 +32,7 @@ export const deleteComment = async (commentId: string) => {
     });
 
     revalidatePath(ticketEditPath(comment.ticketId));
-    
+
     return toActionState("Comment deleted successfully", "SUCCESS");
   } catch (err) {
     return fromErrorToActionState(err);

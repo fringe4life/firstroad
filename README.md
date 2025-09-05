@@ -15,7 +15,7 @@ A full-stack collaborative platform built with Next.js 15, featuring authenticat
 - **📊 Infinite Pagination**: Efficient cursor-based pagination for comments
 - **🔒 Ownership System**: Users can only edit their own tickets and comments
 - **🎯 Type Safety**: Full TypeScript support with typed routes
-- **📧 Email Features**: Password reset and email verification out-of-the-box
+- **📧 Email Features**: Password reset and email verification with React Email templates
 - **🔄 Database Hooks**: Automatic UserInfo creation on user registration
 - **🔄 Parallel Routes**: Next.js 15 parallel routes for enhanced user experience
 - **⚡ React Compiler**: Experimental React compiler for improved performance
@@ -33,6 +33,7 @@ A full-stack collaborative platform built with Next.js 15, featuring authenticat
 - **Notifications**: Sonner toast notifications
 - **Theme**: next-themes for dark/light mode
 - **URL Search Params**: nuqs for type-safe URL parameters
+- **Email**: React Email with Resend for transactional emails
 - **Package Manager**: Bun (recommended)
 - **Linting**: Biome for fast formatting and linting
 - **Type Checking**: tsgo for fast TypeScript checking
@@ -155,14 +156,19 @@ src/
 │   │   └── utils/         # Auth utilities
 │   ├── ticket/            # Ticket management
 │   ├── comment/           # Comment system
-│   └── utils/             # Shared utilities
+│   └── types/             # Shared type definitions
 ├── lib/                   # Utility libraries
 │   ├── auth.ts           # Better Auth configuration
 │   ├── auth-client.ts    # Client-side auth instance
-│   ├── email.ts          # Email utility
-│   ├── is-redirect-error.ts # Helper to detect Next.js redirects
+│   ├── email.ts          # Email utility with Resend
 │   ├── path.ts           # Type-safe route definitions
 │   └── prisma.ts         # Database client
+├── utils/                 # Shared utilities
+│   ├── cookies.ts        # Cookie management
+│   ├── currency.ts       # Currency utilities
+│   ├── get-active-path.ts # Path utilities
+│   ├── is-redirect-error.ts # Redirect error detection
+│   └── to-action-state.ts # Action state utilities
 └── prisma/               # Database schema and migrations
     ├── models/           # Individual model files
     └── seed-data/        # Database seeding data
@@ -286,9 +292,9 @@ bun run type             # Run TypeScript type checking with tsgo
 bun run typegen          # Generate Next.js type definitions
 
 # Database
-bun run prisma generate  # Generate Prisma client
-bun run prisma db push   # Push schema to database
-bun run prisma db seed   # Seed database with sample data
+bunx prisma generate     # Generate Prisma client
+bunx prisma db push      # Push schema to database
+bunx prisma db seed      # Seed database with sample data
 ```
 
 ## 🔧 Configuration
@@ -323,8 +329,9 @@ PostgreSQL with Prisma ORM for type-safe database operations. Uses Neon serverle
 Better Auth configured with:
 
 - Email/password authentication
-- Password reset functionality
+- Password reset functionality with React Email templates
 - Email verification
+- Rate limiting for production security
 - Database hooks for UserInfo creation
 - Prisma adapter for PostgreSQL (Neon driver adapter)
 
@@ -334,6 +341,7 @@ Better Auth configured with:
 - Typed routes with Next.js 15 (`typedRoutes: true`)
 - Type-safe URL search parameters with nuqs
 - Centralized auth types in `src/features/auth/types.ts`
+- Shared utilities moved to `src/utils/` for better organization
 - Generic type utilities for better code reuse
 
 ### Path Management
