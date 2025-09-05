@@ -1,19 +1,18 @@
-import { render } from "@react-email/components";
-import { sendEmail } from "@/utils/send-email";
+import { resend } from "@/lib/email";
 import EmailPasswordReset from "../../../../react-email-starter/emails/password-reset-email";
+import { env } from "@/lib/env";
 
-export const sendPasswordResetEmail = async (
-  userName: string,
+export const sendEmailPasswordReset = async (
+  username: string,
   email: string,
-  passwordResetToken: string,
+  passwordResetLink: string
 ) => {
-  const html = await render(
-    <EmailPasswordReset toName={userName} url={email} />,
-  );
-
-  await sendEmail({
+  return await resend.emails.send({
+    // your own custom domain here
+    // or your email that you used to sign up at Resend
+    from: env.RESEND_FROM,
     to: email,
-    subject: "Password Reset",
-    html,
+    subject: "Password Reset from TicketBounty",
+    react: <EmailPasswordReset toName={username} url={passwordResetLink} />,
   });
 };

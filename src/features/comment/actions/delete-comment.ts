@@ -9,7 +9,7 @@ import { ticketEditPath } from "@/path";
 import { tryCatch } from "@/utils/try-catch";
 
 export const deleteComment = async (commentId: string) => {
-  const { data, error } = await tryCatch(async () => {
+  const { error } = await tryCatch(async () => {
     const session = await getSessionOrRedirect();
     const comment = await prisma.comment.findUnique({
       where: { id: commentId },
@@ -41,5 +41,5 @@ export const deleteComment = async (commentId: string) => {
     return fromErrorToActionState(error);
   }
 
-  return data!;
+  return toActionState("Comment deleted successfully", "SUCCESS");
 };

@@ -60,7 +60,6 @@ const upsertTicket = async (
   });
 
   if (error) {
-    console.log(error);
     return fromErrorToActionState(error, formData);
   }
 
