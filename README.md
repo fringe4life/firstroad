@@ -291,6 +291,11 @@ bun run check            # Run linting and formatting
 bun run type             # Run TypeScript type checking with tsgo
 bun run typegen          # Generate Next.js type definitions
 
+# Email Development
+bun run email:dev        # Start React Email preview server
+bun run email:build      # Build email templates
+bun run email:export     # Export email templates to HTML
+
 # Database
 bunx prisma generate     # Generate Prisma client
 bunx prisma db push      # Push schema to database
