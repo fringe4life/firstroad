@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
     reactCompiler: true,
     // devtoolSegmentExplorer: true,
     clientSegmentCache: true,
-    // ppr: true,
+    ppr: true,
   },
 };
 
