@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
+import { createAuthMiddleware } from "better-auth/api";
 import { sendEmail } from "@/utils/send-email";
 import { prisma } from "@/lib/prisma";
 
@@ -8,6 +9,72 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "postgresql" }),
 
   plugins: [nextCookies()], // nextCookies should be the last plugin
+
+  hooks: {
+    after: createAuthMiddleware(async (ctx) => {
+      // Check if this is a sign-up request and a new session was created
+      if (ctx.path.startsWith("/sign-up") && ctx.context.newSession) {
+        const newSession = ctx.context.newSession;
+        const user = newSession.user;
+
+        try {
+          await sendEmail({
+            to: user.email,
+            subject: "Welcome to TicketBounty! 🎉",
+            html: `
+              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+                <h2 style="color: #333; text-align: center;">Welcome to TicketBounty! 🎉</h2>
+                <p>Hello ${user.name || "there"},</p>
+                <p>Thank you for joining TicketBounty! We're excited to have you on board.</p>
+                <p>Your account has been successfully created and you can now:</p>
+                <ul style="color: #555;">
+                  <li>Create and manage support tickets</li>
+                  <li>Track ticket status and updates</li>
+                  <li>Collaborate with your team</li>
+                  <li>Access all our features</li>
+                </ul>
+                <div style="text-align: center; margin: 30px 0;">
+                  <a href="${process.env.AUTH_URL || process.env.NEXTAUTH_URL || "http://localhost:3000"}/tickets" 
+                     style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">
+                    Get Started
+                  </a>
+                </div>
+                <p>If you have any questions or need help getting started, don't hesitate to reach out to our support team.</p>
+                <p>Best regards,<br>The TicketBounty Team</p>
+              </div>
+            `,
+            text: `
+              Welcome to TicketBounty! 🎉
+              
+              Hello ${user.name || "there"},
+              
+              Thank you for joining TicketBounty! We're excited to have you on board.
+              
+              Your account has been successfully created and you can now:
+              - Create and manage support tickets
+              - Track ticket status and updates
+              - Collaborate with your team
+              - Access all our features
+              
+              Get started: ${process.env.AUTH_URL || process.env.NEXTAUTH_URL || "http://localhost:3000"}/tickets
+              
+              If you have any questions or need help getting started, don't hesitate to reach out to our support team.
+              
+              Best regards,
+              The TicketBounty Team
+            `,
+          });
+          console.log(`Welcome email sent to ${user.email}`);
+        } catch (error) {
+          console.error(
+            `Failed to send welcome email to ${user.email}:`,
+            error,
+          );
+          // Don't throw the error to avoid breaking the sign-up flow
+        }
+      }
+    }),
+  },
 
   rateLimit: {
     enabled: process.env.NODE_ENV === "production",

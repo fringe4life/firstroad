@@ -5,7 +5,7 @@ import { env } from "@/lib/env";
 export const sendEmailPasswordReset = async (
   username: string,
   email: string,
-  passwordResetLink: string
+  passwordResetLink: string,
 ) => {
   return await resend.emails.send({
     // your own custom domain here

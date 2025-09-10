@@ -24,7 +24,7 @@ A full-stack collaborative platform built with Next.js 15, featuring authenticat
 
 - **Framework**: Next.js 15 (App Router) with Turbopack
 - **Language**: TypeScript with strict type checking
-- **Database**: PostgreSQL with Prisma ORM (Neon adapter)
+- **Database**: PostgreSQL with Prisma Client (queryCompiler + driverAdapters, Neon adapter)
 - **Authentication**: Better Auth with email/password provider
 - **Styling**: Tailwind CSS v4 with shadcn/ui components
 - **Icons**: Lucide React
@@ -78,14 +78,11 @@ Update `.env.local` with your configuration:
 ```env
 # Database
 DATABASE_URL="postgresql://username:password@localhost:5432/your_database"
-DIRECT_URL="postgresql://username:password@localhost:5432/your_database"
 
-# Better Auth
+# Auth
 AUTH_SECRET="your-secret-key-here"
 # Optional, used by frameworks/integrations expecting a public app URL
 NEXTAUTH_URL="http://localhost:3000"
-# Public app URL for client-side auth
-NEXT_PUBLIC_APP_URL="http://localhost:3000"
 
 # Email (Resend)
 # Docs: https://resend.com/
@@ -161,14 +158,17 @@ src/
 │   ├── auth.ts           # Better Auth configuration
 │   ├── auth-client.ts    # Client-side auth instance
 │   ├── email.ts          # Email utility with Resend
+│   ├── env.ts            # Environment validation with Zod
 │   ├── path.ts           # Type-safe route definitions
-│   └── prisma.ts         # Database client
+│   └── prisma.ts         # Database client with queryCompiler + driverAdapters
 ├── utils/                 # Shared utilities
 │   ├── cookies.ts        # Cookie management
 │   ├── currency.ts       # Currency utilities
 │   ├── get-active-path.ts # Path utilities
 │   ├── is-redirect-error.ts # Redirect error detection
 │   └── to-action-state.ts # Action state utilities
+└── generated/            # Generated Prisma client (ignored by Git/Biome)
+    └── prisma/           # Prisma Client with queryCompiler + driverAdapters
 └── prisma/               # Database schema and migrations
     ├── models/           # Individual model files
     └── seed-data/        # Database seeding data
@@ -297,7 +297,7 @@ bun run email:build      # Build email templates
 bun run email:export     # Export email templates to HTML
 
 # Database
-bunx prisma generate     # Generate Prisma client
+bunx prisma generate     # Generate Prisma client (with queryCompiler + driverAdapters)
 bunx prisma db push      # Push schema to database
 bunx prisma db seed      # Seed database with sample data
 ```
@@ -319,7 +319,14 @@ The project uses Tailwind CSS v4 with custom configuration for dark mode and the
 
 ### Database
 
-PostgreSQL with Prisma ORM for type-safe database operations. Uses Neon serverless adapter in `src/lib/prisma.ts` for efficient, edge-friendly connections. The schema is split into individual model files for better organization:
+PostgreSQL with Prisma Client using the new **queryCompiler** and **driverAdapters** preview features. This configuration eliminates the Rust-based query engine binary, reducing bundle sizes and simplifying deployments in serverless/edge environments. Uses Neon serverless adapter in `src/lib/prisma.ts` for efficient, edge-friendly connections. The schema is split into individual model files for better organization:
+
+**Key Benefits of queryCompiler + driverAdapters:**
+
+- **No Rust binaries**: Eliminates native binary dependencies
+- **Smaller bundles**: Significantly reduced deployment package sizes
+- **Edge-friendly**: Optimized for serverless and edge runtimes
+- **Simplified deployment**: No need to manage platform-specific binaries
 
 - **User**: Better Auth user model
 - **Account**: Better Auth account model
@@ -338,7 +345,7 @@ Better Auth configured with:
 - Email verification
 - Rate limiting for production security
 - Database hooks for UserInfo creation
-- Prisma adapter for PostgreSQL (Neon driver adapter)
+- Prisma Client with queryCompiler + driverAdapters (Neon driver adapter)
 
 ### Type Safety
 

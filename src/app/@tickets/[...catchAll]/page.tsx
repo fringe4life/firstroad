@@ -1,5 +1,3 @@
-
-
-export default function CatchAllPage(){
-    return null
+export default function CatchAllPage() {
+  return null;
 }

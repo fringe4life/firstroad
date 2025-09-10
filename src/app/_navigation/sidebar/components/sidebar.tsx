@@ -26,7 +26,7 @@ const Sidebar = () => {
   const { isFetched, user } = useAuth();
   const { isOpen: isMobileOpen, close } = useMobileSidebar();
 
-  console.log({user, isFetched})
+  console.log({ user, isFetched });
 
   // Desktop sidebar - hidden by default, only visible on md and above
   if (isDesktop) {
