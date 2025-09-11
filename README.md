@@ -8,7 +8,7 @@ A full-stack collaborative platform built with Next.js 15, featuring authenticat
 - **🎫 Ticket Management**: Create, edit, and manage tickets with status tracking
 - **💬 Comments System**: Add, edit, and delete comments on tickets with infinite pagination
 - **🌙 Dark Mode**: Beautiful light/dark theme with smooth transitions
-- **📱 Responsive Design**: Optimized for desktop and mobile devices
+- **📱 Responsive Design**: Optimized for desktop and mobile devices with PPR navigation
 - **⚡ Real-time Updates**: Server-side rendering with React Suspense
 - **🔍 Search & Filter**: Advanced search and filtering capabilities
 - **🎨 Modern UI**: Built with shadcn/ui components and Tailwind CSS
@@ -19,6 +19,7 @@ A full-stack collaborative platform built with Next.js 15, featuring authenticat
 - **🔄 Database Hooks**: Automatic UserInfo creation on user registration
 - **🔄 Parallel Routes**: Next.js 15 parallel routes for enhanced user experience
 - **⚡ React Compiler**: Experimental React compiler for improved performance
+- **🚀 Partial Prerendering**: Next.js 15 PPR for enhanced performance and navigation
 
 ## 🛠️ Tech Stack
 
@@ -38,7 +39,7 @@ A full-stack collaborative platform built with Next.js 15, featuring authenticat
 - **Linting**: Biome for fast formatting and linting
 - **Type Checking**: tsgo for fast TypeScript checking
 - **React Compiler**: Experimental React compiler for performance optimization
-- **Partial Prerendering**: Next.js 15 PPR for enhanced performance
+- **Partial Prerendering**: Next.js 15 PPR for enhanced performance and navigation
 
 ## 📋 Prerequisites
 
@@ -138,11 +139,13 @@ src/
 │   │   ├── sign-in/        # Sign in page
 │   │   ├── sign-up/        # Sign up page
 │   │   ├── forgot-password/ # Password reset request
-│   │   └── reset-password/  # Password reset confirmation
+│   │   ├── reset-password/  # Password reset confirmation
+│   │   └── verify-email/   # Email verification
 │   ├── api/                # API routes
 │   ├── _navigation/        # Navigation components
-│   ├── _providers/         # React providers
-│   └── verify-email/       # Email verification
+│   │   ├── ppr/           # PPR navigation components
+│   │   └── sidebar/        # Sidebar components
+│   └── _providers/         # React providers
 ├── components/             # Reusable UI components
 │   ├── ui/                # shadcn/ui components
 │   ├── form/              # Form components
@@ -151,7 +154,6 @@ src/
 │   ├── auth/              # Authentication logic
 │   │   ├── actions/       # Server actions
 │   │   ├── components/    # Auth components
-│   │   ├── hooks/         # Client-side hooks
 │   │   ├── queries/       # Server-side queries
 │   │   ├── types.ts       # Centralized auth types
 │   │   └── utils/         # Auth utilities
@@ -236,11 +238,12 @@ The application uses Better Auth with email/password authentication:
 - Helper: `src/lib/is-redirect-error.ts` centralizes detection of Next.js redirect errors.
 - Example usage: Sign-up action rethrows redirect errors to avoid surfacing `NEXT_REDIRECT` in UI and properly navigate to `/tickets`.
 
-## 🔄 Dynamic Rendering (Next.js 15)
+## 🔄 Partial Prerendering (PPR) & Dynamic Rendering
 
-- Use of `connection()` from `next/server` opts routes/components into dynamic rendering as needed.
-- Applied in session queries and sensitive components (e.g., ticket list) to avoid build-time prerender issues.
-- Centralized `getSession()` reads request `headers()` only after awaiting `connection()` to ensure request context.
+- **Partial Prerendering**: Next.js 15 PPR enabled for enhanced performance and navigation
+- **PPR Navigation**: Navigation components use PPR pattern for better performance
+- **Dynamic Rendering**: Use of `connection()` from `next/server` opts routes/components into dynamic rendering as needed
+- **Session Management**: Centralized `getSession()` for consistent auth state across the application
 
 ## 🎫 Ticket System
 
@@ -314,7 +317,7 @@ bunx prisma db seed      # Seed database with sample data
 - **Turbopack**: Fast bundling for development and production
 - **React Compiler**: Experimental compiler for performance optimization
 - **Parallel Routes**: Enhanced routing with simultaneous route rendering
-- **Partial Prerendering (PPR)**: Experimental feature for enhanced performance
+- **Partial Prerendering (PPR)**: Experimental feature for enhanced performance and navigation
 - **Client Segment Cache**: Improved caching for better performance
 
 ### Tailwind CSS
