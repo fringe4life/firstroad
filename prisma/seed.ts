@@ -1,8 +1,13 @@
+import { PrismaNeon } from "@prisma/adapter-neon";
 import { PrismaClient } from "@/generated/prisma/client";
 import { createComments } from "./seed-data/comments";
 import { createTickets } from "./seed-data/tickets";
 
-const prisma = new PrismaClient();
+const adapter = new PrismaNeon({
+	connectionString: process.env.DATABASE_URL || "",
+});
+
+const prisma = new PrismaClient({ adapter });
 
 const main = async () => {
 	console.log("🧹 Clearing tickets and comments (not users)...");

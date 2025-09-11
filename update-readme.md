@@ -4,7 +4,7 @@ Provide ONLY this file in future sessions to have the AI re-scan and update `REA
 
 ## What the AI will do
 
-- Re-scan these sources: `package.json`, `env.example`, `next.config.ts`, `prisma/schema.prisma`, `prisma/seed.ts`, `src/lib/env.ts`, `src/lib/prisma.ts`, `src/app/**/layout.tsx`, `src/app/**/page.tsx`.
+- Re-scan these sources: `package.json`, `env.example`, `next.config.ts`, `prisma/schema.prisma`, `prisma/seed.ts`, `prisma.config.ts`, `src/lib/env.ts`, `src/lib/prisma.ts`, `src/app/**/layout.tsx`, `src/app/**/page.tsx`.
 - Update sections in `README.md`:
   - Prerequisites and Getting Started
   - Environment variables block (keep in sync with `env.example` and `src/lib/env.ts`)
