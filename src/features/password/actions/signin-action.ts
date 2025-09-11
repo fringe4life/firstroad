@@ -5,11 +5,9 @@ import { redirect } from "next/navigation";
 import { z } from "zod/v4";
 import { auth } from "@/lib/auth";
 import { ticketsPath } from "@/path";
-import { isRedirectError } from "@/utils/is-redirect-error";
 import {
 	type ActionState,
 	fromErrorToActionState,
-	toActionState,
 } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
 
@@ -31,18 +29,14 @@ const signin = async (_state: ActionState | undefined, formData: FormData) => {
 			},
 			headers: await headers(),
 		});
-
-		throw redirect(ticketsPath);
 	});
 
 	if (error) {
-		if (isRedirectError(error)) {
-			throw error;
-		}
 		return fromErrorToActionState(error, formData);
 	}
 
-	return toActionState("Signed in successfully", "SUCCESS");
+	// Redirect after successful authentication
+	redirect(ticketsPath);
 };
 
 export { signin };

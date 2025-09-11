@@ -53,7 +53,7 @@ export default function RootLayout({ children, tickets }: LayoutProps<"/">) {
 								<Header />
 								<div className="flex h-screen border-collapse overflow-hidden">
 									<Sidebar />
-									<main className="flex min-h-screen flex-1 flex-col overflow-y-auto overflow-x-hidden px-8 py-24">
+									<main className="flex min-h-screen flex-1 flex-col gap-y-4 overflow-y-auto overflow-x-hidden px-8 py-24">
 										{children}
 										{tickets}
 									</main>
