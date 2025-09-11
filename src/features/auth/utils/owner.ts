@@ -1,15 +1,15 @@
 import type { ServerSession } from "@/features/auth/types";
 
 type Entity = {
-  userId: string | null | undefined;
+	userId: string | null | undefined;
 };
 
 export type IsOwner = {
-  isOwner: boolean;
+	isOwner: boolean;
 };
 
 export const isOwner = (session: ServerSession | null, { userId }: Entity) => {
-  if (!userId) return false;
+	if (!userId) return false;
 
-  return session?.user?.id === userId;
+	return session?.user?.id === userId;
 };

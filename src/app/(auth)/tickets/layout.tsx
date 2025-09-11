@@ -1,14 +1,14 @@
 import { RedirectToast } from "@/components/redirect-toast";
 
 export default function TicketsLayout({
-  children,
-  tickets,
+	children,
+	tickets,
 }: LayoutProps<"/tickets">) {
-  return (
-    <>
-      {children}
-      {tickets}
-      <RedirectToast />
-    </>
-  );
+	return (
+		<>
+			{children}
+			{tickets}
+			<RedirectToast />
+		</>
+	);
 }

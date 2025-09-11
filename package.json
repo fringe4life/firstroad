@@ -39,7 +39,7 @@
     "@tanstack/react-query-next-experimental": "^5.87.4",
     "babel-plugin-react-compiler": "^19.1.0-rc.1-rc-af1b7da-20250421",
     "better-auth": "^1.3.9",
-    "big.js": "^6.2.2",
+    "big.js": "^7.0.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
@@ -50,14 +50,14 @@
     "next-themes": "^0.4.6",
     "nuqs": "^2.6.0",
     "react": "latest",
-    "react-day-picker": "8.10.1",
+    "react-day-picker": "^9.9.0",
     "react-dom": "latest",
     "resend": "^6.0.3",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
     "tw-animate-css": "^1.3.8",
     "ws": "^8.18.3",
-    "zod": "^4.1.5"
+    "zod": "^4.1.7"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.4",
@@ -69,7 +69,7 @@
     "@types/react": "^19.1.12",
     "@types/react-dom": "^19.1.9",
     "@types/ws": "^8.18.1",
-    "@typescript/native-preview": "^7.0.0-dev.20250910.1",
+    "@typescript/native-preview": "^7.0.0-dev.20250911.1",
     "prisma": "^6.16.0",
     "react-email": "4.2.8",
     "tailwindcss": "^4.1.13",
@@ -91,6 +91,32 @@
     "server-only"
   ],
   "overrides": {
-    "next": "canary"
+    "next": "canary",
+    "ansi-regex": "6.0.1",
+    "ansi-styles": "6.1.0",
+    "backslash": "0.2.0",
+    "chalk": "5.6.0",
+    "chalk-template": "1.1.0",
+    "color-convert": "3.0.1",
+    "color-name": "1.1.4",
+    "color-string": "1.9.1",
+    "debug": "4.3.7",
+    "error-ex": "1.3.2",
+    "has-ansi": "6.0.0",
+    "is-arrayish": "0.3.2",
+    "proto-tinker-wc": "1.8.6",
+    "supports-hyperlinks": "4.0.0",
+    "simple-swizzle": "0.2.2",
+    "slice-ansi": "7.1.0",
+    "strip-ansi": "7.1.0",
+    "supports-color": "8.1.1",
+    "wrap-ansi": "8.1.0",
+    "@coveops/abi": "2.0.0",
+    "@duckdb/duckdb-wasm": "1.29.1",
+    "@duckdb/node-api": "1.3.2",
+    "@duckdb/node-bindings": "1.3.2",
+    "duckdb": "1.3.2",
+    "prebid": "10.9.0",
+    "prebid-universal-creative": "1.17.2"
   }
 }

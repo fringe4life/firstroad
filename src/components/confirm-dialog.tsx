@@ -4,108 +4,108 @@ import { cloneElement, useActionState, useEffect, useState } from "react";
 import Form from "@/components/form/form";
 import SubmitButton from "@/components/form/submit-button";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { type ActionState, EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 
 type UseConfirmDialogProps = {
-  action: () => Promise<ActionState>;
-  trigger: React.ReactElement | ((isPending: boolean) => React.ReactElement);
-  title?: string;
-  description?: string;
-  closeOnSubmit?: boolean; // Optional flag to close dialog immediately on submit
-  onSuccess?: (result: ActionState) => void;
-  onError?: (result: ActionState) => void;
-  onIsPending?: (isPending: boolean) => void;
+	action: () => Promise<ActionState>;
+	trigger: React.ReactElement | ((isPending: boolean) => React.ReactElement);
+	title?: string;
+	description?: string;
+	closeOnSubmit?: boolean; // Optional flag to close dialog immediately on submit
+	onSuccess?: (result: ActionState) => void;
+	onError?: (result: ActionState) => void;
+	onIsPending?: (isPending: boolean) => void;
 };
 
 const useConfirmDialog = ({
-  action,
-  trigger,
-  title = "Are you absolutely sure?",
-  description = "This action cannot be undone. Make sure you understand the consequences.",
-  closeOnSubmit = false, // Default to false for backward compatibility
-  onSuccess,
-  onError,
-  onIsPending,
+	action,
+	trigger,
+	title = "Are you absolutely sure?",
+	description = "This action cannot be undone. Make sure you understand the consequences.",
+	closeOnSubmit = false, // Default to false for backward compatibility
+	onSuccess,
+	onError,
+	onIsPending,
 }: UseConfirmDialogProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+	const [isOpen, setIsOpen] = useState(false);
 
-  // Handle both React element and callback function triggers
-  const getTriggerElement = (isPending: boolean) => {
-    const triggerElement =
-      typeof trigger === "function" ? trigger(isPending) : trigger;
-    return cloneElement(triggerElement, {
-      onClick: () => setIsOpen((prevOpen) => !prevOpen),
-    } as React.HTMLAttributes<HTMLElement>);
-  };
+	// Handle both React element and callback function triggers
+	const getTriggerElement = (isPending: boolean) => {
+		const triggerElement =
+			typeof trigger === "function" ? trigger(isPending) : trigger;
+		return cloneElement(triggerElement, {
+			onClick: () => setIsOpen((prevOpen) => !prevOpen),
+		} as React.HTMLAttributes<HTMLElement>);
+	};
 
-  const handleSuccess = (result: ActionState) => {
-    onSuccess?.(result);
-  };
+	const handleSuccess = (result: ActionState) => {
+		onSuccess?.(result);
+	};
 
-  const handleError = (result: ActionState) => {
-    onError?.(result);
-  };
+	const handleError = (result: ActionState) => {
+		onError?.(result);
+	};
 
-  const [actionState, formAction, isPending] = useActionState(
-    action,
-    EMPTY_ACTION_STATE,
-  );
+	const [actionState, formAction, isPending] = useActionState(
+		action,
+		EMPTY_ACTION_STATE,
+	);
 
-  // Track isPending changes and call onIsPending callback
-  useEffect(() => {
-    // Close dialog when action starts (isPending becomes true) if closeOnSubmit is true
-    if (isPending && closeOnSubmit) {
-      setIsOpen(false);
-    }
+	// Track isPending changes and call onIsPending callback
+	useEffect(() => {
+		// Close dialog when action starts (isPending becomes true) if closeOnSubmit is true
+		if (isPending && closeOnSubmit) {
+			setIsOpen(false);
+		}
 
-    onIsPending?.(isPending);
+		onIsPending?.(isPending);
 
-    // Cleanup function to handle component unmount (e.g., redirects)
-    return () => {
-      // If component unmounts while action is pending, we should clean up any ongoing operations
-      // This prevents memory leaks and ensures toasts are properly dismissed
-      if (isPending) {
-        // Call onIsPending with false to signal cleanup
-        onIsPending?.(false);
-      }
-    };
-  }, [isPending, onIsPending, closeOnSubmit]);
+		// Cleanup function to handle component unmount (e.g., redirects)
+		return () => {
+			// If component unmounts while action is pending, we should clean up any ongoing operations
+			// This prevents memory leaks and ensures toasts are properly dismissed
+			if (isPending) {
+				// Call onIsPending with false to signal cleanup
+				onIsPending?.(false);
+			}
+		};
+	}, [isPending, onIsPending, closeOnSubmit]);
 
-  const dialog = (
-    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>{title}</AlertDialogTitle>
-          <AlertDialogDescription>{description}</AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction asChild>
-            <Form
-              action={formAction}
-              state={actionState}
-              onSuccessState={handleSuccess}
-              onErrorState={handleError}
-            >
-              <SubmitButton label="Confirm" />
-            </Form>
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
-  );
+	const dialog = (
+		<AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+			<AlertDialogContent>
+				<AlertDialogHeader>
+					<AlertDialogTitle>{title}</AlertDialogTitle>
+					<AlertDialogDescription>{description}</AlertDialogDescription>
+				</AlertDialogHeader>
+				<AlertDialogFooter>
+					<AlertDialogCancel>Cancel</AlertDialogCancel>
+					<AlertDialogAction asChild>
+						<Form
+							action={formAction}
+							state={actionState}
+							onSuccessState={handleSuccess}
+							onErrorState={handleError}
+						>
+							<SubmitButton label="Confirm" />
+						</Form>
+					</AlertDialogAction>
+				</AlertDialogFooter>
+			</AlertDialogContent>
+		</AlertDialog>
+	);
 
-  // Return a function that takes isPending to render the trigger, and the dialog
-  return [getTriggerElement, dialog, isPending] as const;
+	// Return a function that takes isPending to render the trigger, and the dialog
+	return [getTriggerElement, dialog, isPending] as const;
 };
 
 export default useConfirmDialog;

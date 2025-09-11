@@ -5,21 +5,21 @@ import SearchInput from "@/components/search-input";
 import { searchParser } from "@/features/ticket/search-params";
 
 interface TicketSearchInputProps {
-  placeholder?: string;
+	placeholder?: string;
 }
 
 const TicketSearchInput = ({
-  placeholder = "Search tickets ...",
+	placeholder = "Search tickets ...",
 }: TicketSearchInputProps) => {
-  const [search, setSearch] = useQueryState("search", searchParser);
+	const [search, setSearch] = useQueryState("search", searchParser);
 
-  return (
-    <SearchInput
-      value={search}
-      onChange={(value) => setSearch(value, { limitUrlUpdates: debounce(250) })}
-      placeholder={placeholder}
-    />
-  );
+	return (
+		<SearchInput
+			value={search}
+			onChange={(value) => setSearch(value, { limitUrlUpdates: debounce(250) })}
+			placeholder={placeholder}
+		/>
+	);
 };
 
 export default TicketSearchInput;

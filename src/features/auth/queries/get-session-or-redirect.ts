@@ -8,39 +8,39 @@ import { signInPath } from "@/path";
 // - when: "no-session" (default) → redirect to sign-in when session is missing
 // - when: "has-session" → redirect to provided path when session exists
 export type GetSessionRedirectOptions =
-  | {
-      when?: "no-session";
-    }
-  | {
-      when: "has-session";
-      redirectPath: Route;
-    };
+	| {
+			when?: "no-session";
+	  }
+	| {
+			when: "has-session";
+			redirectPath: Route;
+	  };
 
 // Overloads
 export function getSessionOrRedirect(): Promise<ServerSession>;
 export function getSessionOrRedirect(
-  options: Extract<GetSessionRedirectOptions, { when?: "no-session" }>,
+	options: Extract<GetSessionRedirectOptions, { when?: "no-session" }>,
 ): Promise<ServerSession>;
 export function getSessionOrRedirect(
-  options: Extract<GetSessionRedirectOptions, { when: "has-session" }>,
+	options: Extract<GetSessionRedirectOptions, { when: "has-session" }>,
 ): Promise<ServerSession | null>;
 
 export async function getSessionOrRedirect(
-  options?: GetSessionRedirectOptions,
+	options?: GetSessionRedirectOptions,
 ): Promise<ServerSession | null> {
-  const session = await getSession();
+	const session = await getSession();
 
-  // has-session branch (narrowed: redirectPath is required)
-  if (options?.when === "has-session") {
-    if (session) {
-      throw redirect(options.redirectPath);
-    }
-    return session;
-  }
+	// has-session branch (narrowed: redirectPath is required)
+	if (options?.when === "has-session") {
+		if (session) {
+			throw redirect(options.redirectPath);
+		}
+		return session;
+	}
 
-  // default: no-session branch
-  if (!session) {
-    throw redirect(signInPath);
-  }
-  return session as ServerSession;
+	// default: no-session branch
+	if (!session) {
+		throw redirect(signInPath);
+	}
+	return session as ServerSession;
 }

@@ -78,11 +78,15 @@ Update `.env.local` with your configuration:
 ```env
 # Database
 DATABASE_URL="postgresql://username:password@localhost:5432/your_database"
+# Optional direct URL for migrations/admin
+DIRECT_URL="postgresql://username:password@localhost:5432/your_database"
 
 # Auth
 AUTH_SECRET="your-secret-key-here"
 # Optional, used by frameworks/integrations expecting a public app URL
 NEXTAUTH_URL="http://localhost:3000"
+# Public app URL for client-side usage
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
 
 # Email (Resend)
 # Docs: https://resend.com/

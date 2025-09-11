@@ -1,7 +1,7 @@
 import { neonConfig } from "@neondatabase/serverless";
 import { PrismaNeon } from "@prisma/adapter-neon";
-import { PrismaClient } from "@/generated/prisma/client";
 import ws from "ws";
+import { PrismaClient } from "@/generated/prisma/client";
 import { env } from "@/lib/env";
 
 neonConfig.webSocketConstructor = ws;
@@ -9,7 +9,7 @@ neonConfig.webSocketConstructor = ws;
 neonConfig.poolQueryViaFetch = true;
 // Type definitions
 declare global {
-  var prisma: PrismaClient | undefined;
+	var prisma: PrismaClient | undefined;
 }
 const connectionString = `${env.DATABASE_URL}`;
 const adapter = new PrismaNeon({ connectionString });

@@ -6,22 +6,22 @@ import type { MouseEventHandler } from "react";
 import { Button } from "../ui/button";
 
 const ThemeSwitcher = () => {
-  const { theme, setTheme } = useTheme();
-  const handleClick: MouseEventHandler<HTMLButtonElement> = () => {
-    setTheme(theme === "light" ? "dark" : "light");
-  };
-  return (
-    <Button
-      className="cursor-pointer"
-      size="icon"
-      variant="outline"
-      onClick={handleClick}
-    >
-      <Moon className="absolute size-4 rotate-90 scale-0 transition-transform duration-150 dark:rotate-0 dark:scale-110" />
+	const { theme, setTheme } = useTheme();
+	const handleClick: MouseEventHandler<HTMLButtonElement> = () => {
+		setTheme(theme === "light" ? "dark" : "light");
+	};
+	return (
+		<Button
+			className="cursor-pointer"
+			size="icon"
+			variant="outline"
+			onClick={handleClick}
+		>
+			<Moon className="absolute size-4 rotate-90 scale-0 transition-transform duration-150 dark:rotate-0 dark:scale-110" />
 
-      <Sun className="size-4 rotate-0 scale-110 transition-all duration-150 dark:rotate-90 dark:scale-0" />
-    </Button>
-  );
+			<Sun className="size-4 rotate-0 scale-110 transition-all duration-150 dark:rotate-90 dark:scale-0" />
+		</Button>
+	);
 };
 
 export { ThemeSwitcher };

@@ -1,26 +1,15 @@
-import type { Prisma } from "@prisma/client";
 import type { IsOwner } from "@/features/auth/utils/owner";
+import type { CommentGetPayload } from "@/generated/prisma/models/Comment";
 
-// Base comment type using Prisma's generated type
-type BaseComment = Prisma.CommentGetPayload<{
-  include: {
-    userInfo: {
-      include: {
-        user: {
-          select: {
-            name: true;
-          };
-        };
-      };
-    };
-  };
-}> &
-  IsOwner;
+type CommentModelWithUserInfo = CommentGetPayload<{
+	include: { userInfo: { include: { user: { select: { name: true } } } } };
+}>;
 
 // Comment type with additional properties for UI
-export type Comment = BaseComment & {
-  isDeleting?: boolean;
-};
+export type Comment = CommentModelWithUserInfo &
+	IsOwner & {
+		isDeleting?: boolean;
+	};
 
 // Comment type with required user info (for actions)
-export type CommentWithUserInfo = BaseComment;
+export type CommentWithUserInfo = Comment;
