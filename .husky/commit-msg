@@ -1,0 +1,6 @@
+# Check if commit message follows the preferred format (commas instead of dashes)
+if ! echo "$1" | grep -qE "^[a-zA-Z'\"].*[a-zA-Z0-9'\".,!?;:]$"; then
+  echo "❌ Commit message should start with a letter, quote, or similar and end with alphanumeric or punctuation"
+  echo "💡 Use commas instead of dashes between items in commit messages"
+  exit 1
+fi
