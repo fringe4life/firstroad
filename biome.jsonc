@@ -68,6 +68,16 @@
       }
     },
     {
+      "includes": ["src/features/**/actions/*.ts", "src/lib/env.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noMagicNumbers": "off"
+          }
+        }
+      }
+    },
+    {
       "includes": ["**/*.css"],
       "linter": {
         "enabled": false

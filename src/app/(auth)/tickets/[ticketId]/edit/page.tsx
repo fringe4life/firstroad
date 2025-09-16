@@ -8,54 +8,56 @@ import { getTicket } from "@/features/ticket/queries/get-ticket";
 import { homePath, ticketPath } from "@/path";
 
 export async function generateMetadata({
-	params,
+  params,
 }: PageProps<"/tickets/[ticketId]/edit">): Promise<Metadata> {
-	const param = await params;
-	const ticket = await getTicket(param.ticketId);
+  const param = await params;
+  const ticket = await getTicket(param.ticketId);
 
-	if (!ticket) {
-		return {
-			title: "Ticket Not Found",
-			description: "The requested ticket could not be found.",
-		};
-	}
+  if (!ticket) {
+    return {
+      title: "Ticket Not Found",
+      description: "The requested ticket could not be found.",
+    };
+  }
 
-	return {
-		title: `Edit ${ticket.title}`,
-		description: `Edit ticket: ${ticket.title}`,
-	};
+  return {
+    title: `Edit ${ticket.title}`,
+    description: `Edit ticket: ${ticket.title}`,
+  };
 }
 
 const TicketEditPage = async ({
-	params,
+  params,
 }: PageProps<"/tickets/[ticketId]/edit">) => {
-	const param = await params;
-	const ticket = await getTicket(param.ticketId);
+  const param = await params;
+  const ticket = await getTicket(param.ticketId);
 
-	if (!ticket || !ticket.isOwner) notFound();
+  if (!ticket?.isOwner) {
+    notFound();
+  }
 
-	return (
-		<>
-			<div className="flex flex-1 flex-col gap-y-8">
-				<Breadcrumbs
-					breadcrumbs={[
-						{ title: "Tickets", href: homePath },
-						{ title: ticket.title, href: ticketPath(ticket.id) as Route },
-						{ title: "Edit" },
-					]}
-				/>
-			</div>
-			<Separator />
-			<div className="justfy-center flex flex-1 flex-col items-center">
-				<CardCompact
-					title="Edit Ticket"
-					description="Edit an existing ticket"
-					className="w-full max-w-120 animate-fade-from-top self-center"
-					content={<TicketUpsertForm ticket={ticket} />}
-				/>
-			</div>
-		</>
-	);
+  return (
+    <>
+      <div className="flex flex-1 flex-col gap-y-8">
+        <Breadcrumbs
+          breadcrumbs={[
+            { title: "Tickets", href: homePath },
+            { title: ticket.title, href: ticketPath(ticket.id) as Route },
+            { title: "Edit" },
+          ]}
+        />
+      </div>
+      <Separator />
+      <div className="justfy-center flex flex-1 flex-col items-center">
+        <CardCompact
+          className="w-full max-w-120 animate-fade-from-top self-center"
+          content={<TicketUpsertForm ticket={ticket} />}
+          description="Edit an existing ticket"
+          title="Edit Ticket"
+        />
+      </div>
+    </>
+  );
 };
 
 export default TicketEditPage;

@@ -11,63 +11,63 @@ import { changePassword } from "@/features/auth/actions/change-password-action";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 
 const ChangePasswordForm = () => {
-	const [state, action] = useActionState(changePassword, EMPTY_ACTION_STATE);
-	const currentId = useId();
-	const newId = useId();
-	const confirmId = useId();
-	const revokeId = useId();
+  const [state, action] = useActionState(changePassword, EMPTY_ACTION_STATE);
+  const currentId = useId();
+  const newId = useId();
+  const confirmId = useId();
+  const revokeId = useId();
 
-	return (
-		<Form action={action} state={state || EMPTY_ACTION_STATE}>
-			<Label htmlFor={currentId}>Current password</Label>
-			<Input
-				id={currentId}
-				name="currentPassword"
-				type="password"
-				placeholder="••••••••"
-				defaultValue={state?.payload?.get("currentPassword")?.toString() || ""}
-			/>
-			<FieldError
-				actionState={state || EMPTY_ACTION_STATE}
-				name="currentPassword"
-			/>
+  return (
+    <Form action={action} state={state || EMPTY_ACTION_STATE}>
+      <Label htmlFor={currentId}>Current password</Label>
+      <Input
+        defaultValue={state?.payload?.get("currentPassword")?.toString() || ""}
+        id={currentId}
+        name="currentPassword"
+        placeholder="••••••••"
+        type="password"
+      />
+      <FieldError
+        actionState={state || EMPTY_ACTION_STATE}
+        name="currentPassword"
+      />
 
-			<Label htmlFor={newId}>New password</Label>
-			<Input
-				id={newId}
-				name="newPassword"
-				type="password"
-				placeholder="At least 8 characters"
-				defaultValue={state?.payload?.get("newPassword")?.toString() || ""}
-			/>
-			<FieldError
-				actionState={state || EMPTY_ACTION_STATE}
-				name="newPassword"
-			/>
+      <Label htmlFor={newId}>New password</Label>
+      <Input
+        defaultValue={state?.payload?.get("newPassword")?.toString() || ""}
+        id={newId}
+        name="newPassword"
+        placeholder="At least 8 characters"
+        type="password"
+      />
+      <FieldError
+        actionState={state || EMPTY_ACTION_STATE}
+        name="newPassword"
+      />
 
-			<Label htmlFor={confirmId}>Confirm new password</Label>
-			<Input
-				id={confirmId}
-				name="confirmPassword"
-				type="password"
-				placeholder="Re-enter new password"
-				defaultValue={state?.payload?.get("confirmPassword")?.toString() || ""}
-			/>
-			<FieldError
-				actionState={state || EMPTY_ACTION_STATE}
-				name="confirmPassword"
-			/>
+      <Label htmlFor={confirmId}>Confirm new password</Label>
+      <Input
+        defaultValue={state?.payload?.get("confirmPassword")?.toString() || ""}
+        id={confirmId}
+        name="confirmPassword"
+        placeholder="Re-enter new password"
+        type="password"
+      />
+      <FieldError
+        actionState={state || EMPTY_ACTION_STATE}
+        name="confirmPassword"
+      />
 
-			<div className="flex items-center space-x-2 py-2">
-				<Checkbox id={revokeId} name="revokeOtherSessions" value="on" />
-				<Label htmlFor={revokeId} className="font-normal text-sm">
-					Sign out other devices
-				</Label>
-			</div>
+      <div className="flex items-center space-x-2 py-2">
+        <Checkbox id={revokeId} name="revokeOtherSessions" value="on" />
+        <Label className="font-normal text-sm" htmlFor={revokeId}>
+          Sign out other devices
+        </Label>
+      </div>
 
-			<SubmitButton label={"Update password"} />
-		</Form>
-	);
+      <SubmitButton label={"Update password"} />
+    </Form>
+  );
 };
 
 export default ChangePasswordForm;

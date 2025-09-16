@@ -1,17 +1,18 @@
 "use client";
 
-import { useEffect } from "react";
 import Placeholder from "@/components/placeholder";
 
 export default function TicketError({
-	error,
+  error: _error,
 }: {
-	error: Error & { digest?: string };
-	reset: () => void;
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
-	useEffect(() => {
-		console.error(error);
-	}, [error]);
+  // Log error for debugging in development
+  if (process.env.NODE_ENV === "development") {
+    // biome-ignore lint/suspicious/noConsole: just for debugging
+    console.error("Ticket error:", _error);
+  }
 
-	return <Placeholder label={"please try again later"} />;
+  return <Placeholder label={"please try again later"} />;
 }

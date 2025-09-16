@@ -10,24 +10,24 @@ import { forgotPassword } from "@/features/password/actions/forgot-password-acti
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 
 const ForgotPasswordForm = () => {
-	const [state, action] = useActionState(forgotPassword, EMPTY_ACTION_STATE);
-	const emailId = useId();
+  const [state, action] = useActionState(forgotPassword, EMPTY_ACTION_STATE);
+  const emailId = useId();
 
-	return (
-		<Form action={action} state={state || EMPTY_ACTION_STATE}>
-			<Label htmlFor={emailId}>Email</Label>
-			<Input
-				name="email"
-				placeholder="Enter your email address"
-				id={emailId}
-				type="email"
-				defaultValue={state?.payload?.get("email")?.toString() || ""}
-			/>
-			<FieldError actionState={state || EMPTY_ACTION_STATE} name="email" />
+  return (
+    <Form action={action} state={state || EMPTY_ACTION_STATE}>
+      <Label htmlFor={emailId}>Email</Label>
+      <Input
+        defaultValue={state?.payload?.get("email")?.toString() || ""}
+        id={emailId}
+        name="email"
+        placeholder="Enter your email address"
+        type="email"
+      />
+      <FieldError actionState={state || EMPTY_ACTION_STATE} name="email" />
 
-			<SubmitButton label="Send Reset Link" />
-		</Form>
-	);
+      <SubmitButton label="Send Reset Link" />
+    </Form>
+  );
 };
 
 export default ForgotPasswordForm;

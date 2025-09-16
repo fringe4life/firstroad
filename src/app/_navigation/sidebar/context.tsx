@@ -6,27 +6,27 @@ import { useToggle } from "@/hooks/use-toggle";
 type MobileSidebarContextType = ReturnType<typeof useToggle>;
 
 const MobileSidebarContext = createContext<MobileSidebarContextType | null>(
-	null,
+  null,
 );
 
 export function MobileSidebarProvider({
-	children,
+  children,
 }: {
-	children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-	const toggleState = useToggle(false);
+  const toggleState = useToggle(false);
 
-	return (
-		<MobileSidebarContext value={toggleState}>{children}</MobileSidebarContext>
-	);
+  return (
+    <MobileSidebarContext value={toggleState}>{children}</MobileSidebarContext>
+  );
 }
 
 export function useMobileSidebar() {
-	const context = use(MobileSidebarContext);
-	if (!context) {
-		throw new Error(
-			"useMobileSidebar must be used within MobileSidebarProvider",
-		);
-	}
-	return context;
+  const context = use(MobileSidebarContext);
+  if (!context) {
+    throw new Error(
+      "useMobileSidebar must be used within MobileSidebarProvider",
+    );
+  }
+  return context;
 }

@@ -11,29 +11,29 @@ import { fromErrorToActionState } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
 
 export const deleteTicket = async (id: string) => {
-	const session = await getSessionOrRedirect();
+  const session = await getSessionOrRedirect();
 
-	const { error } = await tryCatch(async () => {
-		await prisma.$transaction(async (tx) => {
-			const ticket = await tx.ticket.findUnique({
-				where: {
-					id,
-				},
-			});
+  const { error } = await tryCatch(async () => {
+    await prisma.$transaction(async (tx) => {
+      const ticket = await tx.ticket.findUnique({
+        where: {
+          id,
+        },
+      });
 
-			if (!ticket || !isOwner(session, ticket)) {
-				throw new Error("Ticket Not Found");
-			}
+      if (!(ticket && isOwner(session, ticket))) {
+        throw new Error("Ticket Not Found");
+      }
 
-			await tx.ticket.delete({ where: { id } });
-		});
-	});
+      await tx.ticket.delete({ where: { id } });
+    });
+  });
 
-	if (error) {
-		return fromErrorToActionState(error);
-	}
+  if (error) {
+    return fromErrorToActionState(error);
+  }
 
-	revalidatePath(ticketsPath);
-	setCookieByKey("toast", "Ticket deleted");
-	redirect(ticketsPath);
+  revalidatePath(ticketsPath);
+  setCookieByKey("toast", "Ticket deleted");
+  redirect(ticketsPath);
 };

@@ -10,58 +10,58 @@ import { signup } from "@/features/password/actions/signup-action";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 
 const SignUpForm = () => {
-	const [state, action] = useActionState(signup, EMPTY_ACTION_STATE);
-	const nameId = useId();
-	const emailId = useId();
-	const passwordId = useId();
-	const confirmPasswordId = useId();
+  const [state, action] = useActionState(signup, EMPTY_ACTION_STATE);
+  const nameId = useId();
+  const emailId = useId();
+  const passwordId = useId();
+  const confirmPasswordId = useId();
 
-	return (
-		<Form action={action} state={state || EMPTY_ACTION_STATE}>
-			<Label htmlFor={nameId}>Name</Label>
-			<Input
-				name="name"
-				placeholder="Enter your name"
-				id={nameId}
-				defaultValue={state?.payload?.get("name")?.toString() || ""}
-			/>
-			<FieldError actionState={state || EMPTY_ACTION_STATE} name="name" />
+  return (
+    <Form action={action} state={state || EMPTY_ACTION_STATE}>
+      <Label htmlFor={nameId}>Name</Label>
+      <Input
+        defaultValue={state?.payload?.get("name")?.toString() || ""}
+        id={nameId}
+        name="name"
+        placeholder="Enter your name"
+      />
+      <FieldError actionState={state || EMPTY_ACTION_STATE} name="name" />
 
-			<Label htmlFor={emailId}>Email</Label>
-			<Input
-				name="email"
-				placeholder="Enter your email"
-				id={emailId}
-				defaultValue={state?.payload?.get("email")?.toString() || ""}
-			/>
-			<FieldError actionState={state || EMPTY_ACTION_STATE} name="email" />
+      <Label htmlFor={emailId}>Email</Label>
+      <Input
+        defaultValue={state?.payload?.get("email")?.toString() || ""}
+        id={emailId}
+        name="email"
+        placeholder="Enter your email"
+      />
+      <FieldError actionState={state || EMPTY_ACTION_STATE} name="email" />
 
-			<Label htmlFor={passwordId}>Password</Label>
-			<Input
-				type="password"
-				name="password"
-				placeholder="Enter your password"
-				id={passwordId}
-				defaultValue={state?.payload?.get("password")?.toString() || ""}
-			/>
-			<FieldError actionState={state || EMPTY_ACTION_STATE} name="password" />
+      <Label htmlFor={passwordId}>Password</Label>
+      <Input
+        defaultValue={state?.payload?.get("password")?.toString() || ""}
+        id={passwordId}
+        name="password"
+        placeholder="Enter your password"
+        type="password"
+      />
+      <FieldError actionState={state || EMPTY_ACTION_STATE} name="password" />
 
-			<Label htmlFor={confirmPasswordId}>Confirm Password</Label>
-			<Input
-				type="password"
-				name="confirmPassword"
-				placeholder="Confirm your password"
-				id={confirmPasswordId}
-				defaultValue={state?.payload?.get("confirmPassword")?.toString() || ""}
-			/>
-			<FieldError
-				actionState={state || EMPTY_ACTION_STATE}
-				name="confirmPassword"
-			/>
+      <Label htmlFor={confirmPasswordId}>Confirm Password</Label>
+      <Input
+        defaultValue={state?.payload?.get("confirmPassword")?.toString() || ""}
+        id={confirmPasswordId}
+        name="confirmPassword"
+        placeholder="Confirm your password"
+        type="password"
+      />
+      <FieldError
+        actionState={state || EMPTY_ACTION_STATE}
+        name="confirmPassword"
+      />
 
-			<SubmitButton label="Sign up" />
-		</Form>
-	);
+      <SubmitButton label="Sign up" />
+    </Form>
+  );
 };
 
 export default SignUpForm;

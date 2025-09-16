@@ -2,29 +2,29 @@
 
 import { useQueryStates } from "nuqs";
 import SortSelect, {
-	type SortObject,
-	type SortOption,
+  type SortObject,
+  type SortOption,
 } from "@/components/sort-select";
 import type { Prisma } from "@/generated/prisma/client";
 import { options as sortOptions, sortParser } from "../search-params";
 
-interface TicketSortSelectProps {
-	options: SortOption[];
-}
+type TicketSortSelectProps = {
+  options: SortOption[];
+};
 
 const TicketSortSelect = ({ options }: TicketSortSelectProps) => {
-	const [sort, setSort] = useQueryStates(sortParser, sortOptions);
+  const [sort, setSort] = useQueryStates(sortParser, sortOptions);
 
-	const handleChange = (sort: SortObject): void => {
-		setSort({
-			...sort,
-			sortValue: sort.sortValue as Prisma.SortOrder,
-		});
-	};
+  const handleChange = (sortArg: SortObject): void => {
+    setSort({
+      ...sortArg,
+      sortValue: sort.sortValue as Prisma.SortOrder,
+    });
+  };
 
-	return (
-		<SortSelect options={options} value={sort} onValueChange={handleChange} />
-	);
+  return (
+    <SortSelect onValueChange={handleChange} options={options} value={sort} />
+  );
 };
 
 export default TicketSortSelect;

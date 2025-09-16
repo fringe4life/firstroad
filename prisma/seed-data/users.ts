@@ -6,7 +6,7 @@ export const users = [
   },
   {
     name: "Jane Smith",
-    email: "jane@example.com", 
+    email: "jane@example.com",
     password: "password123",
   },
   {

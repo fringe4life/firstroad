@@ -14,82 +14,82 @@ import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 import { upsertTicket } from "../actions/upsert-ticket";
 
 type TicketUpsertFormProps = {
-	ticket?: Ticket;
+  ticket?: Ticket;
 };
 
 const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
-	const titleId = useId();
-	const descriptionId = useId();
-	const deadlineId = useId();
-	const bountyId = useId();
-	const [actionState, action] = useActionState(
-		upsertTicket.bind(null, ticket?.id),
-		EMPTY_ACTION_STATE,
-	);
+  const titleId = useId();
+  const descriptionId = useId();
+  const deadlineId = useId();
+  const bountyId = useId();
+  const [actionState, action] = useActionState(
+    upsertTicket.bind(null, ticket?.id),
+    EMPTY_ACTION_STATE,
+  );
 
-	const datePickerImperativeHandleRef = useRef<DateReset>(null);
+  const datePickerImperativeHandleRef = useRef<DateReset>(null);
 
-	const handleSuccess = () => {
-		datePickerImperativeHandleRef.current?.reset();
-	};
+  const handleSuccess = () => {
+    datePickerImperativeHandleRef.current?.reset();
+  };
 
-	return (
-		<Form state={actionState} action={action} onSuccessState={handleSuccess}>
-			<Label htmlFor={titleId}>Title</Label>
-			<Input
-				id={titleId}
-				name="title"
-				type="text"
-				defaultValue={
-					(actionState.payload?.get("title") as string) ?? ticket?.title
-				}
-			/>
-			<FieldError actionState={actionState} name="title" />
+  return (
+    <Form action={action} onSuccessState={handleSuccess} state={actionState}>
+      <Label htmlFor={titleId}>Title</Label>
+      <Input
+        defaultValue={
+          (actionState.payload?.get("title") as string) ?? ticket?.title
+        }
+        id={titleId}
+        name="title"
+        type="text"
+      />
+      <FieldError actionState={actionState} name="title" />
 
-			<Label htmlFor={descriptionId}>Content</Label>
-			<Textarea
-				id={descriptionId}
-				name="description"
-				defaultValue={
-					(actionState.payload?.get("description") as string) ??
-					ticket?.description
-				}
-			/>
-			<FieldError actionState={actionState} name="description" />
+      <Label htmlFor={descriptionId}>Content</Label>
+      <Textarea
+        defaultValue={
+          (actionState.payload?.get("description") as string) ??
+          ticket?.description
+        }
+        id={descriptionId}
+        name="description"
+      />
+      <FieldError actionState={actionState} name="description" />
 
-			<div className="mb-1 flex gap-x-2">
-				<div className="w-1/2">
-					<Label htmlFor={deadlineId}>Deadline</Label>
-					<DatePicker
-						id={deadlineId}
-						name="deadline"
-						defaultValue={
-							(actionState.payload?.get("deadline") as string) ??
-							ticket?.deadline
-						}
-						ref={datePickerImperativeHandleRef}
-					/>
-					<FieldError actionState={actionState} name="deadline" />
-				</div>
-				<div className="w-1/2">
-					<Label htmlFor={bountyId}>Bounty ($)</Label>
-					<Input
-						id={bountyId}
-						name="bounty"
-						type="number"
-						step=".01"
-						defaultValue={
-							(actionState.payload?.get("bounty") as string) ??
-							(ticket?.bounty ? fromCent(ticket?.bounty) : "")
-						}
-					/>
-					<FieldError actionState={actionState} name="bounty" />
-				</div>
-			</div>
+      <div className="mb-1 flex gap-x-2">
+        <div className="w-1/2">
+          <Label htmlFor={deadlineId}>Deadline</Label>
+          <DatePicker
+            defaultValue={
+              (actionState.payload?.get("deadline") as string) ??
+              ticket?.deadline
+            }
+            id={deadlineId}
+            name="deadline"
+            ref={datePickerImperativeHandleRef}
+          />
+          <FieldError actionState={actionState} name="deadline" />
+        </div>
+        <div className="w-1/2">
+          <Label htmlFor={bountyId}>Bounty ($)</Label>
+          <Input
+            defaultValue={
+              (actionState.payload?.get("bounty") as string) ??
+              (ticket?.bounty ? fromCent(ticket?.bounty) : "")
+            }
+            id={bountyId}
+            name="bounty"
+            step=".01"
+            type="number"
+          />
+          <FieldError actionState={actionState} name="bounty" />
+        </div>
+      </div>
 
-			<SubmitButton label={ticket ? "Edit" : "Create"} />
-		</Form>
-	);
+      <SubmitButton label={ticket ? "Edit" : "Create"} />
+    </Form>
+  );
 };
 
 export default TicketUpsertForm;

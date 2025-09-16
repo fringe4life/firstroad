@@ -1,49 +1,58 @@
 export const createComments = (ticketIds: string[], userIds: string[]) => [
   // Comments for "Implement User Authentication" (DONE) - 3 comments
   {
-    content: "Great work on the authentication implementation! The JWT tokens are working perfectly.",
+    content:
+      "Great work on the authentication implementation! The JWT tokens are working perfectly.",
     ticketId: ticketIds[0],
     userId: userIds[1],
   },
   {
-    content: "The password hashing with bcrypt looks solid. Security is top-notch!",
+    content:
+      "The password hashing with bcrypt looks solid. Security is top-notch!",
     ticketId: ticketIds[0],
     userId: userIds[2],
   },
   {
-    content: "Thanks everyone! The OAuth integration with Google and GitHub is now complete.",
+    content:
+      "Thanks everyone! The OAuth integration with Google and GitHub is now complete.",
     ticketId: ticketIds[0],
     userId: userIds[0],
   },
 
   // Comments for "Create Ticket Management System" (OPEN) - 8 comments to test pagination
   {
-    content: "I think we should add a priority field to help with ticket organization.",
+    content:
+      "I think we should add a priority field to help with ticket organization.",
     ticketId: ticketIds[1],
     userId: userIds[1],
   },
   {
-    content: "Good idea! We could also add labels/tags for better categorization.",
+    content:
+      "Good idea! We could also add labels/tags for better categorization.",
     ticketId: ticketIds[1],
     userId: userIds[2],
   },
   {
-    content: "I'll start working on the UI components for the ticket list view.",
+    content:
+      "I'll start working on the UI components for the ticket list view.",
     ticketId: ticketIds[1],
     userId: userIds[0],
   },
   {
-    content: "The drag-and-drop functionality for reordering tickets would be really useful.",
+    content:
+      "The drag-and-drop functionality for reordering tickets would be really useful.",
     ticketId: ticketIds[1],
     userId: userIds[1],
   },
   {
-    content: "Agreed! We should also add bulk actions for multiple ticket selection.",
+    content:
+      "Agreed! We should also add bulk actions for multiple ticket selection.",
     ticketId: ticketIds[1],
     userId: userIds[2],
   },
   {
-    content: "I've started working on the ticket detail view with all the metadata.",
+    content:
+      "I've started working on the ticket detail view with all the metadata.",
     ticketId: ticketIds[1],
     userId: userIds[0],
   },
@@ -60,7 +69,8 @@ export const createComments = (ticketIds: string[], userIds: string[]) => [
 
   // Comments for "Add Real-time Notifications" (IN_PROGRESS) - 6 comments
   {
-    content: "The WebSocket connection is established. Working on the notification payload structure.",
+    content:
+      "The WebSocket connection is established. Working on the notification payload structure.",
     ticketId: ticketIds[2],
     userId: userIds[1],
   },
@@ -70,7 +80,8 @@ export const createComments = (ticketIds: string[], userIds: string[]) => [
     userId: userIds[0],
   },
   {
-    content: "I've added the notification sound effects. Should be ready for testing soon.",
+    content:
+      "I've added the notification sound effects. Should be ready for testing soon.",
     ticketId: ticketIds[2],
     userId: userIds[2],
   },
@@ -80,7 +91,8 @@ export const createComments = (ticketIds: string[], userIds: string[]) => [
     userId: userIds[1],
   },
   {
-    content: "We should add notification history so users can see what they missed.",
+    content:
+      "We should add notification history so users can see what they missed.",
     ticketId: ticketIds[2],
     userId: userIds[0],
   },
@@ -92,22 +104,26 @@ export const createComments = (ticketIds: string[], userIds: string[]) => [
 
   // Comments for "Optimize Database Queries" (OPEN) - 5 comments
   {
-    content: "I noticed some N+1 query issues in the ticket listing. We should add proper includes.",
+    content:
+      "I noticed some N+1 query issues in the ticket listing. We should add proper includes.",
     ticketId: ticketIds[3],
     userId: userIds[1],
   },
   {
-    content: "Agreed. I'll analyze the query patterns and add database indexes where needed.",
+    content:
+      "Agreed. I'll analyze the query patterns and add database indexes where needed.",
     ticketId: ticketIds[3],
     userId: userIds[0],
   },
   {
-    content: "The query performance has improved significantly with the new indexes.",
+    content:
+      "The query performance has improved significantly with the new indexes.",
     ticketId: ticketIds[3],
     userId: userIds[2],
   },
   {
-    content: "We should implement query result caching to reduce database load.",
+    content:
+      "We should implement query result caching to reduce database load.",
     ticketId: ticketIds[3],
     userId: userIds[1],
   },
@@ -119,12 +135,14 @@ export const createComments = (ticketIds: string[], userIds: string[]) => [
 
   // Comments for "Design Mobile App UI" (OPEN) - 4 comments
   {
-    content: "I've created wireframes for the mobile interface. Should we go with a bottom navigation?",
+    content:
+      "I've created wireframes for the mobile interface. Should we go with a bottom navigation?",
     ticketId: ticketIds[4],
     userId: userIds[2],
   },
   {
-    content: "Bottom navigation would work well for the main sections. What about the ticket details?",
+    content:
+      "Bottom navigation would work well for the main sections. What about the ticket details?",
     ticketId: ticketIds[4],
     userId: userIds[1],
   },
@@ -141,12 +159,14 @@ export const createComments = (ticketIds: string[], userIds: string[]) => [
 
   // Comments for "Fix Critical Security Bug" (IN_PROGRESS) - 7 comments
   {
-    content: "Found the SQL injection vulnerability in the search functionality. Working on parameterized queries.",
+    content:
+      "Found the SQL injection vulnerability in the search functionality. Working on parameterized queries.",
     ticketId: ticketIds[5],
     userId: userIds[0],
   },
   {
-    content: "This is critical! Please prioritize this fix. I can help test once it's ready.",
+    content:
+      "This is critical! Please prioritize this fix. I can help test once it's ready.",
     ticketId: ticketIds[5],
     userId: userIds[1],
   },
@@ -156,12 +176,14 @@ export const createComments = (ticketIds: string[], userIds: string[]) => [
     userId: userIds[2],
   },
   {
-    content: "The security audit is complete. All vulnerabilities have been addressed.",
+    content:
+      "The security audit is complete. All vulnerabilities have been addressed.",
     ticketId: ticketIds[5],
     userId: userIds[0],
   },
   {
-    content: "We should implement rate limiting to prevent brute force attacks.",
+    content:
+      "We should implement rate limiting to prevent brute force attacks.",
     ticketId: ticketIds[5],
     userId: userIds[1],
   },
@@ -178,12 +200,14 @@ export const createComments = (ticketIds: string[], userIds: string[]) => [
 
   // Comments for "Implement Dark Mode Toggle" (OPEN) - 3 comments
   {
-    content: "We should use CSS custom properties for the theme colors to make switching easier.",
+    content:
+      "We should use CSS custom properties for the theme colors to make switching easier.",
     ticketId: ticketIds[6],
     userId: userIds[1],
   },
   {
-    content: "Good approach! I'll create the theme context and provider components.",
+    content:
+      "Good approach! I'll create the theme context and provider components.",
     ticketId: ticketIds[6],
     userId: userIds[0],
   },
@@ -200,7 +224,8 @@ export const createComments = (ticketIds: string[], userIds: string[]) => [
     userId: userIds[2],
   },
   {
-    content: "Make sure to include authentication examples and error responses.",
+    content:
+      "Make sure to include authentication examples and error responses.",
     ticketId: ticketIds[7],
     userId: userIds[1],
   },
@@ -217,12 +242,14 @@ export const createComments = (ticketIds: string[], userIds: string[]) => [
 
   // Comments for "Add Unit Test Coverage" (DONE) - 3 comments
   {
-    content: "Test coverage is now at 85%! All critical business logic is covered.",
+    content:
+      "Test coverage is now at 85%! All critical business logic is covered.",
     ticketId: ticketIds[8],
     userId: userIds[0],
   },
   {
-    content: "Excellent work! The tests are well-structured and easy to maintain.",
+    content:
+      "Excellent work! The tests are well-structured and easy to maintain.",
     ticketId: ticketIds[8],
     userId: userIds[1],
   },
@@ -234,12 +261,14 @@ export const createComments = (ticketIds: string[], userIds: string[]) => [
 
   // Comments for "Implement Search Functionality" (OPEN) - 5 comments
   {
-    content: "I'm thinking we should use Elasticsearch for better search performance.",
+    content:
+      "I'm thinking we should use Elasticsearch for better search performance.",
     ticketId: ticketIds[9],
     userId: userIds[1],
   },
   {
-    content: "Elasticsearch might be overkill for our current scale. Let's start with database full-text search.",
+    content:
+      "Elasticsearch might be overkill for our current scale. Let's start with database full-text search.",
     ticketId: ticketIds[9],
     userId: userIds[0],
   },
@@ -249,7 +278,8 @@ export const createComments = (ticketIds: string[], userIds: string[]) => [
     userId: userIds[2],
   },
   {
-    content: "The search filters are working well with the current implementation.",
+    content:
+      "The search filters are working well with the current implementation.",
     ticketId: ticketIds[9],
     userId: userIds[1],
   },
@@ -283,12 +313,14 @@ export const createComments = (ticketIds: string[], userIds: string[]) => [
 
   // Comments for "Performance Optimization" (OPEN) - 6 comments
   {
-    content: "I've identified several bottlenecks in the image loading and API calls.",
+    content:
+      "I've identified several bottlenecks in the image loading and API calls.",
     ticketId: ticketIds[11],
     userId: userIds[0],
   },
   {
-    content: "We should implement lazy loading for images and add API response caching.",
+    content:
+      "We should implement lazy loading for images and add API response caching.",
     ticketId: ticketIds[11],
     userId: userIds[1],
   },
@@ -298,7 +330,8 @@ export const createComments = (ticketIds: string[], userIds: string[]) => [
     userId: userIds[2],
   },
   {
-    content: "Database query optimization has improved response times significantly.",
+    content:
+      "Database query optimization has improved response times significantly.",
     ticketId: ticketIds[11],
     userId: userIds[0],
   },
@@ -320,7 +353,8 @@ export const createComments = (ticketIds: string[], userIds: string[]) => [
     userId: userIds[1],
   },
   {
-    content: "Which languages should we support initially? I suggest English, Spanish, and French.",
+    content:
+      "Which languages should we support initially? I suggest English, Spanish, and French.",
     ticketId: ticketIds[12],
     userId: userIds[2],
   },
@@ -330,7 +364,8 @@ export const createComments = (ticketIds: string[], userIds: string[]) => [
     userId: userIds[0],
   },
   {
-    content: "We should add language detection based on user's browser settings.",
+    content:
+      "We should add language detection based on user's browser settings.",
     ticketId: ticketIds[12],
     userId: userIds[1],
   },
@@ -342,7 +377,8 @@ export const createComments = (ticketIds: string[], userIds: string[]) => [
     userId: userIds[2],
   },
   {
-    content: "Don't forget to add role-based access control for admin features.",
+    content:
+      "Don't forget to add role-based access control for admin features.",
     ticketId: ticketIds[13],
     userId: userIds[0],
   },
@@ -363,10 +399,11 @@ export const createComments = (ticketIds: string[], userIds: string[]) => [
   },
 
   // Comments for new tickets (ticketIds[14] to ticketIds[29])
-  
+
   // "Implement File Upload System" - 6 comments
   {
-    content: "I'll start with the basic file upload functionality using multer.",
+    content:
+      "I'll start with the basic file upload functionality using multer.",
     ticketId: ticketIds[14],
     userId: userIds[0],
   },
@@ -425,7 +462,8 @@ export const createComments = (ticketIds: string[], userIds: string[]) => [
 
   // "Create User Profile Pages" - 4 comments
   {
-    content: "I'll start with the basic profile layout and user information display.",
+    content:
+      "I'll start with the basic profile layout and user information display.",
     ticketId: ticketIds[16],
     userId: userIds[2],
   },
@@ -518,7 +556,8 @@ export const createComments = (ticketIds: string[], userIds: string[]) => [
     userId: userIds[0],
   },
   {
-    content: "The rate limiting is working well with different tiers for users.",
+    content:
+      "The rate limiting is working well with different tiers for users.",
     ticketId: ticketIds[20],
     userId: userIds[1],
   },
@@ -618,7 +657,8 @@ export const createComments = (ticketIds: string[], userIds: string[]) => [
 
   // "Create Integration API" - 4 comments
   {
-    content: "I'll design the REST API with proper authentication and documentation.",
+    content:
+      "I'll design the REST API with proper authentication and documentation.",
     ticketId: ticketIds[25],
     userId: userIds[2],
   },
