@@ -26,9 +26,8 @@ const CommentCreateForm = ({
   const commentAction = (
     prevState: ActionState<unknown>,
     formData: FormData,
-  ): Promise<ActionState<unknown>> => {
-    return upsertComment(commentId, ticketId, prevState, formData);
-  };
+  ): Promise<ActionState<unknown>> =>
+    upsertComment(commentId, ticketId, prevState, formData);
 
   const [state, formAction] = useActionState(commentAction, EMPTY_ACTION_STATE);
 

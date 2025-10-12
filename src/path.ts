@@ -4,13 +4,11 @@ const ticketsPath: Route = "/tickets";
 
 const homePath: Route = "/";
 
-const ticketPath = (ticketId: string): Route => {
-  return `${ticketsPath}/${ticketId}` as Route;
-};
+const ticketPath = (ticketId: string): Route =>
+  `${ticketsPath}/${ticketId}` as Route;
 
-const ticketEditPath = (ticketId: string): Route => {
-  return `${ticketPath(ticketId)}/edit` as Route;
-};
+const ticketEditPath = (ticketId: string): Route =>
+  `${ticketPath(ticketId)}/edit` as Route;
 
 const signInPath: Route = "/sign-in";
 const signUpPath: Route = "/sign-up";

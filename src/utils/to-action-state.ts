@@ -52,15 +52,13 @@ const toActionState = <T = unknown>(
   status: ActionState["status"],
   formData?: FormData,
   data?: T,
-): ActionState<T> => {
-  return {
-    message,
-    fieldErrors: {},
-    status,
-    timestamp: Date.now(),
-    payload: formData,
-    data,
-  };
-};
+): ActionState<T> => ({
+  message,
+  fieldErrors: {},
+  status,
+  timestamp: Date.now(),
+  payload: formData,
+  data,
+});
 
 export { fromErrorToActionState, toActionState };

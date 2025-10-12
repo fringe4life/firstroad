@@ -9,22 +9,20 @@ export const metadata: Metadata = {
   description: "Change your First Road account password securely.",
 };
 
-const PasswordPage = () => {
-  return (
-    <div className="flex flex-1 flex-col gap-y-8">
-      <Heading
-        description="Keep your account secure"
-        tabs={<AccountTabs />}
-        title="Password"
-      />
-      <CardCompact
-        className="mx-auto w-full max-w-120"
-        content={<ChangePasswordForm />}
-        description="Choose a strong, unique password"
-        title="Update password"
-      />
-    </div>
-  );
-};
+const PasswordPage = () => (
+  <div className="flex flex-1 flex-col gap-y-8">
+    <Heading
+      description="Keep your account secure"
+      tabs={<AccountTabs />}
+      title="Password"
+    />
+    <CardCompact
+      className="mx-auto w-full max-w-120"
+      content={<ChangePasswordForm />}
+      description="Choose a strong, unique password"
+      title="Update password"
+    />
+  </div>
+);
 
 export default PasswordPage;

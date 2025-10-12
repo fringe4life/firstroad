@@ -86,30 +86,28 @@ const Comments = ({ ticketId, list, metadata }: CommentsProps) => {
         title={editingCommentId ? "Edit Comment" : "Create Comment"}
       />
       <div className="grid gap-y-2">
-        {allComments.map((comment) => {
-          return (
-            <CommentItem
-              buttons={
-                comment.isOwner
-                  ? [
-                      <CommentEditButton
-                        comment={comment}
-                        key="edit"
-                        onEdit={handleEdit}
-                      />,
-                      <CommentDeleteButton
-                        id={comment.id}
-                        key="delete"
-                        onDeleteComment={deleteAction}
-                      />,
-                    ]
-                  : []
-              }
-              comment={comment}
-              key={comment.id}
-            />
-          );
-        })}
+        {allComments.map((comment) => (
+          <CommentItem
+            buttons={
+              comment.isOwner
+                ? [
+                    <CommentEditButton
+                      comment={comment}
+                      key="edit"
+                      onEdit={handleEdit}
+                    />,
+                    <CommentDeleteButton
+                      id={comment.id}
+                      key="delete"
+                      onDeleteComment={deleteAction}
+                    />,
+                  ]
+                : []
+            }
+            comment={comment}
+            key={comment.id}
+          />
+        ))}
         {isFetchingNextPage && (
           <>
             <Skeleton />

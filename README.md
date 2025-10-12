@@ -17,29 +17,29 @@ A full-stack collaborative platform built with Next.js 15, featuring authenticat
 - **🎯 Type Safety**: Full TypeScript support with typed routes
 - **📧 Email Features**: Password reset and email verification with React Email templates
 - **🔄 Database Hooks**: Automatic UserInfo creation on user registration
-- **🔄 Parallel Routes**: Next.js 15 parallel routes for enhanced user experience
-- **⚡ React Compiler**: Experimental React compiler for improved performance
-- **🚀 Partial Prerendering**: Next.js 15 PPR for enhanced performance and navigation
+- **🔄 Parallel Routes**: Next.js 16 Beta parallel routes for enhanced user experience
+- **⚡ React Compiler**: React 19 compiler for automatic performance optimization
+- **📬 Background Jobs**: Inngest for async event handling and email processing
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 15 (App Router) with Turbopack
-- **Language**: TypeScript with strict type checking
-- **Database**: PostgreSQL with Prisma Client (queryCompiler + driverAdapters, Neon adapter)
-- **Authentication**: Better Auth with email/password provider
+- **Framework**: Next.js 16 Beta (App Router) with Turbopack
+- **Language**: TypeScript 5.9 with strict type checking
+- **Database**: PostgreSQL with Prisma Client (relationJoins preview, Neon adapter)
+- **Authentication**: Better Auth 1.3+ with email/password provider
 - **Styling**: Tailwind CSS v4 with shadcn/ui components
 - **Icons**: Lucide React
 - **Forms**: React Hook Form with Zod v4 validation
-- **State Management**: TanStack React Query for server state
+- **State Management**: TanStack React Query v5 for server state
 - **Notifications**: Sonner toast notifications
 - **Theme**: next-themes for dark/light mode
 - **URL Search Params**: nuqs for type-safe URL parameters
 - **Email**: React Email with Resend for transactional emails
+- **Background Jobs**: Inngest for background tasks and event handling
 - **Package Manager**: Bun (recommended)
-- **Linting**: Biome for fast formatting and linting
+- **Linting**: Biome 2.2+ for fast formatting and linting
 - **Type Checking**: tsgo for fast TypeScript checking
-- **React Compiler**: Experimental React compiler for performance optimization
-- **Partial Prerendering**: Next.js 15 PPR for enhanced performance and navigation
+- **React Compiler**: React 19 compiler for performance optimization
 
 ## 📋 Prerequisites
 
@@ -238,12 +238,11 @@ The application uses Better Auth with email/password authentication:
 - Helper: `src/lib/is-redirect-error.ts` centralizes detection of Next.js redirect errors.
 - Example usage: Sign-up action rethrows redirect errors to avoid surfacing `NEXT_REDIRECT` in UI and properly navigate to `/tickets`.
 
-## 🔄 Partial Prerendering (PPR) & Dynamic Rendering
+## 🔄 Dynamic Rendering & Session Management
 
-- **Partial Prerendering**: Next.js 15 PPR enabled for enhanced performance and navigation
-- **PPR Navigation**: Navigation components use PPR pattern for better performance
 - **Dynamic Rendering**: Use of `connection()` from `next/server` opts routes/components into dynamic rendering as needed
 - **Session Management**: Centralized `getSession()` for consistent auth state across the application
+- **Background Jobs**: Inngest handles async operations like password reset emails
 
 ## 🎫 Ticket System
 
@@ -304,20 +303,22 @@ bun run email:build      # Build email templates
 bun run email:export     # Export email templates to HTML
 
 # Database
-bunx prisma generate     # Generate Prisma client (with queryCompiler + driverAdapters)
+bunx prisma generate     # Generate Prisma client
 bunx prisma db push      # Push schema to database
 bunx prisma db seed      # Seed database with sample data
+
+# Background Jobs (Inngest)
+bunx inngest-cli dev     # Start Inngest dev server for local testing
 ```
 
 ## 🔧 Configuration
 
-### Next.js 15 Features
+### Next.js 16 Beta Features
 
 - **Typed Routes**: Full type safety for all routes (`typedRoutes: true`)
 - **Turbopack**: Fast bundling for development and production
-- **React Compiler**: Experimental compiler for performance optimization
+- **React Compiler**: React 19 compiler for automatic performance optimization
 - **Parallel Routes**: Enhanced routing with simultaneous route rendering
-- **Partial Prerendering (PPR)**: Experimental feature for enhanced performance and navigation
 - **Client Segment Cache**: Improved caching for better performance
 
 ### Tailwind CSS
@@ -326,14 +327,9 @@ The project uses Tailwind CSS v4 with custom configuration for dark mode and the
 
 ### Database
 
-PostgreSQL with Prisma Client using the new **queryCompiler** and **driverAdapters** preview features. This configuration eliminates the Rust-based query engine binary, reducing bundle sizes and simplifying deployments in serverless/edge environments. Uses Neon serverless adapter in `src/lib/prisma.ts` for efficient, edge-friendly connections. The schema is split into individual model files for better organization:
+PostgreSQL with Prisma Client using the **relationJoins** preview feature with a client-side engine. Uses Neon serverless adapter in `src/lib/prisma.ts` for efficient, edge-friendly connections.
 
-**Key Benefits of queryCompiler + driverAdapters:**
-
-- **No Rust binaries**: Eliminates native binary dependencies
-- **Smaller bundles**: Significantly reduced deployment package sizes
-- **Edge-friendly**: Optimized for serverless and edge runtimes
-- **Simplified deployment**: No need to manage platform-specific binaries
+**Database Models:**
 
 - **User**: Better Auth user model
 - **Account**: Better Auth account model
@@ -343,21 +339,27 @@ PostgreSQL with Prisma Client using the new **queryCompiler** and **driverAdapte
 - **Ticket**: Ticket management
 - **Comment**: Comment system
 
-### Authentication
+### Authentication & Background Jobs
 
 Better Auth configured with:
 
 - Email/password authentication
-- Password reset functionality with React Email templates
+- Password reset functionality with React Email templates via Inngest events
 - Email verification
 - Rate limiting for production security
 - Database hooks for UserInfo creation
-- Prisma Client with queryCompiler + driverAdapters (Neon driver adapter)
+- Prisma Client with Neon driver adapter
+
+Inngest provides background job processing for:
+
+- Password reset emails
+- Email verification
+- Async event handling
 
 ### Type Safety
 
 - Full TypeScript support with strict configuration
-- Typed routes with Next.js 15 (`typedRoutes: true`)
+- Typed routes with Next.js 16 Beta (`typedRoutes: true`)
 - Type-safe URL search parameters with nuqs
 - Centralized auth types in `src/features/auth/types.ts`
 - Shared utilities moved to `src/utils/` for better organization

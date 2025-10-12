@@ -18,40 +18,38 @@ type AccountDropdownProps = {
   user: User;
 };
 
-const AccountDropdown = ({ user }: AccountDropdownProps) => {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Avatar>
-          <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
-          <AvatarImage src={user?.image || ""} />
-        </Avatar>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link href={accountProfilePath}>
-            <LucideUser className="mr-2 aspect-square h-4" />
-            <span>Profile</span>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href={accountPasswordPath}>
-            <LucideLock className="mr-2 aspect-square h-4" />
-            <span>Password</span>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <form action={signOut}>
-            <LucideLogOut className="mr-2 aspect-square h-4" />
-            <button type="submit">Sign Out</button>
-          </form>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-};
+const AccountDropdown = ({ user }: AccountDropdownProps) => (
+  <DropdownMenu>
+    <DropdownMenuTrigger asChild>
+      <Avatar>
+        <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
+        <AvatarImage src={user?.image || ""} />
+      </Avatar>
+    </DropdownMenuTrigger>
+    <DropdownMenuContent className="w-56">
+      <DropdownMenuLabel>My Account</DropdownMenuLabel>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem asChild>
+        <Link href={accountProfilePath}>
+          <LucideUser className="mr-2 aspect-square h-4" />
+          <span>Profile</span>
+        </Link>
+      </DropdownMenuItem>
+      <DropdownMenuItem asChild>
+        <Link href={accountPasswordPath}>
+          <LucideLock className="mr-2 aspect-square h-4" />
+          <span>Password</span>
+        </Link>
+      </DropdownMenuItem>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem asChild>
+        <form action={signOut}>
+          <LucideLogOut className="mr-2 aspect-square h-4" />
+          <button type="submit">Sign Out</button>
+        </form>
+      </DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
+);
 
 export default AccountDropdown;

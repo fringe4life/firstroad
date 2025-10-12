@@ -1,8 +1,8 @@
 "use server";
 
-import { headers } from "next/headers";
+import { inngest } from "src/lib/inngest";
 import { z } from "zod/v4";
-import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import {
   type ActionState,
   fromErrorToActionState,
@@ -22,12 +22,21 @@ const forgotPassword = async (
     const formDataObj = Object.fromEntries(formData);
     const { email } = forgotPasswordSchema.parse(formDataObj);
 
-    await auth.api.requestPasswordReset({
-      body: {
+    const user = await prisma?.user.findUnique({
+      where: {
         email,
-        redirectTo: `${process.env.AUTH_URL || process.env.NEXTAUTH_URL || "http://localhost:3000"}/reset-password`,
       },
-      headers: await headers(),
+    });
+
+    if (!user) {
+      return toActionState("Check your email for a reset link", "SUCCESS");
+    }
+
+    await inngest.send({
+      name: "password.reset",
+      data: {
+        userId: user?.id,
+      },
     });
 
     return toActionState(

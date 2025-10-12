@@ -11,17 +11,15 @@ const Placeholder = ({
   label,
   icon = <MessageSquareWarning />,
   button = <div />,
-}: PlaceholderProps) => {
-  return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-y-2 self-center justify-self-center">
-      {cloneElement(icon, {
-        className: "size-16",
-      })}
-      <h2 className="text-center text-lg">{label}</h2>
-      {cloneElement(button, {
-        className: "h-10",
-      })}
-    </div>
-  );
-};
+}: PlaceholderProps) => (
+  <div className="flex flex-1 flex-col items-center justify-center gap-y-2 self-center justify-self-center">
+    {cloneElement(icon, {
+      className: "size-16",
+    })}
+    <h2 className="text-center text-lg">{label}</h2>
+    {cloneElement(button, {
+      className: "h-10",
+    })}
+  </div>
+);
 export default Placeholder;

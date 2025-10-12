@@ -1,7 +1,5 @@
 import SidebarClient from "./sidebar-client";
 
-const Sidebar = () => {
-  return <SidebarClient />;
-};
+const Sidebar = () => <SidebarClient />;
 
 export default Sidebar;

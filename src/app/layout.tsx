@@ -40,8 +40,6 @@ export const metadata: Metadata = {
   },
 };
 
-export const experimental_ppr = true;
-
 export default function RootLayout({ children, tickets }: LayoutProps<"/">) {
   return (
     <html lang="en" suppressHydrationWarning>

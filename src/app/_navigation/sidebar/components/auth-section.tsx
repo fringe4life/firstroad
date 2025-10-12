@@ -42,18 +42,16 @@ const AuthSectionContent = async () => {
   );
 };
 
-const AuthSection = () => {
-  return (
-    <Suspense
-      fallback={
-        <div className="pt-4">
-          <Separator />
-        </div>
-      }
-    >
-      <AuthSectionContent />
-    </Suspense>
-  );
-};
+const AuthSection = () => (
+  <Suspense
+    fallback={
+      <div className="pt-4">
+        <Separator />
+      </div>
+    }
+  >
+    <AuthSectionContent />
+  </Suspense>
+);
 
 export default AuthSection;

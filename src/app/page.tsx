@@ -7,13 +7,8 @@ export const metadata: Metadata = {
     "View and manage all tickets in the First Road system. Track progress, update status, and collaborate with your team.",
 };
 
-const HomePage = () => {
-  return (
-    <Heading
-      description="Tickets by everyone at one place"
-      title="All Tickets"
-    />
-  );
-};
+const HomePage = () => (
+  <Heading description="Tickets by everyone at one place" title="All Tickets" />
+);
 
 export default HomePage;

@@ -27,9 +27,9 @@ export const generateMetadata = async ({
 };
 
 const Ticket = async ({ params }: PageProps<"/tickets/[ticketId]">) => {
-  const param = await params;
+  const { ticketId } = await params;
 
-  const ticket = await getTicket(param.ticketId);
+  const ticket = await getTicket(ticketId);
 
   if (!ticket) {
     notFound();

@@ -12,14 +12,12 @@ const SearchInput = ({
   value = "",
   onChange,
   placeholder,
-}: SearchInputProps) => {
-  return (
-    <Input
-      onChange={(event) => onChange(event.target.value)}
-      placeholder={placeholder}
-      value={value}
-    />
-  );
-};
+}: SearchInputProps) => (
+  <Input
+    onChange={(event) => onChange(event.target.value)}
+    placeholder={placeholder}
+    value={value}
+  />
+);
 
 export default SearchInput;

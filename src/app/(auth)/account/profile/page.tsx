@@ -7,16 +7,14 @@ export const metadata: Metadata = {
   description: "Manage your First Road profile and account settings.",
 };
 
-const ProfilePage = () => {
-  return (
-    <div className="flex flex-1 flex-col gap-y-8">
-      <Heading
-        description="All your profile information"
-        tabs={<AccountTabs />}
-        title="Profile"
-      />
-    </div>
-  );
-};
+const ProfilePage = () => (
+  <div className="flex flex-1 flex-col gap-y-8">
+    <Heading
+      description="All your profile information"
+      tabs={<AccountTabs />}
+      title="Profile"
+    />
+  </div>
+);
 
 export default ProfilePage;

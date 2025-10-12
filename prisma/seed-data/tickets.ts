@@ -217,9 +217,8 @@ export const baseTickets: TicketWithoutUserId[] = [
 export const createTickets = (
   userIds: string[],
   tickets: TicketWithoutUserId[] = baseTickets,
-): Prisma.TicketCreateManyInput[] => {
-  return tickets.map((t) => ({
+): Prisma.TicketCreateManyInput[] =>
+  tickets.map((t) => ({
     ...t,
     userId: getRandomUserId(userIds),
   }));
-};

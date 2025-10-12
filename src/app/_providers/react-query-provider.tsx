@@ -13,15 +13,14 @@ const SECONDS_PER_MINUTE = 60;
 const MS_PER_SECOND = 1000;
 const STALE_TIME_MS = SECONDS_PER_MINUTE * MS_PER_SECOND; // 1 minute
 
-const makeQueryClient = () => {
-  return new QueryClient({
+const makeQueryClient = () =>
+  new QueryClient({
     defaultOptions: {
       queries: {
         staleTime: STALE_TIME_MS,
       },
     },
   });
-};
 
 let browserQueryClient: QueryClient | undefined;
 

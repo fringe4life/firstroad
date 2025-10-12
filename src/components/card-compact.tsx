@@ -21,17 +21,15 @@ const CardCompact = ({
   content,
   className,
   footer,
-}: CardCompactProps) => {
-  return (
-    <Card className={className}>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent>{content}</CardContent>
-      {footer && <CardFooter>{footer}</CardFooter>}
-    </Card>
-  );
-};
+}: CardCompactProps) => (
+  <Card className={className}>
+    <CardHeader>
+      <CardTitle>{title}</CardTitle>
+      <CardDescription>{description}</CardDescription>
+    </CardHeader>
+    <CardContent>{content}</CardContent>
+    {footer && <CardFooter>{footer}</CardFooter>}
+  </Card>
+);
 
 export { CardCompact };

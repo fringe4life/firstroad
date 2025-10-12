@@ -10,22 +10,20 @@ export const metadata: Metadata = {
     "Reset your First Road account password. Enter your email address and we'll send you a reset link.",
 };
 
-const ForgotPasswordPage = () => {
-  return (
-    <div className="justfy-center flex flex-1 flex-col items-center">
-      <CardCompact
-        className="w-full max-w-120 animate-fade-from-top self-center"
-        content={<ForgotPasswordForm />}
-        description="Enter your email address and we'll send you a link to reset your password"
-        footer={
-          <Link className="text-muted-foreground text-sm" href={signInPath}>
-            Back to Sign In
-          </Link>
-        }
-        title="Forgot Password"
-      />
-    </div>
-  );
-};
+const ForgotPasswordPage = () => (
+  <div className="justfy-center flex flex-1 flex-col items-center">
+    <CardCompact
+      className="w-full max-w-120 animate-fade-from-top self-center"
+      content={<ForgotPasswordForm />}
+      description="Enter your email address and we'll send you a link to reset your password"
+      footer={
+        <Link className="text-muted-foreground text-sm" href={signInPath}>
+          Back to Sign In
+        </Link>
+      }
+      title="Forgot Password"
+    />
+  </div>
+);
 
 export default ForgotPasswordPage;

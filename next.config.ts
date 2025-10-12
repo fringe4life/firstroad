@@ -2,12 +2,12 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   typedRoutes: true,
+  reactCompiler: true,
   experimental: {
     browserDebugInfoInTerminal: true,
-    reactCompiler: true,
-    // devtoolSegmentExplorer: true,
     clientSegmentCache: true,
-    ppr: true,
+    turbopackFileSystemCacheForDev: true,
+    turbopackFileSystemCacheForBuild: true,
   },
 };
 
