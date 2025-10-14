@@ -17,28 +17,27 @@ A full-stack collaborative platform built with Next.js 15, featuring authenticat
 - **🎯 Type Safety**: Full TypeScript support with typed routes
 - **📧 Email Features**: Password reset and email verification with React Email templates
 - **🔄 Database Hooks**: Automatic UserInfo creation on user registration
-- **🔄 Parallel Routes**: Next.js 16 Beta parallel routes for enhanced user experience
+- **🔄 Parallel Routes**: Next.js parallel routes for enhanced user experience
 - **⚡ React Compiler**: React 19 compiler for automatic performance optimization
 - **📬 Background Jobs**: Inngest for async event handling and email processing
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 16 Beta (App Router) with Turbopack
+- **Framework**: Next.js 16 (App Router) with Turbopack
 - **Language**: TypeScript 5.9 with strict type checking
 - **Database**: PostgreSQL with Prisma Client (relationJoins preview, Neon adapter)
 - **Authentication**: Better Auth 1.3+ with email/password provider
 - **Styling**: Tailwind CSS v4 with shadcn/ui components
 - **Icons**: Lucide React
 - **Forms**: React Hook Form with Zod v4 validation
-- **State Management**: TanStack React Query v5 for server state
 - **Notifications**: Sonner toast notifications
 - **Theme**: next-themes for dark/light mode
 - **URL Search Params**: nuqs for type-safe URL parameters
 - **Email**: React Email with Resend for transactional emails
 - **Background Jobs**: Inngest for background tasks and event handling
 - **Package Manager**: Bun (recommended)
-- **Linting**: Biome 2.2+ for fast formatting and linting
-- **Type Checking**: tsgo for fast TypeScript checking
+- **Linting**: Biome 2.2+ for fast formatting and linting with Ultracite rules
+- **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 
 ## 📋 Prerequisites
@@ -79,14 +78,11 @@ Update `.env.local` with your configuration:
 ```env
 # Database
 DATABASE_URL="postgresql://username:password@localhost:5432/your_database"
-# Optional direct URL for migrations/admin
 DIRECT_URL="postgresql://username:password@localhost:5432/your_database"
 
 # Auth
 AUTH_SECRET="your-secret-key-here"
-# Optional, used by frameworks/integrations expecting a public app URL
-NEXTAUTH_URL="http://localhost:3000"
-# Public app URL for client-side usage
+# Public app URL used for emails and redirects
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
 
 # Email (Resend)
@@ -154,19 +150,22 @@ src/
 │   ├── auth/              # Authentication logic
 │   │   ├── actions/       # Server actions
 │   │   ├── components/    # Auth components
-│   │   ├── queries/       # Server-side queries
-│   │   ├── types.ts       # Centralized auth types
-│   │   └── utils/         # Auth utilities
+│   │   ├── queries/       # Server-side queries (getSession)
+│   │   ├── types.ts       # Centralized auth types (MaybeServerSession)
+│   │   └── utils/         # Auth utilities (isOwner)
 │   ├── ticket/            # Ticket management
+│   │   ├── queries/       # Data queries with "use cache"
 │   ├── comment/           # Comment system
+│   ├── password/          # Password reset features
 │   └── types/             # Shared type definitions
 ├── lib/                   # Utility libraries
 │   ├── auth.ts           # Better Auth configuration
 │   ├── auth-client.ts    # Client-side auth instance
+│   ├── auth-helpers.ts   # DAL helpers (hasAuth, requireAuth)
 │   ├── email.ts          # Email utility with Resend
-│   ├── env.ts            # Environment validation with Zod
+│   ├── env.ts            # Environment validation with Zod v4
 │   ├── path.ts           # Type-safe route definitions
-│   └── prisma.ts         # Database client with queryCompiler + driverAdapters
+│   └── prisma.ts         # Database client with Neon adapter
 ├── utils/                 # Shared utilities
 │   ├── cookies.ts        # Cookie management
 │   ├── currency.ts       # Currency utilities
@@ -182,7 +181,7 @@ src/
 
 ## 🔄 Parallel Routes
 
-The project leverages Next.js 15's parallel routes feature for enhanced user experience:
+The project leverages Next.js parallel routes feature for enhanced user experience:
 
 ### Ticket Management Parallel Routes
 
@@ -240,9 +239,34 @@ The application uses Better Auth with email/password authentication:
 
 ## 🔄 Dynamic Rendering & Session Management
 
-- **Dynamic Rendering**: Use of `connection()` from `next/server` opts routes/components into dynamic rendering as needed
-- **Session Management**: Centralized `getSession()` for consistent auth state across the application
+- **Dynamic Rendering**: Use of `connection()` from `next/server` opts routes/components into dynamic rendering
+- **Session Management**: Centralized `getSession()` in `src/features/auth/queries/get-session.ts`
+- **DAL Pattern**: Session injection via `hasAuth()` helper for cacheable data queries
 - **Background Jobs**: Inngest handles async operations like password reset emails
+
+### DAL Pattern
+
+Data queries use the DAL pattern with session injection:
+
+```typescript
+// In query files (e.g., get-ticket.ts)
+export const getTicketById = async (
+  session: MaybeServerSession,
+  ticketId: string
+) => {
+  "use cache";
+  // ... fetch and return data with isOwner checks
+};
+
+// In pages/components
+const ticket = await hasAuth((session) => getTicketById(session, ticketId));
+```
+
+This pattern enables:
+
+- Function-level caching with "use cache"
+- Proper authorization checks via `isOwner(session, entity)`
+- Type-safe session handling with `MaybeServerSession`
 
 ## 🎫 Ticket System
 
@@ -289,12 +313,13 @@ Built with shadcn/ui and Tailwind CSS:
 # Development
 bun run dev              # Start development server with Turbopack
 bun run build            # Build for production with Turbopack
+bun run build:debug      # Build with debug prerender info
 bun run start            # Start production server
-bun run lint             # Run Biome linting
-bun run lint:fix         # Fix linting issues
+bun run lint             # Run Biome linting on src/
+bun run lint:fix         # Fix linting issues automatically
 bun run format           # Format code with Biome
-bun run check            # Run linting and formatting
-bun run type             # Run TypeScript type checking with tsgo
+bun run check            # Run linting and formatting together
+bun run type             # Run TypeScript type checking
 bun run typegen          # Generate Next.js type definitions
 
 # Email Development
@@ -313,13 +338,14 @@ bunx inngest-cli dev     # Start Inngest dev server for local testing
 
 ## 🔧 Configuration
 
-### Next.js 16 Beta Features
+### Next.js 16 Features
 
 - **Typed Routes**: Full type safety for all routes (`typedRoutes: true`)
 - **Turbopack**: Fast bundling for development and production
 - **React Compiler**: React 19 compiler for automatic performance optimization
 - **Parallel Routes**: Enhanced routing with simultaneous route rendering
 - **Client Segment Cache**: Improved caching for better performance
+- **"use cache" Directive**: Function-level caching for data queries
 
 ### Tailwind CSS
 
@@ -327,14 +353,19 @@ The project uses Tailwind CSS v4 with custom configuration for dark mode and the
 
 ### Database
 
-PostgreSQL with Prisma Client using the **relationJoins** preview feature with a client-side engine. Uses Neon serverless adapter in `src/lib/prisma.ts` for efficient, edge-friendly connections.
+PostgreSQL with Prisma Client using:
+
+- **relationJoins** preview feature for optimized queries
+- **Client-side engine** for edge compatibility
+- **Neon serverless adapter** for efficient connections
+- Custom output path: `src/generated/prisma/`
 
 **Database Models:**
 
 - **User**: Better Auth user model
 - **Account**: Better Auth account model
 - **Session**: Better Auth session model
-- **VerificationToken**: Better Auth verification tokens
+- **Verification**: Better Auth verification tokens
 - **UserInfo**: Extended user information
 - **Ticket**: Ticket management
 - **Comment**: Comment system
@@ -359,11 +390,14 @@ Inngest provides background job processing for:
 ### Type Safety
 
 - Full TypeScript support with strict configuration
-- Typed routes with Next.js 16 Beta (`typedRoutes: true`)
+- Typed routes with Next.js 16 (`typedRoutes: true`)
 - Type-safe URL search parameters with nuqs
-- Centralized auth types in `src/features/auth/types.ts`
-- Shared utilities moved to `src/utils/` for better organization
-- Generic type utilities for better code reuse
+- Centralized auth types in `src/features/auth/types.ts`:
+  - `ServerSession`: Full session with user object
+  - `MaybeServerSession`: Session or null for DAL functions
+  - `ClientSession`: Client-side session type
+- DAL pattern with session injection via `hasAuth()` and `requireAuth()` helpers
+- Shared utilities in `src/utils/` for better organization
 
 ### Path Management
 

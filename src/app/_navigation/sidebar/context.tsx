@@ -9,17 +9,17 @@ const MobileSidebarContext = createContext<MobileSidebarContextType | null>(
   null,
 );
 
-export function MobileSidebarProvider({
+export const MobileSidebarProvider = ({
   children,
 }: {
   children: React.ReactNode;
-}) {
+}) => {
   const toggleState = useToggle(false);
 
   return (
     <MobileSidebarContext value={toggleState}>{children}</MobileSidebarContext>
   );
-}
+};
 
 export function useMobileSidebar() {
   const context = use(MobileSidebarContext);

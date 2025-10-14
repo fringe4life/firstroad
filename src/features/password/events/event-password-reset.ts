@@ -1,28 +1,24 @@
-import { headers } from "node_modules/next/headers";
 import { z } from "zod/v4";
-import { auth } from "@/lib/auth";
+import { sendPasswordResetEmail } from "@/features/password/utils/send-password-reset-email";
 import { inngest } from "@/lib/inngest";
 
-const emailSchema = z.object({ email: z.email() });
+const passwordResetSchema = z.object({
+  email: z.email(),
+  resetUrl: z.url(),
+  userName: z.string().optional(),
+});
 
 export const eventPasswordReset = inngest.createFunction(
   { id: "event-password-reset" },
   { event: "password.reset" },
   async ({ event }) => {
-    const result = emailSchema.safeParse(event.data);
+    const result = passwordResetSchema.safeParse(event.data);
     if (!result.success) {
-      throw new Error("Invalid email");
+      throw new Error("Invalid password reset event data");
     }
-    const { email } = result.data;
-    await auth.api.requestPasswordReset({
-      body: {
-        email,
-        redirectTo: `${
-          // biome-ignore lint/style/noNonNullAssertion: exists
-          process.env.NEXT_PUBLIC_APP_URL!
-        }/reset-password`,
-      },
-      headers: await headers(),
-    });
+
+    const { email, resetUrl, userName } = result.data;
+
+    await sendPasswordResetEmail(email, resetUrl, userName);
   },
 );

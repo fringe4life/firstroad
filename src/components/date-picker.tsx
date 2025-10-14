@@ -24,7 +24,7 @@ type DatePickerProps = {
 };
 
 const DatePicker = ({ id, name, defaultValue, ref }: DatePickerProps) => {
-  const [date, setDate] = useState<Date | undefined>(
+  const [date, setDate] = useState<Date | undefined>(() =>
     defaultValue ? new Date(defaultValue) : new Date(),
   );
   const [open, setOpen] = useState<boolean>(false);

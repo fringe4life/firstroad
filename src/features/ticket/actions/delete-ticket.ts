@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
@@ -26,6 +26,10 @@ export const deleteTicket = async (id: string) => {
       }
 
       await tx.ticket.delete({ where: { id } });
+
+      // Immediately expire cache for read-your-own-writes
+      updateTag("tickets");
+      updateTag(`ticket-${id}`);
     });
   });
 
@@ -33,7 +37,6 @@ export const deleteTicket = async (id: string) => {
     return fromErrorToActionState(error);
   }
 
-  revalidatePath(ticketsPath);
   setCookieByKey("toast", "Ticket deleted");
   redirect(ticketsPath);
 };

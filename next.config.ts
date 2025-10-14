@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
     clientSegmentCache: true,
     turbopackFileSystemCacheForDev: true,
     turbopackFileSystemCacheForBuild: true,
+    cacheComponents: true,
   },
 };
 

@@ -3,6 +3,7 @@
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { z } from "zod/v4";
 import { auth } from "@/lib/auth";
 import { accountProfilePath } from "@/path";
@@ -16,11 +17,11 @@ import { tryCatch } from "@/utils/try-catch";
 const schema = z
   .object({
     // Current password field validation
-    currentPassword: z.string().min(1, "Current password is required"),
+    currentPassword: z.string().min(8, "Current password is required"),
     // New password must be at least 8 characters
     newPassword: z.string().min(8, "Password must be at least 8 characters"),
     // Confirm password field validation
-    confirmPassword: z.string().min(1, "Please confirm your password"),
+    confirmPassword: z.string().min(8, "Please confirm your password"),
     // Checkbox for revoking other sessions (transforms "on" to boolean, handles null)
     revokeOtherSessions: z
       .string()
@@ -43,19 +44,10 @@ export async function changePassword(
   _prevState: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  // Extract form data
-  const currentPassword = formData.get("currentPassword");
-  const newPassword = formData.get("newPassword");
-  const confirmPassword = formData.get("confirmPassword");
-  const revokeOtherSessions = formData.get("revokeOtherSessions") || null; // Handle unchecked checkbox
-
+  await connection();
+  const formDataObject = Object.fromEntries(formData.entries());
   // Validate form data with Zod schema
-  const parsed = schema.safeParse({
-    currentPassword,
-    newPassword,
-    confirmPassword,
-    revokeOtherSessions,
-  });
+  const parsed = schema.safeParse(formDataObject);
 
   if (!parsed.success) {
     return fromErrorToActionState(parsed.error, formData);

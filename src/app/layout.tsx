@@ -2,11 +2,11 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { Suspense } from "react";
 import { Toaster } from "sonner";
 import Header from "@/app/_navigation/header";
 import Sidebar from "@/app/_navigation/sidebar/components/sidebar";
 import { MobileSidebarProvider } from "@/app/_navigation/sidebar/context";
-import { ReactQueryProvider } from "@/app/_providers/react-query-provider";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 
 const inter = Inter({
@@ -46,19 +46,19 @@ export default function RootLayout({ children, tickets }: LayoutProps<"/">) {
       <body className={`${inter.className} antialiased`}>
         <NuqsAdapter>
           <ThemeProvider>
-            <ReactQueryProvider>
-              <MobileSidebarProvider>
-                <Header />
-                <div className="flex h-screen border-collapse overflow-hidden">
+            <MobileSidebarProvider>
+              <Header />
+              <div className="flex h-screen border-collapse overflow-hidden">
+                <Suspense fallback={null}>
                   <Sidebar />
-                  <main className="flex min-h-screen flex-1 flex-col gap-y-4 overflow-y-auto overflow-x-hidden px-8 py-24">
-                    {children}
-                    {tickets}
-                  </main>
-                </div>
-              </MobileSidebarProvider>
-              <Toaster expand />
-            </ReactQueryProvider>
+                </Suspense>
+                <main className="flex min-h-screen flex-1 flex-col gap-y-4 overflow-y-auto overflow-x-hidden px-8 py-24">
+                  {children}
+                  {tickets}
+                </main>
+              </div>
+            </MobileSidebarProvider>
+            <Toaster expand />
           </ThemeProvider>
         </NuqsAdapter>
       </body>

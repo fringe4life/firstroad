@@ -1,13 +1,12 @@
 /** biome-ignore-all lint/style/noMagicNumbers: are well explained zod schema */
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { updateTag } from "next/cache";
 import { z } from "zod/v4";
 import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
 import type { CommentWithUserInfo } from "@/features/comment/types";
 import { prisma } from "@/lib/prisma";
-import { ticketEditPath } from "@/path";
 import {
   type ActionState,
   fromErrorToActionState,
@@ -87,8 +86,13 @@ export const upsertComment = async (
       },
     });
 
-    // Revalidate the ticket page to show the updated comment
-    revalidatePath(ticketEditPath(ticketId));
+    // Immediately expire cache for read-your-own-writes
+    updateTag("tickets");
+    updateTag(`ticket-${ticketId}`);
+    updateTag(`comments-${ticketId}`);
+    if (comment.id) {
+      updateTag(`comment-${comment.id}`);
+    }
 
     // Add isOwner property to the comment
     const commentWithOwnership = {

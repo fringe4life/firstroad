@@ -1,17 +1,23 @@
 "use server";
 
-import { cache } from "react";
-import { getSession } from "@/features/auth/queries/get-session";
+import { unstable_cacheTag as cacheTag } from "next/cache";
+import type { MaybeServerSession } from "@/features/auth/types";
 import { isOwner } from "@/features/auth/utils/owner";
 import type { PaginationMetadata } from "@/features/types/pagination";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 
-export const getTicket = cache(async (id: string) => {
-  const session = await getSession();
+export const getTicketById = async (
+  session: MaybeServerSession,
+  ticketId: string,
+) => {
+  "use cache";
+  cacheTag("tickets");
+  cacheTag(`ticket-${ticketId}`);
+  cacheTag(`comments-${ticketId}`);
 
   const ticket = await prisma.ticket.findUnique({
-    where: { id },
+    where: { id: ticketId },
     include: {
       userInfo: {
         include: {
@@ -35,7 +41,7 @@ export const getTicket = cache(async (id: string) => {
           },
         },
         orderBy: {
-          id: "desc" as Prisma.SortOrder, // Use id for cursor-based pagination
+          id: "desc" as Prisma.SortOrder,
         },
         take: 4, // Take one extra to check if there are more
       },
@@ -64,58 +70,64 @@ export const getTicket = cache(async (id: string) => {
     list: commentsWithOwnership,
     isOwner: isOwner(session, ticket),
     metadata: {
-      count: commentsToReturn.length, // This is just the count of loaded comments
+      count: commentsToReturn.length,
       hasNextPage: hasMore,
     } satisfies PaginationMetadata,
   };
-});
+};
 
-export const getMoreComments = cache(
-  async (ticketId: string, cursor?: string, take = 3) => {
-    const session = await getSession();
+export const getCommentsByTicketId = async (
+  session: MaybeServerSession,
+  ticketId: string,
+  cursor?: string,
+  take = 3,
+) => {
+  "use cache";
+  cacheTag("tickets");
+  cacheTag(`ticket-${ticketId}`);
+  cacheTag(`comments-${ticketId}`);
 
-    const comments = await prisma.comment.findMany({
-      where: {
-        ticketId,
-      },
-      include: {
-        userInfo: {
-          include: {
-            user: {
-              select: {
-                name: true,
-              },
+  const comments = await prisma.comment.findMany({
+    where: {
+      ticketId,
+    },
+    include: {
+      userInfo: {
+        include: {
+          user: {
+            select: {
+              name: true,
             },
           },
         },
       },
-      orderBy: {
-        id: "desc" as Prisma.SortOrder, // Use id for cursor-based pagination
-        createdAt: "desc" as Prisma.SortOrder,
-      },
-      take: take + 1, // Take one extra to check if there are more
-      cursor: cursor
-        ? {
-            id: cursor,
-          }
-        : undefined,
-      skip: cursor ? 1 : undefined, // Skip the cursor record itself
-    });
+    },
+    orderBy: {
+      id: "desc" as Prisma.SortOrder,
+      createdAt: "desc" as Prisma.SortOrder,
+    },
+    take: take + 1, // Take one extra to check if there are more
+    cursor: cursor
+      ? {
+          id: cursor,
+        }
+      : undefined,
+    skip: cursor ? 1 : undefined, // Skip the cursor record itself
+  });
 
-    // Check if there are more comments
-    const hasMore = comments.length > take;
-    const commentsToReturn = hasMore ? comments.slice(0, take) : comments;
+  // Check if there are more comments
+  const hasMore = comments.length > take;
+  const commentsToReturn = hasMore ? comments.slice(0, take) : comments;
 
-    // Add isOwner property to each comment
-    const commentsWithOwnership = commentsToReturn.map((comment) => ({
-      ...comment,
-      isOwner: isOwner(session, comment),
-    }));
+  // Add isOwner property to each comment
+  const commentsWithOwnership = commentsToReturn.map((comment) => ({
+    ...comment,
+    isOwner: isOwner(session, comment),
+  }));
 
-    return {
-      list: commentsWithOwnership,
-      hasMore,
-      nextCursor: hasMore ? commentsToReturn.at(-1)?.id : null,
-    };
-  },
-);
+  return {
+    list: commentsWithOwnership,
+    hasMore,
+    nextCursor: hasMore ? commentsToReturn.at(-1)?.id : null,
+  };
+};

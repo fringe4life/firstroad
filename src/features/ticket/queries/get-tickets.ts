@@ -1,5 +1,8 @@
+"use server";
+
+import { unstable_cacheTag as cacheTag } from "next/cache";
 import type { SearchParams } from "nuqs/server";
-import { getSession } from "@/features/auth/queries/get-session";
+import type { MaybeServerSession } from "@/features/auth/types";
 import { isOwner } from "@/features/auth/utils/owner";
 import { searchParamsCache } from "@/features/ticket/search-params";
 import type { BaseTicket } from "@/features/ticket/types";
@@ -11,13 +14,16 @@ import type {
 } from "@/generated/prisma/models/Ticket";
 import { prisma } from "@/lib/prisma";
 
-export const getTickets = async (
+export const getAllTickets = async (
+  session: MaybeServerSession,
   searchParams: Promise<SearchParams>,
-  userId?: string,
+  filterUserId?: string,
 ): Promise<PaginatedResult<BaseTicket>> => {
+  "use cache";
+  cacheTag("tickets");
+
   const { search, sortKey, sortValue, page, limit } =
     await searchParamsCache.parse(searchParams);
-  const session = await getSession();
 
   // Build orderBy based on sort parameter
   let orderBy: TicketOrderByWithRelationInput = {
@@ -29,7 +35,7 @@ export const getTickets = async (
   }
 
   const where: TicketWhereInput = {
-    userId,
+    userId: filterUserId,
     title: {
       contains: search,
       mode: "insensitive",
@@ -37,7 +43,7 @@ export const getTickets = async (
   };
 
   const skip = page * limit;
-  const take = limit;
+  const takeAmount = limit;
 
   const [tickets, count] = await prisma.$transaction([
     prisma.ticket.findMany({
@@ -54,7 +60,7 @@ export const getTickets = async (
         },
       },
       orderBy,
-      take,
+      take: takeAmount,
       skip,
     }),
     prisma.ticket.count({ where, orderBy }),
@@ -69,7 +75,7 @@ export const getTickets = async (
     list: ticketsWithOwnership,
     metadata: {
       count,
-      hasNextPage: count > skip + take,
+      hasNextPage: count > skip + takeAmount,
     },
   };
 };

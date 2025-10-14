@@ -1,7 +1,8 @@
 "use client";
 
-import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
-import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useRef, useState, useTransition } from "react";
+import { hasAuth } from "src/lib/auth-helpers";
 import { CardCompact } from "@/components/card-compact";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -10,7 +11,7 @@ import CommentDeleteButton from "@/features/comment/components/comment-delete-bu
 import CommentEditButton from "@/features/comment/components/comment-edit-button";
 import CommentItem from "@/features/comment/components/comment-item";
 import type { Comment } from "@/features/comment/types";
-import { getMoreComments } from "@/features/ticket/queries/get-ticket";
+import { getCommentsByTicketId } from "@/features/ticket/queries/get-ticket";
 import type { PaginatedResult } from "@/features/types/pagination";
 
 type CommentsProps = {
@@ -18,33 +19,17 @@ type CommentsProps = {
 } & PaginatedResult<Comment>;
 
 const Comments = ({ ticketId, list, metadata }: CommentsProps) => {
-  const queryKey = ["comments", ticketId];
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, error } =
-    useInfiniteQuery({
-      queryKey,
-      queryFn: ({ pageParam }) => getMoreComments(ticketId, pageParam),
-      initialPageParam: undefined as string | undefined,
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-      initialData: {
-        pages: [
-          {
-            list,
-            hasMore: metadata?.hasNextPage ?? false,
-            nextCursor: metadata?.nextCursor ?? null,
-          },
-        ],
-        pageParams: [undefined],
-      },
-    });
-
-  const queryClient = useQueryClient();
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const [comments, setComments] = useState(list);
+  const [nextCursor, setNextCursor] = useState<string | null>(
+    metadata?.nextCursor ?? null,
+  );
+  const [hasMore, setHasMore] = useState(metadata?.hasNextPage ?? false);
 
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editingContent, setEditingContent] = useState<string>("");
   const formRef = useRef<HTMLDivElement>(null);
-
-  // Flatten all comments from all pages
-  const allComments = data.pages.flatMap((page) => page.list);
 
   const handleEdit = (commentId: string, content: string) => {
     setEditingCommentId(commentId);
@@ -59,11 +44,23 @@ const Comments = ({ ticketId, list, metadata }: CommentsProps) => {
     setEditingContent("");
   };
 
-  const deleteAction = () => queryClient.invalidateQueries({ queryKey });
+  const handleLoadMore = () => {
+    startTransition(async () => {
+      const result = await hasAuth((session) =>
+        getCommentsByTicketId(session, ticketId, nextCursor ?? ""),
+      );
+      setComments((prev) => [...prev, ...result.list]);
+      setNextCursor(result.nextCursor ?? null);
+      setHasMore(result.hasMore);
+    });
+  };
 
-  if (error) {
-    return <div>Error loading comments: {error.message}</div>;
-  }
+  const handleAfterMutation = () => {
+    // Refresh the page data to get updated comments from the server
+    router.refresh();
+    setEditingCommentId(null);
+    setEditingContent("");
+  };
 
   return (
     <>
@@ -74,6 +71,7 @@ const Comments = ({ ticketId, list, metadata }: CommentsProps) => {
               commentId={editingCommentId || undefined}
               initialContent={editingContent}
               onCancel={handleCancelEdit}
+              onSuccess={handleAfterMutation}
               ticketId={ticketId}
             />
           </div>
@@ -86,7 +84,7 @@ const Comments = ({ ticketId, list, metadata }: CommentsProps) => {
         title={editingCommentId ? "Edit Comment" : "Create Comment"}
       />
       <div className="grid gap-y-2">
-        {allComments.map((comment) => (
+        {comments.map((comment) => (
           <CommentItem
             buttons={
               comment.isOwner
@@ -99,7 +97,7 @@ const Comments = ({ ticketId, list, metadata }: CommentsProps) => {
                     <CommentDeleteButton
                       id={comment.id}
                       key="delete"
-                      onDeleteComment={deleteAction}
+                      onDeleteComment={handleAfterMutation}
                     />,
                   ]
                 : []
@@ -108,22 +106,22 @@ const Comments = ({ ticketId, list, metadata }: CommentsProps) => {
             key={comment.id}
           />
         ))}
-        {isFetchingNextPage && (
+        {isPending && (
           <>
             <Skeleton />
             <Skeleton />
             <Skeleton />
           </>
         )}
-        {hasNextPage && (
+        {hasMore && (
           <div className="flex justify-center pt-2">
             <Button
               className="w-full"
-              disabled={isFetchingNextPage}
-              onClick={() => fetchNextPage()}
+              disabled={isPending}
+              onClick={handleLoadMore}
               variant="ghost"
             >
-              {isFetchingNextPage ? "Loading..." : "Load More Comments"}
+              {isPending ? "Loading..." : "Load More Comments"}
             </Button>
           </div>
         )}

@@ -2,6 +2,7 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { createAuthMiddleware } from "better-auth/api";
 import { nextCookies } from "better-auth/next-js";
+import { inngest } from "@/lib/inngest";
 import { prisma } from "@/lib/prisma";
 import { sendEmail } from "@/utils/send-email";
 
@@ -34,7 +35,7 @@ export const auth = betterAuth({
                   <li>Access all our features</li>
                 </ul>
                 <div style="text-align: center; margin: 30px 0;">
-                  <a href="${process.env.AUTH_URL || process.env.NEXTAUTH_URL || "http://localhost:3000"}/tickets" 
+                  <a href="${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/tickets" 
                      style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">
                     Get Started
                   </a>
@@ -56,7 +57,7 @@ export const auth = betterAuth({
               - Collaborate with your team
               - Access all our features
               
-              Get started: ${process.env.AUTH_URL || process.env.NEXTAUTH_URL || "http://localhost:3000"}/tickets
+              Get started: ${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/tickets
               
               If you have any questions or need help getting started, don't hesitate to reach out to our support team.
               
@@ -116,48 +117,19 @@ export const auth = betterAuth({
       const urlObj = new URL(url);
       const tokenParam = urlObj.searchParams.get("token");
       const baseUrl =
-        process.env.AUTH_URL ||
-        process.env.NEXTAUTH_URL ||
-        "http://localhost:3000";
-      const dynamicRouteUrl = tokenParam
+        process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+      const resetUrl = tokenParam
         ? `${baseUrl}/reset-password/${tokenParam}`
         : url;
 
-      await sendEmail({
-        to: user.email,
-        subject: "Reset your password",
-        html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2 style="color: #333;">Reset Your Password</h2>
-            <p>Hello,</p>
-            <p>You requested to reset your password. Click the button below to create a new password:</p>
-            <div style="text-align: center; margin: 30px 0;">
-              <a href="${dynamicRouteUrl}" 
-                 style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">
-                Reset Password
-              </a>
-            </div>
-            <p>If you didn't request this password reset, you can safely ignore this email.</p>
-            <p>This link will expire in 1 hour.</p>
-            <p>Best regards,<br>Your App Team</p>
-          </div>
-        `,
-        text: `
-          Reset Your Password
-          
-          Hello,
-          
-          You requested to reset your password. Click the link below to create a new password:
-          
-          ${dynamicRouteUrl}
-          
-          If you didn't request this password reset, you can safely ignore this email.
-          
-          This link will expire in 1 hour.
-          
-          Best regards,
-          Your App Team
-        `,
+      // Trigger Inngest event to handle password reset email asynchronously
+      await inngest.send({
+        name: "password.reset",
+        data: {
+          email: user.email,
+          resetUrl,
+          userName: user.name,
+        },
       });
     },
     // onPasswordReset: async ({ user }, _request) => {},

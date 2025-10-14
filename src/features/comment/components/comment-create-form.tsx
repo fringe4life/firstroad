@@ -14,6 +14,7 @@ type CommentCreateFormProps = {
   commentId?: string;
   initialContent?: string;
   onCancel?: () => void;
+  onSuccess?: () => void;
 };
 
 const CommentCreateForm = ({
@@ -21,6 +22,7 @@ const CommentCreateForm = ({
   commentId,
   initialContent = "",
   onCancel,
+  onSuccess,
 }: CommentCreateFormProps) => {
   // Create a wrapper function that matches useActionState signature
   const commentAction = (
@@ -52,6 +54,10 @@ const CommentCreateForm = ({
     // Reset form on success
     if (textareaRef.current) {
       textareaRef.current.value = "";
+    }
+    // Call onSuccess callback to refresh data
+    if (onSuccess) {
+      onSuccess();
     }
     // Call onCancel if provided (for edit mode)
     if (onCancel) {

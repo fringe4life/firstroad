@@ -1,17 +1,21 @@
-import type { Metadata, Route } from "next";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { hasAuth } from "src/lib/auth-helpers";
 import Breadcrumbs from "@/components/breadcrumbs";
 import { CardCompact } from "@/components/card-compact";
 import { Separator } from "@/components/ui/separator";
+import { upsertTicket } from "@/features/ticket/actions/upsert-ticket";
 import TicketUpsertForm from "@/features/ticket/components/ticket-upsert-form";
-import { getTicket } from "@/features/ticket/queries/get-ticket";
+import { getTicketById } from "@/features/ticket/queries/get-ticket";
 import { homePath, ticketPath } from "@/path";
 
 export async function generateMetadata({
   params,
 }: PageProps<"/tickets/[ticketId]/edit">): Promise<Metadata> {
   const param = await params;
-  const ticket = await getTicket(param.ticketId);
+  const ticket = await hasAuth((session) =>
+    getTicketById(session, param.ticketId),
+  );
 
   if (!ticket) {
     return {
@@ -30,7 +34,9 @@ const TicketEditPage = async ({
   params,
 }: PageProps<"/tickets/[ticketId]/edit">) => {
   const param = await params;
-  const ticket = await getTicket(param.ticketId);
+  const ticket = await hasAuth((session) =>
+    getTicketById(session, param.ticketId),
+  );
 
   if (!ticket?.isOwner) {
     notFound();
@@ -38,20 +44,23 @@ const TicketEditPage = async ({
 
   return (
     <>
-      <div className="flex flex-1 flex-col gap-y-8">
-        <Breadcrumbs
-          breadcrumbs={[
-            { title: "Tickets", href: homePath },
-            { title: ticket.title, href: ticketPath(ticket.id) as Route },
-            { title: "Edit" },
-          ]}
-        />
-      </div>
+      <Breadcrumbs
+        breadcrumbs={[
+          { title: "Tickets", href: homePath },
+          { title: ticket.title, href: ticketPath(ticket.id) },
+          { title: "Edit" },
+        ]}
+      />
       <Separator />
       <div className="justfy-center flex flex-1 flex-col items-center">
         <CardCompact
           className="w-full max-w-120 animate-fade-from-top self-center"
-          content={<TicketUpsertForm ticket={ticket} />}
+          content={
+            <TicketUpsertForm
+              ticket={ticket}
+              upsertTicketAction={upsertTicket}
+            />
+          }
           description="Edit an existing ticket"
           title="Edit Ticket"
         />

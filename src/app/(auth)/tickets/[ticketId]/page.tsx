@@ -1,16 +1,19 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
+import Spinner from "src/components/spinner";
+import { hasAuth } from "src/lib/auth-helpers";
 import Breadcrumbs from "@/components/breadcrumbs";
 import { Separator } from "@/components/ui/separator";
 import TicketItem from "@/features/ticket/components/ticket-item";
-import { getTicket } from "@/features/ticket/queries/get-ticket";
+import { getTicketById } from "@/features/ticket/queries/get-ticket";
 import { homePath } from "@/path";
 
 export const generateMetadata = async ({
   params,
 }: PageProps<"/tickets/[ticketId]">): Promise<Metadata> => {
   const { ticketId } = await params;
-  const ticket = await getTicket(ticketId);
+  const ticket = await hasAuth((session) => getTicketById(session, ticketId));
 
   if (!ticket) {
     return {
@@ -26,25 +29,22 @@ export const generateMetadata = async ({
   };
 };
 
-const Ticket = async ({ params }: PageProps<"/tickets/[ticketId]">) => {
-  const { ticketId } = await params;
+type TicketItemProps = { ticketIdPromise: Promise<{ ticketId: string }> };
 
-  const ticket = await getTicket(ticketId);
-
+const SuspendedTicketItem = async (params: TicketItemProps) => {
+  const { ticketId } = await params.ticketIdPromise;
+  const ticket = await hasAuth((session) => getTicketById(session, ticketId));
   if (!ticket) {
     notFound();
   }
-
   return (
     <>
-      <div className="flex flex-1 flex-col gap-y-8">
-        <Breadcrumbs
-          breadcrumbs={[
-            { title: "Tickets", href: homePath },
-            { title: ticket.title },
-          ]}
-        />
-      </div>
+      <Breadcrumbs
+        breadcrumbs={[
+          { title: "Tickets", href: homePath },
+          { title: ticket.title },
+        ]}
+      />
       <Separator />
       <div className="flex animate-fade-from-top justify-center">
         <TicketItem isDetail={true} ticket={ticket} />
@@ -52,5 +52,11 @@ const Ticket = async ({ params }: PageProps<"/tickets/[ticketId]">) => {
     </>
   );
 };
+
+const Ticket = (props: PageProps<"/tickets/[ticketId]">) => (
+  <Suspense fallback={<Spinner />}>
+    <SuspendedTicketItem ticketIdPromise={props.params} />
+  </Suspense>
+);
 
 export default Ticket;

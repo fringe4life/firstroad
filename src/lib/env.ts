@@ -13,7 +13,6 @@ const envSchema = z.object({
       1,
       "RESEND_FROM is required (e.g. 'Your App <onboarding@resend.dev>' or 'noreply@yourdomain.com')",
     ),
-  NEXTAUTH_URL: z.url().optional(),
 });
 
 // Export validated environment variables

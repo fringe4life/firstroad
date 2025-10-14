@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CardCompact } from "@/components/card-compact";
-import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
+import { signin } from "@/features/password/actions/signin-action";
 import SignInForm from "@/features/password/components/sign-in-form";
-import { forgotPasswordPath, signUpPath, ticketsPath } from "@/path";
+import { forgotPasswordPath, signUpPath } from "@/path";
 
 export const metadata: Metadata = {
   title: "Sign In",
@@ -11,17 +11,15 @@ export const metadata: Metadata = {
     "Sign in to your First Road account to access your tickets and manage your profile.",
 };
 
+// biome-ignore lint/suspicious/useAwait: for use with use cache
 const SignInPage = async () => {
-  await getSessionOrRedirect({
-    when: "has-session",
-    redirectPath: ticketsPath,
-  });
+  "use cache";
 
   return (
     <div className="justfy-center flex flex-1 flex-col items-center">
       <CardCompact
         className="w-full max-w-120 animate-fade-from-top self-center"
-        content={<SignInForm />}
+        content={<SignInForm signinAction={signin} />}
         description="Sign in to your account"
         footer={
           <div className="flex w-full justify-between">

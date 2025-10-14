@@ -6,11 +6,15 @@ import Form from "@/components/form/form";
 import SubmitButton from "@/components/form/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signup } from "@/features/password/actions/signup-action";
+import type { signup } from "@/features/password/actions/signup-action";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 
-const SignUpForm = () => {
-  const [state, action] = useActionState(signup, EMPTY_ACTION_STATE);
+type SignUpFormProps = {
+  signupAction: typeof signup;
+};
+
+const SignUpForm = ({ signupAction }: SignUpFormProps) => {
+  const [state, action] = useActionState(signupAction, EMPTY_ACTION_STATE);
   const nameId = useId();
   const emailId = useId();
   const passwordId = useId();

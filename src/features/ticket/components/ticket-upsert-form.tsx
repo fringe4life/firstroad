@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useId, useRef } from "react";
+import { Suspense, useActionState, useId, useRef } from "react";
 import DatePicker, { type DateReset } from "@/components/date-picker";
 import FieldError from "@/components/form/field-error";
 import Form from "@/components/form/form";
@@ -11,19 +11,23 @@ import { Textarea } from "@/components/ui/textarea";
 import type { Ticket } from "@/generated/prisma/client";
 import { fromCent } from "@/utils/currency";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
-import { upsertTicket } from "../actions/upsert-ticket";
+import type { upsertTicket } from "../actions/upsert-ticket";
 
 type TicketUpsertFormProps = {
   ticket?: Ticket;
+  upsertTicketAction: typeof upsertTicket;
 };
 
-const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
+const TicketUpsertForm = ({
+  ticket,
+  upsertTicketAction,
+}: TicketUpsertFormProps) => {
   const titleId = useId();
   const descriptionId = useId();
   const deadlineId = useId();
   const bountyId = useId();
   const [actionState, action] = useActionState(
-    upsertTicket.bind(null, ticket?.id),
+    upsertTicketAction.bind(null, ticket?.id),
     EMPTY_ACTION_STATE,
   );
 
@@ -60,15 +64,17 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
       <div className="mb-1 flex gap-x-2">
         <div className="w-1/2">
           <Label htmlFor={deadlineId}>Deadline</Label>
-          <DatePicker
-            defaultValue={
-              (actionState.payload?.get("deadline") as string) ??
-              ticket?.deadline
-            }
-            id={deadlineId}
-            name="deadline"
-            ref={datePickerImperativeHandleRef}
-          />
+          <Suspense fallback={null}>
+            <DatePicker
+              defaultValue={
+                (actionState.payload?.get("deadline") as string) ??
+                ticket?.deadline
+              }
+              id={deadlineId}
+              name="deadline"
+              ref={datePickerImperativeHandleRef}
+            />
+          </Suspense>
           <FieldError actionState={actionState} name="deadline" />
         </div>
         <div className="w-1/2">

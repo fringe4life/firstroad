@@ -7,11 +7,20 @@ import SubmitButton from "@/components/form/submit-button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { changePassword } from "@/features/auth/actions/change-password-action";
+import type { changePassword } from "@/features/auth/actions/change-password-action";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 
-const ChangePasswordForm = () => {
-  const [state, action] = useActionState(changePassword, EMPTY_ACTION_STATE);
+type ChangePasswordFormProps = {
+  changePasswordAction: typeof changePassword;
+};
+
+const ChangePasswordForm = ({
+  changePasswordAction,
+}: ChangePasswordFormProps) => {
+  const [state, action] = useActionState(
+    changePasswordAction,
+    EMPTY_ACTION_STATE,
+  );
   const currentId = useId();
   const newId = useId();
   const confirmId = useId();

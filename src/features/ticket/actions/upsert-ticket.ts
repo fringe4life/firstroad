@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/style/noMagicNumbers: numbers are called in a max function */
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod/v4";
 import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
@@ -52,20 +52,24 @@ const upsertTicket = async (
       bounty: toCent(data.bounty),
       userId: session.user?.id as string,
     };
-    await prisma.ticket.upsert({
+    const ticket = await prisma.ticket.upsert({
       where: {
         id: id || "",
       },
       update: dbData,
       create: dbData,
     });
+
+    // Immediately expire cache for read-your-own-writes
+    updateTag("tickets");
+    if (ticket.id) {
+      updateTag(`ticket-${ticket.id}`);
+    }
   });
 
   if (error) {
     return fromErrorToActionState(error, formData);
   }
-
-  revalidatePath(ticketsPath);
 
   if (id) {
     setCookieByKey("toast", "Ticket updated");

@@ -1,17 +1,24 @@
 # Git Commit Message Template
 
 ## Usage
-Supply this file to the AI to generate a 140-character git commit message based on changes since the last commit.
+
+Supply this file to the AI to generate a git commit message based on changes since the last commit. For small changes, aim for 140 characters. For large changes (10+ files or 100+ lines), allow up to 300 characters. For extensive changes (40+ files or major refactoring), allow up to 450 characters.
 
 ## Format
+
 The AI should:
+
 1. Analyze the git diff to understand changes
-2. Create a concise commit message under 140 characters
-3. Use conventional commit format: `type: description`
-4. Focus on the most significant changes
-5. Use commas instead of dashes between items (per user preference)
+2. Create a concise commit message under 140 characters for small changes
+3. For large changes (10+ files or 100+ lines), allow up to 300 characters
+4. For extensive changes (40+ files or major refactoring), allow up to 450 characters
+5. Use conventional commit format: `type: description`
+6. Focus on the most significant changes
+7. Use commas instead of dashes between items (per user preference)
+8. Prioritize the most impactful changes when space is limited
 
 ## Commit Types
+
 - `feat`: New features
 - `fix`: Bug fixes
 - `refactor`: Code refactoring
@@ -24,15 +31,33 @@ The AI should:
 - `build`: Build system changes
 
 ## Examples
-- `refactor: remove duplicate metadata titles, update deps, restructure auth routes`
-- `feat: add user authentication, implement password reset flow`
-- `fix: resolve type errors, update component props, improve error handling`
+
+### Small Changes (under 140 chars)
+
+- `refactor: remove duplicate metadata titles, update deps`
+- `feat: add user authentication, implement password reset`
+- `fix: resolve type errors, update component props`
+- `fix: host van detail route css, correct container width and image sizing`
+
+### Large Changes (up to 300 chars)
+
+- `feat: implement van state system with dynamic pricing, refactor components to use GenericComponent, add discount functionality, update schema with VanState enum and discount field, create VanPrice and VanBadge components, migrate to prisma.config.ts, enhance seed data with state management, update README with new features`
+
+### Extensive Changes (up to 450 chars)
+
+- `refactor: implement DAL pattern with hasAuth helper for session injection, create MaybeServerSession type, move ticket queries to get-ticket.ts and get-tickets.ts with cached functions, update all pages and components to use hasAuth callback pattern, remove dal folder, add auth-helpers.ts with hasAuth and requireAuth functions, update ticket/comment components to inject session at call site`
 
 ## Instructions for AI
+
 1. Run `git diff` to see unstaged changes
 2. Run `git diff --cached` to see staged changes
-3. Analyze the changes and categorize them
-4. Generate a concise, descriptive commit message
-5. Ensure the message is under 140 characters
-6. Use conventional commit format with appropriate type
-7. Focus on the most impactful changes
+3. Run `git diff --stat` to see change summary
+4. Analyze the changes and categorize them
+5. Count files changed and lines modified
+6. Generate a descriptive commit message:
+   - Small changes (under 10 files, under 100 lines): aim for 140 characters
+   - Large changes (10+ files or 100+ lines): allow up to 300 characters
+   - Extensive changes (40+ files or major refactoring): allow up to 450 characters
+7. Use conventional commit format with appropriate type
+8. Focus on the most impactful changes
+9. Use commas instead of dashes between items

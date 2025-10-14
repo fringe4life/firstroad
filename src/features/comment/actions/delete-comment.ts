@@ -1,10 +1,9 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { updateTag } from "next/cache";
 import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
 import { prisma } from "@/lib/prisma";
-import { ticketEditPath } from "@/path";
 import { fromErrorToActionState, toActionState } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
 
@@ -30,9 +29,13 @@ export const deleteComment = async (commentId: string) => {
       await tx.comment.delete({
         where: { id: commentId },
       });
-    });
 
-    revalidatePath(ticketEditPath(comment.ticketId));
+      // Immediately expire cache for read-your-own-writes
+      updateTag("tickets");
+      updateTag(`ticket-${comment.ticketId}`);
+      updateTag(`comments-${comment.ticketId}`);
+      updateTag(`comment-${commentId}`);
+    });
 
     return toActionState("Comment deleted successfully", "SUCCESS");
   });
