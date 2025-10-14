@@ -3,7 +3,7 @@
 import { unstable_cacheTag as cacheTag } from "next/cache";
 import type { SearchParams } from "nuqs/server";
 import type { MaybeServerSession } from "@/features/auth/types";
-import { isOwner } from "@/features/auth/utils/owner";
+import { withOwnership } from "@/features/auth/utils/owner";
 import { searchParamsCache } from "@/features/ticket/search-params";
 import type { BaseTicket } from "@/features/ticket/types";
 import type { PaginatedResult } from "@/features/types/pagination";
@@ -22,8 +22,9 @@ export const getAllTickets = async (
   "use cache";
   cacheTag("tickets");
 
+  const resolvedSearchParams = await searchParams;
   const { search, sortKey, sortValue, page, limit } =
-    await searchParamsCache.parse(searchParams);
+    searchParamsCache.parse(resolvedSearchParams);
 
   // Build orderBy based on sort parameter
   let orderBy: TicketOrderByWithRelationInput = {
@@ -66,10 +67,7 @@ export const getAllTickets = async (
     prisma.ticket.count({ where, orderBy }),
   ]);
 
-  const ticketsWithOwnership = tickets.map((ticket) => ({
-    ...ticket,
-    isOwner: isOwner(session, ticket),
-  }));
+  const ticketsWithOwnership = withOwnership(session, tickets);
 
   return {
     list: ticketsWithOwnership,

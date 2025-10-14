@@ -2,7 +2,7 @@
 
 import { unstable_cacheTag as cacheTag } from "next/cache";
 import type { MaybeServerSession } from "@/features/auth/types";
-import { isOwner } from "@/features/auth/utils/owner";
+import { isOwner, withOwnership } from "@/features/auth/utils/owner";
 import type { PaginationMetadata } from "@/features/types/pagination";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
@@ -60,10 +60,7 @@ export const getTicketById = async (
     : ticket.comments;
 
   // Add isOwner property to each comment
-  const commentsWithOwnership = commentsToReturn.map((comment) => ({
-    ...comment,
-    isOwner: isOwner(session, comment),
-  }));
+  const commentsWithOwnership = withOwnership(session, commentsToReturn);
 
   return {
     ...ticket,
@@ -120,10 +117,7 @@ export const getCommentsByTicketId = async (
   const commentsToReturn = hasMore ? comments.slice(0, take) : comments;
 
   // Add isOwner property to each comment
-  const commentsWithOwnership = commentsToReturn.map((comment) => ({
-    ...comment,
-    isOwner: isOwner(session, comment),
-  }));
+  const commentsWithOwnership = withOwnership(session, commentsToReturn);
 
   return {
     list: commentsWithOwnership,
