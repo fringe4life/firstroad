@@ -40,6 +40,99 @@ A full-stack collaborative platform built with Next.js 15, featuring authenticat
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 
+## ⚛️ React 19 Modern Patterns
+
+This project leverages cutting-edge React 19.2 features for optimal performance and developer experience:
+
+### Activity Component
+
+Pre-renders hidden content at lower priority for instant transitions:
+
+```tsx
+// Skeletons pre-render in background, ready before loading starts
+<Activity mode={isPending ? "visible" : "hidden"}>
+  <Skeleton />
+  <Skeleton />
+  <Skeleton />
+</Activity>
+
+// Comments component stays mounted when hidden, preserving state
+<Activity mode={isDetail ? "visible" : "hidden"}>
+  <Comments ticketId={ticketId} />
+</Activity>
+```
+
+**Benefits:**
+- Instant visual feedback on state changes
+- Preserves component state when hidden
+- Reduces perceived latency
+- Lower-priority background rendering
+
+### useEffectEvent Hook
+
+Prevents unnecessary effect re-runs by extracting non-reactive callbacks:
+
+```tsx
+// Callbacks no longer trigger effect re-synchronization
+const handleSuccess = useEffectEvent(() => {
+  onSuccess?.({ state });
+});
+
+useEffect(() => {
+  if (state.status === "SUCCESS") {
+    handleSuccess();
+  }
+}, [state]); // ✅ Callbacks not in dependencies
+```
+
+**Benefits:**
+- Fewer effect re-runs and re-renders
+- Always accesses latest callback values
+- Prevents event listener re-attachment
+- Cleaner dependency arrays
+
+### Render Props Pattern
+
+Modern alternative to `cloneElement` for explicit data flow:
+
+```tsx
+// Before: cloneElement (implicit prop injection)
+<ConfirmDialog trigger={<Button>Delete</Button>} />
+
+// After: Render props (explicit prop passing)
+<ConfirmDialog
+  trigger={({ isPending, onClick }) => (
+    <Button onClick={onClick} disabled={isPending}>
+      Delete
+    </Button>
+  )}
+/>
+```
+
+**Benefits:**
+- Explicit data flow
+- Full TypeScript support
+- Better component reusability
+- React team recommended approach
+
+### startTransition
+
+Non-blocking state updates for smoother UX:
+
+```tsx
+startTransition(() => {
+  setComments((prev) => [...prev, ...result.list]);
+  setNextCursor(result.nextCursor);
+  setHasMore(result.hasMore);
+});
+```
+
+**Benefits:**
+- UI stays responsive during updates
+- Lower priority for non-urgent updates
+- Better perceived performance
+- Avoids blocking user interactions
+
 ## 📋 Prerequisites
 
 - Node.js 18+ or Bun
