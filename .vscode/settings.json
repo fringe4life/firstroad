@@ -5,12 +5,12 @@
     "source.fixAll.biome": "explicit"
   },
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.defaultFormatter": "biomejs.biome",
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
   },
   "[markdown]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "biomejs.biome"
   },
   "markdown.validate.enabled": true,
   "[javascript]": {

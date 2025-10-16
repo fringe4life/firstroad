@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useRef, useState, useTransition } from "react";
+import { Activity, useRef, useState, useTransition } from "react";
 import { hasAuth } from "src/lib/auth-helpers";
 import { CardCompact } from "@/components/card-compact";
 import { Button } from "@/components/ui/button";
@@ -49,9 +49,11 @@ const Comments = ({ ticketId, list, metadata }: CommentsProps) => {
       const result = await hasAuth((session) =>
         getCommentsByTicketId(session, ticketId, nextCursor ?? ""),
       );
-      setComments((prev) => [...prev, ...result.list]);
-      setNextCursor(result.nextCursor ?? null);
-      setHasMore(result.hasMore);
+      startTransition(() => {
+        setComments((prev) => [...prev, ...result.list]);
+        setNextCursor(result.nextCursor ?? null);
+        setHasMore(result.hasMore);
+      });
     });
   };
 
@@ -106,14 +108,12 @@ const Comments = ({ ticketId, list, metadata }: CommentsProps) => {
             key={comment.id}
           />
         ))}
-        {isPending && (
-          <>
-            <Skeleton />
-            <Skeleton />
-            <Skeleton />
-          </>
-        )}
-        {hasMore && (
+        <Activity mode={isPending ? "visible" : "hidden"}>
+          <Skeleton />
+          <Skeleton />
+          <Skeleton />
+        </Activity>
+        <Activity mode={hasMore ? "visible" : "hidden"}>
           <div className="flex justify-center pt-2">
             <Button
               className="w-full"
@@ -124,7 +124,7 @@ const Comments = ({ ticketId, list, metadata }: CommentsProps) => {
               {isPending ? "Loading..." : "Load More Comments"}
             </Button>
           </div>
-        )}
+        </Activity>
       </div>
     </>
   );
