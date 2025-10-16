@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { unstable_cacheLife as cacheLife } from "node_modules/next/cache";
+import { cacheLife } from "node_modules/next/cache";
 import Heading from "@/components/heading";
 
 export const metadata: Metadata = {

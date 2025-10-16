@@ -1,7 +1,6 @@
 "use client";
-
-import { LucideLoaderCircle, LucideTrash } from "lucide-react";
 import { toast } from "sonner";
+import ConfirmDeleteIcon from "@/components/confirm-delete-icon";
 import useConfirmDialog from "@/components/confirm-dialog";
 import {
   DropdownMenu,
@@ -23,20 +22,15 @@ type TicketMoreMenuProps = {
 };
 
 const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
-  // const deleteButton = <ConfirmDialog action={} trigger={} />;
-
   const [getDeleteButton, deleteDialog, isPending] = useConfirmDialog({
     action: deleteTicket.bind(null, ticket.id),
-    trigger: (isPendingArg: boolean) => (
+    trigger: ({ isPending: isPendingArg, onClick }) => (
       <DropdownMenuItem
         className="flex justify-between px-4"
         disabled={isPendingArg}
+        onClick={onClick}
       >
-        {isPendingArg ? (
-          <LucideLoaderCircle className="aspect-square w-4 animate-spin" />
-        ) : (
-          <LucideTrash className="aspect-square w-4" />
-        )}
+        <ConfirmDeleteIcon isPending={isPendingArg} />
         <span>Delete</span>
       </DropdownMenuItem>
     ),

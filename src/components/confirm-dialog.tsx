@@ -1,6 +1,6 @@
 "use client";
 
-import { cloneElement, useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useEffectEvent, useState } from "react";
 import Form from "@/components/form/form";
 import SubmitButton from "@/components/form/submit-button";
 import {
@@ -17,7 +17,10 @@ import { type ActionState, EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 
 type UseConfirmDialogProps = {
   action: () => Promise<ActionState>;
-  trigger: React.ReactElement | ((isPending: boolean) => React.ReactElement);
+  trigger: (props: {
+    isPending: boolean;
+    onClick: () => void;
+  }) => React.ReactElement;
   title?: string;
   description?: string;
   closeOnSubmit?: boolean; // Optional flag to close dialog immediately on submit
@@ -38,13 +41,10 @@ const useConfirmDialog = ({
 }: UseConfirmDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  // Handle both React element and callback function triggers
+  // Render prop pattern: pass onClick and isPending to the trigger function
   const getTriggerElement = (isPendingArg: boolean) => {
-    const triggerElement =
-      typeof trigger === "function" ? trigger(isPendingArg) : trigger;
-    return cloneElement(triggerElement, {
-      onClick: () => setIsOpen((prevOpen) => !prevOpen),
-    } as React.HTMLAttributes<HTMLElement>);
+    const handleClick = () => setIsOpen((prevOpen) => !prevOpen);
+    return trigger({ isPending: isPendingArg, onClick: handleClick });
   };
 
   const handleSuccess = (result: ActionState) => {
@@ -60,14 +60,20 @@ const useConfirmDialog = ({
     EMPTY_ACTION_STATE,
   );
 
+  // Wrap callback in useEffectEvent to prevent effect re-runs when it changes
+  const handleIsPending = useEffectEvent((pending: boolean) => {
+    onIsPending?.(pending);
+  });
+
   // Track isPending changes and call onIsPending callback
+  // biome-ignore lint/correctness/useExhaustiveDependencies: useEffectEvent functions don't need to be in dependency array
   useEffect(() => {
     // Close dialog when action starts (isPending becomes true) if closeOnSubmit is true
     if (isPending && closeOnSubmit) {
       setIsOpen(false);
     }
 
-    onIsPending?.(isPending);
+    handleIsPending(isPending);
 
     // Cleanup function to handle component unmount (e.g., redirects)
     return () => {
@@ -75,10 +81,10 @@ const useConfirmDialog = ({
       // This prevents memory leaks and ensures toasts are properly dismissed
       if (isPending) {
         // Call onIsPending with false to signal cleanup
-        onIsPending?.(false);
+        handleIsPending(false);
       }
     };
-  }, [isPending, onIsPending, closeOnSubmit]);
+  }, [isPending, closeOnSubmit]); // ✅ onIsPending no longer in dependencies
 
   const dialog = (
     <AlertDialog onOpenChange={setIsOpen} open={isOpen}>

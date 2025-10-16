@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useEffectEvent, useRef } from "react";
 import type { ActionState } from "../../../utils/to-action-state";
 
 type onArgs = {
@@ -18,16 +18,27 @@ const useActionFeedback = (
 ) => {
   const prevTimeStamp = useRef(state.timestamp);
   const isNewAction = prevTimeStamp.current !== state.timestamp;
+
+  // Wrap callbacks in useEffectEvent to prevent effect re-runs when they change
+  const handleSuccess = useEffectEvent(() => {
+    onSuccess?.({ state });
+  });
+
+  const handleError = useEffectEvent(() => {
+    onError?.({ state });
+  });
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: useEffect is used
   useEffect(() => {
     if (!isNewAction) {
       return;
     }
     if (state.status === "SUCCESS") {
-      onSuccess?.({ state });
+      handleSuccess();
     } else if (state.status === "ERROR") {
-      onError?.({ state });
+      handleError();
     }
     prevTimeStamp.current = state.timestamp;
-  }, [onSuccess, onError, state, isNewAction]);
+  }, [state, isNewAction]); // ✅ Callbacks no longer in dependencies
 };
 export { useActionFeedback };

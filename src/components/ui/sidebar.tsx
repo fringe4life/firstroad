@@ -101,7 +101,13 @@ function SidebarProvider({
     [isMobile, setOpen],
   );
 
+  // Wrap toggleSidebar in useEffectEvent to prevent event listener re-attachment
+  const handleToggleSidebar = React.useEffectEvent(() => {
+    toggleSidebar();
+  });
+
   // Adds a keyboard shortcut to toggle the sidebar.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: useEffectEvent functions don't need to be in dependency array
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (
@@ -109,13 +115,13 @@ function SidebarProvider({
         (event.metaKey || event.ctrlKey)
       ) {
         event.preventDefault();
-        toggleSidebar();
+        handleToggleSidebar();
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [toggleSidebar]);
+  }, []); // ✅ toggleSidebar no longer in dependencies
 
   // We add a state so that we can do data-state="expanded" or "collapsed".
   // This makes it easier to style the sidebar with Tailwind classes.
