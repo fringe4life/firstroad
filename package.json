@@ -70,7 +70,7 @@
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.1",
     "@types/ws": "^8.18.1",
-    "@typescript/native-preview": "^7.0.0-dev.20251016.1",
+    "@typescript/native-preview": "^7.0.0-dev.20251017.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.4",
     "prisma": "^6.17.1",

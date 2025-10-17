@@ -17,14 +17,9 @@ import { getTicketById } from "@/features/ticket/queries/get-ticket";
 import { homePath, ticketPath } from "@/path";
 import { parseTicketRoute } from "@/utils/parse-ticket-route";
 
-type TicketsPageProps = {
-  params: Promise<{ ticketId?: string[] }>;
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-};
-
 export async function generateMetadata({
   params,
-}: TicketsPageProps): Promise<Metadata> {
+}: PageProps<"/tickets/[[...ticketId]]">): Promise<Metadata> {
   const { isListView, isEditView, ticketId } = await parseTicketRoute(params);
 
   // List view metadata
@@ -154,7 +149,7 @@ function TicketListView({
 export default async function TicketsPage({
   params,
   searchParams,
-}: TicketsPageProps) {
+}: PageProps<"/tickets/[[...ticketId]]">) {
   await connection();
 
   // Parse the route to determine active view (cached to avoid duplicate await)
@@ -163,7 +158,12 @@ export default async function TicketsPage({
 
   return (
     <div className="flex flex-1 flex-col gap-y-8">
-      <ViewTransition>
+      <ViewTransition
+        default={undefined}
+        enter="slide-up"
+        exit="slide-down"
+        name={`${ticketId ?? ""}`}
+      >
         {/* List view - visible when no ticketId */}
         <Suspense fallback={<Spinner />}>
           <Activity mode={isListView ? "visible" : "hidden"}>
@@ -172,6 +172,7 @@ export default async function TicketsPage({
         </Suspense>
 
         {/* Detail view - pre-renders in background, visible when ticketId without edit */}
+
         <Suspense fallback={<Spinner />}>
           <Activity mode={isDetailView ? "visible" : "hidden"}>
             <TicketDetail ticketId={ticketId ?? ""} />

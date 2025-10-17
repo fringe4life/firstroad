@@ -17,7 +17,7 @@ export type SortOption = {
 
 export type SortObject = Omit<SortOption, "label">;
 type SortSelectProps = {
-  options: SortOption[];
+  options: readonly SortOption[];
   value: SortObject;
   onValueChange: (sort: SortObject) => void;
 };

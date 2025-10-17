@@ -9,7 +9,7 @@ import type { Prisma } from "@/generated/prisma/client";
 import { options as sortOptions, sortParser } from "../search-params";
 
 type TicketSortSelectProps = {
-  options: SortOption[];
+  options: readonly SortOption[];
 };
 
 const TicketSortSelect = ({ options }: TicketSortSelectProps) => {
