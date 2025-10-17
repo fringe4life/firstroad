@@ -114,13 +114,27 @@ export const auth = betterAuth({
     enabled: true,
     sendResetPassword: async ({ user, url }, _request) => {
       // Extract the token from the URL and construct a dynamic route URL
-      const urlObj = new URL(url);
-      const tokenParam = urlObj.searchParams.get("token");
       const baseUrl =
         process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-      const resetUrl = tokenParam
-        ? `${baseUrl}/reset-password/${tokenParam}`
-        : url;
+
+      // Parse URL with base URL to handle relative paths
+      const urlObj = new URL(url, baseUrl);
+
+      // Try to extract token from query params first, then from pathname
+      let token = urlObj.searchParams.get("token");
+      if (!token) {
+        // Extract token from pathname like /reset-password/TOKEN
+        const pathParts = urlObj.pathname.split("/");
+        token = pathParts.at(-1) || null;
+      }
+
+      // Ensure we have a valid token
+      if (!token) {
+        throw new Error("Password reset token not found in URL");
+      }
+
+      // Always construct absolute URL for email
+      const resetUrl = `${baseUrl}/reset-password/${token}`;
 
       // Trigger Inngest event to handle password reset email asynchronously
       await inngest.send({
@@ -136,44 +150,43 @@ export const auth = betterAuth({
     resetPasswordTokenExpiresIn: 3600, // 1 hour
   },
 
-  // emailVerification: {
-  //   sendVerificationEmail: async ({ user, url }, _request) => {
-  //     await sendEmail({
-  //       to: user.email,
-  //       subject: "Verify your email address",
-  //       html: `
-  //         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-  //           <h2 style="color: #333;">Verify Your Email Address</h2>
-  //           <p>Hello,</p>
-  //           <p>Please verify your email address by clicking the button below:</p>
-  //           <div style="text-align: center; margin: 30px 0;">
-  //             <a href="${url}"
-  //                style="background-color: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">
-  //               Verify Email
-  //             </a>
-  //           </div>
-  //           <p>If you didn't create an account, you can safely ignore this email.</p>
-  //           <p>Best regards,<br>Your App Team</p>
-  //         </div>
-  //       `,
-  //       text: `
-  //         Verify Your Email Address
+  emailVerification: {
+    sendVerificationEmail: async ({ user, url }, _request) => {
+      // Extract the token from the URL and construct a dynamic verification URL
+      const baseUrl =
+        process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
-  //         Hello,
+      // Parse URL with base URL to handle relative paths
+      const urlObj = new URL(url, baseUrl);
 
-  //         Please verify your email address by clicking the link below:
+      // Try to extract token from query params first, then from pathname
+      let token = urlObj.searchParams.get("token");
+      if (!token) {
+        // Extract token from pathname like /verify-email/TOKEN
+        const pathParts = urlObj.pathname.split("/");
+        token = pathParts.at(-1) || null;
+      }
 
-  //         ${url}
+      // Ensure we have a valid token
+      if (!token) {
+        throw new Error("Email verification token not found in URL");
+      }
 
-  //         If you didn't create an account, you can safely ignore this email.
+      // Always construct absolute URL for email
+      const verificationUrl = `${baseUrl}/verify-email?token=${token}`;
 
-  //         Best regards,
-  //         Your App Team
-  //       `,
-  //     });
-  //   },
-  //   sendOnSignUp: true,
-  //   autoSignInAfterVerification: true,
-  //   expiresIn: 3600, // 1 hour
-  // },
+      // Trigger Inngest event to handle email verification asynchronously
+      await inngest.send({
+        name: "email.verification",
+        data: {
+          email: user.email,
+          verificationUrl,
+          userName: user.name,
+        },
+      });
+    },
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
+    expiresIn: 3600, // 1 hour
+  },
 });

@@ -18,7 +18,8 @@
     "email:dev": "email dev --dir react-email-starter/emails",
     "email:build": "email build --dir react-email-starter/emails",
     "email:export": "email export --dir react-email-starter/emails",
-    "prepare": "husky"
+    "prepare": "husky",
+    "inngest": "bunx inngest-cli dev -u http://localhost:3000"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",

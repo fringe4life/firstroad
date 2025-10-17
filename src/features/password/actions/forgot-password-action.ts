@@ -22,14 +22,15 @@ const forgotPassword = async (
     const formDataObj = Object.fromEntries(formData);
     const { email } = forgotPasswordSchema.parse(formDataObj);
 
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const redirectTo = `${baseUrl}/reset-password`;
+
     // Use Better Auth's API to handle password reset
     // This will trigger the sendResetPassword callback which sends the Inngest event
     await auth.api.requestPasswordReset({
       body: {
         email,
-        redirectTo: `${
-          process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
-        }/reset-password`,
+        redirectTo,
       },
       headers: await headers(),
     });
