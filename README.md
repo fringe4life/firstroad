@@ -215,14 +215,11 @@ src/
 ├── app/                    # Next.js App Router pages
 │   ├── (auth)/            # Protected routes
 │   │   ├── tickets/       # Ticket management pages
-│   │   │   ├── @tickets/  # Parallel route for ticket list
-│   │   │   │   ├── page.tsx      # Main ticket list component
-│   │   │   │   ├── loading.tsx   # Loading state
-│   │   │   │   ├── error.tsx     # Error handling
-│   │   │   │   └── default.tsx   # Default fallback
-│   │   │   ├── [ticketId]/ # Dynamic ticket routes
-│   │   │   ├── page.tsx    # Ticket creation form
-│   │   │   └── layout.tsx  # Layout with parallel routes
+│   │   │   └── [[...ticketId]]/  # Optional catch-all route
+│   │   │       ├── page.tsx      # Unified list/detail/edit page with Activity
+│   │   │       ├── layout.tsx    # Layout wrapper
+│   │   │       ├── error.tsx     # Error boundary
+│   │   │       └── not-found.tsx # 404 page
 │   │   └── account/        # User account pages
 │   ├── (password)/         # Public auth routes
 │   │   ├── sign-in/        # Sign in page
@@ -272,37 +269,44 @@ src/
     └── seed-data/        # Database seeding data
 ```
 
-## 🔄 Parallel Routes
+## 🔄 Optional Catch-All Routes with Activity
 
-The project leverages Next.js parallel routes feature for enhanced user experience:
+The project uses Next.js optional catch-all routes `[[...ticketId]]` combined with React 19's Activity component for optimal performance:
 
-### Ticket Management Parallel Routes
-
-- **Main Route** (`/tickets`): Displays the ticket creation form and main content
-- **Parallel Route** (`@tickets`): Renders the ticket list alongside the main content
-- **Layout Integration**: Both routes are rendered simultaneously in the layout
-- **Enhanced UX**: Users can create tickets while viewing their existing tickets
-
-### Parallel Route Structure
+### Unified Tickets Route
 
 ```
-src/app/(auth)/tickets/
-├── layout.tsx           # Renders both main and parallel routes
-├── page.tsx            # Main route: ticket creation form
-├── @tickets/           # Parallel route slot
-│   ├── page.tsx        # Ticket list component
-│   ├── loading.tsx     # Loading state
-│   ├── error.tsx       # Error handling
-│   └── default.tsx     # Default fallback
-└── [ticketId]/         # Dynamic ticket routes
+/tickets              → List view (create + all tickets)
+/tickets/abc123       → Detail view (specific ticket)
+/tickets/abc123/edit  → Edit view (edit ticket)
+```
+
+All handled by a **single page component** at `tickets/[[...ticketId]]/page.tsx`
+
+### How It Works
+
+```tsx
+// All views always render, Activity controls visibility
+<ViewTransition>
+  <Activity mode={isListView ? "visible" : "hidden"}>
+    <TicketListView />
+  </Activity>
+  <Activity mode={isDetailView ? "visible" : "hidden"}>
+    <TicketDetail ticketId={id} />
+  </Activity>
+  <Activity mode={isEditView ? "visible" : "hidden"}>
+    <TicketEdit ticketId={id} />
+  </Activity>
+</ViewTransition>
 ```
 
 ### Benefits
 
-- **Simultaneous Rendering**: Both routes render at the same time
-- **Independent Loading States**: Each route can have its own loading and error states
-- **Better User Experience**: Users see both creation form and ticket list
-- **Performance**: Parallel rendering improves perceived performance
+- **Pre-rendering**: All views render in background at lower priority
+- **Instant Transitions**: No loading spinners, just pure shared element morphing
+- **State Preservation**: Components stay mounted when hidden
+- **Shared Element Transitions**: Ticket cards smoothly morph between views
+- **Clean URLs**: No query parameters needed
 
 ## 🔐 Authentication
 
@@ -536,7 +540,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Better Auth](https://better-auth.com/) - Authentication
 - [Prisma](https://www.prisma.io/) - Database ORM
 - [Tailwind CSS](https://tailwindcss.com/) - CSS framework
-- [TanStack Query](https://tanstack.com/query) - Server state management
 - [nuqs](https://nuqs.vercel.app/) - Type-safe URL search params
 - [Biome](https://biomejs.dev/) - Fast formatting and linting
+- [Ultracite](https://ultracite.ai/) - Biome rules enforcement
 - [React Compiler](https://react.dev/blog/2024/02/15/react-labs-what-we-have-been-working-on-february-2024) - Performance optimization
+- [React Email](https://react.email/) - Email templates
+- [Inngest](https://www.inngest.com/) - Background job processing

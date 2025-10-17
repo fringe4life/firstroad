@@ -1,4 +1,4 @@
-import Spinner from "@/components/spinner";
+import Spinner from "src/components/spinner";
 
 export default function TicketsLoading() {
   return <Spinner />;

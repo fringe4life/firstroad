@@ -2,12 +2,12 @@ import { RedirectToast } from "@/components/redirect-toast";
 
 export default function TicketsLayout({
   children,
-  tickets,
-}: LayoutProps<"/tickets">) {
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <>
       {children}
-      {tickets}
       <RedirectToast />
     </>
   );

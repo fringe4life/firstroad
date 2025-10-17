@@ -1,6 +1,6 @@
 import type { Route } from "next";
 
-const ticketsPath: Route = "/tickets";
+const ticketsPath: Route = "/tickets" as Route;
 
 const homePath: Route = "/";
 
