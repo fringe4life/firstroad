@@ -8,6 +8,10 @@ const emailVerificationSchema = z.object({
   userName: z.string().optional(),
 });
 
+export type EmailVerificationEventData = z.infer<
+  typeof emailVerificationSchema
+>;
+
 export const eventEmailVerification = inngest.createFunction(
   { id: "event-email-verification" },
   { event: "email.verification" },

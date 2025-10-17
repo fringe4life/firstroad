@@ -8,6 +8,8 @@ const passwordResetSchema = z.object({
   userName: z.string().optional(),
 });
 
+export type PasswordResetEventData = z.infer<typeof passwordResetSchema>;
+
 export const eventPasswordReset = inngest.createFunction(
   { id: "event-password-reset" },
   { event: "password.reset" },
