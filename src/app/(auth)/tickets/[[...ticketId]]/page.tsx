@@ -15,6 +15,7 @@ import TicketList from "@/features/ticket/components/ticket-list";
 import TicketUpsertForm from "@/features/ticket/components/ticket-upsert-form";
 import { getTicketById } from "@/features/ticket/queries/get-ticket";
 import { homePath, ticketPath } from "@/path";
+import { parseTicketRoute } from "@/utils/parse-ticket-route";
 
 type TicketsPageProps = {
   params: Promise<{ ticketId?: string[] }>;
@@ -24,10 +25,11 @@ type TicketsPageProps = {
 export async function generateMetadata({
   params,
 }: TicketsPageProps): Promise<Metadata> {
-  const { ticketId } = await params;
+  const { ticketId: ticketIdParam } = await params;
+  const { isListView, isEditView, ticketId } = parseTicketRoute(ticketIdParam);
 
-  // If no ticketId, show tickets list metadata
-  if (!ticketId || ticketId.length === 0) {
+  // List view metadata
+  if (isListView) {
     return {
       title: "My Tickets",
       description:
@@ -35,12 +37,9 @@ export async function generateMetadata({
     };
   }
 
-  // Check if this is an edit page
-  const isEdit = ticketId.length === 2 && ticketId[1] === "edit";
-
-  // Get ticket for metadata
+  // Get ticket for detail/edit metadata
   const ticket = await hasAuth((session) =>
-    getTicketById(session, ticketId[0]),
+    getTicketById(session, ticketId ?? ""),
   );
 
   if (!ticket) {
@@ -50,13 +49,15 @@ export async function generateMetadata({
     };
   }
 
-  if (isEdit) {
+  // Edit view metadata
+  if (isEditView) {
     return {
       title: `Edit ${ticket.title}`,
       description: `Edit ticket: ${ticket.title}`,
     };
   }
 
+  // Detail view metadata
   return {
     title: ticket.title,
     description:
@@ -156,15 +157,11 @@ export default async function TicketsPage({
   searchParams,
 }: TicketsPageProps) {
   await connection();
-  const { ticketId } = await params;
+  const { ticketId: ticketIdParam } = await params;
 
-  // Parse the route segments
-  const isListView = !ticketId || ticketId.length === 0;
-  const isEditView =
-    ticketId && ticketId.length === 2 && ticketId[1] === "edit";
-  const isDetailView =
-    ticketId && ticketId.length === 1 && !isEditView && !isListView;
-  const currentTicketId = ticketId && ticketId.length > 0 ? ticketId[0] : null;
+  // Parse the route to determine active view
+  const { isListView, isDetailView, isEditView, ticketId } =
+    parseTicketRoute(ticketIdParam);
 
   return (
     <div className="flex flex-1 flex-col gap-y-8">
@@ -179,14 +176,14 @@ export default async function TicketsPage({
         {/* Detail view - pre-renders in background, visible when ticketId without edit */}
         <Suspense fallback={<Spinner />}>
           <Activity mode={isDetailView ? "visible" : "hidden"}>
-            <TicketDetail ticketId={currentTicketId ?? ""} />
+            <TicketDetail ticketId={ticketId ?? ""} />
           </Activity>
         </Suspense>
 
         {/* Edit view - pre-renders in background, visible when ticketId/edit */}
         <Suspense fallback={<Spinner />}>
           <Activity mode={isEditView ? "visible" : "hidden"}>
-            <TicketEdit ticketId={currentTicketId ?? ""} />
+            <TicketEdit ticketId={ticketId ?? ""} />
           </Activity>
         </Suspense>
       </ViewTransition>
