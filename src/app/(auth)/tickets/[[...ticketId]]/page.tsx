@@ -25,8 +25,7 @@ type TicketsPageProps = {
 export async function generateMetadata({
   params,
 }: TicketsPageProps): Promise<Metadata> {
-  const { ticketId: ticketIdParam } = await params;
-  const { isListView, isEditView, ticketId } = parseTicketRoute(ticketIdParam);
+  const { isListView, isEditView, ticketId } = await parseTicketRoute(params);
 
   // List view metadata
   if (isListView) {
@@ -157,11 +156,10 @@ export default async function TicketsPage({
   searchParams,
 }: TicketsPageProps) {
   await connection();
-  const { ticketId: ticketIdParam } = await params;
 
-  // Parse the route to determine active view
+  // Parse the route to determine active view (cached to avoid duplicate await)
   const { isListView, isDetailView, isEditView, ticketId } =
-    parseTicketRoute(ticketIdParam);
+    await parseTicketRoute(params);
 
   return (
     <div className="flex flex-1 flex-col gap-y-8">

@@ -1,3 +1,5 @@
+import { cache } from "react";
+
 type TicketRouteInfo = {
   isListView: boolean;
   isDetailView: boolean;
@@ -7,31 +9,37 @@ type TicketRouteInfo = {
 
 /**
  * Parses the optional catch-all ticketId segments to determine the active view
- * @param ticketId - Optional array from [[...ticketId]] route
- * @returns Object with view states and parsed ticketId
+ * Cached to prevent duplicate awaiting of params in generateMetadata and page component
+ *
+ * @param params - Params promise from PageProps (already a Promise)
+ * @returns Promise resolving to object with view states and parsed ticketId
  *
  * @example
- * parseTicketRoute(undefined)           // { isListView: true, ... }
- * parseTicketRoute([])                  // { isListView: true, ... }
- * parseTicketRoute(['abc123'])          // { isDetailView: true, ticketId: 'abc123' }
- * parseTicketRoute(['abc123', 'edit'])  // { isEditView: true, ticketId: 'abc123' }
+ * await parseTicketRoute(params) // params with undefined → { isListView: true, ... }
+ * await parseTicketRoute(params) // params with [] → { isListView: true, ... }
+ * await parseTicketRoute(params) // params with ['abc123'] → { isDetailView: true, ticketId: 'abc123' }
+ * await parseTicketRoute(params) // params with ['abc123', 'edit'] → { isEditView: true, ticketId: 'abc123' }
  */
-export function parseTicketRoute(
-  ticketId: string[] | undefined,
-): TicketRouteInfo {
-  const isListView = !ticketId || ticketId.length === 0;
-  const isEditView = Boolean(
-    ticketId && ticketId.length === 2 && ticketId[1] === "edit",
-  );
-  const isDetailView = Boolean(
-    ticketId && ticketId.length === 1 && !isEditView && !isListView,
-  );
-  const parsedTicketId = ticketId && ticketId.length > 0 ? ticketId[0] : null;
+export const parseTicketRoute = cache(
+  async (
+    params: PageProps<"/tickets/[[...ticketId]]">["params"],
+  ): Promise<TicketRouteInfo> => {
+    const { ticketId } = await params;
 
-  return {
-    isListView,
-    isDetailView,
-    isEditView,
-    ticketId: parsedTicketId,
-  };
-}
+    const isListView = !ticketId || ticketId.length === 0;
+    const isEditView = Boolean(
+      ticketId && ticketId.length === 2 && ticketId[1] === "edit",
+    );
+    const isDetailView = Boolean(
+      ticketId && ticketId.length === 1 && !isEditView && !isListView,
+    );
+    const parsedTicketId = ticketId && ticketId.length > 0 ? ticketId[0] : null;
+
+    return {
+      isListView,
+      isDetailView,
+      isEditView,
+      ticketId: parsedTicketId,
+    };
+  },
+);
