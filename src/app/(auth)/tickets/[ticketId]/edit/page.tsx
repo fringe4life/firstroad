@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { connection } from "next/server";
 import { hasAuth } from "src/lib/auth-helpers";
 import Breadcrumbs from "@/components/breadcrumbs";
 import { CardCompact } from "@/components/card-compact";
@@ -33,6 +34,7 @@ export async function generateMetadata({
 const TicketEditPage = async ({
   params,
 }: PageProps<"/tickets/[ticketId]/edit">) => {
+  await connection(); // Prevent static generation during build time
   const param = await params;
   const ticket = await hasAuth((session) =>
     getTicketById(session, param.ticketId),
@@ -54,7 +56,7 @@ const TicketEditPage = async ({
       <Separator />
       <div className="justfy-center flex flex-1 flex-col items-center">
         <CardCompact
-          className="w-full max-w-120 animate-fade-from-top self-center"
+          className="w-full max-w-120 self-center"
           content={
             <TicketUpsertForm
               ticket={ticket}

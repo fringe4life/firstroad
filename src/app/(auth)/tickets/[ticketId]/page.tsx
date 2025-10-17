@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
-import Spinner from "src/components/spinner";
+import { ViewTransition } from "react";
 import { hasAuth } from "src/lib/auth-helpers";
 import Breadcrumbs from "@/components/breadcrumbs";
 import { Separator } from "@/components/ui/separator";
@@ -46,7 +45,7 @@ const SuspendedTicketItem = async (params: TicketItemProps) => {
         ]}
       />
       <Separator />
-      <div className="flex animate-fade-from-top justify-center">
+      <div className="flex justify-center">
         <TicketItem isDetail={true} ticket={ticket} />
       </div>
     </>
@@ -54,9 +53,9 @@ const SuspendedTicketItem = async (params: TicketItemProps) => {
 };
 
 const Ticket = (props: PageProps<"/tickets/[ticketId]">) => (
-  <Suspense fallback={<Spinner />}>
+  <ViewTransition>
     <SuspendedTicketItem ticketIdPromise={props.params} />
-  </Suspense>
+  </ViewTransition>
 );
 
 export default Ticket;

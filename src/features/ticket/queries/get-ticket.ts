@@ -1,6 +1,6 @@
 "use server";
 
-import { unstable_cacheTag as cacheTag } from "next/cache";
+import { cacheTag } from "next/cache";
 import type { MaybeServerSession } from "@/features/auth/types";
 import { isOwner, withOwnership } from "@/features/auth/utils/owner";
 import type { PaginationMetadata } from "@/features/types/pagination";

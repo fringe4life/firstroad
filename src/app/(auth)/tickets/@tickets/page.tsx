@@ -1,6 +1,5 @@
 import { connection } from "next/server";
-import { Suspense } from "react";
-import Spinner from "src/components/spinner";
+import { ViewTransition } from "react";
 import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
 import TicketList from "@/features/ticket/components/ticket-list";
 
@@ -18,9 +17,9 @@ async function AuthenticatedTicketList({
 export default function Tickets({ searchParams }: PageProps<"/tickets">) {
   return (
     <div className="flex flex-1 flex-col items-center gap-y-4">
-      <Suspense fallback={<Spinner />}>
+      <ViewTransition>
         <AuthenticatedTicketList searchParams={searchParams} />
-      </Suspense>
+      </ViewTransition>
     </div>
   );
 }

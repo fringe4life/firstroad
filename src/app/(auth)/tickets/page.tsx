@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cacheLife } from "node_modules/next/cache";
 import { CardCompact } from "@/components/card-compact";
 import Heading from "@/components/heading";
 import { upsertTicket } from "@/features/ticket/actions/upsert-ticket";
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
 // biome-ignore lint/suspicious/useAwait: for use with use cache
 const TicketsPage = async () => {
   "use cache";
+  cacheLife("days");
   return (
     <div className="flex flex-1 flex-col gap-y-8">
       <Heading description="All your tickets at one place" title="My Tickets" />

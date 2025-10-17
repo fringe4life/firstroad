@@ -1,6 +1,6 @@
 "use server";
 
-import { unstable_cacheTag as cacheTag } from "next/cache";
+import { cacheTag } from "next/cache";
 import type { SearchParams } from "nuqs/server";
 import type { MaybeServerSession } from "@/features/auth/types";
 import { withOwnership } from "@/features/auth/utils/owner";

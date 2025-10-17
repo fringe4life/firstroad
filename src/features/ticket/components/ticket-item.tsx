@@ -1,4 +1,3 @@
-"use server";
 import clsx from "clsx";
 import {
   LucideMoreVertical,
@@ -6,6 +5,7 @@ import {
   SquareArrowOutUpRight,
 } from "lucide-react";
 import Link from "next/link";
+import { ViewTransition } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -73,32 +73,34 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
       })}
     >
       <div className="flex gap-x-2">
-        <Card className="w-full overflow-hidden">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-x-2">
-              <span>{TICKET_ICONS[ticket.status]}</span>
-              <span className="truncate">{ticket.title}</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <span
-              className={clsx("whitespace-break-spaces", {
-                "line-clamp-3": !isDetail,
-              })}
-            >
-              {ticket.description}
-            </span>
-          </CardContent>
-          <CardFooter className="flex justify-between">
-            <p className="text-muted-foreground text-sm">
-              {ticket.deadline.toLocaleDateString()} by{" "}
-              {ticket.userInfo.user.name}
-            </p>
-            <p className="text-muted-foreground text-sm">
-              {toCurrencyFromCent(ticket.bounty)}
-            </p>
-          </CardFooter>
-        </Card>
+        <ViewTransition name={`ticket-card-${ticket.id}`}>
+          <Card className="w-full overflow-hidden">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-x-2">
+                <span>{TICKET_ICONS[ticket.status]}</span>
+                <span className="truncate">{ticket.title}</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <span
+                className={clsx("whitespace-break-spaces", {
+                  "line-clamp-3": !isDetail,
+                })}
+              >
+                {ticket.description}
+              </span>
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              <p className="text-muted-foreground text-sm">
+                {ticket.deadline.toLocaleDateString()} by{" "}
+                {ticket.userInfo.user.name}
+              </p>
+              <p className="text-muted-foreground text-sm">
+                {toCurrencyFromCent(ticket.bounty)}
+              </p>
+            </CardFooter>
+          </Card>
+        </ViewTransition>
 
         <div className="flex flex-col gap-y-1">
           {isDetail ? (

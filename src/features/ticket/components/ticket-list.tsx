@@ -1,6 +1,6 @@
 import { connection } from "next/server";
 import type { SearchParams } from "nuqs/server";
-import { Activity } from "react";
+import { Activity, ViewTransition } from "react";
 import { hasAuth } from "src/lib/auth-helpers";
 import Placeholder from "@/components/placeholder";
 import TicketItem from "@/features/ticket/components/ticket-item";
@@ -42,7 +42,9 @@ const TicketList = async ({ userId, searchParams }: TicketListProps) => {
       </div>
       <Activity mode={hasTickets ? "visible" : "hidden"}>
         {tickets.map((ticket) => (
-          <TicketItem isDetail={false} key={ticket.id} ticket={ticket} />
+          <ViewTransition key={ticket.id} name={`ticket-card-${ticket.id}`}>
+            <TicketItem isDetail={false} ticket={ticket} />
+          </ViewTransition>
         ))}
       </Activity>
       <Activity mode={hasTickets ? "hidden" : "visible"}>

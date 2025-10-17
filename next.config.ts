@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
     turbopackFileSystemCacheForDev: true,
     turbopackFileSystemCacheForBuild: true,
     cacheComponents: true,
+    viewTransition: true,
   },
 };
 
