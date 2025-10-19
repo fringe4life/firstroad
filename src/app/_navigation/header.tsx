@@ -1,16 +1,18 @@
 import { Kanban } from "lucide-react";
+import { cacheLife } from "next/cache";
 import Link from "next/link";
 import { Suspense } from "react";
-import Spinner from "@/components/spinner";
 import { ThemeSwitcher } from "@/components/theme/theme-switcher";
 import { buttonVariants } from "@/components/ui/button";
 import { homePath } from "@/path";
+import AuthNavSkeleton from "./auth-nav-skeleton";
 import MobileMenuButton from "./mobile-menu-button";
 import AuthNav from "./sidebar/components/auth-nav";
 
 // biome-ignore lint/suspicious/useAwait: "needed for 'use cache'"
 const HeaderContent = async () => {
   "use cache";
+  cacheLife("weeks");
   return (
     <div className="flex items-center gap-x-2">
       <MobileMenuButton />
@@ -30,7 +32,7 @@ const Header = () => (
     <HeaderContent />
     <div className="hidden items-center gap-x-1 md:flex">
       <ThemeSwitcher />
-      <Suspense fallback={<Spinner />}>
+      <Suspense fallback={<AuthNavSkeleton />}>
         <AuthNav />
       </Suspense>
     </div>

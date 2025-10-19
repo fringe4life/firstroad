@@ -26,23 +26,20 @@ const SuspendResetPasswordForm = async ({
 const ResetPasswordPage = ({
   params,
 }: PageProps<"/reset-password/[token]">) => (
-  <div className="justfy-center flex flex-1 flex-col items-center">
-    <CardCompact
-      className="w-full max-w-120 animate-fade-from-top self-center"
-      content={
-        <Suspense fallback={<Spinner />}>
-          <SuspendResetPasswordForm tokenPromise={params} />
-        </Suspense>
-      }
-      description="Enter your new password below"
-      footer={
-        <Link className="text-muted-foreground text-sm" href={signInPath}>
-          Back to Sign In
-        </Link>
-      }
-      title="Reset Password"
-    />
-  </div>
+  <CardCompact
+    content={
+      <Suspense fallback={<Spinner />}>
+        <SuspendResetPasswordForm tokenPromise={params} />
+      </Suspense>
+    }
+    description="Enter your new password below"
+    footer={
+      <Link className="text-muted-foreground text-sm" href={signInPath}>
+        Back to Sign In
+      </Link>
+    }
+    title="Reset Password"
+  />
 );
 
 export default ResetPasswordPage;

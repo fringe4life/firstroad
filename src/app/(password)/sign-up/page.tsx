@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cacheLife } from "next/cache";
 import Link from "next/link";
 import { CardCompact } from "@/components/card-compact";
 import { signup } from "@/features/password/actions/signup-action";
@@ -14,20 +15,18 @@ export const metadata: Metadata = {
 // biome-ignore lint/suspicious/useAwait: for use with use cache
 const SignUpPage = async () => {
   "use cache";
+  cacheLife("max");
   return (
-    <div className="justfy-center flex flex-1 flex-col items-center">
-      <CardCompact
-        className="w-full max-w-120 animate-fade-from-top self-center"
-        content={<SignUpForm signupAction={signup} />}
-        description="Create an accout to get started"
-        footer={
-          <Link className="text-muted-foreground text-sm" href={signInPath}>
-            Have an account? sign in here
-          </Link>
-        }
-        title="Sign Up"
-      />
-    </div>
+    <CardCompact
+      content={<SignUpForm signupAction={signup} />}
+      description="Create an accout to get started"
+      footer={
+        <Link className="text-muted-foreground text-sm" href={signInPath}>
+          Have an account? sign in here
+        </Link>
+      }
+      title="Sign Up"
+    />
   );
 };
 

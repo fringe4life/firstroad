@@ -8,6 +8,7 @@ import Header from "@/app/_navigation/header";
 import Sidebar from "@/app/_navigation/sidebar/components/sidebar";
 import { MobileSidebarProvider } from "@/app/_navigation/sidebar/context";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import { SidebarSkeleton } from "./_navigation/sidebar/components/sidebar-skeleton";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -42,23 +43,23 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children, tickets }: LayoutProps<"/">) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html data-scroll-behavior="smooth" lang="en" suppressHydrationWarning>
       <body className={`${inter.className} antialiased`}>
         <NuqsAdapter>
           <ThemeProvider>
             <MobileSidebarProvider>
               <Header />
-              <div className="flex h-screen border-collapse overflow-hidden">
-                <Suspense fallback={null}>
+              <div className="grid h-screen border-collapse grid-flow-col grid-cols-[var(--side-width)_1fr] grid-rows-1 overflow-hidden">
+                <Suspense fallback={<SidebarSkeleton />}>
                   <Sidebar />
                 </Suspense>
-                <main className="flex min-h-screen flex-1 flex-col gap-y-4 overflow-y-auto overflow-x-hidden px-8 py-24">
+                <main className="grid min-h-screen grid-rows-[min-content_min-content_1fr] gap-y-4 overflow-y-auto overflow-x-hidden px-8 py-24 transition-transform duration-200 peer-hover/sidebar:translate-x-[calc(15rem-var(--side-width))]">
                   {children}
                   {tickets}
                 </main>
               </div>
+              <Toaster expand />
             </MobileSidebarProvider>
-            <Toaster expand />
           </ThemeProvider>
         </NuqsAdapter>
       </body>

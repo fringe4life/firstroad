@@ -111,11 +111,25 @@
   --radius-lg: var(--radius);
 
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* Layout dimensions */
+  --header-padding-y: 0.625rem;
+  --header-content-height: 2.5rem;
+  --header-border: 1px;
+  --header-height: calc(var(--header-padding-y) * 2 + var(--header-content-height) + var(--header-border));
+  --sidebar-height: calc(100svh - var(--header-height));
+  
+  --side-width: 4.875rem;
+  --auth-nav-width: 10.5rem;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  }
+  html {
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
   }
   body {
     @apply bg-background text-foreground;

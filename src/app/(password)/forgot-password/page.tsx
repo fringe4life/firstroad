@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { cacheLife } from "next/cache";
 import Link from "next/link";
 import { CardCompact } from "@/components/card-compact";
+import { forgotPassword } from "@/features/password/actions/forgot-password-action";
 import ForgotPasswordForm from "@/features/password/components/forgot-password-form";
 import { signInPath } from "@/path";
 
@@ -10,11 +12,14 @@ export const metadata: Metadata = {
     "Reset your First Road account password. Enter your email address and we'll send you a reset link.",
 };
 
-const ForgotPasswordPage = () => (
-  <div className="justfy-center flex flex-1 flex-col items-center">
+// biome-ignore lint/suspicious/useAwait: for use with use cache
+const ForgotPasswordPage = async () => {
+  "use cache";
+  cacheLife("max");
+
+  return (
     <CardCompact
-      className="w-full max-w-120 animate-fade-from-top self-center"
-      content={<ForgotPasswordForm />}
+      content={<ForgotPasswordForm forgotPasswordAction={forgotPassword} />}
       description="Enter your email address and we'll send you a link to reset your password"
       footer={
         <Link className="text-muted-foreground text-sm" href={signInPath}>
@@ -23,7 +28,7 @@ const ForgotPasswordPage = () => (
       }
       title="Forgot Password"
     />
-  </div>
-);
+  );
+};
 
 export default ForgotPasswordPage;

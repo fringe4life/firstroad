@@ -6,11 +6,20 @@ import Form from "@/components/form/form";
 import SubmitButton from "@/components/form/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { forgotPassword } from "@/features/password/actions/forgot-password-action";
+import type { forgotPassword } from "@/features/password/actions/forgot-password-action";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 
-const ForgotPasswordForm = () => {
-  const [state, action] = useActionState(forgotPassword, EMPTY_ACTION_STATE);
+type ForgotPasswordFormProps = {
+  forgotPasswordAction: typeof forgotPassword;
+};
+
+const ForgotPasswordForm = ({
+  forgotPasswordAction,
+}: ForgotPasswordFormProps) => {
+  const [state, action] = useActionState(
+    forgotPasswordAction,
+    EMPTY_ACTION_STATE,
+  );
   const emailId = useId();
 
   return (
