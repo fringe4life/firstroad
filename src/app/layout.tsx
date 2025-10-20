@@ -44,7 +44,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children, tickets }: LayoutProps<"/">) {
   return (
     <html data-scroll-behavior="smooth" lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} antialiased`}>
+      <body
+        className={`${inter.className} antialiased md:[--side-width:4.875rem]`}
+      >
         <NuqsAdapter>
           <ThemeProvider>
             <MobileSidebarProvider>
@@ -53,7 +55,7 @@ export default function RootLayout({ children, tickets }: LayoutProps<"/">) {
                 <Suspense fallback={<SidebarSkeleton />}>
                   <Sidebar />
                 </Suspense>
-                <main className="grid min-h-screen grid-rows-[min-content_min-content_1fr] gap-y-4 overflow-y-auto overflow-x-hidden px-8 py-24 transition-transform duration-200 peer-hover/sidebar:translate-x-[calc(15rem-var(--side-width))]">
+                <main className="col-span-2 grid min-h-screen grid-rows-[min-content_min-content_1fr] gap-y-4 overflow-y-auto overflow-x-hidden px-8 py-24 transition-transform duration-200 peer-hover/sidebar:translate-x-[calc(15rem-var(--side-width))] md:col-span-1">
                   {children}
                   {tickets}
                 </main>

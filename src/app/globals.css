@@ -104,6 +104,32 @@
     }
   }
 
+  --animate-slide-left: --slide-left 400ms ease-out;
+
+  @keyframes --slide-left {
+    from {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  --animate-slide-right-skew: --slide-right-skew 350ms ease-in;
+
+  @keyframes --slide-right-skew {
+    from {
+      transform: translateX(0) skewX(0deg);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(100%) skewX(-8deg);
+      opacity: 0;
+    }
+  }
+
   --radius-sm: calc(var(--radius) - 4px);
 
   --radius-md: calc(var(--radius) - 2px);
@@ -119,7 +145,7 @@
   --header-height: calc(var(--header-padding-y) * 2 + var(--header-content-height) + var(--header-border));
   --sidebar-height: calc(100svh - var(--header-height));
   
-  --side-width: 4.875rem;
+  --side-width: 0;
   --auth-nav-width: 10.5rem;
 }
 
@@ -135,6 +161,7 @@
     @apply bg-background text-foreground;
   }
 }
+
 
 :root {
   color-scheme: light dark;
