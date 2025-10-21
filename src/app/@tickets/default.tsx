@@ -1,3 +1,3 @@
-export default function TicketsDefault() {
-  return null;
-}
+const TicketsDefault = () => null;
+
+export default TicketsDefault;

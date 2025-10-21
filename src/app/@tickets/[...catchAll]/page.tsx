@@ -1,3 +1,3 @@
-export default function CatchAllPage() {
-  return null;
-}
+const CatchAllPage = () => null;
+
+export default CatchAllPage;

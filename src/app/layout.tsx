@@ -41,30 +41,31 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children, tickets }: LayoutProps<"/">) {
-  return (
-    <html data-scroll-behavior="smooth" lang="en" suppressHydrationWarning>
-      <body
-        className={`${inter.className} antialiased md:[--side-width:4.875rem]`}
-      >
-        <NuqsAdapter>
-          <ThemeProvider>
-            <MobileSidebarProvider>
-              <Header />
-              <div className="grid h-screen border-collapse grid-flow-col grid-cols-[var(--side-width)_1fr] grid-rows-1 overflow-hidden">
-                <Suspense fallback={<SidebarSkeleton />}>
-                  <Sidebar />
-                </Suspense>
-                <main className="col-span-2 grid min-h-screen grid-rows-[min-content_min-content_1fr] gap-y-4 overflow-y-auto overflow-x-hidden px-8 py-24 transition-transform duration-200 peer-hover/sidebar:translate-x-[calc(15rem-var(--side-width))] md:col-span-1">
-                  {children}
-                  {tickets}
-                </main>
-              </div>
-              <Toaster expand />
-            </MobileSidebarProvider>
-          </ThemeProvider>
-        </NuqsAdapter>
-      </body>
-    </html>
-  );
-}
+const RootLayout = ({ children, tickets, auth }: LayoutProps<"/">) => (
+  <html data-scroll-behavior="smooth" lang="en" suppressHydrationWarning>
+    <body
+      className={`${inter.className} antialiased md:[--side-width:4.875rem]`}
+    >
+      <NuqsAdapter>
+        <ThemeProvider>
+          <MobileSidebarProvider>
+            <Header />
+            <div className="grid h-screen border-collapse grid-flow-col grid-cols-[var(--side-width)_1fr] grid-rows-1 overflow-hidden">
+              <Suspense fallback={<SidebarSkeleton />}>
+                <Sidebar />
+              </Suspense>
+              <main className="col-span-2 grid min-h-screen grid-rows-[min-content_min-content_1fr] gap-y-4 overflow-y-auto overflow-x-hidden px-8 py-24 transition-transform duration-200 peer-hover/sidebar:translate-x-[calc(15rem-var(--side-width))] md:col-span-1">
+                {children}
+                {tickets}
+              </main>
+            </div>
+            {auth}
+            <Toaster expand />
+          </MobileSidebarProvider>
+        </ThemeProvider>
+      </NuqsAdapter>
+    </body>
+  </html>
+);
+
+export default RootLayout;

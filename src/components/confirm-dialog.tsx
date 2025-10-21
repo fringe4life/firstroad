@@ -1,18 +1,18 @@
 "use client";
 
-import { useActionState, useEffect, useEffectEvent, useState } from "react";
+import { useActionState, useEffect, useEffectEvent } from "react";
 import Form from "@/components/form/form";
 import SubmitButton from "@/components/form/submit-button";
+import { Button } from "@/components/ui/button";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { useToggle } from "@/hooks/use-toggle";
 import { type ActionState, EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 
 type UseConfirmDialogProps = {
@@ -39,13 +39,11 @@ const useConfirmDialog = ({
   onError,
   onIsPending,
 }: UseConfirmDialogProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const { isOpen, toggle, close } = useToggle(false);
 
   // Render prop pattern: pass onClick and isPending to the trigger function
-  const getTriggerElement = (isPendingArg: boolean) => {
-    const handleClick = () => setIsOpen((prevOpen) => !prevOpen);
-    return trigger({ isPending: isPendingArg, onClick: handleClick });
-  };
+  const getTriggerElement = (isPendingArg: boolean) =>
+    trigger({ isPending: isPendingArg, onClick: toggle });
 
   const handleSuccess = (result: ActionState) => {
     onSuccess?.(result);
@@ -70,7 +68,7 @@ const useConfirmDialog = ({
   useEffect(() => {
     // Close dialog when action starts (isPending becomes true) if closeOnSubmit is true
     if (isPending && closeOnSubmit) {
-      setIsOpen(false);
+      close();
     }
 
     handleIsPending(isPending);
@@ -87,27 +85,27 @@ const useConfirmDialog = ({
   }, [isPending, closeOnSubmit]); // ✅ onIsPending no longer in dependencies
 
   const dialog = (
-    <AlertDialog onOpenChange={setIsOpen} open={isOpen}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>{title}</AlertDialogTitle>
-          <AlertDialogDescription>{description}</AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction asChild>
-            <Form
-              action={formAction}
-              onErrorState={handleError}
-              onSuccessState={handleSuccess}
-              state={actionState}
-            >
-              <SubmitButton label="Confirm" />
-            </Form>
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <Dialog onOpenChange={close} open={isOpen}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button onClick={close} variant="outline">
+            Cancel
+          </Button>
+          <Form
+            action={formAction}
+            onErrorState={handleError}
+            onSuccessState={handleSuccess}
+            state={actionState}
+          >
+            <SubmitButton label="Confirm" />
+          </Form>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 
   // Return a function that takes isPending to render the trigger, and the dialog

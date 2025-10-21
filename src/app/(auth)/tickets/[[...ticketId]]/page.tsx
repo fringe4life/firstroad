@@ -133,18 +133,16 @@ async function TicketCreationForm() {
   );
 }
 
-function TicketListView({
+const TicketListView = ({
   searchParams,
 }: {
   searchParams: PageProps<"/tickets/[[...ticketId]]">["searchParams"];
-}) {
-  return (
-    <>
-      <TicketCreationForm />
-      <TicketList searchParams={searchParams} />
-    </>
-  );
-}
+}) => (
+  <>
+    <TicketCreationForm />
+    <TicketList searchParams={searchParams} />
+  </>
+);
 
 export default async function TicketsPage({
   params,

@@ -2,12 +2,12 @@
 
 import Placeholder from "@/components/placeholder";
 
-export default function TicketError({
+const TicketError = ({
   error: _error,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
-}) {
+}) => {
   // Log error for debugging in development
   if (process.env.NODE_ENV === "development") {
     // biome-ignore lint/suspicious/noConsole: just for debugging
@@ -15,4 +15,6 @@ export default function TicketError({
   }
 
   return <Placeholder label={"please try again later"} />;
-}
+};
+
+export default TicketError;
