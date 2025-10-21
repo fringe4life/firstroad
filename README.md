@@ -1,6 +1,23 @@
 # First Road - A Collaborative Ticket Management Platform
 
-A full-stack collaborative platform built with Next.js 15, featuring authentication, real-time updates, and a modern UI. Users can create, manage, and track tickets with comments and collaboration features.
+<div align="center">
+
+[![Next.js](https://img.shields.io/badge/Next.js-16.0.0-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.2.0-61DAFB?logo=react&logoColor=white)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Prisma](https://img.shields.io/badge/Prisma-6.17.1-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
+[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.3.28-000000)](https://better-auth.com/)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.15-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Biome](https://img.shields.io/badge/Biome-2.2.6-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-5.6.4-000000)](https://ultracite.dev/)
+[![nuqs](https://img.shields.io/badge/nuqs-2.7.2-000000)](https://nuqs.47ng.com/)
+[![Zod](https://img.shields.io/badge/Zod-4.1.12-3E67B1?logo=zod&logoColor=white)](https://zod.dev/)
+[![Inngest](https://img.shields.io/badge/Inngest-3.44.3-000000)](https://www.inngest.com/)
+[![Resend](https://img.shields.io/badge/Resend-6.2.0-000000)](https://resend.com/)
+
+</div>
+
+A full-stack collaborative platform built with Next.js 16, featuring authentication, real-time updates, and a modern UI. Users can create, manage, and track tickets with comments and collaboration features.
 
 ## 🚀 Features
 
@@ -222,16 +239,27 @@ src/
 │   │   │       └── not-found.tsx # 404 page
 │   │   └── account/        # User account pages
 │   ├── (password)/         # Public auth routes
-│   │   ├── sign-in/        # Sign in page
-│   │   ├── sign-up/        # Sign up page
+│   │   ├── sign-in/        # Sign in page (CardCompact)
+│   │   ├── sign-up/        # Sign up page (CardCompact)
 │   │   ├── forgot-password/ # Password reset request
 │   │   ├── reset-password/  # Password reset confirmation
 │   │   └── verify-email/   # Email verification
+│   ├── @auth/              # Parallel route slot for auth modals
+│   │   ├── (.)sign-in/     # Intercepted sign-in modal
+│   │   ├── (.)sign-up/     # Intercepted sign-up modal
+│   │   ├── (.)forgot-password/ # Intercepted forgot-password modal
+│   │   ├── [...catchAll]/  # Catch-all for closing modals
+│   │   └── default.tsx     # Default null state
+│   ├── @tickets/           # Parallel route slot for tickets
+│   │   ├── page.tsx        # Tickets list view
+│   │   ├── [...catchAll]/  # Catch-all route
+│   │   ├── default.tsx     # Default state
+│   │   ├── error.tsx       # Error boundary
+│   │   └── loading.tsx     # Loading state
 │   ├── api/                # API routes
 │   ├── _navigation/        # Navigation components
-│   │   ├── ppr/           # PPR navigation components
 │   │   └── sidebar/        # Sidebar components
-│   └── _providers/         # React providers
+│   └── layout.tsx          # Root layout with parallel slots
 ├── components/             # Reusable UI components
 │   ├── ui/                # shadcn/ui components
 │   ├── form/              # Form components
@@ -247,6 +275,10 @@ src/
 │   │   ├── queries/       # Data queries with "use cache"
 │   ├── comment/           # Comment system
 │   ├── password/          # Password reset features
+│   │   ├── components/    # Shared auth page content components
+│   │   │   ├── sign-in-page-content.tsx     # Shared between modal & page
+│   │   │   ├── sign-up-page-content.tsx     # Preserves state on refresh
+│   │   │   └── forgot-password-page-content.tsx
 │   └── types/             # Shared type definitions
 ├── lib/                   # Utility libraries
 │   ├── auth.ts           # Better Auth configuration
@@ -440,7 +472,8 @@ bunx inngest-cli dev     # Start Inngest dev server for local testing
 - **Typed Routes**: Full type safety for all routes (`typedRoutes: true`)
 - **Turbopack**: Fast bundling for development and production
 - **React Compiler**: React 19 compiler for automatic performance optimization
-- **Parallel Routes**: Enhanced routing with simultaneous route rendering
+- **Parallel Routes**: Enhanced routing with simultaneous route rendering (`@auth`, `@tickets`)
+- **Interception Routes**: Modal overlays with graceful fallback on hard refresh
 - **Client Segment Cache**: Improved caching for better performance
 - **"use cache" Directive**: Function-level caching for data queries
 

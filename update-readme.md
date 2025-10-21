@@ -6,6 +6,7 @@ Provide ONLY this file in future sessions to have the AI re-scan and update `REA
 
 - Re-scan these sources: `package.json`, `env.example`, `next.config.ts`, `prisma/schema.prisma`, `prisma/seed.ts`, `prisma.config.ts`, `src/lib/env.ts`, `src/lib/prisma.ts`, `src/app/**/layout.tsx`, `src/app/**/page.tsx`.
 - Update sections in `README.md`:
+  - Tech stack badges (sync versions from `package.json` dependencies)
   - Prerequisites and Getting Started
   - Environment variables block (keep in sync with `env.example` and `src/lib/env.ts`)
   - Database setup commands (Prisma generate, db push, seed)
@@ -13,6 +14,7 @@ Provide ONLY this file in future sessions to have the AI re-scan and update `REA
   - Tech stack and configuration notes (Next.js, Turbopack, React Compiler, Neon, Resend)
   - Project structure overview
 - Keep wording concise, match existing style, do not over-explain.
+- **Badge versions**: Extract versions from `package.json` and update all badge URLs accordingly.
 
 ## Rules
 
@@ -20,6 +22,7 @@ Provide ONLY this file in future sessions to have the AI re-scan and update `REA
 - Reflect the CSS and linting standards from `biome.json` and Tailwind v4.
 - Mention `nuqs` for type-safe search params via Context7.
 - Mention centralized auth types in `src/features/auth/types.ts`.
+- Keep tech stack badges in sync with `package.json` versions (extract from dependencies).
 - Preserve existing README headings and tone, only patch relevant sections.
 - Do not change license wording.
 
