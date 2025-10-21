@@ -146,7 +146,10 @@
   --sidebar-height: calc(100svh - var(--header-height));
   
   --side-width: 0;
+  --expanded-sidebar-width: 0;
   --auth-nav-width: 10.5rem;
+  --padding-inline-main: 2rem;
+  --max-content-width: 30rem;
 }
 
 @layer base {
@@ -156,6 +159,24 @@
   html {
     scrollbar-gutter: stable;
     scrollbar-width: thin;
+    
+    /* Dynamic sidebar calculations - must run AFTER HTML class overrides */
+    --sidebar-current-width: max(var(--side-width), var(--expanded-sidebar-width));
+    
+    /* Sidebar expansion amount (how much it grows from collapsed to expanded) */
+    --sidebar-expansion: calc(var(--sidebar-current-width) - var(--side-width));
+    
+    /* Check if sidebar + main content area exceeds viewport */
+    /* Main content area = content + padding on both sides */
+    --main-content-area: calc(var(--max-content-width) + 2 * var(--padding-inline-main));
+    /* Account for scrollbar (~17px), sidebar border (1px), and safety margin (8px for rounding) */
+    --scrollbar-width: 17px;
+    --safety-margin: 8px;
+    --total-width-needed: calc(var(--sidebar-current-width) + var(--main-content-area) + var(--scrollbar-width) + var(--safety-margin) + 1px);
+    --viewport-overflow: calc(var(--total-width-needed) - 100svw);
+    
+    /* Translation: shift by overflow amount, but cap at sidebar expansion */
+    --sidebar-translation: clamp(0px, var(--viewport-overflow), var(--sidebar-expansion));
   }
   body {
     @apply bg-background text-foreground;

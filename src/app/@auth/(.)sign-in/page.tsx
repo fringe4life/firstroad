@@ -3,7 +3,7 @@ import { SignInPageContent } from "@/features/password/components/sign-in-page-c
 
 const SignInModal = () => (
   <Dialog defaultOpen>
-    <DialogContent className="sm:max-w-[480px]">
+    <DialogContent className="sm:max-w-120">
       <SignInPageContent />
     </DialogContent>
   </Dialog>

@@ -42,19 +42,22 @@ export const metadata: Metadata = {
 };
 
 const RootLayout = ({ children, tickets, auth }: LayoutProps<"/">) => (
-  <html data-scroll-behavior="smooth" lang="en" suppressHydrationWarning>
-    <body
-      className={`${inter.className} antialiased md:[--side-width:4.875rem]`}
-    >
+  <html
+    className="has-[.sidebar:focus-within]:[--expanded-sidebar-width:15rem] has-[.sidebar:hover]:[--expanded-sidebar-width:15rem] md:[--side-width:4.875rem]"
+    data-scroll-behavior="smooth"
+    lang="en"
+    suppressHydrationWarning
+  >
+    <body className={`${inter.className} antialiased`}>
       <NuqsAdapter>
         <ThemeProvider>
           <MobileSidebarProvider>
             <Header />
-            <div className="grid h-screen border-collapse grid-flow-col grid-cols-[var(--side-width)_1fr] grid-rows-1 overflow-hidden">
+            <div className="group/sidebar-parent grid h-screen border-collapse grid-flow-col grid-cols-[var(--side-width)_1fr] grid-rows-1 overflow-hidden">
               <Suspense fallback={<SidebarSkeleton />}>
                 <Sidebar />
               </Suspense>
-              <main className="col-span-2 grid min-h-screen grid-rows-[min-content_min-content_1fr] gap-y-4 overflow-y-auto overflow-x-hidden px-8 py-24 transition-transform duration-200 peer-hover/sidebar:translate-x-[calc(15rem-var(--side-width))] md:col-span-1">
+              <main className="col-span-2 grid min-h-screen grid-rows-[min-content_min-content_1fr] gap-y-4 px-(--padding-inline-main) py-24 transition-transform duration-200 group-has-[.sidebar:hover]/sidebar-parent:translate-x-(--sidebar-translation) md:col-span-1">
                 {children}
                 {tickets}
               </main>
@@ -69,3 +72,5 @@ const RootLayout = ({ children, tickets, auth }: LayoutProps<"/">) => (
 );
 
 export default RootLayout;
+
+// peer-hover/sidebar:translate-x-(--sidebar-translation)

@@ -28,7 +28,7 @@ CSS variables are parsed and applied by the browser **before React renders**. By
 Use arbitrary values to reference CSS variables:
 
 ```tsx
-<nav className="w-[var(--side-width)] h-screen" />
+<nav className="w-(--side-width) h-screen" />
 ```
 
 ### 3. Create Matching Skeleton Components
@@ -37,7 +37,7 @@ Skeletons should use the same CSS variables:
 
 ```tsx
 const SidebarSkeleton = () => (
-  <div className="w-[var(--side-width)] h-screen" />
+  <div className="w-(--side-width) h-screen" />
 );
 ```
 
@@ -68,7 +68,7 @@ const SidebarSkeleton = () => (
 ```tsx
 <nav className={cn(
   "hidden h-screen border-r md:block",
-  isOpen ? "w-60" : "w-[var(--side-width)]"
+  isOpen ? "w-60" : "w-(--side-width)"
 )} />
 ```
 

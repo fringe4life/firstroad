@@ -69,7 +69,6 @@ feat:
 ✨ Implemented password reset flow
 📧 Added email verification with React Email
 🔐 Created forgot-password action and form
-📝 Updated documentation
 ```
 
 ### Large Changes (16-30 files)
@@ -112,7 +111,7 @@ refactor:
    - Order by importance (most impactful first)
    - Keep bullet points concise and descriptive
 7. Scale based on change size:
-   - Small (1-5 files): 2-4 bullet points
-   - Medium (6-15 files): 4-6 bullet points
-   - Large (16-30 files): 6-8 bullet points
+   - Small (1-5 files): 2-3 bullet points
+   - Medium (6-15 files): 3-4 bullet points
+   - Large (16-30 files): 5-7 bullet points
    - Extensive (30+ files): 7-10 bullet points
