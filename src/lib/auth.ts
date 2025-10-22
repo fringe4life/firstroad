@@ -2,14 +2,34 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { createAuthMiddleware } from "better-auth/api";
 import { nextCookies } from "better-auth/next-js";
+import { emailOTP } from "better-auth/plugins";
 import { inngest } from "@/lib/inngest";
 import { prisma } from "@/lib/prisma";
-import { sendEmail } from "@/utils/send-email";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "postgresql" }),
 
-  plugins: [nextCookies()], // nextCookies should be the last plugin
+  plugins: [
+    emailOTP({
+      async sendVerificationOTP({ email, otp, type }) {
+        // Trigger Inngest event to handle OTP email asynchronously
+        await inngest.send({
+          name: "email.otp",
+          data: {
+            email,
+            otp,
+            type,
+            userName: undefined, // Will be populated by the event handler if needed
+          },
+        });
+      },
+      otpLength: 6,
+      expiresIn: 300, // 5 minutes
+      allowedAttempts: 5,
+      overrideDefaultEmailVerification: true, // Use OTP instead of verification links
+    }),
+    nextCookies(), // nextCookies should be the last plugin
+  ],
 
   hooks: {
     after: createAuthMiddleware(async (ctx) => {
@@ -19,51 +39,13 @@ export const auth = betterAuth({
         const user = newSession.user;
 
         try {
-          await sendEmail({
-            to: user.email,
-            subject: "Welcome to TicketBounty! 🎉",
-            html: `
-              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-                <h2 style="color: #333; text-align: center;">Welcome to TicketBounty! 🎉</h2>
-                <p>Hello ${user.name || "there"},</p>
-                <p>Thank you for joining TicketBounty! We're excited to have you on board.</p>
-                <p>Your account has been successfully created and you can now:</p>
-                <ul style="color: #555;">
-                  <li>Create and manage support tickets</li>
-                  <li>Track ticket status and updates</li>
-                  <li>Collaborate with your team</li>
-                  <li>Access all our features</li>
-                </ul>
-                <div style="text-align: center; margin: 30px 0;">
-                  <a href="${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/tickets" 
-                     style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">
-                    Get Started
-                  </a>
-                </div>
-                <p>If you have any questions or need help getting started, don't hesitate to reach out to our support team.</p>
-                <p>Best regards,<br>The TicketBounty Team</p>
-              </div>
-            `,
-            text: `
-              Welcome to TicketBounty! 🎉
-              
-              Hello ${user.name || "there"},
-              
-              Thank you for joining TicketBounty! We're excited to have you on board.
-              
-              Your account has been successfully created and you can now:
-              - Create and manage support tickets
-              - Track ticket status and updates
-              - Collaborate with your team
-              - Access all our features
-              
-              Get started: ${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/tickets
-              
-              If you have any questions or need help getting started, don't hesitate to reach out to our support team.
-              
-              Best regards,
-              The TicketBounty Team
-            `,
+          // Trigger Inngest event to handle welcome email with 2-minute delay
+          await inngest.send({
+            name: "user.welcome",
+            data: {
+              email: user.email,
+              userName: user.name,
+            },
           });
         } catch (_error) {
           // Don't throw the error to avoid breaking the sign-up flow

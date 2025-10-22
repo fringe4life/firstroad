@@ -5,7 +5,7 @@
 [![Next.js](https://img.shields.io/badge/Next.js-16.0.0-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.2.0-61DAFB?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Prisma](https://img.shields.io/badge/Prisma-6.17.1-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
+[![Prisma](https://img.shields.io/badge/Prisma-6.18.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
 [![Better Auth](https://img.shields.io/badge/Better%20Auth-1.3.28-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.15-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Biome](https://img.shields.io/badge/Biome-2.2.6-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
@@ -14,6 +14,7 @@
 [![Zod](https://img.shields.io/badge/Zod-4.1.12-3E67B1?logo=zod&logoColor=white)](https://zod.dev/)
 [![Inngest](https://img.shields.io/badge/Inngest-3.44.3-000000)](https://www.inngest.com/)
 [![Resend](https://img.shields.io/badge/Resend-6.2.2-000000)](https://resend.com/)
+[![React Email](https://img.shields.io/badge/React%20Email-4.3.1-000000)](https://react.email/)
 
 </div>
 
@@ -21,7 +22,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 
 ## 🚀 Features
 
-- **🔐 Authentication**: Secure user authentication with Better Auth (email/password)
+- **🔐 Authentication**: Secure user authentication with Better Auth (email/password + OTP)
 - **🎫 Ticket Management**: Create, edit, and manage tickets with status tracking
 - **💬 Comments System**: Add, edit, and delete comments on tickets with infinite pagination
 - **🌙 Dark Mode**: Beautiful light/dark theme with smooth transitions
@@ -32,7 +33,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **📊 Infinite Pagination**: Efficient cursor-based pagination for comments
 - **🔒 Ownership System**: Users can only edit their own tickets and comments
 - **🎯 Type Safety**: Full TypeScript support with typed routes
-- **📧 Email Features**: Password reset and email verification with React Email templates
+- **📧 Email Features**: Password reset, email verification, OTP authentication, and welcome emails with React Email templates
 - **🔄 Database Hooks**: Automatic UserInfo creation on user registration
 - **🔄 Parallel Routes**: Next.js parallel routes for enhanced user experience
 - **⚡ React Compiler**: React 19 compiler for automatic performance optimization
@@ -342,12 +343,14 @@ All handled by a **single page component** at `tickets/[[...ticketId]]/page.tsx`
 
 ## 🔐 Authentication
 
-The application uses Better Auth with email/password authentication:
+The application uses Better Auth with multiple authentication methods:
 
 - **Sign Up**: Create new accounts with email and password
-- **Sign In**: Secure login with credential validation
+- **Sign In**: Secure login with credential validation or OTP
+- **OTP Authentication**: One-time password authentication via email
 - **Password Reset**: Built-in password reset functionality
 - **Email Verification**: Automatic email verification on signup
+- **Welcome Emails**: Delayed welcome emails sent 2 minutes after signup
 - **Protected Routes**: Automatic redirection for unauthenticated users
 - **User Sessions**: Secure session management
 - **Database Hooks**: Automatic UserInfo creation on user registration
@@ -356,9 +359,11 @@ The application uses Better Auth with email/password authentication:
 
 1. **Registration**: Users sign up with email/password
 2. **Email Verification**: Verification email sent automatically
-3. **Login**: Users sign in with verified credentials
-4. **Password Reset**: Users can request password reset via email
-5. **Session Management**: Secure sessions with automatic UserInfo creation
+3. **Welcome Email**: Delayed welcome email sent 2 minutes after signup
+4. **Login**: Users sign in with verified credentials or OTP
+5. **OTP Login**: Alternative login method using one-time passwords
+6. **Password Reset**: Users can request password reset via email
+7. **Session Management**: Secure sessions with automatic UserInfo creation
 
 ### Redirect Handling
 
@@ -515,6 +520,8 @@ Inngest provides background job processing for:
 
 - Password reset emails
 - Email verification
+- OTP authentication emails
+- Welcome emails (2-minute delay)
 - Async event handling
 
 ### Type Safety
