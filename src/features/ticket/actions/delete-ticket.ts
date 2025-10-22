@@ -1,6 +1,6 @@
 "use server";
 
-import { updateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
@@ -26,11 +26,9 @@ export const deleteTicket = async (id: string) => {
       }
 
       await tx.ticket.delete({ where: { id } });
-
-      // Immediately expire cache for read-your-own-writes
-      updateTag("tickets");
-      updateTag(`ticket-${id}`);
     });
+    revalidateTag("tickets", "max");
+    revalidateTag(`ticket-${id}`, "max");
   });
 
   if (error) {

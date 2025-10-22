@@ -7,16 +7,14 @@ import type { PaginationMetadata } from "@/features/types/pagination";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 
-export const getTicketById = async (
-  session: MaybeServerSession,
-  ticketId: string,
-) => {
+// Cached database query - only the expensive part
+const getTicketFromDB = async (ticketId: string) => {
   "use cache";
   cacheTag("tickets");
   cacheTag(`ticket-${ticketId}`);
   cacheTag(`comments-${ticketId}`);
 
-  const ticket = await prisma.ticket.findUnique({
+  return await prisma.ticket.findUnique({
     where: { id: ticketId },
     include: {
       userInfo: {
@@ -47,25 +45,33 @@ export const getTicketById = async (
       },
     },
   });
+};
+
+export const getTicketById = async (
+  session: MaybeServerSession,
+  ticketId: string,
+) => {
+  // Only cache the database query
+  const ticket = await getTicketFromDB(ticketId);
 
   if (!ticket) {
     return null;
   }
 
-  // Check if there are more comments using cursor-based logic
+  // Check if there are more comments using cursor-based logic (not cached)
   const MAX_COMMENTS_PREVIEW = 3;
   const hasMore = ticket.comments.length > MAX_COMMENTS_PREVIEW;
   const commentsToReturn = hasMore
     ? ticket.comments.slice(0, MAX_COMMENTS_PREVIEW)
     : ticket.comments;
 
-  // Add isOwner property to each comment
+  // Add isOwner property to each comment (not cached - user-specific)
   const commentsWithOwnership = withOwnership(session, commentsToReturn);
 
   return {
     ...ticket,
     list: commentsWithOwnership,
-    isOwner: isOwner(session, ticket),
+    isOwner: isOwner(session, ticket), // Not cached - user-specific
     metadata: {
       count: commentsToReturn.length,
       hasNextPage: hasMore,
@@ -73,8 +79,8 @@ export const getTicketById = async (
   };
 };
 
-export const getCommentsByTicketId = async (
-  session: MaybeServerSession,
+// Cached database query - only the expensive part
+const getCommentsFromDB = async (
   ticketId: string,
   cursor?: string,
   take = 3,
@@ -84,7 +90,7 @@ export const getCommentsByTicketId = async (
   cacheTag(`ticket-${ticketId}`);
   cacheTag(`comments-${ticketId}`);
 
-  const comments = await prisma.comment.findMany({
+  return await prisma.comment.findMany({
     where: {
       ticketId,
     },
@@ -111,12 +117,22 @@ export const getCommentsByTicketId = async (
       : undefined,
     skip: cursor ? 1 : undefined, // Skip the cursor record itself
   });
+};
 
-  // Check if there are more comments
+export const getCommentsByTicketId = async (
+  session: MaybeServerSession,
+  ticketId: string,
+  cursor?: string,
+  take = 3,
+) => {
+  // Only cache the database query
+  const comments = await getCommentsFromDB(ticketId, cursor, take);
+
+  // Check if there are more comments (not cached)
   const hasMore = comments.length > take;
   const commentsToReturn = hasMore ? comments.slice(0, take) : comments;
 
-  // Add isOwner property to each comment
+  // Add isOwner property to each comment (not cached - user-specific)
   const commentsWithOwnership = withOwnership(session, commentsToReturn);
 
   return {

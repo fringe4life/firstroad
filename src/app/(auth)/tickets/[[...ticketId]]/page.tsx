@@ -17,9 +17,13 @@ import { getTicketById } from "@/features/ticket/queries/get-ticket";
 import { homePath, ticketPath } from "@/path";
 import { parseTicketRoute } from "@/utils/parse-ticket-route";
 
-export async function generateMetadata({
+type TicketIdParam = {
+  ticketId: Awaited<ReturnType<typeof parseTicketRoute>>["ticketId"];
+};
+
+export const generateMetadata = async ({
   params,
-}: PageProps<"/tickets/[[...ticketId]]">): Promise<Metadata> {
+}: PageProps<"/tickets/[[...ticketId]]">): Promise<Metadata> => {
   const { isListView, isEditView, ticketId } = await parseTicketRoute(params);
 
   // List view metadata
@@ -57,9 +61,13 @@ export async function generateMetadata({
     description:
       ticket.description || "View ticket details and collaborate with others.",
   };
-}
+};
 
-async function TicketDetail({ ticketId }: { ticketId: string }) {
+const TicketDetail = async ({ ticketId }: TicketIdParam) => {
+  if (!ticketId) {
+    return null;
+  }
+
   const ticket = await hasAuth((session) => getTicketById(session, ticketId));
 
   if (!ticket) {
@@ -80,9 +88,13 @@ async function TicketDetail({ ticketId }: { ticketId: string }) {
       </div>
     </>
   );
-}
+};
 
-async function TicketEdit({ ticketId }: { ticketId: string }) {
+const TicketEdit = async ({ ticketId }: TicketIdParam) => {
+  if (!ticketId) {
+    return null;
+  }
+
   const ticket = await hasAuth((session) => getTicketById(session, ticketId));
 
   if (!ticket?.isOwner) {
@@ -114,10 +126,10 @@ async function TicketEdit({ ticketId }: { ticketId: string }) {
       </div>
     </>
   );
-}
+};
 
 // biome-ignore lint/suspicious/useAwait: required for "use cache"
-async function TicketCreationForm() {
+const TicketCreationForm = async () => {
   "use cache";
   cacheLife("days");
   return (
@@ -131,7 +143,7 @@ async function TicketCreationForm() {
       />
     </>
   );
-}
+};
 
 const TicketListView = ({
   searchParams,
@@ -144,10 +156,10 @@ const TicketListView = ({
   </>
 );
 
-export default async function TicketsPage({
+const TicketsPage = async ({
   params,
   searchParams,
-}: PageProps<"/tickets/[[...ticketId]]">) {
+}: PageProps<"/tickets/[[...ticketId]]">) => {
   await connection();
 
   // Parse the route to determine active view (cached to avoid duplicate await)
@@ -173,17 +185,19 @@ export default async function TicketsPage({
 
         <Suspense fallback={<Spinner />}>
           <Activity mode={isDetailView ? "visible" : "hidden"}>
-            <TicketDetail ticketId={ticketId ?? ""} />
+            <TicketDetail ticketId={ticketId} />
           </Activity>
         </Suspense>
 
         {/* Edit view - pre-renders in background, visible when ticketId/edit */}
         <Suspense fallback={<Spinner />}>
           <Activity mode={isEditView ? "visible" : "hidden"}>
-            <TicketEdit ticketId={ticketId ?? ""} />
+            <TicketEdit ticketId={ticketId} />
           </Activity>
         </Suspense>
       </ViewTransition>
     </div>
   );
-}
+};
+
+export default TicketsPage;

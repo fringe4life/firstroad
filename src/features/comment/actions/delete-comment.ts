@@ -1,6 +1,6 @@
 "use server";
 
-import { updateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
 import { prisma } from "@/lib/prisma";
@@ -29,13 +29,11 @@ export const deleteComment = async (commentId: string) => {
       await tx.comment.delete({
         where: { id: commentId },
       });
-
-      // Immediately expire cache for read-your-own-writes
-      updateTag("tickets");
-      updateTag(`ticket-${comment.ticketId}`);
-      updateTag(`comments-${comment.ticketId}`);
-      updateTag(`comment-${commentId}`);
     });
+    revalidateTag("tickets", "max");
+    revalidateTag(`ticket-${comment.ticketId}`, "max");
+    revalidateTag(`comments-${comment.ticketId}`, "max");
+    revalidateTag(`comment-${commentId}`, "max");
 
     return toActionState("Comment deleted successfully", "SUCCESS");
   });

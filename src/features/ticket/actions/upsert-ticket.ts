@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/style/noMagicNumbers: numbers are called in a max function */
 "use server";
 
-import { updateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod/v4";
 import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
@@ -60,10 +60,9 @@ const upsertTicket = async (
       create: dbData,
     });
 
-    // Immediately expire cache for read-your-own-writes
-    updateTag("tickets");
+    revalidateTag("tickets", "max");
     if (ticket.id) {
-      updateTag(`ticket-${ticket.id}`);
+      revalidateTag(`ticket-${ticket.id}`, "max");
     }
   });
 

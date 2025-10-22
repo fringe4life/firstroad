@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/style/noMagicNumbers: are well explained zod schema */
 "use server";
 
-import { updateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { z } from "zod/v4";
 import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
@@ -86,12 +86,11 @@ export const upsertComment = async (
       },
     });
 
-    // Immediately expire cache for read-your-own-writes
-    updateTag("tickets");
-    updateTag(`ticket-${ticketId}`);
-    updateTag(`comments-${ticketId}`);
+    revalidateTag("tickets", "max");
+    revalidateTag(`ticket-${ticketId}`, "max");
+    revalidateTag(`comments-${ticketId}`, "max");
     if (comment.id) {
-      updateTag(`comment-${comment.id}`);
+      revalidateTag(`comment-${comment.id}`, "max");
     }
 
     // Add isOwner property to the comment

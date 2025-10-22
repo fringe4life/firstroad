@@ -14,14 +14,44 @@ import type {
 } from "@/generated/prisma/models/Ticket";
 import { prisma } from "@/lib/prisma";
 
+// Cached database query - only the expensive part
+const getTicketsFromDB = async (
+  where: TicketWhereInput,
+  orderBy: TicketOrderByWithRelationInput,
+  takeAmount: number,
+  skip: number,
+) => {
+  "use cache";
+  cacheTag("tickets");
+
+  return await prisma.$transaction([
+    prisma.ticket.findMany({
+      where,
+      include: {
+        userInfo: {
+          include: {
+            user: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy,
+      take: takeAmount,
+      skip,
+    }),
+    prisma.ticket.count({ where, orderBy }),
+  ]);
+};
+
 export const getAllTickets = async (
   session: MaybeServerSession,
   searchParams: Promise<SearchParams>,
   filterUserId?: string,
 ): Promise<PaginatedResult<BaseTicket>> => {
-  "use cache";
-  cacheTag("tickets");
-
+  // Parse search params (not cached - fast and user-specific)
   const resolvedSearchParams = await searchParams;
   const { search, sortKey, sortValue, page, limit } =
     searchParamsCache.parse(resolvedSearchParams);
@@ -46,27 +76,15 @@ export const getAllTickets = async (
   const skip = page * limit;
   const takeAmount = limit;
 
-  const [tickets, count] = await prisma.$transaction([
-    prisma.ticket.findMany({
-      where,
-      include: {
-        userInfo: {
-          include: {
-            user: {
-              select: {
-                name: true,
-              },
-            },
-          },
-        },
-      },
-      orderBy,
-      take: takeAmount,
-      skip,
-    }),
-    prisma.ticket.count({ where, orderBy }),
-  ]);
+  // Only cache the database transaction
+  const [tickets, count] = await getTicketsFromDB(
+    where,
+    orderBy,
+    takeAmount,
+    skip,
+  );
 
+  // Apply ownership logic (not cached - user-specific)
   const ticketsWithOwnership = withOwnership(session, tickets);
 
   return {

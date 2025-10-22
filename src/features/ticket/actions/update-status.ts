@@ -1,6 +1,6 @@
 "use server";
 
-import { updateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
 import type { TicketStatus } from "@/generated/prisma/enums";
@@ -30,9 +30,8 @@ export const updateStatus = async (newValue: TicketStatus, id: string) => {
         },
       });
 
-      // Immediately expire cache for read-your-own-writes
-      updateTag("tickets");
-      updateTag(`ticket-${id}`);
+      revalidateTag("tickets", "max");
+      revalidateTag(`ticket-${id}`, "max");
     });
   });
 
