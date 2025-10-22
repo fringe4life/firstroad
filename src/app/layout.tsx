@@ -57,7 +57,7 @@ const RootLayout = ({ children, tickets, auth }: LayoutProps<"/">) => (
               <Suspense fallback={<SidebarSkeleton />}>
                 <Sidebar />
               </Suspense>
-              <main className="col-span-2 grid min-h-screen grid-rows-[min-content_min-content_1fr] gap-y-4 px-(--padding-inline-main) py-24 transition-transform duration-200 group-has-[.sidebar:hover]/sidebar-parent:translate-x-(--sidebar-translation) md:col-span-1">
+              <main className="col-span-2 grid min-h-screen grid-rows-[min-content_min-content_1fr] gap-y-4 overflow-x-clip px-(--padding-inline-main) py-24 transition-transform duration-200 group-has-[.sidebar:hover]/sidebar-parent:translate-x-(--sidebar-translation) md:col-span-1">
                 {children}
                 {tickets}
               </main>

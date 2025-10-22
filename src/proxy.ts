@@ -45,5 +45,4 @@ export const config = {
     "/reset-password/:path*",
     "/verify-email",
   ],
-  runtime: "nodejs",
 };

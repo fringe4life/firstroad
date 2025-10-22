@@ -13,7 +13,7 @@
 [![nuqs](https://img.shields.io/badge/nuqs-2.7.2-000000)](https://nuqs.47ng.com/)
 [![Zod](https://img.shields.io/badge/Zod-4.1.12-3E67B1?logo=zod&logoColor=white)](https://zod.dev/)
 [![Inngest](https://img.shields.io/badge/Inngest-3.44.3-000000)](https://www.inngest.com/)
-[![Resend](https://img.shields.io/badge/Resend-6.2.0-000000)](https://resend.com/)
+[![Resend](https://img.shields.io/badge/Resend-6.2.2-000000)](https://resend.com/)
 
 </div>
 

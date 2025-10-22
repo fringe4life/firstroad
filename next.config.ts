@@ -8,7 +8,6 @@ const nextConfig: NextConfig = {
     browserDebugInfoInTerminal: true,
     clientSegmentCache: true,
     turbopackFileSystemCacheForDev: true,
-    turbopackFileSystemCacheForBuild: true,
     viewTransition: true,
   },
 };
