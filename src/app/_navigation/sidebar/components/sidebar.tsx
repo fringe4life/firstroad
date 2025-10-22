@@ -8,7 +8,7 @@ const Sidebar = () => (
     <nav
       aria-label="Main navigation"
       aria-live="polite"
-      className="sidebar group peer/sidebar z-20 mt-(--header-height) hidden h-screen w-(--sidebar-current-width) border-r px-3 py-2 transition-all duration-200 md:block"
+      className="sidebar group peer/sidebar fixed top-(--header-height) bottom-0 left-0 z-20 hidden w-(--sidebar-current-width) border-r px-3 py-2 transition-all duration-200 md:block"
     >
       <div className="space-y-2">
         <NavItems isCollapsed />

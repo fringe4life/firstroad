@@ -53,11 +53,11 @@ const RootLayout = ({ children, tickets, auth }: LayoutProps<"/">) => (
         <ThemeProvider>
           <MobileSidebarProvider>
             <Header />
-            <div className="group/sidebar-parent grid h-screen border-collapse grid-flow-col grid-cols-[var(--side-width)_1fr] grid-rows-1 overflow-hidden">
+            <div className="group/sidebar-parent grid grid-flow-col grid-cols-[var(--side-width)_1fr]">
               <Suspense fallback={<SidebarSkeleton />}>
                 <Sidebar />
               </Suspense>
-              <main className="col-span-2 grid min-h-screen grid-rows-[min-content_min-content_1fr] gap-y-4 overflow-x-clip px-(--padding-inline-main) py-24 transition-transform duration-200 group-has-[.sidebar:hover]/sidebar-parent:translate-x-(--sidebar-translation) md:col-span-1">
+              <main className="col-span-2 grid min-h-screen grid-rows-[min-content_min-content_1fr] gap-y-4 overflow-x-clip px-(--padding-inline-main) py-24 transition-transform duration-200 group-has-[.sidebar:hover]/sidebar-parent:translate-x-(--sidebar-translation) md:col-start-2">
                 {children}
                 {tickets}
               </main>
