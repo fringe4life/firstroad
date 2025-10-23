@@ -2,13 +2,11 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
-import { Suspense } from "react";
 import { Toaster } from "sonner";
 import Header from "@/app/_navigation/header";
 import Sidebar from "@/app/_navigation/sidebar/components/sidebar";
 import { MobileSidebarProvider } from "@/app/_navigation/sidebar/context";
 import { ThemeProvider } from "@/components/theme/theme-provider";
-import { SidebarSkeleton } from "./_navigation/sidebar/components/sidebar-skeleton";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -54,9 +52,7 @@ const RootLayout = ({ children, tickets, auth }: LayoutProps<"/">) => (
           <MobileSidebarProvider>
             <Header />
             <div className="group/sidebar-parent grid grid-flow-col grid-cols-[var(--side-width)_1fr]">
-              <Suspense fallback={<SidebarSkeleton />}>
-                <Sidebar />
-              </Suspense>
+              <Sidebar />
               <main className="col-span-2 grid min-h-screen grid-rows-[min-content_min-content_1fr] gap-y-4 overflow-x-clip px-(--padding-inline-main) py-24 transition-transform duration-200 group-has-[.sidebar:hover]/sidebar-parent:translate-x-(--sidebar-translation) md:col-start-2">
                 {children}
                 {tickets}

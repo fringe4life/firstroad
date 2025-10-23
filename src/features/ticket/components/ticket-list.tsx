@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import GenericComponent from "@/components/generic-component";
 import Placeholder from "@/components/placeholder";
 import type { SortOption } from "@/components/sort-select";
@@ -30,8 +31,12 @@ const TicketList = async ({ userId }: TicketListProps) => {
   return (
     <div className="grid flex-1 justify-items-center gap-y-4">
       <div className="grid w-full max-w-105 grid-flow-col grid-cols-2 gap-x-2">
-        <TicketSearchInput placeholder="Search tickets ..." />
-        <TicketSortSelect options={TICKET_SORT_OPTIONS} />
+        <Suspense>
+          <TicketSearchInput placeholder="Search tickets ..." />
+        </Suspense>
+        <Suspense>
+          <TicketSortSelect options={TICKET_SORT_OPTIONS} />
+        </Suspense>
       </div>
       {hasTickets ? (
         <GenericComponent
@@ -46,7 +51,9 @@ const TicketList = async ({ userId }: TicketListProps) => {
       )}
 
       <div className="w-full max-w-105">
-        <TicketPagination metadata={metadata} />
+        <Suspense>
+          <TicketPagination metadata={metadata} />
+        </Suspense>
       </div>
     </div>
   );
