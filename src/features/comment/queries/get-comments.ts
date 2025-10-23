@@ -1,4 +1,7 @@
+"use server";
+
 import { cacheTag } from "next/cache";
+import { connection } from "next/server";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 
@@ -9,7 +12,6 @@ const getCommentsFromDB = async (
   take = 3,
 ) => {
   "use cache";
-  cacheTag("tickets");
   cacheTag(`ticket-${ticketId}`);
   cacheTag(`comments-${ticketId}`);
 
@@ -48,6 +50,7 @@ export const getCommentsByTicketId = async (
   take = 3,
 ) => {
   // Only cache the database query
+  await connection();
   const comments = await getCommentsFromDB(ticketId, cursor, take);
 
   // Check if there are more comments (not cached)

@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import { cacheLife } from "next/cache";
-import { Suspense } from "react";
-import Spinner from "src/components/spinner";
 import { CardCompact } from "@/components/card-compact";
 import Heading from "@/components/heading";
 import { upsertTicket } from "@/features/ticket/actions/upsert-ticket";
@@ -34,9 +32,7 @@ const TicketCreationForm = async () => {
 const TicketsPage = () => (
   <div className="flex flex-1 flex-col gap-y-8">
     <TicketCreationForm />
-    <Suspense fallback={<Spinner />}>
-      <TicketList />
-    </Suspense>
+    <TicketList />
   </div>
 );
 

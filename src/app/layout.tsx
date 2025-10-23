@@ -68,5 +68,3 @@ const RootLayout = ({ children, tickets, auth }: LayoutProps<"/">) => (
 );
 
 export default RootLayout;
-
-// peer-hover/sidebar:translate-x-(--sidebar-translation)

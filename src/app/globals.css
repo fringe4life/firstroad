@@ -336,3 +336,41 @@
     }
   }
 }
+
+/* View Transitions for Shared Element Animations */
+@keyframes ticket-card-enter {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes ticket-card-exit {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.05);
+    opacity: 0;
+  }
+}
+
+/* Shared element transitions for ticket cards */
+::view-transition-old(ticket-card) {
+  animation: ticket-card-exit 0.3s ease-out;
+}
+
+::view-transition-new(ticket-card) {
+  animation: ticket-card-enter 0.3s ease-out;
+}
+
+/* Smooth transitions for ticket card shared elements */
+::view-transition-group(ticket-card) {
+  animation-duration: 0.3s;
+  animation-timing-function: ease-out;
+}

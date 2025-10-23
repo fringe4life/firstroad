@@ -36,7 +36,10 @@ const TicketItem = ({ ticket, children }: TicketItemProps) => {
     >
       <div className="flex gap-x-2">
         <ViewTransition name={`ticket-card-${ticket.id}`}>
-          <Card className="w-full overflow-hidden">
+          <Card
+            className="w-full overflow-hidden"
+            style={{ viewTransitionName: `ticket-card-${ticket.id}` }}
+          >
             <CardHeader>
               <CardTitle className="flex items-center gap-x-2">
                 <span>{TICKET_ICONS[ticket.status]}</span>

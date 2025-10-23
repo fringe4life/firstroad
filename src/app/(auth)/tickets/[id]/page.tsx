@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import Breadcrumbs from "@/components/breadcrumbs";
+import { loadMoreComments } from "@/features/comment/actions/load-more-comments";
 import CommentsServer from "@/features/comment/components/comments-server";
 import TicketItem from "@/features/ticket/components/ticket-item";
 import { getAllTicketIds } from "@/features/ticket/queries/get-all-ticket-ids";
@@ -52,7 +53,10 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[id]">) => {
       <div className="flex justify-center">
         <TicketItem ticket={ticket}>
           <Suspense fallback={<div>Loading comments...</div>}>
-            <CommentsServer ticketId={ticket.id} />
+            <CommentsServer
+              loadMoreAction={loadMoreComments}
+              ticketId={ticket.id}
+            />
           </Suspense>
         </TicketItem>
       </div>

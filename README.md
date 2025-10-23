@@ -6,7 +6,7 @@
 [![React](https://img.shields.io/badge/React-19.2.0-61DAFB?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Prisma](https://img.shields.io/badge/Prisma-6.18.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
-[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.3.28-000000)](https://better-auth.com/)
+[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.3.29-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.16-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Biome](https://img.shields.io/badge/Biome-2.2.6-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
 [![Ultracite](https://img.shields.io/badge/Ultracite-5.6.4-000000)](https://ultracite.dev/)
@@ -45,7 +45,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **Framework**: Next.js 16 (App Router) with Turbopack
 - **Language**: TypeScript 5.9 with strict type checking
 - **Database**: PostgreSQL with Prisma Client (relationJoins preview, Neon adapter)
-- **Authentication**: Better Auth 1.3+ with email/password provider
+- **Authentication**: Better Auth 1.3.29 with email/password provider
 - **Styling**: Tailwind CSS v4 with shadcn/ui components
 - **Icons**: Lucide React
 - **Forms**: React Hook Form with Zod v4 validation
@@ -295,8 +295,8 @@ src/
 │   │   ├── types.ts      # Ticket types
 │   │   └── utils/        # Ticket utilities
 │   ├── comment/          # Comment system
-│   │   ├── actions/      # Comment actions
-│   │   ├── components/   # Comment components
+│   │   ├── actions/      # Comment actions (load-more-comments, upsert-comment, delete-comment)
+│   │   ├── components/   # Comment components (comments, comment-item, time-ago)
 │   │   ├── queries/      # Comment queries
 │   │   └── types.ts      # Comment types
 │   ├── password/         # Password reset features
@@ -325,45 +325,6 @@ src/
 │   └── prisma/          # Prisma Client with queryCompiler
 └── path.ts              # Type-safe route definitions
 ```
-
-## 🔄 Optional Catch-All Routes with Activity
-
-The project uses Next.js optional catch-all routes `[[...ticketId]]` combined with React 19's Activity component for optimal performance:
-
-### Unified Tickets Route
-
-```
-/tickets              → List view (create + all tickets)
-/tickets/abc123       → Detail view (specific ticket)
-/tickets/abc123/edit  → Edit view (edit ticket)
-```
-
-All handled by a **single page component** at `tickets/[[...ticketId]]/page.tsx`
-
-### How It Works
-
-```tsx
-// All views always render, Activity controls visibility
-<ViewTransition>
-  <Activity mode={isListView ? "visible" : "hidden"}>
-    <TicketListView />
-  </Activity>
-  <Activity mode={isDetailView ? "visible" : "hidden"}>
-    <TicketDetail ticketId={id} />
-  </Activity>
-  <Activity mode={isEditView ? "visible" : "hidden"}>
-    <TicketEdit ticketId={id} />
-  </Activity>
-</ViewTransition>
-```
-
-### Benefits
-
-- **Pre-rendering**: All views render in background at lower priority
-- **Instant Transitions**: No loading spinners, just pure shared element morphing
-- **State Preservation**: Components stay mounted when hidden
-- **Shared Element Transitions**: Ticket cards smoothly morph between views
-- **Clean URLs**: No query parameters needed
 
 ## 🔐 Authentication
 

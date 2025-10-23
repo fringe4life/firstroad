@@ -1,34 +1,55 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Activity, useRef, useState, useTransition } from "react";
+import {
+  Activity,
+  startTransition,
+  useActionState,
+  useRef,
+  useState,
+} from "react";
 import { CardCompact } from "@/components/card-compact";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import type { LoadMoreState } from "@/features/comment/actions/load-more-comments";
 import CommentCreateForm from "@/features/comment/components/comment-create-form";
 import CommentItem from "@/features/comment/components/comment-item";
 import CommentOwnerButtons from "@/features/comment/components/comment-owner-buttons";
-// Removed server function import - will be passed as props
 import type { Comment } from "@/features/comment/types";
 import type { PaginatedResult } from "@/features/types/pagination";
 
 type CommentsProps = {
   ticketId: string;
-  loadMore: (cursor: string) => Promise<{
-    list: Comment[];
-    hasMore: boolean;
-    nextCursor: string | null;
-  }>;
+  loadMoreAction: (ticketId: string, cursor: string) => Promise<LoadMoreState>;
 } & PaginatedResult<Comment>;
 
-const Comments = ({ ticketId, list, metadata, loadMore }: CommentsProps) => {
+const Comments = ({
+  ticketId,
+  list,
+  metadata,
+  loadMoreAction,
+}: CommentsProps) => {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-  const [comments, setComments] = useState(list);
-  const [nextCursor, setNextCursor] = useState<string | null>(
-    metadata?.nextCursor ?? null,
+
+  // Use useActionState for the load more action with initial state
+  const [loadMoreState, loadMoreActionState, isPending] = useActionState(
+    async (prevState: LoadMoreState, formData: FormData) => {
+      const cursor = formData.get("cursor") as string;
+      const newData = await loadMoreAction(ticketId, cursor);
+
+      // Merge previous state with new data
+      return {
+        list: [...prevState.list, ...newData.list],
+        hasMore: newData.hasMore,
+        nextCursor: newData.nextCursor,
+      };
+    },
+    {
+      list,
+      hasMore: metadata?.hasNextPage ?? false,
+      nextCursor: metadata?.nextCursor ?? null,
+    },
   );
-  const [hasMore, setHasMore] = useState(metadata?.hasNextPage ?? false);
 
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editingContent, setEditingContent] = useState<string>("");
@@ -48,13 +69,10 @@ const Comments = ({ ticketId, list, metadata, loadMore }: CommentsProps) => {
   };
 
   const handleLoadMore = () => {
-    startTransition(async () => {
-      const result = await loadMore(nextCursor ?? "");
-      startTransition(() => {
-        setComments((prev) => [...prev, ...result.list]);
-        setNextCursor(result.nextCursor ?? null);
-        setHasMore(result.hasMore);
-      });
+    startTransition(() => {
+      const formData = new FormData();
+      formData.append("cursor", loadMoreState.nextCursor ?? "");
+      loadMoreActionState(formData);
     });
   };
 
@@ -87,7 +105,7 @@ const Comments = ({ ticketId, list, metadata, loadMore }: CommentsProps) => {
         title={editingCommentId ? "Edit Comment" : "Create Comment"}
       />
       <div className="grid gap-y-2">
-        {comments.map((comment) => (
+        {loadMoreState.list.map((comment) => (
           <CommentItem
             buttons={
               <CommentOwnerButtons
@@ -105,7 +123,7 @@ const Comments = ({ ticketId, list, metadata, loadMore }: CommentsProps) => {
           <Skeleton />
           <Skeleton />
         </Activity>
-        <Activity mode={hasMore ? "visible" : "hidden"}>
+        <Activity mode={loadMoreState.hasMore ? "visible" : "hidden"}>
           <div className="flex justify-center pt-2">
             <Button
               className="w-full"
