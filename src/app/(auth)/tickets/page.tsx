@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 // biome-ignore lint/suspicious/useAwait: required for "use cache"
 const TicketCreationForm = async () => {
   "use cache";
-  cacheLife("days");
+  cacheLife("weeks");
   return (
     <>
       <Heading description="All your tickets at one place" title="My Tickets" />

@@ -21,12 +21,11 @@ export const loadMoreComments = async (
       hasMore: result.hasMore,
       nextCursor: result.nextCursor,
     };
-  } catch (error) {
+  } catch {
     return {
       list: [],
       hasMore: false,
       nextCursor: null,
-      error: error instanceof Error ? error.message : "Failed to load comments",
     };
   }
 };

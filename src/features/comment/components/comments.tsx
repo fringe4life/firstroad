@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import {
   Activity,
   startTransition,
@@ -8,29 +7,39 @@ import {
   useRef,
   useState,
 } from "react";
+import GenericComponent from "src/components/generic-component";
 import { CardCompact } from "@/components/card-compact";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { LoadMoreState } from "@/features/comment/actions/load-more-comments";
+import type { deleteComment } from "@/features/comment/actions/delete-comment";
+import type {
+  LoadMoreState,
+  loadMoreComments,
+} from "@/features/comment/actions/load-more-comments";
+import type { upsertComment } from "@/features/comment/actions/upsert-comment";
 import CommentCreateForm from "@/features/comment/components/comment-create-form";
-import CommentItem from "@/features/comment/components/comment-item";
 import CommentOwnerButtons from "@/features/comment/components/comment-owner-buttons";
 import type { Comment } from "@/features/comment/types";
 import type { PaginatedResult } from "@/features/types/pagination";
+import CommentItem from "./comment-item";
 
 type CommentsProps = {
   ticketId: string;
-  loadMoreAction: (ticketId: string, cursor: string) => Promise<LoadMoreState>;
+  loadMoreAction: typeof loadMoreComments;
+  upsertCommentAction: typeof upsertComment;
+  deleteCommentAction: typeof deleteComment;
+  userId?: string;
 } & PaginatedResult<Comment>;
 
 const Comments = ({
-  ticketId,
   list,
   metadata,
+  ticketId,
   loadMoreAction,
+  upsertCommentAction,
+  // deleteCommentAction,
+  userId,
 }: CommentsProps) => {
-  const router = useRouter();
-
   // Use useActionState for the load more action with initial state
   const [loadMoreState, loadMoreActionState, isPending] = useActionState(
     async (prevState: LoadMoreState, formData: FormData) => {
@@ -76,9 +85,7 @@ const Comments = ({
     });
   };
 
-  const handleAfterMutation = () => {
-    // Refresh the page data to get updated comments from the server
-    router.refresh();
+  const handleAfterMutation = (_commentId?: string) => {
     setEditingCommentId(null);
     setEditingContent("");
   };
@@ -94,6 +101,7 @@ const Comments = ({
               onCancel={handleCancelEdit}
               onSuccess={handleAfterMutation}
               ticketId={ticketId}
+              upsertCommentAction={upsertCommentAction}
             />
           </div>
         }
@@ -105,19 +113,25 @@ const Comments = ({
         title={editingCommentId ? "Edit Comment" : "Create Comment"}
       />
       <div className="grid gap-y-2">
-        {loadMoreState.list.map((comment) => (
-          <CommentItem
-            buttons={
-              <CommentOwnerButtons
-                comment={comment}
-                onDeleteComment={handleAfterMutation}
-                onEdit={handleEdit}
-              />
-            }
-            comment={comment}
-            key={comment.id}
-          />
-        ))}
+        <GenericComponent
+          Component={CommentItem}
+          className="grid gap-y-2"
+          items={loadMoreState.list}
+          renderKey={(item) => item.id}
+          renderProps={(item) => ({
+            comment: item,
+            buttons:
+              userId === item.userInfo?.userId ? (
+                <CommentOwnerButtons
+                  comment={item}
+                  onDeleteComment={() => handleAfterMutation(item.id)}
+                  onEdit={(commentId, content) =>
+                    handleEdit(commentId, content)
+                  }
+                />
+              ) : null,
+          })}
+        />
         <Activity mode={isPending ? "visible" : "hidden"}>
           <Skeleton />
           <Skeleton />

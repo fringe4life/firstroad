@@ -6,8 +6,8 @@ import Form from "@/components/form/form";
 import SubmitButton from "@/components/form/submit-button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { upsertComment } from "@/features/comment/actions/upsert-comment";
 import { type ActionState, EMPTY_ACTION_STATE } from "@/utils/to-action-state";
+import { upsertComment } from "../actions/upsert-comment";
 
 type CommentCreateFormProps = {
   ticketId: string;
@@ -15,6 +15,7 @@ type CommentCreateFormProps = {
   initialContent?: string;
   onCancel?: () => void;
   onSuccess?: () => void;
+  upsertCommentAction: typeof upsertComment;
 };
 
 const CommentCreateForm = ({
