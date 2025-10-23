@@ -3,10 +3,10 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "sonner";
-import Header from "@/app/_navigation/header";
-import Sidebar from "@/app/_navigation/sidebar/components/sidebar";
-import { MobileSidebarProvider } from "@/app/_navigation/sidebar/context";
+import { MobileSidebarProvider } from "src/features/navigation/context/context";
+import Header from "@/components/header";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import Sidebar from "@/features/navigation/components/sidebar";
 
 const inter = Inter({
   subsets: ["latin"],

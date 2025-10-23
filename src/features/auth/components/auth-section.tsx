@@ -1,25 +1,17 @@
+import { cacheLife } from "next/cache";
 import Link from "next/link";
 import { Suspense } from "react";
-import AccountDropdown from "@/app/_navigation/account-dropwdown";
 import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { getSession } from "@/features/auth/queries/get-session";
 import { signInPath, signUpPath } from "@/path";
+import AccountDropdown from "./account-dropwdown";
 
-const AuthSectionContent = async () => {
-  const session = await getSession();
-  const user = session?.user ?? null;
-
-  if (user) {
-    return (
-      <div className="pt-4">
-        <Separator />
-        <div className="px-3 py-2">
-          <AccountDropdown user={user} />
-        </div>
-      </div>
-    );
-  }
+// Cached static shell for non-logged-in users
+// biome-ignore lint/suspicious/useAwait: needed for use cache
+const AuthSectionShell = async () => {
+  "use cache";
+  cacheLife("weeks");
 
   return (
     <div className="pt-4">
@@ -40,6 +32,24 @@ const AuthSectionContent = async () => {
       </div>
     </div>
   );
+};
+
+const AuthSectionContent = async () => {
+  const session = await getSession();
+  const user = session?.user ?? null;
+
+  if (user) {
+    return (
+      <div className="pt-4">
+        <Separator />
+        <div className="px-3 py-2">
+          <AccountDropdown user={user} />
+        </div>
+      </div>
+    );
+  }
+
+  return <AuthSectionShell />;
 };
 
 const AuthSection = () => (

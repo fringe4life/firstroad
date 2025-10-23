@@ -1,4 +1,5 @@
 import { Check, File, Pencil } from "lucide-react";
+import type { Prisma } from "@/generated/prisma/client";
 
 const TICKET_ICONS = {
   OPEN: <File />,
@@ -12,7 +13,6 @@ const TICKET_STATUS_LABELS = {
   IN_PROGRESS: "In Progress",
 } as const;
 
-export { TICKET_ICONS, TICKET_STATUS_LABELS };
-
-// Sort orders used in UI and parsers
-export const SORT_ORDERS = ["asc", "desc"] as const;
+// Sort orders used in UI and parsers - matches Prisma.SortOrder
+const SORT_ORDERS: Prisma.SortOrder[] = ["asc", "desc"] as const;
+export { TICKET_ICONS, TICKET_STATUS_LABELS, SORT_ORDERS };

@@ -5,6 +5,16 @@ Provide ONLY this file in future sessions to have the AI re-scan and update `REA
 ## What the AI will do
 
 - Re-scan these sources: `package.json`, `env.example`, `next.config.ts`, `prisma/schema.prisma`, `prisma/seed.ts`, `prisma.config.ts`, `src/lib/env.ts`, `src/lib/prisma.ts`, `src/app/**/layout.tsx`, `src/app/**/page.tsx`.
+- **Scan current folder structure** using these commands:
+  - `list_dir` on `src/` to get top-level structure
+  - `list_dir` on `src/app/` to get app router structure
+  - `list_dir` on `src/features/` to get feature modules
+  - `list_dir` on `src/components/` to get component structure
+  - `list_dir` on `src/lib/` to get utility libraries
+  - `list_dir` on `src/utils/` to get shared utilities
+  - `list_dir` on `src/generated/` to get generated files
+  - Use `glob_file_search` with patterns like `src/app/**/*.tsx` to find all page/layout files
+  - Use `glob_file_search` with patterns like `src/features/**/components/` to find component directories
 - Update sections in `README.md`:
   - Tech stack badges (sync versions from `package.json` dependencies)
   - Prerequisites and Getting Started
@@ -12,9 +22,10 @@ Provide ONLY this file in future sessions to have the AI re-scan and update `REA
   - Database setup commands (Prisma generate, db push, seed)
   - Available scripts from `package.json`
   - Tech stack and configuration notes (Next.js, Turbopack, React Compiler, Neon, Resend)
-  - Project structure overview
+  - **Project Structure section** - completely regenerate based on current folder structure
 - Keep wording concise, match existing style, do not over-explain.
 - **Badge versions**: Extract versions from `package.json` and update all badge URLs accordingly.
+- **Project Structure**: Must reflect current organization (features/, components/, navigation moved to features/navigation, etc.)
 
 ## Rules
 

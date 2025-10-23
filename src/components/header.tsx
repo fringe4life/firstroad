@@ -2,12 +2,12 @@ import { Kanban } from "lucide-react";
 import { cacheLife } from "next/cache";
 import Link from "next/link";
 import { Suspense } from "react";
+import AuthNav from "src/features/auth/components/auth-nav";
+import AuthNavSkeleton from "src/features/auth/components/auth-nav-skeleton";
 import { ThemeSwitcher } from "@/components/theme/theme-switcher";
 import { buttonVariants } from "@/components/ui/button";
+import MobileMenuButton from "@/features/navigation/components/mobile-menu-button";
 import { homePath } from "@/path";
-import AuthNavSkeleton from "./auth-nav-skeleton";
-import MobileMenuButton from "./mobile-menu-button";
-import AuthNav from "./sidebar/components/auth-nav";
 
 // Cached static shell - header wrapper and logo
 // biome-ignore lint/suspicious/useAwait: needed for use cache
@@ -30,13 +30,13 @@ const HeaderShell = async ({ children }: { children: React.ReactNode }) => {
         </Link>
       </div>
       <div className="hidden items-center gap-x-1 md:flex">
-        <Suspense fallback={<div className="size-10" />}>
+        <Suspense fallback={<div className="size-9" />}>
           <ThemeSwitcher />
         </Suspense>
         {children}
       </div>
       <div className="flex items-center gap-x-1 md:hidden">
-        <Suspense fallback={<div className="size-10" />}>
+        <Suspense fallback={<div className="size-9" />}>
           <ThemeSwitcher />
         </Suspense>
       </div>

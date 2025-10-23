@@ -1,8 +1,8 @@
 import Link from "next/link";
-import AccountDropdown from "@/app/_navigation/account-dropwdown";
 import { buttonVariants } from "@/components/ui/button";
 import { getSession } from "@/features/auth/queries/get-session";
 import { signInPath, signUpPath } from "@/path";
+import AccountDropdown from "./account-dropwdown";
 
 const AuthNav = async () => {
   const session = await getSession();

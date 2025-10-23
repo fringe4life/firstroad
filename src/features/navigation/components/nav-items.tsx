@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cloneElement } from "react";
-import { navItems } from "@/app/_navigation/sidebar/constants";
 import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { navItems } from "./constants";
 
 type NavItemsProps = {
   isCollapsed?: boolean;

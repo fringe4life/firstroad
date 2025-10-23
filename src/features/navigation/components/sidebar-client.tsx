@@ -7,7 +7,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { useMobileSidebar } from "../context";
+import { useMobileSidebar } from "../context/context";
 import { NavItems } from "./nav-items";
 
 type SidebarClientProps = {

@@ -17,9 +17,9 @@ const ThemeSwitcher = () => {
       size="icon"
       variant="outline"
     >
-      <Moon className="absolute size-4 rotate-90 scale-0 transition-transform duration-150 dark:rotate-0 dark:scale-110" />
+      <Moon className="absolute aspect-square w-4 rotate-90 scale-0 transition-transform duration-150 dark:rotate-0 dark:scale-110" />
 
-      <Sun className="size-4 rotate-0 scale-110 transition-all duration-150 dark:rotate-90 dark:scale-0" />
+      <Sun className="aspect-square w-4 rotate-0 scale-110 transition-all duration-150 dark:rotate-90 dark:scale-0" />
     </Button>
   );
 };

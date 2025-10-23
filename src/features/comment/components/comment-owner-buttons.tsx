@@ -1,4 +1,4 @@
-import { HasAuthSuspense } from "@/components/has-auth";
+import { HasAuthSuspense } from "src/features/auth/components/has-auth";
 import { isOwner } from "@/features/auth/utils/owner";
 import CommentDeleteButton from "@/features/comment/components/comment-delete-button";
 import CommentEditButton from "@/features/comment/components/comment-edit-button";

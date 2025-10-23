@@ -2,8 +2,8 @@
 
 import clsx from "clsx";
 import { Menu, X } from "lucide-react";
-import { useMobileSidebar } from "@/app/_navigation/sidebar/context";
 import { Button } from "@/components/ui/button";
+import { useMobileSidebar } from "../context/context";
 
 const MobileMenuButton = () => {
   const { isOpen, toggle } = useMobileSidebar();
@@ -31,7 +31,7 @@ const MobileMenuButton = () => {
           isOpen ? "rotate-90 scale-0" : "rotate-0 scale-110",
         )}
       />
-      <span className="sr-only">
+      <span aria-live="polite" className="sr-only">
         {isOpen ? "Close" : "Open"} navigation menu
       </span>
     </Button>

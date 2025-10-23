@@ -7,7 +7,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Prisma](https://img.shields.io/badge/Prisma-6.18.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
 [![Better Auth](https://img.shields.io/badge/Better%20Auth-1.3.28-000000)](https://better-auth.com/)
-[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.15-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.16-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Biome](https://img.shields.io/badge/Biome-2.2.6-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
 [![Ultracite](https://img.shields.io/badge/Ultracite-5.6.4-000000)](https://ultracite.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.7.2-000000)](https://nuqs.47ng.com/)
@@ -234,73 +234,96 @@ src/
 ├── app/                    # Next.js App Router pages
 │   ├── (auth)/            # Protected routes
 │   │   ├── tickets/       # Ticket management pages
-│   │   │   └── [[...ticketId]]/  # Optional catch-all route
-│   │   │       ├── page.tsx      # Unified list/detail/edit page with Activity
-│   │   │       ├── layout.tsx    # Layout wrapper
-│   │   │       ├── error.tsx     # Error boundary
-│   │   │       └── not-found.tsx # 404 page
-│   │   └── account/        # User account pages
-│   ├── (password)/         # Public auth routes
-│   │   ├── sign-in/        # Sign in page (CardCompact)
-│   │   ├── sign-up/        # Sign up page (CardCompact)
+│   │   │   ├── [id]/      # Dynamic ticket routes
+│   │   │   │   ├── edit/  # Edit ticket page
+│   │   │   │   └── page.tsx # Ticket detail page
+│   │   │   ├── page.tsx   # Tickets list page
+│   │   │   └── error.tsx  # Error boundary
+│   │   ├── account/       # User account pages
+│   │   │   ├── password/  # Change password
+│   │   │   ├── profile/   # User profile
+│   │   │   └── _components/ # Account components
+│   │   └── layout.tsx     # Auth layout
+│   ├── (password)/        # Public auth routes
+│   │   ├── sign-in/       # Sign in page
+│   │   ├── sign-up/       # Sign up page
 │   │   ├── forgot-password/ # Password reset request
-│   │   ├── reset-password/  # Password reset confirmation
-│   │   └── verify-email/   # Email verification
-│   ├── @auth/              # Parallel route slot for auth modals
-│   │   ├── (.)sign-in/     # Intercepted sign-in modal
-│   │   ├── (.)sign-up/     # Intercepted sign-up modal
+│   │   ├── reset-password/ # Password reset confirmation
+│   │   ├── verify-email/  # Email verification
+│   │   └── layout.tsx     # Password layout
+│   ├── @auth/             # Parallel route slot for auth modals
+│   │   ├── (.)sign-in/    # Intercepted sign-in modal
+│   │   ├── (.)sign-up/    # Intercepted sign-up modal
 │   │   ├── (.)forgot-password/ # Intercepted forgot-password modal
-│   │   ├── [...catchAll]/  # Catch-all for closing modals
-│   │   └── default.tsx     # Default null state
-│   ├── @tickets/           # Parallel route slot for tickets
-│   │   ├── page.tsx        # Tickets list view
-│   │   ├── [...catchAll]/  # Catch-all route
-│   │   ├── default.tsx     # Default state
-│   │   ├── error.tsx       # Error boundary
-│   │   └── loading.tsx     # Loading state
-│   ├── api/                # API routes
-│   ├── _navigation/        # Navigation components
-│   │   └── sidebar/        # Sidebar components
-│   └── layout.tsx          # Root layout with parallel slots
-├── components/             # Reusable UI components
-│   ├── ui/                # shadcn/ui components
-│   ├── form/              # Form components
-│   └── theme/             # Theme configuration
-├── features/              # Feature-based modules
-│   ├── auth/              # Authentication logic
-│   │   ├── actions/       # Server actions
-│   │   ├── components/    # Auth components
-│   │   ├── queries/       # Server-side queries (getSession)
-│   │   ├── types.ts       # Centralized auth types (MaybeServerSession)
-│   │   └── utils/         # Auth utilities (isOwner)
-│   ├── ticket/            # Ticket management
-│   │   ├── queries/       # Data queries with "use cache"
-│   ├── comment/           # Comment system
-│   ├── password/          # Password reset features
-│   │   ├── components/    # Shared auth page content components
-│   │   │   ├── sign-in-page-content.tsx     # Shared between modal & page
-│   │   │   ├── sign-up-page-content.tsx     # Preserves state on refresh
-│   │   │   └── forgot-password-page-content.tsx
-│   └── types/             # Shared type definitions
-├── lib/                   # Utility libraries
-│   ├── auth.ts           # Better Auth configuration
-│   ├── auth-client.ts    # Client-side auth instance
-│   ├── auth-helpers.ts   # DAL helpers (hasAuth, requireAuth)
-│   ├── email.ts          # Email utility with Resend
-│   ├── env.ts            # Environment validation with Zod v4
-│   ├── path.ts           # Type-safe route definitions
-│   └── prisma.ts         # Database client with Neon adapter
-├── utils/                 # Shared utilities
-│   ├── cookies.ts        # Cookie management
-│   ├── currency.ts       # Currency utilities
+│   │   ├── [...catchAll]/ # Catch-all for closing modals
+│   │   └── default.tsx    # Default null state
+│   ├── @tickets/          # Parallel route slot for tickets
+│   │   ├── page.tsx       # Tickets list view
+│   │   ├── [...catchAll]/ # Catch-all route
+│   │   ├── default.tsx    # Default state
+│   │   └── error.tsx      # Error boundary
+│   ├── api/               # API routes
+│   │   ├── auth/          # Authentication API
+│   │   └── inngest/       # Background jobs
+│   ├── layout.tsx         # Root layout with parallel slots
+│   ├── page.tsx           # Home page
+│   └── globals.css        # Global styles
+├── components/            # Reusable UI components
+│   ├── ui/               # shadcn/ui components
+│   ├── form/             # Form components
+│   ├── theme/            # Theme configuration
+│   ├── header.tsx        # Main application header
+│   ├── breadcrumbs.tsx   # Breadcrumb navigation
+│   ├── pagination.tsx    # Pagination component
+│   └── ...               # Other shared components
+├── features/             # Feature-based modules
+│   ├── auth/             # Authentication logic
+│   │   ├── actions/      # Server actions
+│   │   ├── components/   # Auth components (auth-nav, auth-section, etc.)
+│   │   ├── events/       # Inngest events
+│   │   ├── queries/      # Server-side queries (getSession)
+│   │   ├── types.ts      # Centralized auth types
+│   │   └── utils/        # Auth utilities
+│   ├── navigation/       # Navigation components
+│   │   ├── components/   # Sidebar, nav-items, mobile-menu-button
+│   │   ├── context/      # Mobile sidebar context
+│   │   └── types/        # Navigation types
+│   ├── ticket/           # Ticket management
+│   │   ├── actions/      # Server actions
+│   │   ├── components/   # Ticket components
+│   │   ├── queries/      # Data queries with "use cache"
+│   │   ├── types.ts      # Ticket types
+│   │   └── utils/        # Ticket utilities
+│   ├── comment/          # Comment system
+│   │   ├── actions/      # Comment actions
+│   │   ├── components/   # Comment components
+│   │   ├── queries/      # Comment queries
+│   │   └── types.ts      # Comment types
+│   ├── password/         # Password reset features
+│   │   ├── actions/      # Password actions
+│   │   ├── components/   # Password forms
+│   │   ├── emails/       # Email templates
+│   │   ├── events/       # Password reset events
+│   │   └── utils/        # Password utilities
+│   ├── types/            # Shared type definitions
+│   └── constants.tsx     # Shared constants
+├── lib/                  # Utility libraries
+│   ├── auth.ts          # Better Auth configuration
+│   ├── auth-client.ts   # Client-side auth instance
+│   ├── email.ts         # Email utility with Resend
+│   ├── env.ts           # Environment validation
+│   ├── prisma.ts        # Database client
+│   └── utils.ts         # Shared utilities
+├── utils/                # Shared utilities
+│   ├── cookies.ts       # Cookie management
+│   ├── currency.ts      # Currency utilities
 │   ├── get-active-path.ts # Path utilities
 │   ├── is-redirect-error.ts # Redirect error detection
 │   └── to-action-state.ts # Action state utilities
-└── generated/            # Generated Prisma client (ignored by Git/Biome)
-    └── prisma/           # Prisma Client with queryCompiler + driverAdapters
-└── prisma/               # Database schema and migrations
-    ├── models/           # Individual model files
-    └── seed-data/        # Database seeding data
+├── hooks/                # Custom React hooks
+├── generated/            # Generated Prisma client
+│   └── prisma/          # Prisma Client with queryCompiler
+└── path.ts              # Type-safe route definitions
 ```
 
 ## 🔄 Optional Catch-All Routes with Activity

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { HasAuthSuspense } from "src/features/auth/components/has-auth";
 import Breadcrumbs from "@/components/breadcrumbs";
 import { CardCompact } from "@/components/card-compact";
-import { HasAuthSuspense } from "@/components/has-auth";
 import { isOwner } from "@/features/auth/utils/owner";
 import { upsertTicket } from "@/features/ticket/actions/upsert-ticket";
 import TicketUpsertForm from "@/features/ticket/components/ticket-upsert-form";

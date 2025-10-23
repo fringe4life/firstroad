@@ -1,6 +1,6 @@
 import { cacheLife } from "next/cache";
 import { Suspense } from "react";
-import AuthSection from "./auth-section";
+import AuthSection from "@/features/auth/components/auth-section";
 import { NavItems } from "./nav-items";
 import { SidebarClient } from "./sidebar-client";
 
