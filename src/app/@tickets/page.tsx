@@ -1,13 +1,10 @@
-import { Suspense, ViewTransition } from "react";
-import Spinner from "@/components/spinner";
+import { ViewTransition } from "react";
 import TicketList from "@/features/ticket/components/ticket-list";
 
-const Tickets = ({ searchParams }: PageProps<"/">) => (
+const Tickets = () => (
   <div className="grid items-center gap-y-4">
     <ViewTransition>
-      <Suspense fallback={<Spinner />}>
-        <TicketList searchParams={searchParams} />
-      </Suspense>
+      <TicketList />
     </ViewTransition>
   </div>
 );

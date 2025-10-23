@@ -2,23 +2,26 @@
 
 import { useRouter } from "next/navigation";
 import { Activity, useRef, useState, useTransition } from "react";
-import { hasAuth } from "src/lib/auth-helpers";
 import { CardCompact } from "@/components/card-compact";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import CommentCreateForm from "@/features/comment/components/comment-create-form";
-import CommentDeleteButton from "@/features/comment/components/comment-delete-button";
-import CommentEditButton from "@/features/comment/components/comment-edit-button";
 import CommentItem from "@/features/comment/components/comment-item";
+import CommentOwnerButtons from "@/features/comment/components/comment-owner-buttons";
+// Removed server function import - will be passed as props
 import type { Comment } from "@/features/comment/types";
-import { getCommentsByTicketId } from "@/features/ticket/queries/get-ticket";
 import type { PaginatedResult } from "@/features/types/pagination";
 
 type CommentsProps = {
   ticketId: string;
+  loadMore: (cursor: string) => Promise<{
+    list: Comment[];
+    hasMore: boolean;
+    nextCursor: string | null;
+  }>;
 } & PaginatedResult<Comment>;
 
-const Comments = ({ ticketId, list, metadata }: CommentsProps) => {
+const Comments = ({ ticketId, list, metadata, loadMore }: CommentsProps) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [comments, setComments] = useState(list);
@@ -46,9 +49,7 @@ const Comments = ({ ticketId, list, metadata }: CommentsProps) => {
 
   const handleLoadMore = () => {
     startTransition(async () => {
-      const result = await hasAuth((session) =>
-        getCommentsByTicketId(session, ticketId, nextCursor ?? ""),
-      );
+      const result = await loadMore(nextCursor ?? "");
       startTransition(() => {
         setComments((prev) => [...prev, ...result.list]);
         setNextCursor(result.nextCursor ?? null);
@@ -89,20 +90,11 @@ const Comments = ({ ticketId, list, metadata }: CommentsProps) => {
         {comments.map((comment) => (
           <CommentItem
             buttons={
-              comment.isOwner
-                ? [
-                    <CommentEditButton
-                      comment={comment}
-                      key="edit"
-                      onEdit={handleEdit}
-                    />,
-                    <CommentDeleteButton
-                      id={comment.id}
-                      key="delete"
-                      onDeleteComment={handleAfterMutation}
-                    />,
-                  ]
-                : []
+              <CommentOwnerButtons
+                comment={comment}
+                onDeleteComment={handleAfterMutation}
+                onEdit={handleEdit}
+              />
             }
             comment={comment}
             key={comment.id}

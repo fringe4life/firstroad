@@ -2,8 +2,6 @@
 
 import { cacheTag } from "next/cache";
 import type { SearchParams } from "nuqs/server";
-import type { MaybeServerSession } from "@/features/auth/types";
-import { withOwnership } from "@/features/auth/utils/owner";
 import { searchParamsCache } from "@/features/ticket/search-params";
 import type { BaseTicket } from "@/features/ticket/types";
 import type { PaginatedResult } from "@/features/types/pagination";
@@ -47,12 +45,12 @@ const getTicketsFromDB = async (
 };
 
 export const getAllTickets = async (
-  session: MaybeServerSession,
-  searchParams: Promise<SearchParams>,
+  searchParams?: Promise<SearchParams>,
   filterUserId?: string,
 ): Promise<PaginatedResult<BaseTicket>> => {
   // Parse search params (not cached - fast and user-specific)
-  const resolvedSearchParams = await searchParams;
+  const resolvedSearchParams =
+    searchParams instanceof Promise ? await searchParams : {};
   const { search, sortKey, sortValue, page, limit } =
     searchParamsCache.parse(resolvedSearchParams);
 
@@ -84,11 +82,8 @@ export const getAllTickets = async (
     skip,
   );
 
-  // Apply ownership logic (not cached - user-specific)
-  const ticketsWithOwnership = withOwnership(session, tickets);
-
   return {
-    list: ticketsWithOwnership,
+    list: tickets,
     metadata: {
       count,
       hasNextPage: count > skip + takeAmount,

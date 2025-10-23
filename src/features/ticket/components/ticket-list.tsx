@@ -1,6 +1,3 @@
-import { connection } from "next/server";
-import type { SearchParams } from "nuqs/server";
-import { hasAuth } from "src/lib/auth-helpers";
 import GenericComponent from "@/components/generic-component";
 import Placeholder from "@/components/placeholder";
 import type { SortOption } from "@/components/sort-select";
@@ -25,15 +22,10 @@ const TICKET_SORT_OPTIONS: readonly SortOption[] = [
 
 type TicketListProps = {
   userId?: string;
-  searchParams: Promise<SearchParams>;
 };
 
-const TicketList = async ({ userId, searchParams }: TicketListProps) => {
-  await connection(); // Prevent static generation during build time
-
-  const { list: tickets, metadata } = await hasAuth((session) =>
-    getAllTickets(session, searchParams, userId),
-  );
+const TicketList = async ({ userId }: TicketListProps) => {
+  const { list: tickets, metadata } = await getAllTickets(undefined, userId);
   const hasTickets = tickets.length > 0;
   return (
     <div className="grid flex-1 justify-items-center gap-y-4">

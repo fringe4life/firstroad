@@ -1,9 +1,4 @@
-import clsx from "clsx";
-import {
-  LucideMoreVertical,
-  LucidePencil,
-  SquareArrowOutUpRight,
-} from "lucide-react";
+import { SquareArrowOutUpRight } from "lucide-react";
 import Link from "next/link";
 import { ViewTransition } from "react";
 import { Button } from "@/components/ui/button";
@@ -14,31 +9,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Comments from "@/features/comment/components/comments";
-import type { Comment } from "@/features/comment/types";
 import { TICKET_ICONS } from "@/features/constants";
-import TicketMoreMenu from "@/features/ticket/components/ticket-more-menu";
+import TicketOwnerOptions from "@/features/ticket/components/ticket-owner-options";
 import type { BaseTicket } from "@/features/ticket/types";
-import type { PaginatedResult } from "@/features/types/pagination";
-import { ticketEditPath, ticketPath } from "@/path";
+import { ticketPath } from "@/path";
 import { toCurrencyFromCent } from "@/utils/currency";
 
-// List view props (isDetail: false)
-type TicketItemListProps = {
-  isDetail: false;
+type TicketItemProps = {
   ticket: BaseTicket;
+  children?: React.ReactNode;
 };
 
-// Detail view props (isDetail: true)
-type TicketItemDetailProps = {
-  isDetail: true;
-  ticket: BaseTicket & PaginatedResult<Comment>;
-};
-
-// Discriminated union type
-type TicketItemProps = TicketItemListProps | TicketItemDetailProps;
-
-const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
+const TicketItem = ({ ticket, children }: TicketItemProps) => {
   const detailButton = (
     <Button asChild size="icon" variant="outline">
       <Link href={ticketPath(ticket.id)} prefetch>
@@ -47,30 +29,10 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
     </Button>
   );
 
-  const editButton = ticket.isOwner ? (
-    <Button asChild size="icon" variant="outline">
-      <Link href={ticketEditPath(ticket.id)} prefetch>
-        <LucidePencil className="size-4" />
-      </Link>
-    </Button>
-  ) : null;
-
-  const trigger = (
-    <Button size="icon" variant="outline">
-      <LucideMoreVertical className="size-4" />
-    </Button>
-  );
-
-  const moreMenu = ticket.isOwner ? (
-    <TicketMoreMenu ticket={ticket} trigger={trigger} />
-  ) : null;
-
   return (
     <div
-      className={clsx("grid w-full gap-y-4", {
-        "max-w-120": isDetail,
-        "max-w-105": !isDetail,
-      })}
+      className="grid w-full max-w-105 gap-y-4 data-[detail=true]:max-w-120"
+      data-detail={!!children}
     >
       <div className="flex gap-x-2">
         <ViewTransition name={`ticket-card-${ticket.id}`}>
@@ -82,11 +44,7 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <span
-                className={clsx("whitespace-break-spaces", {
-                  "line-clamp-3": !isDetail,
-                })}
-              >
+              <span className="line-clamp-3 whitespace-break-spaces data-[detail=true]:line-clamp-none">
                 {ticket.description}
               </span>
             </CardContent>
@@ -103,26 +61,17 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
         </ViewTransition>
 
         <div className="flex flex-col gap-y-1">
-          {isDetail ? (
-            <>
-              {editButton}
-              {moreMenu}
-            </>
+          {children ? (
+            <TicketOwnerOptions isDetail={true} ticket={ticket} />
           ) : (
             <>
               {detailButton}
-              {editButton}
+              <TicketOwnerOptions ticket={ticket} />
             </>
           )}
         </div>
       </div>
-      {isDetail && (
-        <Comments
-          list={ticket.list}
-          metadata={ticket.metadata}
-          ticketId={ticket.id}
-        />
-      )}
+      {children}
     </div>
   );
 };

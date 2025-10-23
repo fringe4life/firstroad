@@ -1,14 +1,14 @@
-import { formatDistanceToNow } from "date-fns";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import type { Comment } from "@/features/comment/types";
+import TimeAgo from "./time-ago";
 
 type CommentItemProps = {
   comment: Comment;
-  buttons?: React.ReactNode[];
+  buttons?: React.ReactNode;
 };
 
-const CommentItem = ({ comment, buttons = [] }: CommentItemProps) => {
+const CommentItem = ({ comment, buttons }: CommentItemProps) => {
   const { updatedAt, createdAt, content, userInfo } = comment;
 
   const userName = userInfo?.user?.name || "Anonymous";
@@ -19,15 +19,7 @@ const CommentItem = ({ comment, buttons = [] }: CommentItemProps) => {
     .toUpperCase()
     .slice(0, 2);
 
-  // Safely parse dates and handle potential invalid date values
-  const createdDate = new Date(createdAt);
-  const updatedDate = new Date(updatedAt);
-  const timeAgo = Number.isNaN(createdDate.getTime())
-    ? "Unknown time"
-    : formatDistanceToNow(createdDate, { addSuffix: true });
-  const isEdited =
-    !Number.isNaN(updatedDate.getTime()) &&
-    updatedDate.getTime() !== createdDate.getTime();
+  // Time display is now handled by the TimeAgo client component
 
   return (
     <div className="flex gap-2">
@@ -41,15 +33,10 @@ const CommentItem = ({ comment, buttons = [] }: CommentItemProps) => {
             </Avatar>
             <div className="grid">
               <span className="font-medium text-sm">{userName}</span>
-              <div className="flex items-center gap-2 text-muted-foreground text-xs">
-                <span>{timeAgo}</span>
-                {isEdited && (
-                  <>
-                    <span>•</span>
-                    <span>edited</span>
-                  </>
-                )}
-              </div>
+              <TimeAgo
+                createdAt={createdAt.toISOString()}
+                updatedAt={updatedAt.toISOString()}
+              />
             </div>
           </div>
         </CardHeader>

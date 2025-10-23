@@ -26,8 +26,8 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **🎫 Ticket Management**: Create, edit, and manage tickets with status tracking
 - **💬 Comments System**: Add, edit, and delete comments on tickets with infinite pagination
 - **🌙 Dark Mode**: Beautiful light/dark theme with smooth transitions
-- **📱 Responsive Design**: Optimized for desktop and mobile devices with PPR navigation
-- **⚡ Real-time Updates**: Server-side rendering with React Suspense
+- **📱 Responsive Design**: Optimized for desktop and mobile devices with PPR navigation and cached components
+- **⚡ Real-time Updates**: Server-side rendering with React Suspense and PPR dynamic holes
 - **🔍 Search & Filter**: Advanced search and filtering capabilities
 - **🎨 Modern UI**: Built with shadcn/ui components and Tailwind CSS
 - **📊 Infinite Pagination**: Efficient cursor-based pagination for comments
@@ -38,6 +38,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **🔄 Parallel Routes**: Next.js parallel routes for enhanced user experience
 - **⚡ React Compiler**: React 19 compiler for automatic performance optimization
 - **📬 Background Jobs**: Inngest for async event handling and email processing
+- **⚡ PPR Navigation**: Partial Prerendering with cached header shell and dynamic auth components
 
 ## 🛠️ Tech Stack
 
@@ -481,6 +482,7 @@ bunx inngest-cli dev     # Start Inngest dev server for local testing
 - **Interception Routes**: Modal overlays with graceful fallback on hard refresh
 - **Client Segment Cache**: Improved caching for better performance
 - **"use cache" Directive**: Function-level caching for data queries
+- **PPR (Partial Prerendering)**: Static shell with dynamic holes for optimal performance
 
 ### Tailwind CSS
 
