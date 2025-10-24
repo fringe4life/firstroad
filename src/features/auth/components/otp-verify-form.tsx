@@ -15,16 +15,12 @@ import type { verifyEmailVerificationOTP } from "../actions/verify-otp-action";
 
 type OTPVerifyFormProps = {
   verifyOTPAction: typeof verifyEmailVerificationOTP;
-  title: string;
-  description: string;
   submitLabel: string;
   email?: string;
 };
 
 const OTPVerifyForm = ({
   verifyOTPAction,
-  title,
-  description,
   submitLabel,
   email,
 }: OTPVerifyFormProps) => {
@@ -34,15 +30,11 @@ const OTPVerifyForm = ({
   return (
     <Form action={action} state={state || EMPTY_ACTION_STATE}>
       <div className="space-y-4">
-        <div>
-          <h1 className="font-semibold text-2xl">{title}</h1>
-          <p className="text-muted-foreground">{description}</p>
-          {email && (
-            <p className="text-muted-foreground text-sm">
-              Code sent to: <span className="font-medium">{email}</span>
-            </p>
-          )}
-        </div>
+        {email && (
+          <p className="text-muted-foreground text-sm">
+            Code sent to: <span className="font-medium">{email}</span>
+          </p>
+        )}
 
         <div className="space-y-2">
           <Label htmlFor={otpId}>Verification Code</Label>

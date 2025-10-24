@@ -153,15 +153,12 @@
   --expanded-sidebar-width: 0;
   --auth-nav-width: 10.5rem;
   --padding-inline-main: 2rem;
-  --max-content-width-widest: 30rem;
-  --max-content-width-narrow: 26.25rem;
-}
-@utility max-content-widest {
-  inline-size: min(100%, var(--max-content-width-widest));
+  --max-content-widest: 30rem;
+  --max-content-narrow: 26.25rem;
 }
 
-@utility max-content-narrow {
-  inline-size: min(100%, var(--max-content-width-narrow));
+@utility max-content-* {
+  inline-size: min(100%, --value(--max-content-*));
 }
 
 @layer base {

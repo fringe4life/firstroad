@@ -11,20 +11,14 @@ type SignInOTPVerifyPageProps = {
   searchParams: Promise<{ email?: string }>;
 };
 
-type SuspendSignInOTPVerifyFormProps = {
-  searchParamsPromise: Promise<{ email?: string }>;
-};
-
-const SuspendSignInOTPVerifyForm = async ({
-  searchParamsPromise,
-}: SuspendSignInOTPVerifyFormProps) => {
-  const { email } = await searchParamsPromise;
+const SignInOTPVerifyForm = async ({
+  searchParams,
+}: SignInOTPVerifyPageProps) => {
+  const { email } = await searchParams;
   return (
     <OTPVerifyForm
-      description="Enter the 6-digit sign-in code sent to your email"
       email={email}
       submitLabel="Sign In"
-      title="Sign In with OTP"
       verifyOTPAction={verifySignInOTP}
     />
   );
@@ -40,7 +34,7 @@ const SignInOTPVerifyPage = async ({
     <CardCompact
       content={
         <Suspense fallback={<Spinner />}>
-          <SuspendSignInOTPVerifyForm searchParamsPromise={searchParams} />
+          <SignInOTPVerifyForm searchParams={searchParams} />
         </Suspense>
       }
       description="Enter the sign-in code sent to your email"
