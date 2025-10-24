@@ -246,10 +246,18 @@ src/
 │   │   └── layout.tsx     # Auth layout
 │   ├── (password)/        # Public auth routes
 │   │   ├── sign-in/       # Sign in page
+│   │   │   ├── otp/       # OTP authentication
+│   │   │   │   ├── send/  # Send OTP page
+│   │   │   │   └── verify/ # Verify OTP page
+│   │   │   └── page.tsx   # Sign in page
 │   │   ├── sign-up/       # Sign up page
 │   │   ├── forgot-password/ # Password reset request
 │   │   ├── reset-password/ # Password reset confirmation
+│   │   │   └── [token]/   # Token-based reset
 │   │   ├── verify-email/  # Email verification
+│   │   │   └── otp/       # OTP email verification
+│   │   │       ├── send/  # Send verification OTP
+│   │   │       └── verify/ # Verify email OTP
 │   │   └── layout.tsx     # Password layout
 │   ├── @auth/             # Parallel route slot for auth modals
 │   │   ├── (.)sign-in/    # Intercepted sign-in modal
@@ -278,9 +286,9 @@ src/
 │   └── ...               # Other shared components
 ├── features/             # Feature-based modules
 │   ├── auth/             # Authentication logic
-│   │   ├── actions/      # Server actions
-│   │   ├── components/   # Auth components (auth-nav, auth-section, etc.)
-│   │   ├── events/       # Inngest events
+│   │   ├── actions/      # Server actions (send-otp, verify-otp, change-password, signout)
+│   │   ├── components/   # Auth components (auth-nav, auth-section, otp-forms, etc.)
+│   │   ├── events/       # Inngest events (email-otp, email-verification, welcome-email)
 │   │   ├── queries/      # Server-side queries (getSession)
 │   │   ├── types.ts      # Centralized auth types
 │   │   └── utils/        # Auth utilities
@@ -333,6 +341,8 @@ The application uses Better Auth with multiple authentication methods:
 - **Sign Up**: Create new accounts with email and password
 - **Sign In**: Secure login with credential validation or OTP
 - **OTP Authentication**: One-time password authentication via email
+  - **Sign-in OTP**: Alternative login method using one-time passwords
+  - **Email Verification OTP**: Verify email addresses with OTP codes
 - **Password Reset**: Built-in password reset functionality
 - **Email Verification**: Automatic email verification on signup
 - **Welcome Emails**: Delayed welcome emails sent 2 minutes after signup
@@ -349,6 +359,15 @@ The application uses Better Auth with multiple authentication methods:
 5. **OTP Login**: Alternative login method using one-time passwords
 6. **Password Reset**: Users can request password reset via email
 7. **Session Management**: Secure sessions with automatic UserInfo creation
+
+### OTP Authentication Routes
+
+- **Sign-in OTP**: `/sign-in/otp/send` → `/sign-in/otp/verify`
+- **Email Verification OTP**: `/verify-email/otp/send` → `/verify-email/otp/verify`
+- **Dedicated Server Actions**: Purpose-specific actions for each OTP flow
+- **Reusable Components**: `OTPSendForm` and `OTPVerifyForm` for consistent UX
+- **InputOTP Component**: Enhanced OTP input with shadcn/ui
+- **Toast Notifications**: Success feedback for OTP sent
 
 ### Redirect Handling
 

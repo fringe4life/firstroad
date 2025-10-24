@@ -1,0 +1,73 @@
+"use client";
+
+import { useActionState, useId } from "react";
+import FieldError from "@/components/form/field-error";
+import Form from "@/components/form/form";
+import SubmitButton from "@/components/form/submit-button";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
+import { Label } from "@/components/ui/label";
+import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
+import type { verifyEmailVerificationOTP } from "../actions/verify-otp-action";
+
+type OTPVerifyFormProps = {
+  verifyOTPAction: typeof verifyEmailVerificationOTP;
+  title: string;
+  description: string;
+  submitLabel: string;
+  email?: string;
+};
+
+const OTPVerifyForm = ({
+  verifyOTPAction,
+  title,
+  description,
+  submitLabel,
+  email,
+}: OTPVerifyFormProps) => {
+  const [state, action] = useActionState(verifyOTPAction, EMPTY_ACTION_STATE);
+  const otpId = useId();
+
+  return (
+    <Form action={action} state={state || EMPTY_ACTION_STATE}>
+      <div className="space-y-4">
+        <div>
+          <h1 className="font-semibold text-2xl">{title}</h1>
+          <p className="text-muted-foreground">{description}</p>
+          {email && (
+            <p className="text-muted-foreground text-sm">
+              Code sent to: <span className="font-medium">{email}</span>
+            </p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor={otpId}>Verification Code</Label>
+          <InputOTP maxLength={6} name="otp" required>
+            <InputOTPGroup>
+              <InputOTPSlot index={0} />
+              <InputOTPSlot index={1} />
+              <InputOTPSlot index={2} />
+            </InputOTPGroup>
+            <InputOTPGroup>
+              <InputOTPSlot index={3} />
+              <InputOTPSlot index={4} />
+              <InputOTPSlot index={5} />
+            </InputOTPGroup>
+          </InputOTP>
+          <FieldError actionState={state || EMPTY_ACTION_STATE} name="otp" />
+        </div>
+
+        {/* Hidden email field for form submission */}
+        {email && <input name="email" type="hidden" value={email} />}
+
+        <SubmitButton label={submitLabel} />
+      </div>
+    </Form>
+  );
+};
+
+export default OTPVerifyForm;

@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
     clientSegmentCache: true,
     turbopackFileSystemCacheForDev: true,
     viewTransition: true,
+    mcpServer: true,
   },
 };
 
