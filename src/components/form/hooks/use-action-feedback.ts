@@ -28,7 +28,6 @@ const useActionFeedback = (
     onError?.({ state });
   });
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: useEffect is used
   useEffect(() => {
     if (!isNewAction) {
       return;

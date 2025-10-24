@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -142,9 +141,14 @@
   --header-padding-y: 0.625rem;
   --header-content-height: 2.5rem;
   --header-border: 1px;
-  --header-height: calc(var(--header-padding-y) * 2 + var(--header-content-height) + var(--header-border));
+  --header-height: calc(
+    var(--header-padding-y) *
+    2 +
+    var(--header-content-height) +
+    var(--header-border)
+  );
   --sidebar-height: calc(100svh - var(--header-height));
-  
+
   --side-width: 0;
   --expanded-sidebar-width: 0;
   --auth-nav-width: 10.5rem;
@@ -167,30 +171,46 @@
   html {
     scrollbar-gutter: stable;
     scrollbar-width: thin;
-    
+
     /* Dynamic sidebar calculations - must run AFTER HTML class overrides */
-    --sidebar-current-width: max(var(--side-width), var(--expanded-sidebar-width));
-    
+    --sidebar-current-width: max(
+      var(--side-width),
+      var(--expanded-sidebar-width)
+    );
+
     /* Sidebar expansion amount (how much it grows from collapsed to expanded) */
     --sidebar-expansion: calc(var(--sidebar-current-width) - var(--side-width));
-    
+
     /* Check if sidebar + main content area exceeds viewport */
     /* Main content area = content + padding on both sides */
-    --main-content-area: calc(var(--max-content-width) + 2 * var(--padding-inline-main));
+    --main-content-area: calc(
+      var(--max-content-width) +
+      2 *
+      var(--padding-inline-main)
+    );
     /* Account for scrollbar (~17px), sidebar border (1px), and safety margin (8px for rounding) */
     --scrollbar-width: 17px;
     --safety-margin: 8px;
-    --total-width-needed: calc(var(--sidebar-current-width) + var(--main-content-area) + var(--scrollbar-width) + var(--safety-margin) + 1px);
+    --total-width-needed: calc(
+      var(--sidebar-current-width) +
+      var(--main-content-area) +
+      var(--scrollbar-width) +
+      var(--safety-margin) +
+      1px
+    );
     --viewport-overflow: calc(var(--total-width-needed) - 100svw);
-    
+
     /* Translation: shift by overflow amount, but cap at sidebar expansion */
-    --sidebar-translation: clamp(0px, var(--viewport-overflow), var(--sidebar-expansion));
+    --sidebar-translation: clamp(
+      0px,
+      var(--viewport-overflow),
+      var(--sidebar-expansion)
+    );
   }
   body {
     @apply bg-background text-foreground;
   }
 }
-
 
 :root {
   color-scheme: light dark;
@@ -266,23 +286,27 @@
 @media (prefers-reduced-motion: no-preference) {
   /* Slide forward (list → detail) */
   ::view-transition-old(.slide-forward) {
-    animation: 150ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
+    animation:
+      150ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
       400ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
   }
 
   ::view-transition-new(.slide-forward) {
-    animation: 210ms cubic-bezier(0, 0, 0.2, 1) 150ms both fade-in,
+    animation:
+      210ms cubic-bezier(0, 0, 0.2, 1) 150ms both fade-in,
       400ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
   }
 
   /* Slide back (detail → list) */
   ::view-transition-old(.slide-back) {
-    animation: 150ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
+    animation:
+      150ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
       400ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-right;
   }
 
   ::view-transition-new(.slide-back) {
-    animation: 210ms cubic-bezier(0, 0, 0.2, 1) 150ms both fade-in,
+    animation:
+      210ms cubic-bezier(0, 0, 0.2, 1) 150ms both fade-in,
       400ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-left;
   }
 
@@ -325,11 +349,15 @@
 
   /* Slide animations for Suspense loading states */
   ::view-transition-old(.slide-down) {
-    animation: 150ms ease-out both fade-out, 150ms ease-out both slide-down;
+    animation:
+      150ms ease-out both fade-out,
+      150ms ease-out both slide-down;
   }
 
   ::view-transition-new(.slide-up) {
-    animation: 210ms ease-in 150ms both fade-in, 400ms ease-in both slide-up;
+    animation:
+      210ms ease-in 150ms both fade-in,
+      400ms ease-in both slide-up;
   }
 
   @keyframes slide-up {

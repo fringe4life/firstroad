@@ -42,15 +42,14 @@
       "jsxQuoteStyle": "double"
     }
   },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
   "files": {
     "ignoreUnknown": true,
-    "experimentalScannerIgnores": [
-      ".next/**",
-      "node_modules/**",
-      "dist/**",
-      "build/**",
-      "src/generated/**"
-    ]
+    "includes": ["**", "!.next", "!dist", "!build", "!src/generated"]
   },
   "overrides": [
     {
@@ -78,25 +77,7 @@
           }
         }
       }
-    },
-    {
-      "includes": ["**/*.css"],
-      "linter": {
-        "enabled": false
-      },
-      "formatter": {
-        "enabled": false
-      }
-    },
-    {
-      "includes": ["src/app/globals.css"],
-      "linter": {
-        "enabled": false
-      },
-      "formatter": {
-        "enabled": false
-      }
     }
   ],
-  "extends": ["ultracite"]
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/next"]
 }
