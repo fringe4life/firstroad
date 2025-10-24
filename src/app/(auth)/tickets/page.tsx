@@ -20,7 +20,7 @@ const TicketCreationForm = async () => {
     <>
       <Heading description="All your tickets at one place" title="My Tickets" />
       <CardCompact
-        className="w-full max-w-105 self-center"
+        className="max-content-narrow self-center"
         content={<TicketUpsertForm upsertTicketAction={upsertTicket} />}
         description="A new ticket will be created"
         title="Create Ticket"

@@ -31,7 +31,7 @@ const TicketItem = ({ ticket, children }: TicketItemProps) => {
 
   return (
     <div
-      className="grid w-full max-w-105 gap-y-4 data-[detail=true]:max-w-120"
+      className="data-[detail=true]:max-content-widest max-content-narrow grid gap-y-4"
       data-detail={!!children}
     >
       <div className="flex gap-x-2">

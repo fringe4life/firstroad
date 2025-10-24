@@ -3,7 +3,7 @@ import { ForgotPasswordPageContent } from "@/features/password/components/forgot
 
 const ForgotPasswordModal = () => (
   <Dialog defaultOpen>
-    <DialogContent className="sm:max-w-120">
+    <DialogContent className="sm:max-content-widest">
       <ForgotPasswordPageContent />
     </DialogContent>
   </Dialog>

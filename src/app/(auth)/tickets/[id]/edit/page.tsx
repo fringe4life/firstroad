@@ -55,7 +55,7 @@ const TicketEditPage = async ({ params }: PageProps<"/tickets/[id]/edit">) => {
         <HasAuthSuspense
           fallback={
             <CardCompact
-              className="w-full max-w-120 self-center"
+              className="max-content-widest self-center"
               content={<div>Loading...</div>}
               description="Edit an existing ticket"
               title="Edit Ticket"
@@ -69,7 +69,7 @@ const TicketEditPage = async ({ params }: PageProps<"/tickets/[id]/edit">) => {
 
             return (
               <CardCompact
-                className="w-full max-w-120 self-center"
+                className="max-content-widest self-center"
                 content={
                   <TicketUpsertForm
                     ticket={ticket}

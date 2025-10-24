@@ -178,6 +178,39 @@ const Spinner = () => (
 </div>
 ```
 
+### Ticket Controls (Search + Sort Inputs)
+
+**File**: `src/features/ticket/components/ticket-controls-fallback.tsx`
+
+**Pattern**: Single div with box-shadow creating second element
+```tsx
+"use cache";
+
+const TicketControlsFallback = async () => (
+  <div className="max-content-narrow grid grid-flow-col grid-cols-2 gap-x-2">
+    {/* Single div with box-shadow creating the second element */}
+    <div className="h-9 w-full animate-pulse bg-muted shadow-[calc(100%+0.5rem)_0_0_0_var(--muted)]" />
+  </div>
+);
+```
+
+**Key Features**:
+- ✅ Single DOM element (second "element" created with box-shadow)
+- ✅ Cached with "use cache" for performance
+- ✅ No expensive utility functions (no `cn`/`twMerge`)
+- ✅ Matches exact grid layout dimensions
+- ✅ Prevents CLS during Suspense loading
+
+**Usage**: 
+```tsx
+<Suspense fallback={<TicketControlsFallback />}>
+  <div className="max-content-narrow grid grid-flow-col grid-cols-2 gap-x-2">
+    <TicketSearchInput placeholder="Search tickets ..." />
+    <TicketSortSelect options={TICKET_SORT_OPTIONS} />
+  </div>
+</Suspense>
+```
+
 ## Why This Works
 
 ### CSS Variables vs Tailwind Classes

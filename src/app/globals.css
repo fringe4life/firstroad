@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "tw-animate-css";
+
 
 @custom-variant dark (&:is(.dark *));
 
@@ -149,7 +149,15 @@
   --expanded-sidebar-width: 0;
   --auth-nav-width: 10.5rem;
   --padding-inline-main: 2rem;
-  --max-content-width: 30rem;
+  --max-content-width-widest: 30rem;
+  --max-content-width-narrow: 26.25rem;
+}
+@utility max-content-widest {
+  inline-size: min(100%, var(--max-content-width-widest));
+}
+
+@utility max-content-narrow {
+  inline-size: min(100%, var(--max-content-width-narrow));
 }
 
 @layer base {

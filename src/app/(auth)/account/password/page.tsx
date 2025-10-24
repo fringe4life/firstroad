@@ -21,7 +21,7 @@ const PasswordPage = async () => {
         title="Password"
       />
       <CardCompact
-        className="mx-auto w-full max-w-120"
+        className="max-content-widest mx-auto"
         content={<ChangePasswordForm changePasswordAction={changePassword} />}
         description="Choose a strong, unique password"
         title="Update password"

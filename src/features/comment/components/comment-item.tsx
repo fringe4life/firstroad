@@ -23,7 +23,7 @@ const CommentItem = ({ comment, buttons }: CommentItemProps) => {
 
   return (
     <div className="flex gap-2">
-      <Card className="w-full max-w-105 gap-0">
+      <Card className="max-content-narrow gap-0">
         <CardHeader className="pb-3">
           <div className="flex items-center gap-3">
             <Avatar className="h-8 w-8">
