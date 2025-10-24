@@ -67,7 +67,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.6",
-    "@react-email/preview-server": "4.3.1",
+    "@react-email/preview-server": "^4.3.2",
     "@tailwindcss/postcss": "^4.1.16",
     "@types/big.js": "^6.2.2",
     "@types/node": "^20.19.23",
@@ -78,7 +78,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.2.6",
     "prisma": "^6.18.0",
-    "react-email": "4.3.1",
+    "react-email": "^4.3.2",
     "shadcn": "^3.5.0",
     "tailwindcss": "^4.1.16",
     "tsx": "^4.20.6",
