@@ -1,11 +1,9 @@
 import type { Route } from "next";
 
-const ticketsPath: Route = "/tickets";
-
 const homePath: Route = "/";
 
 const ticketPath = (ticketId: string): Route =>
-  `${ticketsPath}/${ticketId}` as Route;
+  `${homePath}${ticketId}` as Route;
 
 const ticketEditPath = (ticketId: string): Route =>
   `${ticketPath(ticketId)}/edit` as Route;
@@ -40,7 +38,6 @@ export {
   signUpPath,
   ticketEditPath,
   ticketPath,
-  ticketsPath,
   accountProfilePath,
   accountPasswordPath,
 };

@@ -18,7 +18,7 @@ export async function generateStaticParams() {
 
 export const generateMetadata = async ({
   params,
-}: PageProps<"/tickets/[id]">): Promise<Metadata> => {
+}: PageProps<"/[id]">): Promise<Metadata> => {
   const { id } = await params;
   const ticket = await getTicketById(id);
 
@@ -38,7 +38,7 @@ export const generateMetadata = async ({
 
 const INITIAL_COMMENTS_COUNT = 3;
 
-const TicketDetailPage = async ({ params }: PageProps<"/tickets/[id]">) => {
+const TicketDetailPage = async ({ params }: PageProps<"/[id]">) => {
   const { id } = await params;
 
   const ticket = await getTicketById(id);

@@ -12,7 +12,7 @@ import {
   string,
 } from "valibot";
 import { auth } from "@/lib/auth";
-import { ticketsPath } from "@/path";
+import { homePath } from "@/path";
 import {
   type ActionState,
   fromErrorToActionState,
@@ -49,7 +49,7 @@ const signin = async (_state: ActionState | undefined, formData: FormData) => {
   }
 
   // Redirect after successful authentication
-  redirect(ticketsPath);
+  redirect(homePath);
 };
 
 export { signin };

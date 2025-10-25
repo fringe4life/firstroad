@@ -39,7 +39,12 @@ export const metadata: Metadata = {
   },
 };
 
-const RootLayout = ({ children, tickets, auth }: LayoutProps<"/">) => (
+const RootLayout = ({
+  children,
+  tickets,
+  auth,
+  "ticket-form": ticketForm,
+}: LayoutProps<"/">) => (
   <html
     className="has-[.sidebar:focus-within]:[--expanded-sidebar-width:15rem] has-[.sidebar:hover]:[--expanded-sidebar-width:15rem] md:[--side-width:4.875rem]"
     data-scroll-behavior="smooth"
@@ -55,6 +60,7 @@ const RootLayout = ({ children, tickets, auth }: LayoutProps<"/">) => (
               <Sidebar />
               <main className="col-span-2 grid min-h-screen grid-rows-[min-content_min-content_1fr] gap-y-4 overflow-x-clip px-(--padding-inline-main) py-24 transition-transform duration-200 group-has-[.sidebar:hover]/sidebar-parent:translate-x-(--sidebar-translation) md:col-start-2">
                 {children}
+                {ticketForm}
                 {tickets}
               </main>
             </div>

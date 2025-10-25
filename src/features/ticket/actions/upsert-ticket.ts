@@ -17,7 +17,7 @@ import {
 import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
 import { prisma } from "@/lib/prisma";
-import { ticketsPath } from "@/path";
+import { homePath } from "@/path";
 import { setCookieByKey } from "@/utils/cookies";
 import { toCent } from "@/utils/currency";
 import {
@@ -82,7 +82,7 @@ const upsertTicket = async (
 
   if (id) {
     setCookieByKey("toast", "Ticket updated");
-    redirect(ticketsPath);
+    redirect(homePath);
   }
   return toActionState("Ticket created", "SUCCESS");
 };

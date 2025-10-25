@@ -15,6 +15,12 @@ export const searchParser = parseAsString.withDefault("").withOptions({
   ...options,
 });
 
+export const scopeParser = parseAsStringLiteral(["all", "mine"])
+  .withDefault("all")
+  .withOptions({
+    ...options,
+  });
+
 export const sortParser = {
   sortKey: parseAsString.withDefault("createdAt"),
   sortValue: parseAsStringLiteral(SORT_ORDERS as readonly string[]).withDefault(
@@ -39,6 +45,7 @@ export const searchParamsParsers = {
   search: searchParser,
   ...sortParser,
   ...paginationParser,
+  scope: scopeParser,
 };
 
 export const searchParamsCache = createSearchParamsCache(searchParamsParsers);

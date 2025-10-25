@@ -2,7 +2,7 @@
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { ticketsPath } from "src/path";
+import { homePath } from "src/path";
 import {
   email,
   length,
@@ -50,7 +50,7 @@ export const verifyEmailVerificationOTP = async (
       });
 
       // Redirect to account profile
-      throw redirect(ticketsPath);
+      throw redirect(homePath);
     });
 
     if (error) {
@@ -88,7 +88,7 @@ export const verifySignInOTP = async (
       });
 
       // Redirect to tickets page
-      throw redirect(ticketsPath);
+      throw redirect(homePath);
     });
 
     if (error) {

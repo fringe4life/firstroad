@@ -1,11 +1,6 @@
-import { cache, Suspense } from "react";
+import { Suspense } from "react";
 import { getSession } from "@/features/auth/queries/get-session";
 import type { MaybeServerSession } from "@/features/auth/types";
-
-// Cached session getter using React's cache function
-const getCachedSession = cache(
-  async (): Promise<MaybeServerSession> => await getSession(),
-);
 
 // HasAuth component that provides session to children
 export const HasAuth = async ({
@@ -13,7 +8,7 @@ export const HasAuth = async ({
 }: {
   children: (session: MaybeServerSession) => React.ReactNode;
 }) => {
-  const session = await getCachedSession();
+  const session = await getSession();
   return <>{children(session)}</>;
 };
 

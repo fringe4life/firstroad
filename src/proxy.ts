@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { signInPath, ticketsPath } from "@/path";
+import { homePath, signInPath } from "@/path";
 
 const authRoutes = [
   "/sign-in",
@@ -24,7 +24,7 @@ export async function proxy(request: NextRequest) {
 
   // Redirect authenticated users away from auth pages
   if (session && isAuthRoute) {
-    return NextResponse.redirect(new URL(ticketsPath, request.url));
+    return NextResponse.redirect(new URL(homePath, request.url));
   }
 
   // Redirect unauthenticated users away from protected pages

@@ -51,7 +51,7 @@ export const getAllTickets = async (
   // Parse search params (not cached - fast and user-specific)
   const resolvedSearchParams =
     searchParams instanceof Promise ? await searchParams : {};
-  const { search, sortKey, sortValue, page, limit } =
+  const { search, sortKey, sortValue, page, limit, scope } =
     searchParamsCache.parse(resolvedSearchParams);
 
   // Build orderBy based on sort parameter
@@ -63,8 +63,12 @@ export const getAllTickets = async (
     orderBy = { bounty: sortValue as Prisma.SortOrder };
   }
 
+  // Server-side validation: if scope is 'mine' but no user, default to 'all'
+  const effectiveScope = scope === "mine" && !filterUserId ? "all" : scope;
+
   const where: TicketWhereInput = {
-    userId: filterUserId,
+    // Only filter by userId if scope is 'mine' and user is authenticated
+    ...(effectiveScope === "mine" && filterUserId && { userId: filterUserId }),
     title: {
       contains: search,
       mode: "insensitive",

@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
 import { prisma } from "@/lib/prisma";
-import { ticketsPath } from "@/path";
+import { homePath } from "@/path";
 import { setCookieByKey } from "@/utils/cookies";
 import { fromErrorToActionState } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
@@ -26,9 +26,9 @@ export const deleteTicket = async (id: string) => {
       }
 
       await tx.ticket.delete({ where: { id } });
+      revalidateTag("tickets", "max");
+      revalidateTag(`ticket-${id}`, "max");
     });
-    revalidateTag("tickets", "max");
-    revalidateTag(`ticket-${id}`, "max");
   });
 
   if (error) {
@@ -36,5 +36,5 @@ export const deleteTicket = async (id: string) => {
   }
 
   setCookieByKey("toast", "Ticket deleted");
-  redirect(ticketsPath);
+  redirect(homePath);
 };

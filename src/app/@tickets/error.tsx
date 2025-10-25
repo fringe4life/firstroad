@@ -1,20 +1,13 @@
 "use client";
 
+import { TicketX } from "lucide-react";
 import Placeholder from "@/components/placeholder";
 
-const TicketError = ({
-  error: _error,
-}: {
-  error: Error & { digest?: string };
-  reset: () => void;
-}) => {
-  // Log error for debugging in development
-  if (process.env.NODE_ENV === "development") {
-    // biome-ignore lint/suspicious/noConsole: just for debugging
-    console.error("Ticket error:", _error);
-  }
-
-  return <Placeholder label={"please try again later"} />;
-};
+const TicketError = ({ error }: { error: Error }) => (
+  <Placeholder
+    icon={<TicketX />}
+    label={error.message || "please try again later"}
+  />
+);
 
 export default TicketError;
