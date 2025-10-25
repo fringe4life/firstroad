@@ -1,4 +1,4 @@
-import z, { ZodError } from "zod/v4";
+import { flatten, ValiError } from "valibot";
 
 export type ActionState<T = unknown> = {
   message: string;
@@ -19,12 +19,12 @@ const fromErrorToActionState = <T = unknown>(
   err: unknown,
   formData?: FormData,
 ): ActionState<T> => {
-  if (err instanceof ZodError) {
-    const flattened = z.flattenError(err);
+  if (err instanceof ValiError) {
+    const flattened = flatten(err.issues);
     return {
       message: "",
       timestamp: Date.now(),
-      fieldErrors: flattened.fieldErrors,
+      fieldErrors: flattened.nested || {},
       payload: formData,
       status: "ERROR",
     };

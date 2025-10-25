@@ -3,7 +3,17 @@
 
 import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
-import { z } from "zod/v4";
+import {
+  maxLength,
+  minLength,
+  number,
+  object,
+  parse,
+  pipe,
+  regex,
+  string,
+  transform,
+} from "valibot";
 import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
 import { prisma } from "@/lib/prisma";
@@ -17,11 +27,11 @@ import {
 } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
 
-const upsertSchema = z.object({
-  title: z.string().min(1).max(191),
-  description: z.string().min(1).max(1024),
-  deadline: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Is required"),
-  bounty: z.coerce.number().positive(),
+const upsertSchema = object({
+  title: pipe(string(), minLength(1), maxLength(191)),
+  description: pipe(string(), minLength(1), maxLength(1024)),
+  deadline: pipe(string(), regex(/^\d{4}-\d{2}-\d{2}$/, "Is required")),
+  bounty: pipe(string(), transform(Number), number()),
 });
 
 const upsertTicket = async (
@@ -44,7 +54,7 @@ const upsertTicket = async (
       }
     }
 
-    const data = upsertSchema.parse(Object.fromEntries(formData.entries()));
+    const data = parse(upsertSchema, Object.fromEntries(formData.entries()));
 
     const dbData = {
       ...data,

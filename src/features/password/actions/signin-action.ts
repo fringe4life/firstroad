@@ -2,7 +2,15 @@
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { z } from "zod/v4";
+import {
+  email,
+  maxLength,
+  minLength,
+  object,
+  parse,
+  pipe,
+  string,
+} from "valibot";
 import { auth } from "@/lib/auth";
 import { ticketsPath } from "@/path";
 import {
@@ -11,20 +19,25 @@ import {
 } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
 
-const signInSchema = z.object({
-  email: z.email().min(1, { message: "Email is required" }).max(191),
-  password: z.string().min(6).max(191),
+const signInSchema = object({
+  email: pipe(
+    string(),
+    email(),
+    minLength(1, "Email is required"),
+    maxLength(191),
+  ),
+  password: pipe(string(), minLength(6), maxLength(191)),
 });
 
 const signin = async (_state: ActionState | undefined, formData: FormData) => {
   const { error } = await tryCatch(async () => {
     const formDataObj = Object.fromEntries(formData);
 
-    const { email, password } = signInSchema.parse(formDataObj);
+    const { email: userEmail, password } = parse(signInSchema, formDataObj);
 
     await auth.api.signInEmail({
       body: {
-        email,
+        email: userEmail,
         password,
       },
       headers: await headers(),

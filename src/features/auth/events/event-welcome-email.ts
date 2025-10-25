@@ -1,13 +1,21 @@
-import { z } from "zod/v4";
+import {
+  email,
+  type InferOutput,
+  object,
+  optional,
+  parse,
+  pipe,
+  string,
+} from "valibot";
 import { sendWelcomeEmail } from "@/features/auth/utils/send-welcome-email";
 import { inngest } from "@/lib/inngest";
 
-const welcomeEmailSchema = z.object({
-  email: z.email(),
-  userName: z.string().optional(),
+const welcomeEmailSchema = object({
+  email: pipe(string(), email()),
+  userName: optional(string()),
 });
 
-export type WelcomeEmailEventData = z.infer<typeof welcomeEmailSchema>;
+export type WelcomeEmailEventData = InferOutput<typeof welcomeEmailSchema>;
 
 export const eventWelcomeEmail = inngest.createFunction(
   {
@@ -21,13 +29,14 @@ export const eventWelcomeEmail = inngest.createFunction(
     },
   },
   async ({ event }) => {
-    const result = welcomeEmailSchema.safeParse(event.data);
-    if (!result.success) {
+    try {
+      const { email: userEmail, userName } = parse(
+        welcomeEmailSchema,
+        event.data,
+      );
+      await sendWelcomeEmail(userEmail, userName);
+    } catch {
       throw new Error("Invalid welcome email event data");
     }
-
-    const { email, userName } = result.data;
-
-    await sendWelcomeEmail(email, userName);
   },
 );

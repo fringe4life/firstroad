@@ -1,7 +1,15 @@
 "use server";
 
 import { headers } from "next/headers";
-import { z } from "zod/v4";
+import {
+  email,
+  maxLength,
+  minLength,
+  object,
+  parse,
+  pipe,
+  string,
+} from "valibot";
 import { auth } from "@/lib/auth";
 import {
   type ActionState,
@@ -10,8 +18,13 @@ import {
 } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
 
-const forgotPasswordSchema = z.object({
-  email: z.email().min(1, { message: "Email is required" }).max(191),
+const forgotPasswordSchema = object({
+  email: pipe(
+    string(),
+    email(),
+    minLength(1, "Email is required"),
+    maxLength(191),
+  ),
 });
 
 const forgotPassword = async (
@@ -20,7 +33,7 @@ const forgotPassword = async (
 ) => {
   const { error } = await tryCatch(async () => {
     const formDataObj = Object.fromEntries(formData);
-    const { email } = forgotPasswordSchema.parse(formDataObj);
+    const { email: userEmail } = parse(forgotPasswordSchema, formDataObj);
 
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
     const redirectTo = `${baseUrl}/reset-password`;
@@ -29,7 +42,7 @@ const forgotPassword = async (
     // This will trigger the sendResetPassword callback which sends the Inngest event
     await auth.api.requestPasswordReset({
       body: {
-        email,
+        email: userEmail,
         redirectTo,
       },
       headers: await headers(),

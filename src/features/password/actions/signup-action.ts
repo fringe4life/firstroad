@@ -2,7 +2,17 @@
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { z } from "zod/v4";
+import {
+  email,
+  forward,
+  maxLength,
+  minLength,
+  object,
+  parse,
+  partialCheck,
+  pipe,
+  string,
+} from "valibot";
 import { auth } from "@/lib/auth";
 import { ticketsPath } from "@/path";
 import { isRedirectError } from "@/utils/is-redirect-error";
@@ -12,29 +22,44 @@ import {
 } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
 
-const signUpSchema = z
-  .object({
-    name: z.string().min(1, { message: "Name is required" }).max(191),
-    email: z.email().min(1, { message: "Email is required" }).max(191),
-    password: z.string().min(6).max(191),
-    confirmPassword: z
-      .string()
-      .min(1, { message: "Please confirm your password" }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"], // This will show the error on the confirmPassword field
-  });
+const signUpSchema = pipe(
+  object({
+    name: pipe(string(), minLength(1, "Name is required"), maxLength(191)),
+    email: pipe(
+      string(),
+      email(),
+      minLength(1, "Email is required"),
+      maxLength(191),
+    ),
+    password: pipe(string(), minLength(6), maxLength(191)),
+    confirmPassword: pipe(
+      string(),
+      minLength(1, "Please confirm your password"),
+    ),
+  }),
+  forward(
+    partialCheck(
+      [["password"], ["confirmPassword"]],
+      (input) => input.password === input.confirmPassword,
+      "Passwords don't match",
+    ),
+    ["confirmPassword"],
+  ),
+);
 
 const signup = async (_state: ActionState | undefined, formData: FormData) => {
   const { error } = await tryCatch(async () => {
     const formDataObj = Object.fromEntries(formData);
-    const { name, email, password } = signUpSchema.parse(formDataObj);
+    const {
+      name,
+      email: userEmail,
+      password,
+    } = parse(signUpSchema, formDataObj);
 
     await auth.api.signUpEmail({
       body: {
         name,
-        email,
+        email: userEmail,
         password,
       },
       headers: await headers(),

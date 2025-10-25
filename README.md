@@ -6,12 +6,12 @@
 [![React](https://img.shields.io/badge/React-19.2.0-61DAFB?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Prisma](https://img.shields.io/badge/Prisma-6.18.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
-[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.3.29-000000)](https://better-auth.com/)
+[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.3.31-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.16-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![Biome](https://img.shields.io/badge/Biome-2.2.6-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-5.6.4-000000)](https://ultracite.dev/)
+[![Biome](https://img.shields.io/badge/Biome-2.3.0-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-6.0.0-000000)](https://ultracite.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.7.2-000000)](https://nuqs.47ng.com/)
-[![Zod](https://img.shields.io/badge/Zod-4.1.12-3E67B1?logo=zod&logoColor=white)](https://zod.dev/)
+[![Valibot](https://img.shields.io/badge/Valibot-1.1.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Inngest](https://img.shields.io/badge/Inngest-3.44.3-000000)](https://www.inngest.com/)
 [![Resend](https://img.shields.io/badge/Resend-6.2.2-000000)](https://resend.com/)
 [![React Email](https://img.shields.io/badge/React%20Email-4.3.1-000000)](https://react.email/)
@@ -45,17 +45,17 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **Framework**: Next.js 16 (App Router) with Turbopack
 - **Language**: TypeScript 5.9 with strict type checking
 - **Database**: PostgreSQL with Prisma Client (relationJoins preview, Neon adapter)
-- **Authentication**: Better Auth 1.3.29 with email/password provider
+- **Authentication**: Better Auth 1.3.30 with email/password provider
 - **Styling**: Tailwind CSS v4 with shadcn/ui components
 - **Icons**: Lucide React
-- **Forms**: React Hook Form with Zod v4 validation
+- **Forms**: React Hook Form with Valibot validation
 - **Notifications**: Sonner toast notifications
 - **Theme**: next-themes for dark/light mode
 - **URL Search Params**: nuqs for type-safe URL parameters
 - **Email**: React Email with Resend for transactional emails
 - **Background Jobs**: Inngest for background tasks and event handling
 - **Package Manager**: Bun (recommended)
-- **Linting**: Biome 2.2+ for fast formatting and linting with Ultracite rules
+- **Linting**: Biome 2.3+ for fast formatting and linting with Ultracite rules
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 
@@ -255,9 +255,10 @@ src/
 │   │   ├── reset-password/ # Password reset confirmation
 │   │   │   └── [token]/   # Token-based reset
 │   │   ├── verify-email/  # Email verification
-│   │   │   └── otp/       # OTP email verification
-│   │   │       ├── send/  # Send verification OTP
-│   │   │       └── verify/ # Verify email OTP
+│   │   │   ├── otp/       # OTP email verification
+│   │   │   │   ├── send/  # Send verification OTP
+│   │   │   │   └── verify/ # Verify email OTP
+│   │   │   └── page.tsx   # Email verification page
 │   │   └── layout.tsx     # Password layout
 │   ├── @auth/             # Parallel route slot for auth modals
 │   │   ├── (.)sign-in/    # Intercepted sign-in modal
@@ -286,8 +287,8 @@ src/
 │   └── ...               # Other shared components
 ├── features/             # Feature-based modules
 │   ├── auth/             # Authentication logic
-│   │   ├── actions/      # Server actions (send-otp, verify-otp, change-password, signout)
-│   │   ├── components/   # Auth components (auth-nav, auth-section, otp-forms, etc.)
+│   │   ├── actions/      # Server actions (send-otp-action, verify-otp-action, change-password-action, signout)
+│   │   ├── components/   # Auth components (auth-nav, auth-section, otp-send-form, otp-verify-form, etc.)
 │   │   ├── events/       # Inngest events (email-otp, email-verification, welcome-email)
 │   │   ├── queries/      # Server-side queries (getSession)
 │   │   ├── types.ts      # Centralized auth types
@@ -367,6 +368,7 @@ The application uses Better Auth with multiple authentication methods:
 - **Dedicated Server Actions**: Purpose-specific actions for each OTP flow
 - **Reusable Components**: `OTPSendForm` and `OTPVerifyForm` for consistent UX
 - **InputOTP Component**: Enhanced OTP input with shadcn/ui
+- **Suspense Patterns**: Proper suspension with `CardCompact` for optimal caching
 - **Toast Notifications**: Success feedback for OTP sent
 
 ### Redirect Handling
@@ -591,3 +593,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [React Compiler](https://react.dev/blog/2024/02/15/react-labs-what-we-have-been-working-on-february-2024) - Performance optimization
 - [React Email](https://react.email/) - Email templates
 - [Inngest](https://www.inngest.com/) - Background job processing
+- [Valibot](https://valibot.dev/) - Lightweight schema validation

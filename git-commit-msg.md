@@ -110,8 +110,40 @@ refactor:
    - Use relevant emojis from the common emojis list
    - Order by importance (most impactful first)
    - Keep bullet points concise and descriptive
+   - **ESCAPE SPECIAL CHARACTERS**: Use `\'` for apostrophes, `\"` for quotes, `\\` for backslashes
 7. Scale based on change size:
    - Small (1-5 files): 2-3 bullet points
    - Medium (6-15 files): 3-4 bullet points
    - Large (16-30 files): 5-7 bullet points
    - Extensive (30+ files): 7-10 bullet points
+
+## Character Escaping Rules
+
+When generating commit messages, escape these characters to prevent shell interpretation issues:
+
+- **Apostrophes**: `Valibot's` → `Valibot\'s`
+- **Double quotes**: `"feature"` → `\"feature\"`
+- **Backslashes**: `\n` → `\\n`
+- **Dollar signs**: `$variable` → `\$variable`
+- **Backticks**: `` `code` `` → `` \`code\` ``
+- **Parentheses**: `(important)` → `\(important\)`
+- **Brackets**: `[array]` → `\[array\]`
+- **Braces**: `{object}` → `\{object\}`
+- **Pipes**: `a|b` → `a\|b`
+- **Semicolons**: `; command` → `\; command`
+- **Ampersands**: `a&b` → `a\&b`
+- **Less than**: `<tag>` → `\<tag\>`
+- **Greater than**: `>output` → `\>output`
+- **Question marks**: `?query` → `\?query`
+- **Exclamation marks**: `!important` → `\!important`
+- **Hash symbols**: `#comment` → `\#comment`
+- **At symbols**: `@user` → `\@user`
+- **Percent signs**: `%complete` → `\%complete`
+- **Tildes**: `~home` → `\~home`
+- **Caret**: `^version` → `\^version`
+- **Plus signs**: `+feature` → `\+feature`
+- **Equals signs**: `=value` → `\=value`
+- **Commas**: `a,b` → `a\,b`
+- **Periods**: `.file` → `\.file`
+- **Colons**: `:value` → `\:value`
+- **Slashes**: `/path` → `\/path`

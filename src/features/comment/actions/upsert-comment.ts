@@ -2,7 +2,7 @@
 "use server";
 
 import { revalidateTag } from "next/cache";
-import { z } from "zod/v4";
+import { maxLength, minLength, object, parse, pipe, string } from "valibot";
 import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
 import type { CommentWithUserInfo } from "@/features/comment/types";
@@ -14,11 +14,12 @@ import {
 } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
 
-const upsertCommentSchema = z.object({
-  content: z
-    .string()
-    .min(1, "Comment cannot be empty")
-    .max(1024, "Comment is too long"),
+const upsertCommentSchema = object({
+  content: pipe(
+    string(),
+    minLength(1, "Comment cannot be empty"),
+    maxLength(1024, "Comment is too long"),
+  ),
 });
 
 export const upsertComment = async (
@@ -57,7 +58,8 @@ export const upsertComment = async (
       }
     }
 
-    const parsedData = upsertCommentSchema.parse(
+    const parsedData = parse(
+      upsertCommentSchema,
       Object.fromEntries(formData.entries()),
     );
 

@@ -1,14 +1,23 @@
-import { z } from "zod/v4";
+import {
+  email,
+  type InferOutput,
+  object,
+  optional,
+  parse,
+  pipe,
+  string,
+  url,
+} from "valibot";
 import { sendEmailVerification } from "@/features/auth/utils/send-email-verification";
 import { inngest } from "@/lib/inngest";
 
-const emailVerificationSchema = z.object({
-  email: z.email(),
-  verificationUrl: z.url(),
-  userName: z.string().optional(),
+const emailVerificationSchema = object({
+  email: pipe(string(), email()),
+  verificationUrl: pipe(string(), url()),
+  userName: optional(string()),
 });
 
-export type EmailVerificationEventData = z.infer<
+export type EmailVerificationEventData = InferOutput<
   typeof emailVerificationSchema
 >;
 
@@ -16,13 +25,15 @@ export const eventEmailVerification = inngest.createFunction(
   { id: "event-email-verification" },
   { event: "email.verification" },
   async ({ event }) => {
-    const result = emailVerificationSchema.safeParse(event.data);
-    if (!result.success) {
+    try {
+      const {
+        email: userEmail,
+        verificationUrl,
+        userName,
+      } = parse(emailVerificationSchema, event.data);
+      await sendEmailVerification(userEmail, verificationUrl, userName);
+    } catch {
       throw new Error("Invalid email verification event data");
     }
-
-    const { email, verificationUrl, userName } = result.data;
-
-    await sendEmailVerification(email, verificationUrl, userName);
   },
 );

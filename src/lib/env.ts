@@ -1,19 +1,20 @@
 import "server-only";
-import { z } from "zod/v4";
+import { minLength, object, parse, pipe, string } from "valibot";
 
 // Environment schema validation
-const envSchema = z.object({
-  AUTH_SECRET: z.string().min(1, "AUTH_SECRET is required"),
-  DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
-  // DIRECT_URL: z.string().min(1, "DIRECT_URL is required"),
-  RESEND_API_KEY: z.string().min(1, "RESEND_API_KEY is required"),
-  RESEND_FROM: z
-    .string()
-    .min(
+const envSchema = object({
+  AUTH_SECRET: pipe(string(), minLength(1, "AUTH_SECRET is required")),
+  DATABASE_URL: pipe(string(), minLength(1, "DATABASE_URL is required")),
+  // DIRECT_URL: pipe(string(), minLength(1, "DIRECT_URL is required")),
+  RESEND_API_KEY: pipe(string(), minLength(1, "RESEND_API_KEY is required")),
+  RESEND_FROM: pipe(
+    string(),
+    minLength(
       1,
       "RESEND_FROM is required (e.g. 'Your App <onboarding@resend.dev>' or 'noreply@yourdomain.com')",
     ),
+  ),
 });
 
 // Export validated environment variables
-export const env = envSchema.parse(process.env);
+export const env = parse(envSchema, process.env);
