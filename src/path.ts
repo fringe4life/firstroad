@@ -24,6 +24,7 @@ const signInOTPVerifyPath: Route = "/sign-in/otp/verify";
 
 const accountProfilePath: Route = "/account/profile";
 const accountPasswordPath: Route = "/account/password";
+const signOutPath: Route = "/sign-out";
 
 export {
   homePath,
@@ -35,6 +36,7 @@ export {
   signInPath,
   signInOTPSendPath,
   signInOTPVerifyPath,
+  signOutPath,
   signUpPath,
   ticketEditPath,
   ticketPath,

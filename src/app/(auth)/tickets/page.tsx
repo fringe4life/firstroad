@@ -30,7 +30,7 @@ const TicketCreationForm = async () => {
 };
 
 const TicketsPage = () => (
-  <div className="flex flex-1 flex-col gap-y-8">
+  <div className="grid justify-center gap-y-8">
     <TicketCreationForm />
     <TicketList />
   </div>

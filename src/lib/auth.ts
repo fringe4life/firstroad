@@ -6,8 +6,29 @@ import { emailOTP } from "better-auth/plugins";
 import { inngest } from "@/lib/inngest";
 import { prisma } from "@/lib/prisma";
 
+// Session configuration constants
+const MINUTES_IN_SECONDS = 60;
+const HOURS_IN_SECONDS = 60 * MINUTES_IN_SECONDS;
+const DAYS_IN_SECONDS = 24 * HOURS_IN_SECONDS;
+const DAYS_PER_WEEK = 7;
+const SESSION_CACHE_MINUTES = 5;
+
+const SESSION_CACHE_DURATION_SECONDS =
+  SESSION_CACHE_MINUTES * MINUTES_IN_SECONDS; // 5 minutes
+const SESSION_EXPIRES_IN_SECONDS = DAYS_PER_WEEK * DAYS_IN_SECONDS; // 7 days
+const SESSION_UPDATE_AGE_SECONDS = DAYS_IN_SECONDS; // 1 day
+
 export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "postgresql" }),
+
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: SESSION_CACHE_DURATION_SECONDS,
+    },
+    expiresIn: SESSION_EXPIRES_IN_SECONDS,
+    updateAge: SESSION_UPDATE_AGE_SECONDS,
+  },
 
   plugins: [
     emailOTP({

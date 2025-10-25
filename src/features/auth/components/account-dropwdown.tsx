@@ -10,9 +10,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { signOut } from "@/features/auth/actions/signout";
 import type { User } from "@/features/auth/types";
-import { accountPasswordPath, accountProfilePath } from "@/path";
+import { accountPasswordPath, accountProfilePath, signOutPath } from "@/path";
 
 type AccountDropdownProps = {
   user: User;
@@ -43,10 +42,10 @@ const AccountDropdown = ({ user }: AccountDropdownProps) => (
       </DropdownMenuItem>
       <DropdownMenuSeparator />
       <DropdownMenuItem asChild>
-        <form action={signOut}>
+        <Link href={signOutPath}>
           <LucideLogOut className="mr-2 aspect-square h-4" />
-          <button type="submit">Sign Out</button>
-        </form>
+          Sign Out
+        </Link>
       </DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>

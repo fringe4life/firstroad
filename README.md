@@ -9,12 +9,12 @@
 [![Better Auth](https://img.shields.io/badge/Better%20Auth-1.3.31-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.16-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Biome](https://img.shields.io/badge/Biome-2.3.0-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-6.0.0-000000)](https://ultracite.dev/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-6.0.1-000000)](https://ultracite.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.7.2-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.1.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Inngest](https://img.shields.io/badge/Inngest-3.44.3-000000)](https://www.inngest.com/)
 [![Resend](https://img.shields.io/badge/Resend-6.2.2-000000)](https://resend.com/)
-[![React Email](https://img.shields.io/badge/React%20Email-4.3.1-000000)](https://react.email/)
+[![React Email](https://img.shields.io/badge/React%20Email-4.3.2-000000)](https://react.email/)
 
 </div>
 
@@ -39,13 +39,14 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **⚡ React Compiler**: React 19 compiler for automatic performance optimization
 - **📬 Background Jobs**: Inngest for async event handling and email processing
 - **⚡ PPR Navigation**: Partial Prerendering with cached header shell and dynamic auth components
+- **🔐 Session Management**: Cookie-based session caching for improved performance
 
 ## 🛠️ Tech Stack
 
 - **Framework**: Next.js 16 (App Router) with Turbopack
 - **Language**: TypeScript 5.9 with strict type checking
 - **Database**: PostgreSQL with Prisma Client (relationJoins preview, Neon adapter)
-- **Authentication**: Better Auth 1.3.30 with email/password provider
+- **Authentication**: Better Auth 1.3.31 with email/password provider and session cookie caching
 - **Styling**: Tailwind CSS v4 with shadcn/ui components
 - **Icons**: Lucide React
 - **Forms**: React Hook Form with Valibot validation
@@ -251,6 +252,7 @@ src/
 │   │   │   │   └── verify/ # Verify OTP page
 │   │   │   └── page.tsx   # Sign in page
 │   │   ├── sign-up/       # Sign up page
+│   │   ├── sign-out/      # Sign out page
 │   │   ├── forgot-password/ # Password reset request
 │   │   ├── reset-password/ # Password reset confirmation
 │   │   │   └── [token]/   # Token-based reset
@@ -288,7 +290,7 @@ src/
 ├── features/             # Feature-based modules
 │   ├── auth/             # Authentication logic
 │   │   ├── actions/      # Server actions (send-otp-action, verify-otp-action, change-password-action, signout)
-│   │   ├── components/   # Auth components (auth-nav, auth-section, otp-send-form, otp-verify-form, etc.)
+│   │   ├── components/   # Auth components (auth-nav, auth-section, otp-send-form, otp-verify-form, account-dropdown, etc.)
 │   │   ├── events/       # Inngest events (email-otp, email-verification, welcome-email)
 │   │   ├── queries/      # Server-side queries (getSession)
 │   │   ├── types.ts      # Centralized auth types
@@ -522,6 +524,8 @@ Better Auth configured with:
 - Rate limiting for production security
 - Database hooks for UserInfo creation
 - Prisma Client with Neon driver adapter
+- Session cookie caching (5-minute cache duration)
+- Session expiration (7 days) and update age (1 day)
 
 Inngest provides background job processing for:
 
