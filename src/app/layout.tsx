@@ -113,9 +113,9 @@ const RootLayout = ({
         <ThemeProvider>
           <MobileSidebarProvider>
             <Header />
-            <div className="group/sidebar-parent grid grid-flow-col grid-cols-[var(--side-width)_1fr]">
+            <div className="group/sidebar-parent layout-grid-cols grid grid-flow-col">
               <Sidebar />
-              <main className="layout-grid col-span-2 min-h-screen gap-y-8 overflow-x-clip px-(--padding-inline-main) py-24 transition-transform duration-200 group-has-[.sidebar:hover]/sidebar-parent:translate-x-(--sidebar-translation) md:col-start-2">
+              <main className="main-grid-rows col-span-2 grid min-h-screen gap-y-8 overflow-x-clip px-(--padding-inline-main) py-24 transition-transform duration-200 group-has-[.sidebar:hover]/sidebar-parent:translate-x-(--sidebar-translation) md:col-start-2">
                 {header}
                 {breadcrumbs}
                 <div className="max-content-widest mx-auto grid gap-y-4">

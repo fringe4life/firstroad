@@ -417,6 +417,9 @@
   animation-timing-function: ease-out;
 }
 
-@utility layout-grid {
+@utility main-grid-rows {
   grid-template-rows: repeat(2, min-content) 1fr;
+}
+@utility layout-grid-cols {
+  grid-template-columns: var(--side-width) 1fr;
 }

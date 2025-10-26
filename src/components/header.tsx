@@ -8,7 +8,7 @@ import { buttonVariants } from "@/components/ui/button";
 import MobileMenuButton from "@/features/navigation/components/mobile-menu-button";
 import { homePath } from "@/path";
 
-const HeaderShell = async ({ children }: { children: React.ReactNode }) => (
+const Header = () => (
   <nav className="fixed top-0 right-0 left-0 z-20 grid animate-header-from-top grid-flow-col items-center justify-between border-b bg-background/65 px-5 py-2.5 backdrop-blur supports-backdrop-blur:bg-background/60">
     <div className="flex items-center gap-x-2">
       <Suspense fallback={<div className="size-10" />}>
@@ -26,7 +26,9 @@ const HeaderShell = async ({ children }: { children: React.ReactNode }) => (
       <Suspense fallback={<div className="size-9" />}>
         <ThemeSwitcher />
       </Suspense>
-      {children}
+      <Suspense fallback={<AuthNavSkeleton />}>
+        <AuthNav />
+      </Suspense>
     </div>
     <div className="flex items-center gap-x-1 md:hidden">
       <Suspense fallback={<div className="size-9" />}>
@@ -34,14 +36,6 @@ const HeaderShell = async ({ children }: { children: React.ReactNode }) => (
       </Suspense>
     </div>
   </nav>
-);
-
-const Header = () => (
-  <HeaderShell>
-    <Suspense fallback={<AuthNavSkeleton />}>
-      <AuthNav />
-    </Suspense>
-  </HeaderShell>
 );
 
 export default Header;

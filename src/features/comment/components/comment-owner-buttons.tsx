@@ -13,7 +13,7 @@ const CommentOwnerButtons = ({
   onEdit,
   onDeleteComment,
 }: CommentOwnerButtonsProps) => (
-  <div className="flex flex-col gap-1">
+  <div className="grid gap-1">
     <CommentEditButton comment={comment} onEdit={onEdit} />
     <CommentDeleteButton id={comment.id} onDeleteComment={onDeleteComment} />
   </div>

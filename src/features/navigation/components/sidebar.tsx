@@ -26,7 +26,7 @@ const Sidebar = () => (
     {/* Desktop sidebar - uses CSS peer hover for expansion */}
     <SidebarShell>
       <Suspense fallback={<div className="h-8" />}>
-        <NavItems isCollapsed />
+        <NavItems />
       </Suspense>
     </SidebarShell>
 

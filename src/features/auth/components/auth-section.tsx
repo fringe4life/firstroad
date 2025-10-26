@@ -16,7 +16,7 @@ const AuthSectionShell = async () => {
   return (
     <div className="pt-4">
       <Separator />
-      <div className="flex flex-col gap-2 px-3 py-2">
+      <div className="grid gap-2 px-3 py-2">
         <Link
           className={buttonVariants({ variant: "outline" })}
           href={signUpPath}

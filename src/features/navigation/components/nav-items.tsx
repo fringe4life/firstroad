@@ -8,11 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { navItems } from "./constants";
 
-type NavItemsProps = {
-  isCollapsed?: boolean;
-};
-
-export const NavItems = ({ isCollapsed }: NavItemsProps) => {
+export const NavItems = () => {
   const pathname = usePathname();
 
   return (
@@ -29,7 +25,7 @@ export const NavItems = ({ isCollapsed }: NavItemsProps) => {
             <Link
               className={cn(
                 buttonVariants({ variant: "ghost" }),
-                "group relative flex h-12 w-full justify-start",
+                "relative flex h-12 w-full justify-start",
                 isActive && "bg-muted font-bold hover:bg-muted",
               )}
               href={item.href}
@@ -37,14 +33,7 @@ export const NavItems = ({ isCollapsed }: NavItemsProps) => {
               {cloneElement(item.icon, {
                 className: "w-5 aspect-square",
               } as React.HTMLAttributes<HTMLElement>)}
-              <span
-                className={cn(
-                  "text-base transition-opacity duration-200",
-                  isCollapsed
-                    ? "absolute left-12 opacity-0 hover:opacity-100 group-hover:opacity-75"
-                    : "ml-3 opacity-100",
-                )}
-              >
+              <span className="absolute left-12 text-base opacity-0 transition-opacity duration-200 hover:opacity-100 group-has-[.sidebar:focus-within]/sidebar-parent:opacity-75 group-has-[.sidebar:hover]/sidebar-parent:opacity-75">
                 {item.title}
               </span>
             </Link>

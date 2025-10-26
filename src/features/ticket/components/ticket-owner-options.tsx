@@ -18,7 +18,7 @@ const TicketOwnerOptions = ({
 }: TicketOwnerOptionsProps) => (
   <HasAuthSuspense
     fallback={
-      <div className="flex flex-col gap-y-1">
+      <div className="grid gap-y-1">
         <Button disabled size="icon" variant="outline">
           <LucidePencil className="size-4" />
         </Button>
