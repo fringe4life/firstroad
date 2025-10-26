@@ -5,7 +5,7 @@ import { useState } from "react";
 export const useToggle = (initialValue = false) => {
   const [value, setValue] = useState(() => initialValue);
 
-  const toggle = () => setValue(!value);
+  const toggle = () => setValue((prevValue) => !prevValue);
   const open = () => setValue(true);
   const close = () => setValue(false);
 

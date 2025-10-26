@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { cacheLife } from "next/cache";
 import Link from "next/link";
+import { connection } from "next/server";
 import { Suspense } from "react";
 import Spinner from "src/components/spinner";
 import { CardCompact } from "@/components/card-compact";
@@ -20,32 +20,28 @@ type ResetPasswordFormProps = {
 const SuspendResetPasswordForm = async ({
   tokenPromise,
 }: ResetPasswordFormProps) => {
+  await connection();
   const { token } = await tokenPromise;
   return <ResetPasswordForm token={token} />;
 };
 
-// biome-ignore lint/suspicious/useAwait: needed for use cache
-const ResetPasswordPage = async ({
+const ResetPasswordPage = ({
   params,
-}: PageProps<"/reset-password/[token]">) => {
-  "use cache";
-  cacheLife("max");
-  return (
-    <CardCompact
-      content={
-        <Suspense fallback={<Spinner />}>
-          <SuspendResetPasswordForm tokenPromise={params} />
-        </Suspense>
-      }
-      description="Enter your new password below"
-      footer={
-        <Link className="text-muted-foreground text-sm" href={signInPath}>
-          Back to Sign In
-        </Link>
-      }
-      title="Reset Password"
-    />
-  );
-};
+}: PageProps<"/reset-password/[token]">) => (
+  <CardCompact
+    content={
+      <Suspense fallback={<Spinner />}>
+        <SuspendResetPasswordForm tokenPromise={params} />
+      </Suspense>
+    }
+    description="Enter your new password below"
+    footer={
+      <Link className="text-muted-foreground text-sm" href={signInPath}>
+        Back to Sign In
+      </Link>
+    }
+    title="Reset Password"
+  />
+);
 
 export default ResetPasswordPage;

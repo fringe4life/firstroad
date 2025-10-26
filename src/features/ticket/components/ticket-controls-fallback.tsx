@@ -1,24 +1,14 @@
 "use cache";
 
 const TicketControlsFallback = async () => (
-  <>
-    {/* Desktop: Stacked skeleton */}
-    <div className="max-content-narrow hidden gap-y-2 sm:grid">
-      <div className="grid grid-flow-col grid-cols-2 gap-x-2">
-        <div className="h-9 w-full animate-pulse bg-muted" />
-        <div className="h-9 w-full animate-pulse bg-muted" />
-      </div>
-      <div className="h-9 w-full animate-pulse bg-muted" />
-    </div>
+  <div className="max-content-narrow grid gap-y-2">
+    {/* Search and Sort/Filter row - single div with shadow creating second element */}
 
-    {/* Mobile: Two-column skeleton */}
-    <div className="max-content-narrow grid gap-y-2 sm:hidden">
-      <div className="grid grid-flow-col grid-cols-2 gap-x-2">
-        <div className="h-9 w-full animate-pulse bg-muted" />
-        <div className="h-9 w-full animate-pulse bg-muted" />
-      </div>
-    </div>
-  </>
+    <div className="h-9 w-1/2 animate-pulse bg-muted shadow-[calc(var(--max-content-narrow)/2-0.25rem)_0_0_0_var(--muted)]" />
+
+    {/* Scope toggle row - only visible on desktop, single div with shadow creating second button */}
+    <div className="hidden h-9 w-1/2 animate-pulse bg-muted shadow-[calc(var(--max-content-narrow)/2)_0_0_0_var(--muted)] sm:block" />
+  </div>
 );
 
 export default TicketControlsFallback;

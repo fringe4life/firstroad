@@ -1,5 +1,5 @@
-import { cacheLife } from "next/cache";
 import Link from "next/link";
+import { connection } from "next/server";
 import { Suspense } from "react";
 import Spinner from "src/components/spinner";
 import { CardCompact } from "@/components/card-compact";
@@ -14,6 +14,7 @@ type VerifyEmailOTPVerifyPageProps = {
 const VerifyEmailOTPVerifyForm = async ({
   searchParams,
 }: VerifyEmailOTPVerifyPageProps) => {
+  await connection();
   const { email } = await searchParams;
   return (
     <OTPVerifyForm
@@ -24,28 +25,23 @@ const VerifyEmailOTPVerifyForm = async ({
   );
 };
 
-// biome-ignore lint/suspicious/useAwait: needed for use cache
-const VerifyEmailOTPVerifyPage = async ({
+const VerifyEmailOTPVerifyPage = ({
   searchParams,
-}: VerifyEmailOTPVerifyPageProps) => {
-  "use cache";
-  cacheLife("max");
-  return (
-    <CardCompact
-      content={
-        <Suspense fallback={<Spinner />}>
-          <VerifyEmailOTPVerifyForm searchParams={searchParams} />
-        </Suspense>
-      }
-      description="Enter the verification code sent to your email"
-      footer={
-        <Link className="text-muted-foreground text-sm" href={verifyEmailPath}>
-          Back to Email Verification
-        </Link>
-      }
-      title="Verify Your Email"
-    />
-  );
-};
+}: VerifyEmailOTPVerifyPageProps) => (
+  <CardCompact
+    content={
+      <Suspense fallback={<Spinner />}>
+        <VerifyEmailOTPVerifyForm searchParams={searchParams} />
+      </Suspense>
+    }
+    description="Enter the verification code sent to your email"
+    footer={
+      <Link className="text-muted-foreground text-sm" href={verifyEmailPath}>
+        Back to Email Verification
+      </Link>
+    }
+    title="Verify Your Email"
+  />
+);
 
 export default VerifyEmailOTPVerifyPage;

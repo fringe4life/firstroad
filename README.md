@@ -6,7 +6,7 @@
 [![React](https://img.shields.io/badge/React-19.2.0-61DAFB?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Prisma](https://img.shields.io/badge/Prisma-6.18.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
-[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.3.31-000000)](https://better-auth.com/)
+[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.3.32-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.16-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Biome](https://img.shields.io/badge/Biome-2.3.0-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
 [![Ultracite](https://img.shields.io/badge/Ultracite-6.0.1-000000)](https://ultracite.dev/)
@@ -46,7 +46,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **Framework**: Next.js 16 (App Router) with Turbopack
 - **Language**: TypeScript 5.9 with strict type checking
 - **Database**: PostgreSQL with Prisma Client (relationJoins preview, Neon adapter)
-- **Authentication**: Better Auth 1.3.31 with email/password provider and session cookie caching
+- **Authentication**: Better Auth 1.3.32 with email/password provider and session cookie caching
 - **Styling**: Tailwind CSS v4 with shadcn/ui components
 - **Icons**: Lucide React
 - **Forms**: React Hook Form with Valibot validation
@@ -234,12 +234,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 src/
 ├── app/                    # Next.js App Router pages
 │   ├── (auth)/            # Protected routes
-│   │   ├── tickets/       # Ticket management pages
-│   │   │   ├── [id]/      # Dynamic ticket routes
-│   │   │   │   ├── edit/  # Edit ticket page
-│   │   │   │   └── page.tsx # Ticket detail page
-│   │   │   ├── page.tsx   # Tickets list page
-│   │   │   └── error.tsx  # Error boundary
 │   │   ├── account/       # User account pages
 │   │   │   ├── password/  # Change password
 │   │   │   ├── profile/   # User profile
@@ -268,11 +262,24 @@ src/
 │   │   ├── (.)forgot-password/ # Intercepted forgot-password modal
 │   │   ├── [...catchAll]/ # Catch-all for closing modals
 │   │   └── default.tsx    # Default null state
-│   ├── @tickets/          # Parallel route slot for tickets
-│   │   ├── page.tsx       # Tickets list view
+│   ├── @tickets/          # Parallel route slot for tickets list
+│   │   ├── _components/   # Ticket-specific components
+│   │   │   ├── conditional-header.tsx # Dynamic header component
+│   │   │   └── conditional-header-skeleton.tsx # Header skeleton
+│   │   ├── [id]/          # Dynamic ticket routes
+│   │   │   ├── edit/      # Edit ticket page
+│   │   │   ├── not-found.tsx # Ticket not found
+│   │   │   └── page.tsx   # Ticket detail page
 │   │   ├── [...catchAll]/ # Catch-all route
 │   │   ├── default.tsx    # Default state
-│   │   └── error.tsx      # Error boundary
+│   │   ├── error.tsx      # Error boundary
+│   │   └── page.tsx       # Tickets list view
+│   ├── @ticketForm/       # Parallel route slot for ticket forms
+│   │   ├── [id]/          # Dynamic ticket edit forms
+│   │   │   └── edit/      # Edit ticket form
+│   │   ├── [...catchAll]/ # Catch-all route
+│   │   ├── default.tsx    # Default state
+│   │   └── page.tsx       # Create ticket form
 │   ├── api/               # API routes
 │   │   ├── auth/          # Authentication API
 │   │   └── inngest/       # Background jobs

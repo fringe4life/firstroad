@@ -1,5 +1,5 @@
 import { LucideBook, LucideCircleUser, LucideLibrary } from "lucide-react";
-import { createTicketScopeLink } from "@/lib/typed-links";
+import { createTicketScopeLink } from "src/utils/typed-links";
 import { accountProfilePath, homePath } from "@/path";
 import type { NavItem } from "../types/types";
 

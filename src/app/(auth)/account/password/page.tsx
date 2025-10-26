@@ -10,24 +10,20 @@ export const metadata: Metadata = {
   description: "Change your First Road account password securely.",
 };
 
-// biome-ignore lint/suspicious/useAwait: for use with use cache
-const PasswordPage = async () => {
-  "use cache";
-  return (
-    <div className="flex flex-1 flex-col gap-y-8">
-      <Heading
-        description="Keep your account secure"
-        tabs={<AccountTabs />}
-        title="Password"
-      />
-      <CardCompact
-        className="max-content-widest mx-auto"
-        content={<ChangePasswordForm changePasswordAction={changePassword} />}
-        description="Choose a strong, unique password"
-        title="Update password"
-      />
-    </div>
-  );
-};
+const PasswordPage = () => (
+  <div className="flex flex-1 flex-col gap-y-8">
+    <Heading
+      description="Keep your account secure"
+      tabs={<AccountTabs />}
+      title="Password"
+    />
+    <CardCompact
+      className="max-content-widest mx-auto"
+      content={<ChangePasswordForm changePasswordAction={changePassword} />}
+      description="Choose a strong, unique password"
+      title="Update password"
+    />
+  </div>
+);
 
 export default PasswordPage;

@@ -1,5 +1,5 @@
-import { cacheLife } from "next/cache";
 import Link from "next/link";
+import { connection } from "next/server";
 import { Suspense } from "react";
 import Spinner from "src/components/spinner";
 import { CardCompact } from "@/components/card-compact";
@@ -14,6 +14,7 @@ type SignInOTPVerifyPageProps = {
 const SignInOTPVerifyForm = async ({
   searchParams,
 }: SignInOTPVerifyPageProps) => {
+  await connection();
   const { email } = await searchParams;
   return (
     <OTPVerifyForm
@@ -23,29 +24,21 @@ const SignInOTPVerifyForm = async ({
     />
   );
 };
-
-// biome-ignore lint/suspicious/useAwait: needed for use cache
-const SignInOTPVerifyPage = async ({
-  searchParams,
-}: SignInOTPVerifyPageProps) => {
-  "use cache";
-  cacheLife("max");
-  return (
-    <CardCompact
-      content={
-        <Suspense fallback={<Spinner />}>
-          <SignInOTPVerifyForm searchParams={searchParams} />
-        </Suspense>
-      }
-      description="Enter the sign-in code sent to your email"
-      footer={
-        <Link className="text-muted-foreground text-sm" href={signInPath}>
-          Back to Sign In
-        </Link>
-      }
-      title="Sign In with OTP"
-    />
-  );
-};
+const SignInOTPVerifyPage = ({ searchParams }: SignInOTPVerifyPageProps) => (
+  <CardCompact
+    content={
+      <Suspense fallback={<Spinner />}>
+        <SignInOTPVerifyForm searchParams={searchParams} />
+      </Suspense>
+    }
+    description="Enter the sign-in code sent to your email"
+    footer={
+      <Link className="text-muted-foreground text-sm" href={signInPath}>
+        Back to Sign In
+      </Link>
+    }
+    title="Sign In with OTP"
+  />
+);
 
 export default SignInOTPVerifyPage;
