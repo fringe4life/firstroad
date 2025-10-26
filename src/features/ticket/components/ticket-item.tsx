@@ -34,7 +34,7 @@ const TicketItem = ({ ticket, children }: TicketItemProps) => {
       className="max-content-narrow detail:max-content-widest grid gap-y-4"
       data-detail={!!children}
     >
-      <div className="flex gap-x-2">
+      <div className="grid grid-flow-col gap-x-2">
         <ViewTransition name={`ticket-card-${ticket.id}`}>
           <Card className="w-full overflow-hidden detail:border-primary/20 detail:shadow-lg">
             <CardHeader>
@@ -60,7 +60,7 @@ const TicketItem = ({ ticket, children }: TicketItemProps) => {
           </Card>
         </ViewTransition>
 
-        <div className="flex flex-col gap-y-1">
+        <div className="space-y-1 self-start">
           {children ? (
             <TicketOwnerOptions isDetail={true} ticket={ticket} />
           ) : (
