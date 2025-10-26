@@ -2,6 +2,7 @@ import { PrismaNeon } from "@prisma/adapter-neon";
 import { PrismaClient } from "@/generated/prisma/client";
 import { createComments } from "./seed-data/comments";
 import { createTickets } from "./seed-data/tickets";
+import "dotenv/config";
 
 const adapter = new PrismaNeon({
   connectionString: process.env.DATABASE_URL || "",

@@ -63,12 +63,16 @@ const useConfirmDialog = ({
     onIsPending?.(pending);
   });
 
+  const handleClose = useEffectEvent(() => {
+    close();
+  });
+
   // Track isPending changes and call onIsPending callback
-  // biome-ignore lint/correctness/useExhaustiveDependencies: useEffectEvent functions don't need to be in dependency array
+
   useEffect(() => {
     // Close dialog when action starts (isPending becomes true) if closeOnSubmit is true
     if (isPending && closeOnSubmit) {
-      close();
+      handleClose();
     }
 
     handleIsPending(isPending);
@@ -82,7 +86,7 @@ const useConfirmDialog = ({
         handleIsPending(false);
       }
     };
-  }, [isPending, closeOnSubmit]); // ✅ onIsPending no longer in dependencies
+  }, [isPending, closeOnSubmit]);
 
   const dialog = (
     <Dialog onOpenChange={close} open={isOpen}>

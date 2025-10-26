@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant detail (&:where([data-detail="true"] *));
 
 @theme inline {
   --bg-background: light-dark(#ffffff, #0a0a0a);

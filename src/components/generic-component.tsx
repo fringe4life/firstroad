@@ -1,6 +1,6 @@
 export type GenericComponentProps<T, P, E extends React.ElementType = "div"> = {
   Component: React.ComponentType<P>;
-  items: T[];
+  items: T[] | readonly T[];
   renderProps: (item: T, index: number) => P;
   renderKey: (item: T, index: number) => React.Key;
   className?: string;

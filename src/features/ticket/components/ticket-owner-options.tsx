@@ -37,7 +37,7 @@ const TicketOwnerOptions = ({
 
       const editButton = (
         <Button asChild size="icon" variant="outline">
-          <Link href={ticketEditPath(ticket.id)} prefetch>
+          <Link href={ticketEditPath(ticket.slug)} prefetch>
             <LucidePencil className="size-4" />
           </Link>
         </Button>

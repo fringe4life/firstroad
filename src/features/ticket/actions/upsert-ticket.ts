@@ -16,8 +16,9 @@ import {
 } from "valibot";
 import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
+import { createSlug, ensureUniqueSlug } from "@/features/ticket/utils/slug";
 import { prisma } from "@/lib/prisma";
-import { homePath } from "@/path";
+import { homePath, ticketPath } from "@/path";
 import { setCookieByKey } from "@/utils/cookies";
 import { toCent } from "@/utils/currency";
 import {
@@ -56,8 +57,23 @@ const upsertTicket = async (
 
     const data = parse(upsertSchema, Object.fromEntries(formData.entries()));
 
+    // Generate slug from title
+    const baseSlug = createSlug(data.title);
+
+    // Get existing slugs to ensure uniqueness
+    const existingSlugs = await prisma.ticket.findMany({
+      select: { slug: true },
+      where: id ? { slug: { not: undefined } } : undefined, // Exclude current ticket when updating
+    });
+
+    const slug = ensureUniqueSlug(
+      baseSlug,
+      existingSlugs.map((t) => t.slug),
+    );
+
     const dbData = {
       ...data,
+      slug,
       deadline: new Date(data.deadline),
       bounty: toCent(data.bounty),
       userId: session.user?.id as string,
@@ -74,6 +90,9 @@ const upsertTicket = async (
     if (ticket.id) {
       revalidateTag(`ticket-${ticket.id}`, "max");
     }
+    if (ticket.slug) {
+      revalidateTag(`ticket-slug-${ticket.slug}`, "max");
+    }
   });
 
   if (error) {
@@ -84,6 +103,11 @@ const upsertTicket = async (
     setCookieByKey("toast", "Ticket updated");
     redirect(homePath);
   }
-  return toActionState("Ticket created", "SUCCESS");
+
+  // For new tickets, redirect to the ticket page using the slug
+  const data = parse(upsertSchema, Object.fromEntries(formData.entries()));
+  const slug = createSlug(data.title);
+  setCookieByKey("toast", "Ticket created");
+  redirect(ticketPath(slug));
 };
 export { upsertTicket };

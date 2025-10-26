@@ -1,3 +1,4 @@
+import { createSlug } from "@/features/ticket/utils/slug";
 import type { Prisma, Ticket } from "@/generated/prisma/client";
 
 const getRandomUserId = (ids: string[]) =>
@@ -5,7 +6,7 @@ const getRandomUserId = (ids: string[]) =>
 
 type TicketWithoutUserId = Omit<
   Ticket,
-  "userId" | "id" | "createdAt" | "updatedAt"
+  "userId" | "id" | "createdAt" | "updatedAt" | "slug"
 >;
 
 // Base tickets list without userId assignment
@@ -213,7 +214,7 @@ export const baseTickets: TicketWithoutUserId[] = [
   },
 ];
 
-// Factory to attach random user IDs; allows overriding tickets list
+// Factory to attach random user IDs and generate slugs; allows overriding tickets list
 export const createTickets = (
   userIds: string[],
   tickets: TicketWithoutUserId[] = baseTickets,
@@ -221,4 +222,5 @@ export const createTickets = (
   tickets.map((t) => ({
     ...t,
     userId: getRandomUserId(userIds),
+    slug: createSlug(t.title),
   }));

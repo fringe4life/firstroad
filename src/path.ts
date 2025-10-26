@@ -2,11 +2,10 @@ import type { Route } from "next";
 
 const homePath: Route = "/";
 
-const ticketPath = (ticketId: string): Route =>
-  `${homePath}${ticketId}` as Route;
+const ticketPath = (slug: string): Route => `${homePath}${slug}` as Route;
 
-const ticketEditPath = (ticketId: string): Route =>
-  `${ticketPath(ticketId)}/edit` as Route;
+const ticketEditPath = (slug: string): Route =>
+  `${ticketPath(slug)}/edit` as Route;
 
 const signInPath: Route = "/sign-in";
 const signUpPath: Route = "/sign-up";

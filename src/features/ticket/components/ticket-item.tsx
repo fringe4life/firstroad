@@ -23,7 +23,7 @@ type TicketItemProps = {
 const TicketItem = ({ ticket, children }: TicketItemProps) => {
   const detailButton = (
     <Button asChild size="icon" variant="outline">
-      <Link href={ticketPath(ticket.id)} prefetch>
+      <Link href={ticketPath(ticket.slug)} prefetch>
         <SquareArrowOutUpRight className="size-4" />
       </Link>
     </Button>
@@ -31,12 +31,12 @@ const TicketItem = ({ ticket, children }: TicketItemProps) => {
 
   return (
     <div
-      className="data-[detail=true]:max-content-widest max-content-narrow grid gap-y-4"
+      className="max-content-narrow detail:max-content-widest grid gap-y-4"
       data-detail={!!children}
     >
       <div className="flex gap-x-2">
         <ViewTransition name={`ticket-card-${ticket.id}`}>
-          <Card className="w-full overflow-hidden">
+          <Card className="w-full overflow-hidden detail:border-primary/20 detail:shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center gap-x-2">
                 <span>{TICKET_ICONS[ticket.status]}</span>
@@ -44,7 +44,7 @@ const TicketItem = ({ ticket, children }: TicketItemProps) => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <span className="line-clamp-3 whitespace-break-spaces data-[detail=true]:line-clamp-none">
+              <span className="line-clamp-3 detail:line-clamp-none whitespace-break-spaces detail:text-base">
                 {ticket.description}
               </span>
             </CardContent>

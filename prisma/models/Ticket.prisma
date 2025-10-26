@@ -6,7 +6,8 @@ enum TicketStatus {
 
 model Ticket {
   id          String       @id @default(cuid())
-  title       String
+  title       String       @unique
+  slug        String       @unique
   description String       @default("No description provided")
   status      TicketStatus @default(OPEN)
   bounty      Int

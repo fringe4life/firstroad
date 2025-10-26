@@ -1,11 +1,11 @@
 import { prisma } from "@/lib/prisma";
 
-export const getAllTicketIds = async () => {
+export const getAllTicketSlugs = async () => {
   const tickets = await prisma.ticket.findMany({
-    select: { id: true },
+    select: { slug: true },
   });
 
   return tickets.map((ticket) => ({
-    id: ticket.id,
+    slug: ticket.slug,
   }));
 };

@@ -8,19 +8,19 @@ import { upsertComment } from "@/features/comment/actions/upsert-comment";
 import Comments from "@/features/comment/components/comments";
 import { getCommentsByTicketId } from "@/features/comment/queries/get-comments";
 import TicketItem from "@/features/ticket/components/ticket-item";
-import { getAllTicketIds } from "@/features/ticket/queries/get-all-ticket-ids";
-import { getTicketById } from "@/features/ticket/queries/get-ticket";
+import { getAllTicketSlugs } from "@/features/ticket/queries/get-all-ticket-slugs";
+import { getTicketBySlug } from "@/features/ticket/queries/get-ticket";
 import { homePath } from "@/path";
 
 export async function generateStaticParams() {
-  return await getAllTicketIds();
+  return await getAllTicketSlugs();
 }
 
 export const generateMetadata = async ({
   params,
-}: PageProps<"/[id]">): Promise<Metadata> => {
-  const { id } = await params;
-  const ticket = await getTicketById(id);
+}: PageProps<"/[slug]">): Promise<Metadata> => {
+  const { slug } = await params;
+  const ticket = await getTicketBySlug(slug);
 
   if (!ticket) {
     return {
@@ -38,10 +38,10 @@ export const generateMetadata = async ({
 
 const INITIAL_COMMENTS_COUNT = 3;
 
-const TicketDetailPage = async ({ params }: PageProps<"/[id]">) => {
-  const { id } = await params;
+const TicketDetailPage = async ({ params }: PageProps<"/[slug]">) => {
+  const { slug } = await params;
 
-  const ticket = await getTicketById(id);
+  const ticket = await getTicketBySlug(slug);
 
   if (!ticket) {
     notFound();
@@ -49,7 +49,7 @@ const TicketDetailPage = async ({ params }: PageProps<"/[id]">) => {
 
   // Prerender the first 3 comments
   const commentsData = await getCommentsByTicketId(
-    id,
+    ticket.id,
     undefined,
     INITIAL_COMMENTS_COUNT,
   );
@@ -75,7 +75,7 @@ const TicketDetailPage = async ({ params }: PageProps<"/[id]">) => {
                   hasNextPage: commentsData.hasMore,
                   nextCursor: commentsData.nextCursor,
                 }}
-                ticketId={id}
+                ticketId={ticket.id}
                 upsertCommentAction={upsertComment}
                 userId={session?.user?.id}
               />

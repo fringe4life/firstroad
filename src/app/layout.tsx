@@ -3,14 +3,12 @@ import type { Metadata } from "next";
 import { cacheTag } from "next/cache";
 import { Inter } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
-import { Suspense } from "react";
 import { Toaster } from "sonner";
 import { MobileSidebarProvider } from "src/features/navigation/context/context";
 import Header from "@/components/header";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import Sidebar from "@/features/navigation/components/sidebar";
 import { ConditionalHeader } from "./@tickets/_components/conditional-header";
-import HeaderSkeleton from "./@tickets/_components/conditional-header-skeleton";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -116,9 +114,7 @@ const RootLayout = ({
             <div className="group/sidebar-parent grid grid-flow-col grid-cols-[var(--side-width)_1fr]">
               <Sidebar />
               <main className="col-span-2 grid min-h-screen grid-rows-[min-content_min-content_1fr] gap-y-4 overflow-x-clip px-(--padding-inline-main) py-24 transition-transform duration-200 group-has-[.sidebar:hover]/sidebar-parent:translate-x-(--sidebar-translation) md:col-start-2">
-                <Suspense fallback={<HeaderSkeleton />}>
-                  <ConditionalHeader />
-                </Suspense>
+                <ConditionalHeader />
                 <div className="grid justify-center gap-y-4">
                   {ticketForm}
                   {tickets}

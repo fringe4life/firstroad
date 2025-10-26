@@ -60,7 +60,7 @@ const TicketList = async ({ userId, searchParams }: TicketListProps) => {
           Component={TicketItem}
           className="grid gap-y-4"
           items={tickets}
-          renderKey={(ticket) => ticket.id}
+          renderKey={(ticket) => ticket.slug}
           renderProps={(ticket) => ({ isDetail: false as const, ticket })}
         />
       ) : (

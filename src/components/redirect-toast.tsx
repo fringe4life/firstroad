@@ -1,19 +1,18 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useEffectEvent } from "react";
 import { toast } from "sonner";
 import { consumeCookieByKey } from "@/utils/cookies";
 
 const RedirectToast = () => {
-  //   const pathname = usePathname();
-  //   console.log(pathname);
+  const showCookieToast = useEffectEvent(async () => {
+    const message = await consumeCookieByKey("toast");
+    if (message) {
+      toast.success(message);
+    }
+  });
+
   useEffect(() => {
-    const showCookieToast = async () => {
-      const message = await consumeCookieByKey("toast");
-      if (message) {
-        toast.success(message);
-      }
-    };
     showCookieToast();
   }, []);
   return null;

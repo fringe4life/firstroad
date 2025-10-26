@@ -4,16 +4,16 @@ import { HasAuthSuspense } from "@/features/auth/components/has-auth";
 import { isOwner } from "@/features/auth/utils/owner";
 import { upsertTicket } from "@/features/ticket/actions/upsert-ticket";
 import TicketUpsertForm from "@/features/ticket/components/ticket-upsert-form";
-import { getTicketById } from "@/features/ticket/queries/get-ticket";
+import { getTicketBySlug } from "@/features/ticket/queries/get-ticket";
 
 const TicketEditFormPage = async ({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }) => {
-  const { id } = await params;
+  const { slug } = await params;
 
-  const ticket = await getTicketById(id);
+  const ticket = await getTicketBySlug(slug);
 
   if (!ticket) {
     notFound();

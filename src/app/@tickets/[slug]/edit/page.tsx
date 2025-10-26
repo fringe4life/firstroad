@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Breadcrumbs from "@/components/breadcrumbs";
-import { getAllTicketIds } from "@/features/ticket/queries/get-all-ticket-ids";
-import { getTicketById } from "@/features/ticket/queries/get-ticket";
+import { getAllTicketSlugs } from "@/features/ticket/queries/get-all-ticket-slugs";
+import { getTicketBySlug } from "@/features/ticket/queries/get-ticket";
 import { homePath, ticketPath } from "@/path";
 
 export async function generateStaticParams() {
-  return await getAllTicketIds();
+  return await getAllTicketSlugs();
 }
 
 export const generateMetadata = async ({
   params,
-}: PageProps<"/[id]/edit">): Promise<Metadata> => {
-  const { id } = await params;
-  const ticket = await getTicketById(id);
+}: PageProps<"/[slug]/edit">): Promise<Metadata> => {
+  const { slug } = await params;
+  const ticket = await getTicketBySlug(slug);
 
   if (!ticket) {
     return {
@@ -28,10 +28,10 @@ export const generateMetadata = async ({
   };
 };
 
-const TicketEditPage = async ({ params }: PageProps<"/[id]/edit">) => {
-  const { id } = await params;
+const TicketEditPage = async ({ params }: PageProps<"/[slug]/edit">) => {
+  const { slug } = await params;
 
-  const ticket = await getTicketById(id);
+  const ticket = await getTicketBySlug(slug);
 
   if (!ticket) {
     notFound();
@@ -42,7 +42,7 @@ const TicketEditPage = async ({ params }: PageProps<"/[id]/edit">) => {
       <Breadcrumbs
         breadcrumbs={[
           { title: "Tickets", href: homePath },
-          { title: ticket.title, href: ticketPath(id) },
+          { title: ticket.title, href: ticketPath(slug) },
           { title: "Edit" },
         ]}
       />
