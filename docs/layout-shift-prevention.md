@@ -97,7 +97,7 @@ const SidebarSkeleton = () => (
 
 ### Sidebar with Dynamic Content Translation
 
-**Files**: `src/app/layout.tsx`, `src/app/_navigation/sidebar/components/sidebar.tsx`, `src/app/globals.css`
+**Files**: `src/app/layout.tsx`, `src/features/navigation/components/sidebar.tsx`, `src/app/globals.css`
 
 **CSS Variables**:
 - `--side-width: 4.875rem` (collapsed, set at `md:` breakpoint)
@@ -110,6 +110,7 @@ const SidebarSkeleton = () => (
 <html className="
   md:[--side-width:4.875rem]
   has-[.sidebar:hover]:[--expanded-sidebar-width:15rem]
+  has-[.sidebar:focus-within]:[--expanded-sidebar-width:15rem]
 ">
   <div className="group/sidebar-parent grid grid-flow-col grid-cols-[var(--side-width)_1fr]">
     <Suspense fallback={<SidebarSkeleton />}>
@@ -142,10 +143,11 @@ const SidebarSkeleton = () => (
 - ✅ No content overlap when sidebar expands
 - ✅ Smooth translation only when needed (viewport overflow)
 - ✅ CSS-driven calculations (no JavaScript)
+- ✅ Support for both hover and focus-within states
 
 ### Header AuthNav (Auth Buttons)
 
-**File**: `src/app/_navigation/header.tsx`
+**File**: `src/components/header.tsx`
 
 **CSS Variable**: `--auth-nav-width: 10.5rem`
 
@@ -187,29 +189,99 @@ const Spinner = () => (
 "use cache";
 
 const TicketControlsFallback = async () => (
-  <div className="max-content-narrow grid grid-flow-col grid-cols-2 gap-x-2">
-    {/* Single div with box-shadow creating the second element */}
-    <div className="h-9 w-full animate-pulse bg-muted shadow-[calc(100%+0.5rem)_0_0_0_var(--muted)]" />
+  <div className="max-content-narrow grid gap-y-2">
+    {/* Search and Sort row - single div with shadow creating second element */}
+    <div className="h-9 w-full animate-pulse bg-muted shadow-[calc(var(--max-content-narrow)/2-0.25rem)_0_0_0_var(--muted)]" />
+
+    {/* Scope toggle row - only visible on desktop, single div with shadow creating second button */}
+    <div className="hidden h-9 w-1/2 animate-pulse bg-muted shadow-[calc(var(--max-content-narrow)/2)_0_0_0_var(--muted)] sm:block" />
   </div>
 );
 ```
 
 **Key Features**:
-- ✅ Single DOM element (second "element" created with box-shadow)
+- ✅ Single DOM element per row (second "element" created with box-shadow)
 - ✅ Cached with "use cache" for performance
 - ✅ No expensive utility functions (no `cn`/`twMerge`)
 - ✅ Matches exact grid layout dimensions
 - ✅ Prevents CLS during Suspense loading
+- ✅ Responsive design (desktop shows scope toggle, mobile doesn't)
 
 **Usage**: 
 ```tsx
 <Suspense fallback={<TicketControlsFallback />}>
-  <div className="max-content-narrow grid grid-flow-col grid-cols-2 gap-x-2">
-    <TicketSearchInput placeholder="Search tickets ..." />
-    <TicketSortSelect options={TICKET_SORT_OPTIONS} />
+  {/* Desktop: Stacked layout with scope toggle below */}
+  <div className="max-content-narrow hidden gap-y-2 sm:grid">
+    <div className="grid grid-flow-col grid-cols-2 gap-x-2">
+      <TicketSearchInput placeholder="Search tickets ..." />
+      <TicketSortSelect options={TICKET_SORT_OPTIONS} />
+    </div>
+    <TicketScopeToggle session={session} />
+  </div>
+
+  {/* Mobile: Two-column layout with dropdown */}
+  <div className="max-content-narrow grid gap-y-2 sm:hidden">
+    <div className="grid grid-flow-col grid-cols-2 gap-x-2">
+      <TicketSearchInput placeholder="Search tickets ..." />
+      <TicketFilterDropdown session={session} />
+    </div>
   </div>
 </Suspense>
 ```
+
+### Parallel Routes with Consistent Heights
+
+**Files**: `src/app/@header/page.tsx`, `src/app/@breadcrumbs/[slug]/page.tsx`, `src/app/globals.css`
+
+**CSS Variable**: `--heading-height: calc(2.25rem + 1.25rem + 1px + 0.5rem)`
+
+**Pattern**: Cached components with matching fallback heights
+```tsx
+// Header component with caching
+const AllTicketsHeading = async () => {
+  "use cache";
+  cacheLife("max");
+  return (
+    <Heading
+      description="Tickets by everyone at one place"
+      title="All Tickets"
+    />
+  );
+};
+
+// Fallback with matching height
+<Suspense fallback={
+  <div className="h-(--heading-height) animate-pulse rounded-lg bg-muted" />
+}>
+  <AllTicketsHeading />
+</Suspense>
+```
+
+**Key Features**:
+- ✅ Cached static components prevent repeated creation
+- ✅ Fallback matches exact component height
+- ✅ No layout shift when switching between parallel routes
+- ✅ Consistent spacing across all route types
+- ✅ Performance optimization with `cacheLife("max")`
+
+**Layout Structure**:
+```tsx
+<main className="grid-rows-[min-content_min-content_min-content_1fr]">
+  {header}        // ← Full width, cached
+  {breadcrumbs}   // ← Full width, cached  
+  <div className="max-content-widest grid justify-center gap-y-4">
+    {ticketForm}  // ← Constrained width
+    {tickets}      // ← Constrained width
+  </div>
+  {children}      // ← Full width
+  {comments}      // ← Full width
+</main>
+```
+
+**Route Behavior**:
+- **`/` (Home)**: Only `{header}` renders, `{breadcrumbs}` returns `null`
+- **`/[slug]` (Ticket Detail)**: Only `{breadcrumbs}` renders, `{header}` returns `null`  
+- **`/[slug]/edit` (Edit)**: Only `{breadcrumbs}` renders, `{header}` returns `null`
 
 ## Why This Works
 
@@ -291,6 +363,45 @@ Skip this pattern for:
 5. **Use `position: fixed` for sticky components** - Prevents scroll-induced layout shifts
 6. **Calculate overflow with `clamp()`** - Conditional translations without JavaScript
 7. **Add safety margins** - Account for scrollbar width and sub-pixel rendering
+8. **Custom Tailwind variants** - Simplify complex selectors with `@custom-variant`
+9. **Cached static components** - Use `"use cache"` and `cacheLife("max")` for performance
+10. **Parallel route height consistency** - Use CSS variables to match fallback heights
+
+## Advanced Pattern: Custom Tailwind Variants
+
+### Problem
+
+Complex CSS selectors like `has-[.sidebar:hover]` and `data-[detail=true]` can make code hard to read and maintain.
+
+### Solution
+
+Use Tailwind CSS v4's `@custom-variant` to create cleaner, more readable selectors:
+
+```css
+@custom-variant dark (&:is(.dark *));
+@custom-variant detail (&:where([data-detail="true"] *));
+@custom-variant sidebar-hover (&:where(.has-\[\.sidebar\:hover\] *));
+@custom-variant sidebar-focus-within (&:where(.has-\[\.sidebar\:focus-within\] *));
+```
+
+### Usage
+
+**Before** (complex selectors):
+```tsx
+<div className="data-[detail=true]:max-content-widest has-[.sidebar:hover]:translate-x-4" />
+```
+
+**After** (clean variants):
+```tsx
+<div className="detail:max-content-widest sidebar-hover:translate-x-4" />
+```
+
+### Benefits
+
+- ✅ **Readability**: Cleaner, more semantic class names
+- ✅ **Maintainability**: Centralized selector definitions
+- ✅ **Consistency**: Same variant used across components
+- ✅ **Performance**: No runtime overhead (compile-time transformation)
 
 ## Advanced Pattern: Dynamic Content Translation
 
@@ -418,8 +529,11 @@ Pure calculations may fail due to:
 
 - [Web.dev: Optimize CLS](https://web.dev/articles/optimize-cls)
 - [React Docs: Suspense](https://react.dev/reference/react/Suspense)
+- [React Docs: cache](https://react.dev/reference/react/cache)
+- [Next.js Docs: Parallel Routes](https://nextjs.org/docs/app/building-your-application/routing/parallel-routes)
 - [CSS Custom Properties (MDN)](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)
 - [CSS clamp() (MDN)](https://developer.mozilla.org/en-US/docs/Web/CSS/clamp)
+- [Tailwind CSS v4 Custom Variants](https://tailwindcss.com/docs/v4-beta#custom-variants)
 - [Tailwind CSS Arbitrary Values](https://tailwindcss.com/docs/adding-custom-styles#using-arbitrary-values)
 - [CSS Transforms and Performance](https://web.dev/articles/animations-guide)
 

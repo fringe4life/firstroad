@@ -1,8 +1,9 @@
 import { cacheTag } from "next/cache";
+import { cache } from "react";
 import { prisma } from "@/lib/prisma";
 
-// Cached database query - only the expensive part
-const getTicketFromDBBySlug = async (slug: string) => {
+export const getTicketBySlug = cache(async (slug: string) => {
+  // Only cache the database query
   "use cache";
   cacheTag("tickets");
   cacheTag(`ticket-slug-${slug}`);
@@ -21,48 +22,4 @@ const getTicketFromDBBySlug = async (slug: string) => {
       },
     },
   });
-};
-
-// Cached database query - only the expensive part
-const getTicketFromDBById = async (ticketId: string) => {
-  "use cache";
-  cacheTag("tickets");
-  cacheTag(`ticket-${ticketId}`);
-
-  return await prisma.ticket.findUnique({
-    where: { id: ticketId },
-    include: {
-      userInfo: {
-        include: {
-          user: {
-            select: {
-              name: true,
-            },
-          },
-        },
-      },
-    },
-  });
-};
-
-export const getTicketBySlug = async (slug: string) => {
-  // Only cache the database query
-  const ticket = await getTicketFromDBBySlug(slug);
-
-  if (!ticket) {
-    return null;
-  }
-
-  return ticket;
-};
-
-export const getTicketById = async (ticketId: string) => {
-  // Only cache the database query
-  const ticket = await getTicketFromDBById(ticketId);
-
-  if (!ticket) {
-    return null;
-  }
-
-  return ticket;
-};
+});

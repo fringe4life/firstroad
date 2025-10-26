@@ -38,7 +38,7 @@ const TicketEditPage = async ({ params }: PageProps<"/[slug]/edit">) => {
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-y-8">
+    <div className="grid gap-y-8">
       <Breadcrumbs
         breadcrumbs={[
           { title: "Tickets", href: homePath },

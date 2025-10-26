@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 const ProfilePage = () => (
-  <div className="flex flex-1 flex-col gap-y-8">
+  <div className="grid gap-y-8">
     <Heading
       description="All your profile information"
       tabs={<AccountTabs />}

@@ -1,16 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Breadcrumbs from "@/components/breadcrumbs";
-import { HasAuthSuspense } from "@/features/auth/components/has-auth";
-import { deleteComment } from "@/features/comment/actions/delete-comment";
-import { loadMoreComments } from "@/features/comment/actions/load-more-comments";
-import { upsertComment } from "@/features/comment/actions/upsert-comment";
-import Comments from "@/features/comment/components/comments";
-import { getCommentsByTicketId } from "@/features/comment/queries/get-comments";
 import TicketItem from "@/features/ticket/components/ticket-item";
 import { getAllTicketSlugs } from "@/features/ticket/queries/get-all-ticket-slugs";
 import { getTicketBySlug } from "@/features/ticket/queries/get-ticket";
-import { homePath } from "@/path";
 
 export async function generateStaticParams() {
   return await getAllTicketSlugs();
@@ -36,8 +28,6 @@ export const generateMetadata = async ({
   };
 };
 
-const INITIAL_COMMENTS_COUNT = 3;
-
 const TicketDetailPage = async ({ params }: PageProps<"/[slug]">) => {
   const { slug } = await params;
 
@@ -47,44 +37,7 @@ const TicketDetailPage = async ({ params }: PageProps<"/[slug]">) => {
     notFound();
   }
 
-  // Prerender the first 3 comments
-  const commentsData = await getCommentsByTicketId(
-    ticket.id,
-    undefined,
-    INITIAL_COMMENTS_COUNT,
-  );
-
-  return (
-    <div className="flex flex-1 flex-col gap-y-8">
-      <Breadcrumbs
-        breadcrumbs={[
-          { title: "Tickets", href: homePath },
-          { title: ticket.title },
-        ]}
-      />
-      <div className="flex justify-center">
-        <TicketItem ticket={ticket}>
-          <HasAuthSuspense fallback={<div>Loading auth...</div>}>
-            {(session) => (
-              <Comments
-                deleteCommentAction={deleteComment}
-                list={commentsData.list}
-                loadMoreAction={loadMoreComments}
-                metadata={{
-                  count: commentsData.list.length,
-                  hasNextPage: commentsData.hasMore,
-                  nextCursor: commentsData.nextCursor,
-                }}
-                ticketId={ticket.id}
-                upsertCommentAction={upsertComment}
-                userId={session?.user?.id}
-              />
-            )}
-          </HasAuthSuspense>
-        </TicketItem>
-      </div>
-    </div>
-  );
+  return <TicketItem isDetail={true} ticket={ticket} />;
 };
 
 export default TicketDetailPage;

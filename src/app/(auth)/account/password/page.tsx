@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 const PasswordPage = () => (
-  <div className="flex flex-1 flex-col gap-y-8">
+  <div className="grid gap-y-8">
     <Heading
       description="Keep your account secure"
       tabs={<AccountTabs />}

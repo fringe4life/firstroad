@@ -35,11 +35,14 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **🎯 Type Safety**: Full TypeScript support with typed routes
 - **📧 Email Features**: Password reset, email verification, OTP authentication, and welcome emails with React Email templates
 - **🔄 Database Hooks**: Automatic UserInfo creation on user registration
-- **🔄 Parallel Routes**: Next.js parallel routes for enhanced user experience
+- **🔄 Parallel Routes**: Next.js parallel routes (@header, @breadcrumbs, @comments, @tickets, @ticketForm) for enhanced user experience
 - **⚡ React Compiler**: React 19 compiler for automatic performance optimization
 - **📬 Background Jobs**: Inngest for async event handling and email processing
 - **⚡ PPR Navigation**: Partial Prerendering with cached header shell and dynamic auth components
 - **🔐 Session Management**: Cookie-based session caching for improved performance
+- **🔗 Slug-based Routing**: Human-readable URLs using ticket slugs instead of IDs
+- **🎯 Scope Filtering**: Type-safe "all" vs "mine" ticket filtering with nuqs
+- **📱 Responsive Controls**: Desktop button groups and mobile dropdowns for ticket filtering
 
 ## 🛠️ Tech Stack
 
@@ -262,11 +265,29 @@ src/
 │   │   ├── (.)forgot-password/ # Intercepted forgot-password modal
 │   │   ├── [...catchAll]/ # Catch-all for closing modals
 │   │   └── default.tsx    # Default null state
+│   ├── @breadcrumbs/      # Parallel route slot for breadcrumbs
+│   │   ├── [slug]/        # Dynamic breadcrumb routes
+│   │   │   ├── edit/      # Edit ticket breadcrumbs
+│   │   │   └── page.tsx   # Ticket detail breadcrumbs
+│   │   ├── [...catchAll]/ # Catch-all route
+│   │   └── default.tsx    # Default null state
+│   ├── @comments/         # Parallel route slot for comments
+│   │   ├── [slug]/        # Dynamic comment routes
+│   │   │   └── page.tsx   # Ticket comments
+│   │   ├── [...catchAll]/ # Catch-all route
+│   │   └── default.tsx    # Default null state
+│   ├── @header/           # Parallel route slot for headers
+│   │   ├── [...catchAll]/ # Catch-all route
+│   │   ├── default.tsx    # Default null state
+│   │   └── page.tsx       # Home page header
+│   ├── @ticketForm/       # Parallel route slot for ticket forms
+│   │   ├── [slug]/        # Dynamic ticket edit forms
+│   │   │   └── edit/      # Edit ticket form
+│   │   ├── [...catchAll]/ # Catch-all route
+│   │   ├── default.tsx    # Default state
+│   │   └── page.tsx       # Create ticket form
 │   ├── @tickets/          # Parallel route slot for tickets list
-│   │   ├── _components/   # Ticket-specific components
-│   │   │   ├── conditional-header.tsx # Dynamic header component
-│   │   │   └── conditional-header-skeleton.tsx # Header skeleton
-│   │   ├── [id]/          # Dynamic ticket routes
+│   │   ├── [slug]/        # Dynamic ticket routes
 │   │   │   ├── edit/      # Edit ticket page
 │   │   │   ├── not-found.tsx # Ticket not found
 │   │   │   └── page.tsx   # Ticket detail page
@@ -274,18 +295,12 @@ src/
 │   │   ├── default.tsx    # Default state
 │   │   ├── error.tsx      # Error boundary
 │   │   └── page.tsx       # Tickets list view
-│   ├── @ticketForm/       # Parallel route slot for ticket forms
-│   │   ├── [id]/          # Dynamic ticket edit forms
-│   │   │   └── edit/      # Edit ticket form
-│   │   ├── [...catchAll]/ # Catch-all route
-│   │   ├── default.tsx    # Default state
-│   │   └── page.tsx       # Create ticket form
 │   ├── api/               # API routes
 │   │   ├── auth/          # Authentication API
 │   │   └── inngest/       # Background jobs
 │   ├── layout.tsx         # Root layout with parallel slots
 │   ├── page.tsx           # Home page
-│   └── globals.css        # Global styles
+│   └── globals.css        # Global styles with custom variants
 ├── components/            # Reusable UI components
 │   ├── ui/               # shadcn/ui components
 │   ├── form/             # Form components
@@ -299,7 +314,7 @@ src/
 │   │   ├── actions/      # Server actions (send-otp-action, verify-otp-action, change-password-action, signout)
 │   │   ├── components/   # Auth components (auth-nav, auth-section, otp-send-form, otp-verify-form, account-dropdown, etc.)
 │   │   ├── events/       # Inngest events (email-otp, email-verification, welcome-email)
-│   │   ├── queries/      # Server-side queries (getSession)
+│   │   ├── queries/      # Server-side queries (getSession, getSessionOrRedirect)
 │   │   ├── types.ts      # Centralized auth types
 │   │   └── utils/        # Auth utilities
 │   ├── navigation/       # Navigation components
@@ -310,8 +325,9 @@ src/
 │   │   ├── actions/      # Server actions
 │   │   ├── components/   # Ticket components
 │   │   ├── queries/      # Data queries with "use cache"
+│   │   ├── search-params.ts # Type-safe search parameters
 │   │   ├── types.ts      # Ticket types
-│   │   └── utils/        # Ticket utilities
+│   │   └── utils/        # Ticket utilities (slug generation)
 │   ├── comment/          # Comment system
 │   │   ├── actions/      # Comment actions (load-more-comments, upsert-comment, delete-comment)
 │   │   ├── components/   # Comment components (comments, comment-item, time-ago)
@@ -337,7 +353,8 @@ src/
 │   ├── currency.ts      # Currency utilities
 │   ├── get-active-path.ts # Path utilities
 │   ├── is-redirect-error.ts # Redirect error detection
-│   └── to-action-state.ts # Action state utilities
+│   ├── to-action-state.ts # Action state utilities
+│   └── typed-links.ts   # Type-safe link generation
 ├── hooks/                # Custom React hooks
 ├── generated/            # Generated Prisma client
 │   └── prisma/          # Prisma Client with queryCompiler
@@ -425,8 +442,11 @@ This pattern enables:
 - **Status Management**: Track ticket status (Open, In Progress, Done)
 - **Ownership**: Users can only edit their own tickets
 - **Search & Filter**: Find tickets by title, description, or status
+- **Scope Filtering**: Toggle between "All Tickets" and "My Tickets" with type-safe URL parameters
 - **Deadline Tracking**: Set and manage ticket deadlines
+- **Slug-based URLs**: Human-readable URLs using ticket slugs (e.g., `/this-ticket-title`)
 - **Parallel Display**: View ticket creation form and list simultaneously
+- **Responsive Controls**: Desktop button groups and mobile dropdowns for filtering
 
 ### Sample Data
 
@@ -480,6 +500,7 @@ bun run email:export     # Export email templates to HTML
 bunx prisma generate     # Generate Prisma client
 bunx prisma db push      # Push schema to database
 bunx prisma db seed      # Seed database with sample data
+bun run reset:tickets    # Reset only ticket and comment data (preserves users)
 
 # Background Jobs (Inngest)
 bunx inngest-cli dev     # Start Inngest dev server for local testing
@@ -492,15 +513,21 @@ bunx inngest-cli dev     # Start Inngest dev server for local testing
 - **Typed Routes**: Full type safety for all routes (`typedRoutes: true`)
 - **Turbopack**: Fast bundling for development and production
 - **React Compiler**: React 19 compiler for automatic performance optimization
-- **Parallel Routes**: Enhanced routing with simultaneous route rendering (`@auth`, `@tickets`)
+- **Parallel Routes**: Enhanced routing with simultaneous route rendering (`@auth`, `@tickets`, `@ticketForm`, `@header`, `@breadcrumbs`, `@comments`)
 - **Interception Routes**: Modal overlays with graceful fallback on hard refresh
 - **Client Segment Cache**: Improved caching for better performance
-- **"use cache" Directive**: Function-level caching for data queries
+- **"use cache" Directive**: Function-level caching for data queries and static components
 - **PPR (Partial Prerendering)**: Static shell with dynamic holes for optimal performance
+- **Slug-based Routing**: Human-readable URLs with automatic slug generation
+- **Type-safe Search Parameters**: nuqs integration for URL parameter management
 
 ### Tailwind CSS
 
-The project uses Tailwind CSS v4 with custom configuration for dark mode and theme variables.
+The project uses Tailwind CSS v4 with custom configuration for dark mode, theme variables, and custom variants:
+
+- **Custom Variants**: `@custom-variant` for cleaner selectors (`detail:`, `sidebar-hover:`, `sidebar-focus-within:`)
+- **CSS Variables**: Dynamic layout calculations with CSS custom properties
+- **Layout Shift Prevention**: CSS-driven height consistency and responsive design
 
 ### Database
 
@@ -518,7 +545,7 @@ PostgreSQL with Prisma Client using:
 - **Session**: Better Auth session model
 - **Verification**: Better Auth verification tokens
 - **UserInfo**: Extended user information
-- **Ticket**: Ticket management
+- **Ticket**: Ticket management with unique slug field
 - **Comment**: Comment system
 
 ### Authentication & Background Jobs
@@ -553,6 +580,8 @@ Inngest provides background job processing for:
   - `ClientSession`: Client-side session type
 - DAL pattern with session injection via `hasAuth()` and `requireAuth()` helpers
 - Shared utilities in `src/utils/` for better organization
+- Type-safe link generation with `createTypedLink` for search parameters
+- Slug-based routing with automatic generation and validation
 
 ### Path Management
 
@@ -560,6 +589,7 @@ Centralized type-safe route definitions in `src/path.ts`:
 
 - Static routes with `Route` type
 - Dynamic routes with `as Route` assertions
+- Slug-based ticket routes (`ticketPath(slug)`, `ticketEditPath(slug)`)
 - Consistent path usage across the application
 
 ## 🚀 Deployment

@@ -150,6 +150,14 @@
   );
   --sidebar-height: calc(100svh - var(--header-height));
 
+  /* Heading dimensions */
+  --heading-height: calc(
+    2.25rem +
+    1.25rem +
+    1px +
+    0.5rem
+  ); /* h2 + p + separator + gap */
+
   --side-width: 0;
   --expanded-sidebar-width: 0;
   --auth-nav-width: 10.5rem;
@@ -407,4 +415,8 @@
 ::view-transition-group(ticket-card) {
   animation-duration: 0.3s;
   animation-timing-function: ease-out;
+}
+
+@utility layout-grid {
+  grid-template-rows: repeat(2, min-content) 1fr;
 }

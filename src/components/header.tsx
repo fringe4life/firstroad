@@ -9,7 +9,7 @@ import MobileMenuButton from "@/features/navigation/components/mobile-menu-butto
 import { homePath } from "@/path";
 
 const HeaderShell = async ({ children }: { children: React.ReactNode }) => (
-  <nav className="fixed top-0 right-0 left-0 z-20 flex animate-header-from-top items-center justify-between border-b bg-background/65 px-5 py-2.5 backdrop-blur supports-backdrop-blur:bg-background/60">
+  <nav className="fixed top-0 right-0 left-0 z-20 grid animate-header-from-top grid-flow-col items-center justify-between border-b bg-background/65 px-5 py-2.5 backdrop-blur supports-backdrop-blur:bg-background/60">
     <div className="flex items-center gap-x-2">
       <Suspense fallback={<div className="size-10" />}>
         <MobileMenuButton />

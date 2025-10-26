@@ -8,7 +8,6 @@ import { MobileSidebarProvider } from "src/features/navigation/context/context";
 import Header from "@/components/header";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import Sidebar from "@/features/navigation/components/sidebar";
-import { ConditionalHeader } from "./@tickets/_components/conditional-header";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -99,6 +98,9 @@ const RootLayout = ({
   auth,
   tickets,
   ticketForm,
+  header,
+  comments,
+  breadcrumbs,
 }: LayoutProps<"/">) => (
   <html
     className="has-[.sidebar:focus-within]:[--expanded-sidebar-width:15rem] has-[.sidebar:hover]:[--expanded-sidebar-width:15rem] md:[--side-width:4.875rem]"
@@ -113,11 +115,13 @@ const RootLayout = ({
             <Header />
             <div className="group/sidebar-parent grid grid-flow-col grid-cols-[var(--side-width)_1fr]">
               <Sidebar />
-              <main className="col-span-2 grid min-h-screen grid-rows-[min-content_min-content_1fr] gap-y-4 overflow-x-clip px-(--padding-inline-main) py-24 transition-transform duration-200 group-has-[.sidebar:hover]/sidebar-parent:translate-x-(--sidebar-translation) md:col-start-2">
-                <ConditionalHeader />
-                <div className="grid justify-center gap-y-4">
+              <main className="layout-grid col-span-2 min-h-screen gap-y-8 overflow-x-clip px-(--padding-inline-main) py-24 transition-transform duration-200 group-has-[.sidebar:hover]/sidebar-parent:translate-x-(--sidebar-translation) md:col-start-2">
+                {header}
+                {breadcrumbs}
+                <div className="max-content-widest mx-auto grid gap-y-4">
                   {ticketForm}
                   {tickets}
+                  {comments}
                 </div>
                 {children}
               </main>

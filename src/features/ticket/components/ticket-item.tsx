@@ -17,10 +17,10 @@ import { toCurrencyFromCent } from "@/utils/currency";
 
 type TicketItemProps = {
   ticket: BaseTicket;
-  children?: React.ReactNode;
+  isDetail?: boolean;
 };
 
-const TicketItem = ({ ticket, children }: TicketItemProps) => {
+const TicketItem = ({ ticket, isDetail = false }: TicketItemProps) => {
   const detailButton = (
     <Button asChild size="icon" variant="outline">
       <Link href={ticketPath(ticket.slug)} prefetch>
@@ -32,7 +32,7 @@ const TicketItem = ({ ticket, children }: TicketItemProps) => {
   return (
     <div
       className="max-content-narrow detail:max-content-widest grid gap-y-4"
-      data-detail={!!children}
+      data-detail={isDetail}
     >
       <div className="grid grid-flow-col gap-x-2">
         <ViewTransition name={`ticket-card-${ticket.id}`}>
@@ -61,7 +61,7 @@ const TicketItem = ({ ticket, children }: TicketItemProps) => {
         </ViewTransition>
 
         <div className="space-y-1 self-start">
-          {children ? (
+          {isDetail ? (
             <TicketOwnerOptions isDetail={true} ticket={ticket} />
           ) : (
             <>
@@ -71,7 +71,6 @@ const TicketItem = ({ ticket, children }: TicketItemProps) => {
           )}
         </div>
       </div>
-      {children}
     </div>
   );
 };

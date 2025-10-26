@@ -84,7 +84,7 @@
     "tailwindcss": "^4.1.16",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3",
-    "ultracite": "6.0.1",
+    "ultracite": "6.0.3",
     "zod": "^4.1.12"
   },
   "trustedDependencies": [
@@ -99,9 +99,5 @@
     "protobufjs",
     "resend",
     "sharp"
-  ],
-  "overrides": {
-    "@types/react": "19.2.2",
-    "@types/react-dom": "19.2.2"
-  }
+  ]
 }
