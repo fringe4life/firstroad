@@ -1,3 +1,4 @@
+import { APIError } from "better-auth";
 import { flatten, ValiError } from "valibot";
 
 export type ActionState<T = unknown> = {
@@ -29,6 +30,40 @@ const fromErrorToActionState = <T = unknown>(
       status: "ERROR",
     };
   }
+
+  // Check for Better Auth APIError
+  if (err instanceof APIError) {
+    const apiError = err as {
+      status: string;
+      body: { code?: string; message?: string };
+    };
+
+    // Map Better Auth error codes to specific fields
+    const fieldErrors: Record<string, string[]> = {};
+
+    if (apiError.body.code === "INVALID_PASSWORD") {
+      fieldErrors.currentPassword = [
+        apiError.body.message || "Invalid password",
+      ];
+    } else if (apiError.body.code === "PASSWORD_TOO_WEAK") {
+      fieldErrors.newPassword = [
+        apiError.body.message || "Password is too weak",
+      ];
+    } else if (apiError.body.code === "PASSWORD_COMPROMISED") {
+      fieldErrors.newPassword = [
+        apiError.body.message || "Password is compromised",
+      ];
+    }
+
+    return {
+      message: apiError.body.message || "Authentication error",
+      fieldErrors,
+      payload: formData,
+      status: "ERROR",
+      timestamp: Date.now(),
+    };
+  }
+
   if (err instanceof Error) {
     return {
       message: err.message,
@@ -38,9 +73,10 @@ const fromErrorToActionState = <T = unknown>(
       timestamp: Date.now(),
     };
   }
+
   return {
     fieldErrors: {},
-    message: "An unknown error occured",
+    message: "An unknown error occurred",
     payload: formData,
     status: "ERROR",
     timestamp: Date.now(),

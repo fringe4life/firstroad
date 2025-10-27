@@ -1,13 +1,13 @@
 "use client";
 
 import { useActionState, useId } from "react";
-import type { changePassword } from "src/features/password/actions/change-password-action";
 import FieldError from "@/components/form/field-error";
 import Form from "@/components/form/form";
 import SubmitButton from "@/components/form/submit-button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import type { changePassword } from "@/features/password/actions/change-password-action";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 
 type ChangePasswordFormProps = {

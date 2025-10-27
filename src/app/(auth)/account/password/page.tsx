@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
+import { changePassword } from "src/features/password/actions/change-password-action";
+import ChangePasswordForm from "src/features/password/components/change-password-form";
 import AccountTabs from "@/app/(auth)/account/_components/account-tabs";
 import { CardCompact } from "@/components/card-compact";
 import Heading from "@/components/heading";
-import { changePassword } from "@/features/auth/actions/change-password-action";
-import ChangePasswordForm from "@/features/auth/components/change-password-form";
 
 export const metadata: Metadata = {
   title: "Password",

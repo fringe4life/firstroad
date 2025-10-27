@@ -149,7 +149,20 @@ export const auth = betterAuth({
         },
       });
     },
-    // onPasswordReset: async ({ user }, _request) => {},
+    onPasswordReset: async ({ user }) => {
+      // Trigger Inngest event to handle password changed email asynchronously
+      try {
+        await inngest.send({
+          name: "password.changed",
+          data: {
+            email: user.email,
+            userName: user.name,
+          },
+        });
+      } catch {
+        // Don't throw the error to avoid breaking the password change flow
+      }
+    },
     resetPasswordTokenExpiresIn: 3600, // 1 hour
   },
 

@@ -82,17 +82,6 @@
     }
   }
 
-  --animate-header-from-top: --header-from-top 250ms ease-out;
-
-  @keyframes --header-from-top {
-    from {
-      transform: translateY(-100%);
-    }
-    to {
-      transform: translateY(0);
-    }
-  }
-
   --animate-sidebar-from-left: --sidebar-from-left 500ms ease-out;
 
   @keyframes --sidebar-from-left {
@@ -380,35 +369,34 @@
 }
 
 /* View Transitions for Shared Element Animations */
-@keyframes ticket-card-enter {
+@keyframes --ticket-card-enter {
   from {
-    transform: scale(0.95);
+    scale: 0.25;
     opacity: 0;
   }
   to {
-    transform: scale(1);
+    scale: 1;
     opacity: 1;
   }
 }
 
-@keyframes ticket-card-exit {
+@keyframes --ticket-card-exit {
   from {
-    transform: scale(1);
     opacity: 1;
   }
   to {
-    transform: scale(1.05);
+    scale: 0.25;
     opacity: 0;
   }
 }
 
 /* Shared element transitions for ticket cards */
 ::view-transition-old(ticket-card) {
-  animation: ticket-card-exit 0.3s ease-out;
+  animation: --ticket-card-exit 0.3s ease-out;
 }
 
 ::view-transition-new(ticket-card) {
-  animation: ticket-card-enter 0.3s ease-out;
+  animation: --ticket-card-enter 0.3s ease-out;
 }
 
 /* Smooth transitions for ticket card shared elements */

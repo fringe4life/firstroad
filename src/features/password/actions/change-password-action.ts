@@ -82,35 +82,31 @@ export async function changePassword(
   const formDataObject = Object.fromEntries(formData.entries());
 
   // Validate form data with Valibot schema
-  try {
+
+  const { error } = await tryCatch(async () => {
     const parsed = parse(schema, formDataObject);
+    const headersData = await headers();
 
-    const { error } = await tryCatch(async () => {
-      const headersData = await headers();
+    const changePasswordBody = {
+      currentPassword: parsed.currentPassword,
+      newPassword: parsed.newPassword,
+      revokeOtherSessions: parsed.revokeOtherSessions,
+    };
 
-      const changePasswordBody = {
-        currentPassword: parsed.currentPassword,
-        newPassword: parsed.newPassword,
-        revokeOtherSessions: parsed.revokeOtherSessions,
-      };
-
-      await auth.api.changePassword({
-        headers: headersData,
-        body: changePasswordBody,
-      });
-
-      setCookieByKey("toast", "Password successfully changed");
-      throw redirect(accountProfilePath);
+    await auth.api.changePassword({
+      headers: headersData,
+      body: changePasswordBody,
     });
 
-    if (error) {
-      unstable_rethrow(error);
-      return fromErrorToActionState(error, formData);
-    }
+    setCookieByKey("toast", "Password successfully changed");
+    throw redirect(accountProfilePath);
+  });
 
-    // This should never be reached due to redirect, but satisfies TypeScript
-    return toActionState("Password changed successfully", "SUCCESS");
-  } catch (error) {
+  if (error) {
+    unstable_rethrow(error);
     return fromErrorToActionState(error, formData);
   }
+
+  // This should never be reached due to redirect, but satisfies TypeScript
+  return toActionState("Password changed successfully", "SUCCESS");
 }

@@ -1,7 +1,7 @@
 "use server";
 
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { redirect, unstable_rethrow } from "next/navigation";
 import { homePath } from "src/path";
 import {
   email,
@@ -14,7 +14,6 @@ import {
   string,
 } from "valibot";
 import { auth } from "@/lib/auth";
-import { isRedirectError } from "@/utils/is-redirect-error";
 import type { ActionState } from "@/utils/to-action-state";
 import { fromErrorToActionState, toActionState } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
@@ -35,36 +34,28 @@ export const verifyEmailVerificationOTP = async (
 ): Promise<ActionState> => {
   const formDataObject = Object.fromEntries(formData.entries());
 
-  // Validate form data with simplified schema
-  try {
+  const { error } = await tryCatch(async () => {
     const parsed = parse(otpSchema, formDataObject);
-
-    const { error } = await tryCatch(async () => {
-      // For email verification, use the verify email endpoint
-      await auth.api.verifyEmailOTP({
-        body: {
-          email: parsed.email,
-          otp: parsed.otp,
-        },
-        headers: await headers(),
-      });
-
-      // Redirect to account profile
-      throw redirect(homePath);
+    // For email verification, use the verify email endpoint
+    await auth.api.verifyEmailOTP({
+      body: {
+        email: parsed.email,
+        otp: parsed.otp,
+      },
+      headers: await headers(),
     });
 
-    if (error) {
-      if (isRedirectError(error)) {
-        throw error;
-      }
-      return fromErrorToActionState(error, formData);
-    }
+    // Redirect to account profile
+    throw redirect(homePath);
+  });
 
-    // This should never be reached due to redirect, but satisfies TypeScript
-    return toActionState("OTP verified successfully", "SUCCESS");
-  } catch (error) {
+  if (error) {
+    unstable_rethrow(error);
     return fromErrorToActionState(error, formData);
   }
+
+  // This should never be reached due to redirect, but satisfies TypeScript
+  return toActionState("OTP verified successfully", "SUCCESS");
 };
 
 export const verifySignInOTP = async (
@@ -73,34 +64,26 @@ export const verifySignInOTP = async (
 ): Promise<ActionState> => {
   const formDataObject = Object.fromEntries(formData.entries());
 
-  // Validate form data with simplified schema
-  try {
+  const { error } = await tryCatch(async () => {
+    // For sign-in, use the sign-in endpoint
     const parsed = parse(otpSchema, formDataObject);
-
-    const { error } = await tryCatch(async () => {
-      // For sign-in, use the sign-in endpoint
-      await auth.api.signInEmailOTP({
-        body: {
-          email: parsed.email,
-          otp: parsed.otp,
-        },
-        headers: await headers(),
-      });
-
-      // Redirect to tickets page
-      throw redirect(homePath);
+    await auth.api.signInEmailOTP({
+      body: {
+        email: parsed.email,
+        otp: parsed.otp,
+      },
+      headers: await headers(),
     });
 
-    if (error) {
-      if (isRedirectError(error)) {
-        throw error;
-      }
-      return fromErrorToActionState(error, formData);
-    }
+    // Redirect to tickets page
+    throw redirect(homePath);
+  });
 
-    // This should never be reached due to redirect, but satisfies TypeScript
-    return toActionState("OTP verified successfully", "SUCCESS");
-  } catch (error) {
+  if (error) {
+    unstable_rethrow(error);
     return fromErrorToActionState(error, formData);
   }
+
+  // This should never be reached due to redirect, but satisfies TypeScript
+  return toActionState("OTP verified successfully", "SUCCESS");
 };

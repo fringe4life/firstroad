@@ -6,10 +6,12 @@ type FieldErrorProps = {
 };
 
 const FieldError = ({ actionState, name }: FieldErrorProps) => {
-  const error = actionState.fieldErrors[name]?.[0];
-  if (!error) {
-    return null;
+  // Only use fieldErrors for security (no payload fallback to avoid exposing sensitive data)
+  const fieldError = actionState.fieldErrors[name];
+  if (fieldError && fieldError.length > 0) {
+    return <span className="text-red-500 text-sm">{fieldError[0]}</span>;
   }
-  return <span className="text-red-500 text-sm">{error}</span>;
+
+  return null;
 };
 export default FieldError;

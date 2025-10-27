@@ -1,11 +1,10 @@
 "use server";
 
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { redirect, unstable_rethrow } from "next/navigation";
 import { email, minLength, object, parse, pipe, string } from "valibot";
 import { auth } from "@/lib/auth";
 import { setCookieByKey } from "@/utils/cookies";
-import { isRedirectError } from "@/utils/is-redirect-error";
 import type { ActionState } from "@/utils/to-action-state";
 import { fromErrorToActionState, toActionState } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
@@ -21,39 +20,31 @@ export const sendEmailVerificationOTP = async (
 ): Promise<ActionState> => {
   const formDataObject = Object.fromEntries(formData.entries());
 
-  // Validate form data with simplified schema
-  try {
+  const { error } = await tryCatch(async () => {
     const parsed = parse(emailSchema, formDataObject);
-
-    const { error } = await tryCatch(async () => {
-      await auth.api.sendVerificationOTP({
-        body: {
-          email: parsed.email,
-          type: "email-verification",
-        },
-        headers: await headers(),
-      });
-
-      // Set toast cookie to show success message
-      await setCookieByKey("toast", "Verification code sent to your email");
-
-      // Redirect to verify page with email in URL
-      const verifyUrl = `/verify-email/otp/verify?email=${encodeURIComponent(parsed.email)}`;
-      throw redirect(verifyUrl as `/verify-email/otp/verify?email=${string}`);
+    await auth.api.sendVerificationOTP({
+      body: {
+        email: parsed.email,
+        type: "email-verification",
+      },
+      headers: await headers(),
     });
 
-    if (error) {
-      if (isRedirectError(error)) {
-        throw error;
-      }
-      return fromErrorToActionState(error, formData);
-    }
+    // Set toast cookie to show success message
+    await setCookieByKey("toast", "Verification code sent to your email");
 
-    // This should never be reached due to redirect, but satisfies TypeScript
-    return toActionState("OTP sent successfully", "SUCCESS");
-  } catch (error) {
+    // Redirect to verify page with email in URL
+    const verifyUrl = `/verify-email/otp/verify?email=${encodeURIComponent(parsed.email)}`;
+    throw redirect(verifyUrl as `/verify-email/otp/verify?email=${string}`);
+  });
+
+  if (error) {
+    unstable_rethrow(error);
     return fromErrorToActionState(error, formData);
   }
+
+  // This should never be reached due to redirect, but satisfies TypeScript
+  return toActionState("OTP sent successfully", "SUCCESS");
 };
 
 export const sendSignInOTP = async (
@@ -62,37 +53,29 @@ export const sendSignInOTP = async (
 ): Promise<ActionState> => {
   const formDataObject = Object.fromEntries(formData.entries());
 
-  // Validate form data with simplified schema
-  try {
+  const { error } = await tryCatch(async () => {
     const parsed = parse(emailSchema, formDataObject);
-
-    const { error } = await tryCatch(async () => {
-      await auth.api.sendVerificationOTP({
-        body: {
-          email: parsed.email,
-          type: "sign-in",
-        },
-        headers: await headers(),
-      });
-
-      // Set toast cookie to show success message
-      await setCookieByKey("toast", "Verification code sent to your email");
-
-      // Redirect to verify page with email in URL
-      const verifyUrl = `/sign-in/otp/verify?email=${encodeURIComponent(parsed.email)}`;
-      throw redirect(verifyUrl as `/sign-in/otp/verify?email=${string}`);
+    await auth.api.sendVerificationOTP({
+      body: {
+        email: parsed.email,
+        type: "sign-in",
+      },
+      headers: await headers(),
     });
 
-    if (error) {
-      if (isRedirectError(error)) {
-        throw error;
-      }
-      return fromErrorToActionState(error, formData);
-    }
+    // Set toast cookie to show success message
+    await setCookieByKey("toast", "Verification code sent to your email");
 
-    // This should never be reached due to redirect, but satisfies TypeScript
-    return toActionState("OTP sent successfully", "SUCCESS");
-  } catch (error) {
+    // Redirect to verify page with email in URL
+    const verifyUrl = `/sign-in/otp/verify?email=${encodeURIComponent(parsed.email)}`;
+    throw redirect(verifyUrl as `/sign-in/otp/verify?email=${string}`);
+  });
+
+  if (error) {
+    unstable_rethrow(error);
     return fromErrorToActionState(error, formData);
   }
+
+  // This should never be reached due to redirect, but satisfies TypeScript
+  return toActionState("OTP sent successfully", "SUCCESS");
 };
