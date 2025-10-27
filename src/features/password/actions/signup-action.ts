@@ -1,7 +1,7 @@
 "use server";
 
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { redirect, unstable_rethrow } from "next/navigation";
 import {
   email,
   forward,
@@ -15,7 +15,6 @@ import {
 } from "valibot";
 import { auth } from "@/lib/auth";
 import { homePath } from "@/path";
-import { isRedirectError } from "@/utils/is-redirect-error";
 import {
   type ActionState,
   fromErrorToActionState,
@@ -69,9 +68,7 @@ const signup = async (_state: ActionState | undefined, formData: FormData) => {
   });
 
   if (error) {
-    if (isRedirectError(error)) {
-      throw error;
-    }
+    unstable_rethrow(error);
     return fromErrorToActionState(error, formData);
   }
 };

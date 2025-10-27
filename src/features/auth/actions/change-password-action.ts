@@ -2,22 +2,24 @@
 "use server";
 
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { redirect, unstable_rethrow } from "next/navigation";
 import { connection } from "next/server";
 import {
   forward,
+  literal,
   minLength,
   object,
+  optional,
   parse,
   partialCheck,
   pipe,
   string,
   transform,
+  union,
 } from "valibot";
 import { auth } from "@/lib/auth";
 import { accountProfilePath } from "@/path";
 import { setCookieByKey } from "@/utils/cookies";
-import { isRedirectError } from "@/utils/is-redirect-error";
 import type { ActionState } from "@/utils/to-action-state";
 import { fromErrorToActionState, toActionState } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
@@ -42,8 +44,16 @@ const schema = pipe(
     ),
     // Checkbox for revoking other sessions (transforms "on" to boolean, handles null)
     revokeOtherSessions: pipe(
-      string(),
-      transform((v) => v === "on"),
+      optional(union([literal("on"), literal("off")])),
+      transform((v) => {
+        if (v === "on") {
+          return true;
+        }
+        if (v === "off") {
+          return false;
+        }
+        return false;
+      }),
     ),
   }),
   forward(
@@ -70,18 +80,23 @@ export async function changePassword(
 ): Promise<ActionState> {
   await connection();
   const formDataObject = Object.fromEntries(formData.entries());
+
   // Validate form data with Valibot schema
   try {
     const parsed = parse(schema, formDataObject);
 
     const { error } = await tryCatch(async () => {
+      const headersData = await headers();
+
+      const changePasswordBody = {
+        currentPassword: parsed.currentPassword,
+        newPassword: parsed.newPassword,
+        revokeOtherSessions: parsed.revokeOtherSessions,
+      };
+
       await auth.api.changePassword({
-        headers: await headers(),
-        body: {
-          currentPassword: parsed.currentPassword,
-          newPassword: parsed.newPassword,
-          revokeOtherSessions: parsed.revokeOtherSessions,
-        },
+        headers: headersData,
+        body: changePasswordBody,
       });
 
       setCookieByKey("toast", "Password successfully changed");
@@ -89,9 +104,7 @@ export async function changePassword(
     });
 
     if (error) {
-      if (isRedirectError(error)) {
-        throw error;
-      }
+      unstable_rethrow(error);
       return fromErrorToActionState(error, formData);
     }
 

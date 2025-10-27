@@ -20,7 +20,7 @@
     "email:build": "email build --dir react-email-starter/emails",
     "email:export": "email export --dir react-email-starter/emails",
     "prepare": "husky",
-    "inngest": "bunx inngest-cli dev -u http://localhost:3000",
+    "inngest": "bunx inngest-cli dev -u http://localhost:3000/api/inngest",
     "deploy": "vercel deploy --prod",
     "deploy:prod": "vercel build && vercel deploy --prebuilt --archive=tgz"
   },
