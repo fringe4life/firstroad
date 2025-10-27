@@ -11,7 +11,7 @@ const authRoutes = [
   "/verify-email",
 ];
 
-const protectedRoutes = ["/tickets", "/account"];
+const protectedRoutes = ["/account"];
 
 export async function proxy(request: NextRequest) {
   const session = await auth.api.getSession({ headers: request.headers });

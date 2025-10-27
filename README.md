@@ -8,12 +8,12 @@
 [![Prisma](https://img.shields.io/badge/Prisma-6.18.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
 [![Better Auth](https://img.shields.io/badge/Better%20Auth-1.3.32-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.16-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![Biome](https://img.shields.io/badge/Biome-2.3.0-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-6.0.1-000000)](https://ultracite.dev/)
+[![Biome](https://img.shields.io/badge/Biome-2.3.1-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-6.0.4-000000)](https://ultracite.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.7.2-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.1.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Inngest](https://img.shields.io/badge/Inngest-3.44.3-000000)](https://www.inngest.com/)
-[![Resend](https://img.shields.io/badge/Resend-6.2.2-000000)](https://resend.com/)
+[![Resend](https://img.shields.io/badge/Resend-6.3.0-000000)](https://resend.com/)
 [![React Email](https://img.shields.io/badge/React%20Email-4.3.2-000000)](https://react.email/)
 
 </div>

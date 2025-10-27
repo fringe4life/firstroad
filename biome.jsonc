@@ -3,29 +3,13 @@
   "vcs": {
     "enabled": true,
     "clientKind": "git",
-    "useIgnoreFile": true
+    "useIgnoreFile": true,
+    "defaultBranch": "main"
   },
   "linter": {
     "enabled": true,
     "rules": {
       "recommended": true,
-      "correctness": {
-        "noUnusedVariables": "error",
-        "noUndeclaredVariables": "error",
-        "useImportExtensions": "off"
-      },
-      "suspicious": {
-        "noExplicitAny": "warn",
-        "noDoubleEquals": "error",
-        "noDebugger": "error"
-      },
-      "style": {
-        "useImportType": "error",
-        "useConsistentArrayType": "error"
-      },
-      "complexity": {
-        "useArrowFunction": "warn"
-      },
       "nursery": {
         "useSortedClasses": "error"
       }

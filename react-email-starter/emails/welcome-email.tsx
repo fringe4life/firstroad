@@ -17,8 +17,17 @@ type WelcomeEmailProps = {
 
 const WelcomeEmail = ({ toName, appUrl }: WelcomeEmailProps) => (
   <Html>
-    <Head />
     <Tailwind>
+      <Head>
+        <style>{`
+          .space-y-2 > * + * {
+            margin-top: 0.5rem;
+          }
+          .hover\\:bg-blue-700:hover {
+            background-color: #1d4ed8;
+          }
+        `}</style>
+      </Head>
       <Body className="m-8 text-center font-sans">
         <Container>
           <Heading className="font-bold text-3xl text-gray-900">
@@ -36,10 +45,10 @@ const WelcomeEmail = ({ toName, appUrl }: WelcomeEmailProps) => (
               Your account has been successfully created and you can now:
             </Text>
             <ul className="mt-4 space-y-2 text-left text-gray-600">
-              <li>• Create and manage support tickets</li>
-              <li>• Track ticket status and updates</li>
-              <li>• Collaborate with your team</li>
-              <li>• Access all our features</li>
+              <li> Create and manage support tickets</li>
+              <li> Track ticket status and updates</li>
+              <li> Collaborate with your team</li>
+              <li> Access all our features</li>
             </ul>
           </Section>
           <Section className="mt-8">
