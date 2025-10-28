@@ -9,13 +9,15 @@ Supply this file to the AI to generate a git commit message based on changes sin
 The AI should:
 
 1. Analyze the git diff to understand changes
-2. Use the format: `type:\n` followed by emoji bullet points
-3. Each change gets its own line with an appropriate emoji
-4. Start with the commit type (feat, fix, refactor, docs, etc.) followed by a colon
-5. Add a newline, then list changes as emoji bullets
-6. Choose emojis that match the type of change
-7. Keep each bullet point concise and descriptive
-8. Prioritize the most impactful changes first
+2. **For single type changes**: Use the format: `type:\n` followed by emoji bullet points
+3. **For multiple type changes**: Use separate sections: `type1:\n` followed by emoji bullets, then `type2:\n` followed by emoji bullets, etc.
+4. Each change gets its own line with an appropriate emoji
+5. Start with the commit type(s) followed by a colon
+6. Add a newline, then list changes as emoji bullets
+7. Choose emojis that match the type of change
+8. Keep each bullet point concise and descriptive
+9. Prioritize the most impactful changes first
+10. **Automatically stage, commit, and push** unless specifically instructed otherwise
 
 ## Commit Types
 
@@ -60,6 +62,29 @@ docs:
 fix:
 🐛 Resolved session type inference errors
 🔧 Updated auth helper types
+```
+
+### Multiple Types (Mixed Changes)
+
+```
+docs:
+📝 Updated README with current codebase structure
+📁 Refreshed project structure to reflect password feature module
+
+refactor:
+♻️ Moved password management to dedicated feature module
+🔧 Enhanced error handling with Better Auth APIError
+```
+
+```
+feat:
+✨ Added password changed email notification system
+
+fix:
+🐛 Fixed FieldError component to prevent password exposure
+
+style:
+🎨 Improved CSS animations with modern transform properties
 ```
 
 ### Medium Changes (6-15 files)
@@ -116,6 +141,11 @@ refactor:
    - Medium (6-15 files): 3-4 bullet points
    - Large (16-30 files): 5-7 bullet points
    - Extensive (30+ files): 7-10 bullet points
+8. **Automatically execute git operations**:
+   - Stage all changes: `git add .`
+   - Commit with generated message
+   - Push to origin: `git push origin main`
+   - **Skip git operations only if explicitly instructed** (e.g., "just generate the message", "don't commit", etc.)
 
 ## Character Escaping Rules
 
