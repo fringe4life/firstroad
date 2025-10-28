@@ -1,6 +1,7 @@
 "use client";
 
 import { debounce, useQueryState, useQueryStates } from "nuqs";
+import { useTransition } from "react";
 import SearchInput from "@/components/search-input";
 import {
   options as PaginationOptions,
@@ -19,13 +20,15 @@ const TicketSearchInput = ({
 }: TicketSearchInputProps) => {
   const [search, setSearch] = useQueryState("search", searchParser);
   const [, setPagination] = useQueryStates(paginationParser, PaginationOptions);
-
+  const [_, startTransition] = useTransition();
   return (
     <SearchInput
       onChange={(value) => {
-        setSearch(value, { limitUrlUpdates: debounce(DEBOUNCE_DELAY_MS) });
-        // Reset to first page when search changes
-        setPagination({ page: 0 });
+        startTransition(() => {
+          setSearch(value, { limitUrlUpdates: debounce(DEBOUNCE_DELAY_MS) });
+          // Reset to first page when search changes
+          setPagination({ page: 0 });
+        });
       }}
       placeholder={placeholder}
       value={search}

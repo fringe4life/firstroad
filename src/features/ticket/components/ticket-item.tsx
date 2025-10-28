@@ -30,12 +30,16 @@ const TicketItem = ({ ticket, isDetail = false }: TicketItemProps) => {
   );
 
   return (
-    <div
-      className="max-content-narrow detail:max-content-widest grid gap-y-4"
-      data-detail={isDetail}
+    <ViewTransition
+      enter="ticket-card-enter"
+      exit="ticket-card-exit"
+      name={`ticket-${ticket.id}`}
     >
-      <div className="grid grid-flow-col gap-x-2">
-        <ViewTransition name={`ticket-card-${ticket.id}`}>
+      <div
+        className="max-content-narrow detail:max-content-widest grid gap-y-4"
+        data-detail={isDetail}
+      >
+        <div className="grid grid-flow-col gap-x-2">
           <Card className="w-full overflow-hidden detail:border-primary/20 detail:shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center gap-x-2">
@@ -58,20 +62,20 @@ const TicketItem = ({ ticket, isDetail = false }: TicketItemProps) => {
               </p>
             </CardFooter>
           </Card>
-        </ViewTransition>
 
-        <div className="space-y-1 self-start">
-          {isDetail ? (
-            <TicketOwnerOptions isDetail={true} ticket={ticket} />
-          ) : (
-            <>
-              {detailButton}
-              <TicketOwnerOptions ticket={ticket} />
-            </>
-          )}
+          <div className="space-y-1 self-start">
+            {isDetail ? (
+              <TicketOwnerOptions isDetail={true} ticket={ticket} />
+            ) : (
+              <>
+                {detailButton}
+                <TicketOwnerOptions ticket={ticket} />
+              </>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </ViewTransition>
   );
 };
 

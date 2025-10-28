@@ -1,5 +1,6 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import type { MouseEventHandler } from "react";
+import { useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -23,7 +24,7 @@ const Pagination = ({
   metadata,
 }: PaginationProps) => {
   const { page, limit } = pagination;
-
+  const [_, startTransition] = useTransition();
   const startOffset = page * limit + 1;
   const endOffset = startOffset - 1 + limit;
   const actualEndOffset = Math.min(endOffset, metadata.count);
@@ -31,24 +32,30 @@ const Pagination = ({
   const label = `${startOffset} - ${actualEndOffset} of ${metadata.count}`;
 
   const handleNextPage: MouseEventHandler<HTMLButtonElement> = () => {
-    setPagination({
-      ...pagination,
-      page: page + 1,
+    startTransition(() => {
+      setPagination({
+        ...pagination,
+        page: page + 1,
+      });
     });
   };
 
   const handlePreviousPage: MouseEventHandler<HTMLButtonElement> = () => {
-    setPagination({
-      ...pagination,
-      page: page - 1,
+    startTransition(() => {
+      setPagination({
+        ...pagination,
+        page: page - 1,
+      });
     });
   };
 
   const handleLimitChange = (value: string) => {
-    setPagination({
-      ...pagination,
-      limit: Number.parseInt(value, 10),
-      page: 0,
+    startTransition(() => {
+      setPagination({
+        ...pagination,
+        limit: Number.parseInt(value, 10),
+        page: 0,
+      });
     });
   };
 

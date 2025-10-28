@@ -1,4 +1,4 @@
-# First Road - A Collaborative Ticket Management Platform
+# First Ticket - A Collaborative Ticket Management Platform
 
 <div align="center">
 
@@ -38,7 +38,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **🔄 Parallel Routes**: Next.js parallel routes (@header, @breadcrumbs, @comments, @tickets, @ticketForm) for enhanced user experience
 - **⚡ React Compiler**: React 19 compiler for automatic performance optimization
 - **📬 Background Jobs**: Inngest for async event handling and email processing
-- **⚡ PPR Navigation**: Partial Prerendering with cached header shell and dynamic auth components
+- **⚡ PPR Navigation**: Partial Prerendering with dynamic auth components
 - **🔐 Session Management**: Cookie-based session caching for improved performance
 - **🔗 Slug-based Routing**: Human-readable URLs using ticket slugs instead of IDs
 - **🎯 Scope Filtering**: Type-safe "all" vs "mine" ticket filtering with nuqs
@@ -62,6 +62,33 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **Linting**: Biome 2.3+ for fast formatting and linting with Ultracite rules
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
+
+  ## ⚡ Next.js 16 Modern Features
+  
+  This project leverages cutting-edge Next.js 16 features for optimal performance and developer experience:
+  
+  ### Core Features
+  
+  - **Typed Routes**: Full type safety for all routes (`typedRoutes: true`)
+  - **Turbopack**: Fast bundling for development and production
+  - **React Compiler**: React 19 compiler for automatic performance optimization
+  - **Parallel Routes**: Enhanced routing with simultaneous route rendering (`@auth`, `@tickets`, `@ticketForm`, `@header`, `@breadcrumbs`, `@comments`)
+  - **Interception Routes**: Modal overlays with graceful fallback on hard refresh
+  - **Client Segment Cache**: Improved caching for better performance
+  
+  ### Cache Components & PPR
+  
+  - **"use cache" Directive**: Function-level caching for data queries and static components
+  - **PPR (Partial Prerendering)**: Static shell with dynamic holes for optimal performance
+  - **Slug-based Routing**: Human-readable URLs with automatic slug generation
+  - **Type-safe Search Parameters**: nuqs integration for URL parameter management
+  
+  ### Performance Optimizations
+  
+  - **Static Shell Prerendering**: Header and Sidebar components are prerendered for instant loading
+  - **Dynamic Streaming**: Auth-dependent components stream in with Suspense boundaries
+  - **Cache Lifecycle Management**: Strategic caching with `cacheLife()` for optimal performance
+  - **Background Rendering**: Lower-priority rendering for hidden content
 
 ## ⚛️ React 19 Modern Patterns
 
@@ -156,6 +183,7 @@ startTransition(() => {
 - Better perceived performance
 - Avoids blocking user interactions
 
+
 ## 📋 Prerequisites
 
 - Node.js 18+ or Bun
@@ -194,7 +222,6 @@ Update `.env.local` with your configuration:
 ```env
 # Database
 DATABASE_URL="postgresql://username:password@localhost:5432/your_database"
-DIRECT_URL="postgresql://username:password@localhost:5432/your_database"
 
 # Auth
 AUTH_SECRET="your-secret-key-here"
@@ -252,7 +279,8 @@ src/
 │   │   ├── sign-out/      # Sign out page
 │   │   ├── forgot-password/ # Password reset request
 │   │   ├── reset-password/ # Password reset confirmation
-│   │   │   └── [token]/   # Token-based reset
+│   │   │   ├── [token]/   # Token-based reset
+│   │   │   └── success/   # Reset success page
 │   │   ├── verify-email/  # Email verification
 │   │   │   ├── otp/       # OTP email verification
 │   │   │   │   ├── send/  # Send verification OTP
@@ -311,7 +339,7 @@ src/
 │   └── ...               # Other shared components
 ├── features/             # Feature-based modules
 │   ├── auth/             # Authentication logic
-│   │   ├── actions/      # Server actions (send-otp-action, verify-otp-action, change-password-action, signout)
+│   │   ├── actions/      # Server actions (send-otp-action, verify-otp-action, signout)
 │   │   ├── components/   # Auth components (auth-nav, auth-section, otp-send-form, otp-verify-form, account-dropdown, etc.)
 │   │   ├── events/       # Inngest events (email-otp, email-verification, welcome-email)
 │   │   ├── queries/      # Server-side queries (getSession, getSessionOrRedirect)
@@ -333,32 +361,34 @@ src/
 │   │   ├── components/   # Comment components (comments, comment-item, time-ago)
 │   │   ├── queries/      # Comment queries
 │   │   └── types.ts      # Comment types
-│   ├── password/         # Password reset features
-│   │   ├── actions/      # Password actions
-│   │   ├── components/   # Password forms
-│   │   ├── emails/       # Email templates
-│   │   ├── events/       # Password reset events
-│   │   └── utils/        # Password utilities
+│   ├── password/         # Password management
+│   │   ├── actions/      # Password actions (change-password, forgot-password, reset-password, signin, signup)
+│   │   ├── components/  # Password components (forms, page content)
+│   │   ├── emails/      # Password reset email templates
+│   │   ├── events/      # Password events (password-changed, password-reset)
+│   │   └── utils/       # Password utilities
 │   ├── types/            # Shared type definitions
 │   └── constants.tsx     # Shared constants
 ├── lib/                  # Utility libraries
 │   ├── auth.ts          # Better Auth configuration
 │   ├── auth-client.ts   # Client-side auth instance
+│   ├── big.ts           # Big.js configuration
 │   ├── email.ts         # Email utility with Resend
 │   ├── env.ts           # Environment validation
+│   ├── inngest.ts       # Background jobs configuration
 │   ├── prisma.ts        # Database client
 │   └── utils.ts         # Shared utilities
 ├── utils/                # Shared utilities
 │   ├── cookies.ts       # Cookie management
 │   ├── currency.ts      # Currency utilities
-│   ├── get-active-path.ts # Path utilities
-│   ├── is-redirect-error.ts # Redirect error detection
-│   ├── to-action-state.ts # Action state utilities
+│   ├── to-action-state.ts # Action state management
+│   ├── try-catch.ts     # Error handling utilities
 │   └── typed-links.ts   # Type-safe link generation
 ├── hooks/                # Custom React hooks
 ├── generated/            # Generated Prisma client
 │   └── prisma/          # Prisma Client with queryCompiler
-└── path.ts              # Type-safe route definitions
+├── path.ts              # Type-safe route definitions
+└── proxy.ts             # Proxy configuration
 ```
 
 ## 🔐 Authentication
@@ -400,38 +430,49 @@ The application uses Better Auth with multiple authentication methods:
 ### Redirect Handling
 
 - Framework redirects (e.g., `redirect()` from `next/navigation`) are preserved by rethrowing redirect errors.
-- Helper: `src/lib/is-redirect-error.ts` centralizes detection of Next.js redirect errors.
-- Example usage: Sign-up action rethrows redirect errors to avoid surfacing `NEXT_REDIRECT` in UI and properly navigate to `/tickets`.
+- Helper: `unstable_rethrow` rethrows Next.js framework errors.
+- Example usage: Sign-up action rethrows redirect errors to avoid surfacing `NEXT_REDIRECT` in UI and properly navigate to `/`.
 
 ## 🔄 Dynamic Rendering & Session Management
 
 - **Dynamic Rendering**: Use of `connection()` from `next/server` opts routes/components into dynamic rendering
 - **Session Management**: Centralized `getSession()` in `src/features/auth/queries/get-session.ts`
-- **DAL Pattern**: Session injection via `hasAuth()` helper for cacheable data queries
+- **HasAuthSuspense Pattern**: Suspense-wrapped session injection for auth-dependent components
 - **Background Jobs**: Inngest handles async operations like password reset emails
 
-### DAL Pattern
+### HasAuthSuspense Pattern
 
-Data queries use the DAL pattern with session injection:
+Components use the `HasAuthSuspense` pattern for session-dependent rendering:
 
 ```typescript
-// In query files (e.g., get-ticket.ts)
-export const getTicketById = async (
-  session: MaybeServerSession,
-  ticketId: string
-) => {
-  "use cache";
-  // ... fetch and return data with isOwner checks
-};
+// In page components (e.g., @header/page.tsx)
+const HeaderPage = ({ searchParams }: HeaderPageProps) => (
+  <HasAuthSuspense
+    fallback={<div className="h-(--heading-height) animate-pulse rounded-lg bg-muted" />}
+  >
+    {async (session) => {
+      const { scope } = searchParamsCache.parse(resolvedSearchParams);
+      if (session?.user && scope === "mine") {
+        return <MyTicketsHeading />;
+      }
+      return <AllTicketsHeading />;
+    }}
+  </HasAuthSuspense>
+);
 
-// In pages/components
-const ticket = await hasAuth((session) => getTicketById(session, ticketId));
+// Static components with caching
+const AllTicketsHeading = async () => {
+  "use cache";
+  cacheLife("max");
+  return <Heading description="Tickets by everyone at one place" title="All Tickets" />;
+};
 ```
 
 This pattern enables:
 
-- Function-level caching with "use cache"
-- Proper authorization checks via `isOwner(session, entity)`
+- Suspense-based loading states for auth-dependent content
+- Function-level caching with "use cache" for static components
+- Proper authorization checks via session context
 - Type-safe session handling with `MaybeServerSession`
 
 ## 🎫 Ticket System
@@ -503,29 +544,19 @@ bunx prisma db seed      # Seed database with sample data
 bun run reset:tickets    # Reset only ticket and comment data (preserves users)
 
 # Background Jobs (Inngest)
-bunx inngest-cli dev     # Start Inngest dev server for local testing
+bun run inngest          # Start Inngest dev server for local testing
+
+# Deployment
+bun run deploy           # Deploy to Vercel production
+bun run deploy:prod      # Build and deploy to Vercel production
 ```
 
 ## 🔧 Configuration
-
-### Next.js 16 Features
-
-- **Typed Routes**: Full type safety for all routes (`typedRoutes: true`)
-- **Turbopack**: Fast bundling for development and production
-- **React Compiler**: React 19 compiler for automatic performance optimization
-- **Parallel Routes**: Enhanced routing with simultaneous route rendering (`@auth`, `@tickets`, `@ticketForm`, `@header`, `@breadcrumbs`, `@comments`)
-- **Interception Routes**: Modal overlays with graceful fallback on hard refresh
-- **Client Segment Cache**: Improved caching for better performance
-- **"use cache" Directive**: Function-level caching for data queries and static components
-- **PPR (Partial Prerendering)**: Static shell with dynamic holes for optimal performance
-- **Slug-based Routing**: Human-readable URLs with automatic slug generation
-- **Type-safe Search Parameters**: nuqs integration for URL parameter management
 
 ### Tailwind CSS
 
 The project uses Tailwind CSS v4 with custom configuration for dark mode, theme variables, and custom variants:
 
-- **Custom Variants**: `@custom-variant` for cleaner selectors (`detail:`, `sidebar-hover:`, `sidebar-focus-within:`)
 - **CSS Variables**: Dynamic layout calculations with CSS custom properties
 - **Layout Shift Prevention**: CSS-driven height consistency and responsive design
 
@@ -578,7 +609,7 @@ Inngest provides background job processing for:
   - `ServerSession`: Full session with user object
   - `MaybeServerSession`: Session or null for DAL functions
   - `ClientSession`: Client-side session type
-- DAL pattern with session injection via `hasAuth()` and `requireAuth()` helpers
+- HasAuthSuspense pattern with session injection for auth-dependent components
 - Shared utilities in `src/utils/` for better organization
 - Type-safe link generation with `createTypedLink` for search parameters
 - Slug-based routing with automatic generation and validation
