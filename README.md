@@ -63,32 +63,32 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 
-  ## ⚡ Next.js 16 Modern Features
+## ⚡ Next.js 16 Modern Features
   
-  This project leverages cutting-edge Next.js 16 features for optimal performance and developer experience:
+This project leverages cutting-edge Next.js 16 features for optimal performance and developer experience:
   
-  ### Core Features
+### Core Features
   
-  - **Typed Routes**: Full type safety for all routes (`typedRoutes: true`)
-  - **Turbopack**: Fast bundling for development and production
-  - **React Compiler**: React 19 compiler for automatic performance optimization
-  - **Parallel Routes**: Enhanced routing with simultaneous route rendering (`@auth`, `@tickets`, `@ticketForm`, `@header`, `@breadcrumbs`, `@comments`)
-  - **Interception Routes**: Modal overlays with graceful fallback on hard refresh
-  - **Client Segment Cache**: Improved caching for better performance
+- **Typed Routes**: Full type safety for all routes (`typedRoutes: true`)
+- **Turbopack**: Fast bundling for development and production
+- **React Compiler**: React 19 compiler for automatic performance optimization
+- **Parallel Routes**: Enhanced routing with simultaneous route rendering (`@auth`, `@tickets`, `@ticketForm`, `@header`, `@breadcrumbs`, `@comments`)
+- **Interception Routes**: Modal overlays with graceful fallback on hard refresh
+- **Client Segment Cache**: Improved caching for better performance
   
-  ### Cache Components & PPR
+### Cache Components & PPR
   
-  - **"use cache" Directive**: Function-level caching for data queries and static components
-  - **PPR (Partial Prerendering)**: Static shell with dynamic holes for optimal performance
-  - **Slug-based Routing**: Human-readable URLs with automatic slug generation
-  - **Type-safe Search Parameters**: nuqs integration for URL parameter management
+- **"use cache" Directive**: Function-level caching for data queries and static components
+- **PPR (Partial Prerendering)**: Static shell with dynamic holes for optimal performance
+- **Slug-based Routing**: Human-readable URLs with automatic slug generation
+- **Type-safe Search Parameters**: nuqs integration for URL parameter management
   
-  ### Performance Optimizations
+### Performance Optimizations
   
-  - **Static Shell Prerendering**: Header and Sidebar components are prerendered for instant loading
-  - **Dynamic Streaming**: Auth-dependent components stream in with Suspense boundaries
-  - **Cache Lifecycle Management**: Strategic caching with `cacheLife()` for optimal performance
-  - **Background Rendering**: Lower-priority rendering for hidden content
+- **Static Shell Prerendering**: Header and Sidebar components are prerendered for instant loading
+- **Dynamic Streaming**: Auth-dependent components stream in with Suspense boundaries
+- **Cache Lifecycle Management**: Strategic caching with `cacheLife()` for optimal performance
+- **Background Rendering**: Lower-priority rendering for hidden content
 
 ## ⚛️ React 19 Modern Patterns
 
