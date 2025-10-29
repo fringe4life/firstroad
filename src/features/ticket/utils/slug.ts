@@ -42,7 +42,7 @@ export const ensureUniqueSlug = (
   let uniqueSlug = `${baseSlug}-${counter}`;
 
   while (existingSlugs.includes(uniqueSlug)) {
-    counter++;
+    counter += 1;
     uniqueSlug = `${baseSlug}-${counter}`;
   }
 

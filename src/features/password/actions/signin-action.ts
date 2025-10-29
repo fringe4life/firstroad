@@ -1,7 +1,7 @@
 "use server";
 
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { RedirectType, redirect } from "next/navigation";
 import {
   email,
   maxLength,
@@ -49,7 +49,7 @@ const signin = async (_state: ActionState | undefined, formData: FormData) => {
   }
 
   // Redirect after successful authentication
-  redirect(homePath);
+  redirect(homePath, RedirectType.replace);
 };
 
 export { signin };

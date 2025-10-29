@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
     turbopackFileSystemCacheForDev: true,
     viewTransition: true,
     mcpServer: true,
+    authInterrupts: true,
   },
 };
 

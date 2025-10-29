@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
@@ -26,8 +26,8 @@ export const deleteTicket = async (id: string) => {
       }
 
       await tx.ticket.delete({ where: { id } });
-      revalidateTag("tickets", "max");
-      revalidateTag(`ticket-${id}`, "max");
+      updateTag("tickets");
+      updateTag(`ticket-${id}`);
     });
   });
 

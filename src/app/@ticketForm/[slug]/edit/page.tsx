@@ -1,16 +1,13 @@
 import { notFound } from "next/navigation";
 import { CardCompact } from "@/components/card-compact";
-import { HasAuthSuspense } from "@/features/auth/components/has-auth";
+import { RequireAuthSuspense } from "@/features/auth/components/require-auth";
 import { isOwner } from "@/features/auth/utils/owner";
 import { upsertTicket } from "@/features/ticket/actions/upsert-ticket";
 import TicketUpsertForm from "@/features/ticket/components/ticket-upsert-form";
 import { getTicketBySlug } from "@/features/ticket/queries/get-ticket";
+import { ticketEditPath } from "@/path";
 
-const TicketEditFormPage = async ({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) => {
+const TicketEditFormPage = async ({ params }: PageProps<"/[slug]/edit">) => {
   const { slug } = await params;
 
   const ticket = await getTicketBySlug(slug);
@@ -19,8 +16,11 @@ const TicketEditFormPage = async ({
     notFound();
   }
 
+  const editPath = ticketEditPath(slug);
+
   return (
-    <HasAuthSuspense
+    <RequireAuthSuspense
+      authorize={(session) => isOwner(session, ticket)}
       fallback={
         <CardCompact
           className="max-content-widest self-center"
@@ -29,27 +29,22 @@ const TicketEditFormPage = async ({
           title="Edit Ticket"
         />
       }
+      redirectPath={editPath}
     >
-      {(session) => {
-        if (!isOwner(session, ticket)) {
-          notFound();
-        }
-
-        return (
-          <CardCompact
-            className="max-content-widest self-center"
-            content={
-              <TicketUpsertForm
-                ticket={ticket}
-                upsertTicketAction={upsertTicket}
-              />
-            }
-            description="Edit an existing ticket"
-            title="Edit Ticket"
-          />
-        );
-      }}
-    </HasAuthSuspense>
+      {() => (
+        <CardCompact
+          className="max-content-widest self-center"
+          content={
+            <TicketUpsertForm
+              ticket={ticket}
+              upsertTicketAction={upsertTicket}
+            />
+          }
+          description="Edit an existing ticket"
+          title="Edit Ticket"
+        />
+      )}
+    </RequireAuthSuspense>
   );
 };
 

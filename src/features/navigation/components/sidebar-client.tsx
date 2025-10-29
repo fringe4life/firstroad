@@ -1,6 +1,5 @@
 "use client";
 
-import type { ReactNode } from "react";
 import { Activity } from "react";
 import {
   Sheet,
@@ -11,11 +10,7 @@ import {
 import { useMobileSidebar } from "../context/context";
 import { NavItems } from "./nav-items";
 
-type SidebarClientProps = {
-  authSection: ReactNode;
-};
-
-export const SidebarClient = ({ authSection }: SidebarClientProps) => {
+export const SidebarClient = () => {
   const { isOpen, close } = useMobileSidebar();
 
   return (
@@ -27,7 +22,6 @@ export const SidebarClient = ({ authSection }: SidebarClientProps) => {
           </SheetHeader>
           <nav aria-label="Mobile navigation" className="space-y-2 px-3 py-2">
             <NavItems />
-            {authSection}
           </nav>
         </SheetContent>
       </Sheet>

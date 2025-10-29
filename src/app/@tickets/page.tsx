@@ -1,6 +1,5 @@
 import type { SearchParams } from "nuqs/server";
-import { Suspense } from "react";
-import { getSession } from "@/features/auth/queries/get-session";
+import { HasAuthSuspense } from "src/features/auth/components/has-auth";
 import TicketList from "@/features/ticket/components/ticket-list";
 
 type TicketsProps = {
@@ -8,30 +7,27 @@ type TicketsProps = {
 };
 
 const TicketsPage = ({ searchParams }: TicketsProps) => (
-  <Suspense fallback={<TicketListSkeleton />}>
-    <TicketListWithAuth searchParams={searchParams} />
-  </Suspense>
+  <HasAuthSuspense fallback={<TicketListSkeleton />}>
+    {(session) => (
+      <TicketList searchParams={searchParams} userId={session?.user?.id} />
+    )}
+  </HasAuthSuspense>
 );
-
-// Tickets list with auth filtering
-const TicketListWithAuth = async ({
-  searchParams,
-}: {
-  searchParams?: Promise<SearchParams>;
-}) => {
-  const session = await getSession();
-  const userId = session?.user?.id;
-
-  return <TicketList searchParams={searchParams} userId={userId} />;
-};
 
 // Loading skeletons
 
 const TicketListSkeleton = () => (
-  <div className="space-y-4">
-    <div className="h-20 animate-pulse rounded-lg bg-muted" />
-    <div className="h-20 animate-pulse rounded-lg bg-muted" />
-    <div className="h-20 animate-pulse rounded-lg bg-muted" />
+  <div className="max-content-widest grid grid-cols-[1fr_36px] gap-x-2 gap-y-4">
+    <div className="h-49 animate-pulse rounded-lg bg-muted-foreground/50" />
+    <div className="aspect-square h-4 animate-pulse rounded-lg bg-muted-foreground/50" />
+    <div className="h-49 animate-pulse rounded-lg bg-muted-foreground/50" />
+    <div className="aspect-square h-4 animate-pulse rounded-lg bg-muted-foreground/50" />
+    <div className="h-49 animate-pulse rounded-lg bg-muted-foreground/50" />
+    <div className="aspect-square h-4 animate-pulse rounded-lg bg-muted-foreground/50" />
+    <div className="h-49 animate-pulse rounded-lg bg-muted-foreground/50" />
+    <div className="aspect-square h-4 animate-pulse rounded-lg bg-muted-foreground/50" />
+    <div className="h-49 animate-pulse rounded-lg bg-muted-foreground/50" />
+    <div className="aspect-square h-4 animate-pulse rounded-lg bg-muted-foreground/50" />
   </div>
 );
 

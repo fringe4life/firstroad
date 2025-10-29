@@ -26,7 +26,7 @@ export const NavItems = () => {
               className={cn(
                 buttonVariants({ variant: "ghost" }),
                 "relative flex h-12 w-full justify-start",
-                isActive && "bg-muted font-bold hover:bg-muted",
+                isActive && "bg-muted font-bold hover:bg-muted-foreground",
               )}
               href={item.href}
             >

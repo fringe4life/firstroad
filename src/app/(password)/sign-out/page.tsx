@@ -1,18 +1,16 @@
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-import { Suspense } from "react";
-import { auth } from "@/lib/auth";
-import { homePath } from "@/path";
+"use client";
 
-// Dynamic sign-out logic
-const SignOutLogic = async () => {
-  // Sign out the user
-  await auth.api.signOut({
-    headers: await headers(),
-  });
+import { Suspense, useEffect } from "react";
+import { signOut } from "@/features/auth/actions/signout";
 
-  // Redirect to home page
-  throw redirect(homePath);
+// Dynamic sign-out logic - calls server action to handle cookie deletion and redirect
+const SignOutLogic = () => {
+  useEffect(() => {
+    // Call server action which handles cookie deletion and redirect
+    signOut();
+  }, []);
+
+  return null;
 };
 
 // Loading fallback

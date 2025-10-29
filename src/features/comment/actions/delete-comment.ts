@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
 import { prisma } from "@/lib/prisma";
@@ -30,10 +30,10 @@ export const deleteComment = async (commentId: string) => {
         where: { id: commentId },
       });
     });
-    revalidateTag("tickets", "max");
-    revalidateTag(`ticket-${comment.ticketId}`, "max");
-    revalidateTag(`comments-${comment.ticketId}`, "max");
-    revalidateTag(`comment-${commentId}`, "max");
+    updateTag("tickets");
+    updateTag(`ticket-${comment.ticketId}`);
+    updateTag(`comments-${comment.ticketId}`);
+    updateTag(`comment-${commentId}`);
 
     return toActionState("Comment deleted successfully", "SUCCESS");
   });

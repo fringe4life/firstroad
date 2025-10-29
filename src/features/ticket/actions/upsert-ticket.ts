@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/style/noMagicNumbers: numbers are called in a max function */
 "use server";
 
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import {
   maxLength,
@@ -86,12 +86,12 @@ const upsertTicket = async (
       create: dbData,
     });
 
-    revalidateTag("tickets", "max");
+    updateTag("tickets");
     if (ticket.id) {
-      revalidateTag(`ticket-${ticket.id}`, "max");
+      updateTag(`ticket-${ticket.id}`);
     }
     if (ticket.slug) {
-      revalidateTag(`ticket-slug-${ticket.slug}`, "max");
+      updateTag(`ticket-slug-${ticket.slug}`);
     }
   });
 

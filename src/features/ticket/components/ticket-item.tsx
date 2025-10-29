@@ -39,7 +39,7 @@ const TicketItem = ({ ticket, isDetail = false }: TicketItemProps) => {
         className="max-content-narrow detail:max-content-widest grid gap-y-4"
         data-detail={isDetail}
       >
-        <div className="grid grid-flow-col gap-x-2">
+        <div className="grid grid-flow-col grid-cols-[1fr_36px] gap-x-2">
           <Card className="w-full overflow-hidden detail:border-primary/20 detail:shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center gap-x-2">

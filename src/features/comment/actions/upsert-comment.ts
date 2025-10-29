@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/style/noMagicNumbers: are well explained zod schema */
 "use server";
 
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import { maxLength, minLength, object, parse, pipe, string } from "valibot";
 import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
@@ -88,11 +88,11 @@ export const upsertComment = async (
       },
     });
 
-    revalidateTag("tickets", "max");
-    revalidateTag(`ticket-${ticketId}`, "max");
-    revalidateTag(`comments-${ticketId}`, "max");
+    updateTag("tickets");
+    updateTag(`ticket-${ticketId}`);
+    updateTag(`comments-${ticketId}`);
     if (comment.id) {
-      revalidateTag(`comment-${comment.id}`, "max");
+      updateTag(`comment-${comment.id}`);
     }
 
     // Add isOwner property to the comment
