@@ -1,6 +1,6 @@
-import EmailPasswordReset from "react-email-starter/emails/password-reset-email";
 import { resend } from "@/lib/email";
 import { env } from "@/lib/env";
+import EmailPasswordReset from "../../../../react-email-starter/emails/password-reset-email";
 
 export const sendPasswordResetEmail = async (
   email: string,

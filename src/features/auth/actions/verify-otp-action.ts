@@ -2,7 +2,6 @@
 
 import { headers } from "next/headers";
 import { redirect, unstable_rethrow } from "next/navigation";
-import { homePath } from "src/path";
 import {
   email,
   length,
@@ -14,6 +13,7 @@ import {
   string,
 } from "valibot";
 import { auth } from "@/lib/auth";
+import { homePath } from "@/path";
 import type { ActionState } from "@/utils/to-action-state";
 import { fromErrorToActionState, toActionState } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";

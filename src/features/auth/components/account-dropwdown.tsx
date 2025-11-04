@@ -1,4 +1,4 @@
-import { LucideLock, LucideLogOut, LucideUser } from "lucide-react";
+import { LucideLock, LucideUser } from "lucide-react";
 import Link from "next/link";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -11,7 +11,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { User } from "@/features/auth/types";
-import { accountPasswordPath, accountProfilePath, signOutPath } from "@/path";
+import { accountPasswordPath, accountProfilePath } from "@/path";
+import SignOutButton from "./sign-out-button";
 
 type AccountDropdownProps = {
   user: User;
@@ -41,11 +42,8 @@ const AccountDropdown = ({ user }: AccountDropdownProps) => (
         </Link>
       </DropdownMenuItem>
       <DropdownMenuSeparator />
-      <DropdownMenuItem asChild>
-        <Link href={signOutPath}>
-          <LucideLogOut className="mr-2 aspect-square h-4" />
-          Sign Out
-        </Link>
+      <DropdownMenuItem>
+        <SignOutButton className="flex w-full items-center" />
       </DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>

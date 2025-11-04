@@ -5,12 +5,14 @@ model User {
   emailVerified Boolean
   image         String?
 
-  // Relations
-  accounts Account[]
-  sessions Session[]
-  userInfo UserInfo? // One-to-one relationship with UserInfo
-
   // Timestamps
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // Relations
+  accounts    Account[]
+  sessions    Session[]
+  userInfo    UserInfo? // One-to-one relationship with UserInfo
+  member      Member?
+  invitations Invitation[]
 }

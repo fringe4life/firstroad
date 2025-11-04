@@ -1,6 +1,6 @@
-import WelcomeEmail from "react-email-starter/emails/welcome-email";
 import { resend } from "@/lib/email";
 import { env } from "@/lib/env";
+import WelcomeEmail from "../../../../react-email-starter/emails/welcome-email";
 
 export const sendWelcomeEmail = async (email: string, userName?: string) =>
   await resend.emails.send({

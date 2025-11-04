@@ -1,6 +1,6 @@
-import EmailVerification from "react-email-starter/emails/email-verification";
 import { resend } from "@/lib/email";
 import { env } from "@/lib/env";
+import EmailVerification from "../../../../react-email-starter/emails/email-verification";
 
 export const sendEmailVerification = async (
   email: string,

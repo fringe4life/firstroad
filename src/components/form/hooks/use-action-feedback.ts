@@ -17,27 +17,34 @@ const useActionFeedback = (
   { onSuccess, onError }: FeedBackOption,
 ) => {
   const prevTimeStamp = useRef(state.timestamp);
-  const isNewAction = prevTimeStamp.current !== state.timestamp;
 
   // Wrap callbacks in useEffectEvent to prevent effect re-runs when they change
-  const handleSuccess = useEffectEvent(() => {
-    onSuccess?.({ state });
+  const handleSuccess = useEffectEvent((args: onArgs) => {
+    onSuccess?.(args);
   });
 
-  const handleError = useEffectEvent(() => {
-    onError?.({ state });
+  const handleError = useEffectEvent((args: onArgs) => {
+    onError?.(args);
   });
+
+  // Access latest state and status via effect events to avoid extra deps
+  const getLatestStatus = useEffectEvent(() => state.status);
+  const getLatestState = useEffectEvent(() => state);
+
+  const timestamp = state.timestamp;
 
   useEffect(() => {
-    if (!isNewAction) {
+    if (prevTimeStamp.current === timestamp) {
       return;
     }
-    if (state.status === "SUCCESS") {
-      handleSuccess();
-    } else if (state.status === "ERROR") {
-      handleError();
+    const status = getLatestStatus();
+    const latestState = getLatestState();
+    if (status === "SUCCESS") {
+      handleSuccess({ state: latestState });
+    } else if (status === "ERROR") {
+      handleError({ state: latestState });
     }
-    prevTimeStamp.current = state.timestamp;
-  }, [state, isNewAction]); // ✅ Callbacks no longer in dependencies
+    prevTimeStamp.current = timestamp;
+  }, [timestamp]);
 };
 export { useActionFeedback };

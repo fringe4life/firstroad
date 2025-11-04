@@ -1,6 +1,6 @@
-import PasswordChangedEmail from "react-email-starter/emails/password-changed-email";
 import { resend } from "@/lib/email";
 import { env } from "@/lib/env";
+import PasswordChangedEmail from "../../../../react-email-starter/emails/password-changed-email";
 
 export const sendPasswordChangedEmail = async (
   email: string,

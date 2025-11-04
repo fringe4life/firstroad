@@ -1,3 +1,5 @@
+import slugify from "slugify";
+
 /**
  * Converts a title string to a URL-friendly slug
  *
@@ -9,16 +11,12 @@
  * createSlug("Toggle Dark Theme") // "toggle-dark-theme"
  * createSlug("Fix Bug #123") // "fix-bug-123"
  */
-export const createSlug = (title: string): string => {
-  return title
-    .trim() // Remove leading/trailing whitespace
-    .replace(/\s+/g, " ") // Replace multiple spaces with single space
-    .toLowerCase() // Convert to lowercase
-    .replace(/[^a-z0-9\s-]/g, "") // Remove special characters except spaces and hyphens
-    .replace(/\s+/g, "-") // Replace spaces with hyphens
-    .replace(/-+/g, "-") // Replace multiple hyphens with single hyphen
-    .replace(/^-|-$/g, ""); // Remove leading/trailing hyphens
-};
+export const createSlug = (title: string): string =>
+  slugify(title, {
+    lower: true,
+    strict: true,
+    trim: true,
+  });
 
 /**
  * Ensures a slug is unique by appending a number if necessary

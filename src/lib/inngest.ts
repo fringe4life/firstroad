@@ -1,9 +1,9 @@
 import { EventSchemas, Inngest } from "inngest";
-import type { EmailOTPEventData } from "src/features/auth/events/event-email-otp";
-import type { EmailVerificationEventData } from "src/features/auth/events/event-email-verification";
-import type { WelcomeEmailEventData } from "src/features/auth/events/event-welcome-email";
-import type { PasswordChangedEventData } from "src/features/password/events/event-password-changed";
-import type { PasswordResetEventData } from "src/features/password/events/event-password-reset";
+import type { EmailOTPEventData } from "@/features/auth/events/event-email-otp";
+import type { EmailVerificationEventData } from "@/features/auth/events/event-email-verification";
+import type { WelcomeEmailEventData } from "@/features/auth/events/event-welcome-email";
+import type { PasswordChangedEventData } from "@/features/password/events/event-password-changed";
+import type { PasswordResetEventData } from "@/features/password/events/event-password-reset";
 
 // Define the event schemas for Inngest
 export type Events = {

@@ -1,12 +1,14 @@
 import {
   createSearchParamsCache,
+  type inferParserType,
+  type Options,
   parseAsInteger,
   parseAsString,
   parseAsStringLiteral,
 } from "nuqs/server";
 import { SORT_ORDERS } from "@/features/constants";
 
-export const options = {
+export const options: Options = {
   clearOnDefault: true,
   shallow: false,
 };
@@ -20,6 +22,8 @@ export const scopeParser = parseAsStringLiteral(["all", "mine"])
   .withOptions({
     ...options,
   });
+
+export type Scope = inferParserType<typeof scopeParser>;
 
 export const sortParser = {
   sortKey: parseAsString.withDefault("createdAt"),

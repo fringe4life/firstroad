@@ -1,5 +1,5 @@
 import type { SearchParams } from "nuqs/server";
-import { HasAuthSuspense } from "src/features/auth/components/has-auth";
+import { HasAuthSuspense } from "@/features/auth/components/has-auth";
 import TicketList from "@/features/ticket/components/ticket-list";
 
 type TicketsProps = {

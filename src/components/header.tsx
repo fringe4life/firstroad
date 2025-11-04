@@ -1,11 +1,11 @@
 import { Kanban } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
-import AuthNavSkeleton from "src/features/auth/components/auth-nav-skeleton";
-import { HasAuthSuspense } from "src/features/auth/components/has-auth";
 import { ThemeSwitcher } from "@/components/theme/theme-switcher";
 import { buttonVariants } from "@/components/ui/button";
 import AccountDropdown from "@/features/auth/components/account-dropwdown";
+import AuthNavSkeleton from "@/features/auth/components/auth-nav-skeleton";
+import { HasAuthSuspense } from "@/features/auth/components/has-auth";
 import MobileMenuButton from "@/features/navigation/components/mobile-menu-button";
 import { homePath, signInPath, signUpPath } from "@/path";
 
@@ -27,6 +27,7 @@ const Header = () => (
       <Suspense fallback={<div className="size-9" />}>
         <ThemeSwitcher />
       </Suspense>
+
       <HasAuthSuspense fallback={<AuthNavSkeleton />}>
         {(session) => {
           const user = session?.user ?? null;

@@ -27,7 +27,6 @@ const HeaderPage = ({ searchParams }: HeaderPageProps) => (
   </HasAuthSuspense>
 );
 
-// biome-ignore lint/suspicious/useAwait: needed for caching
 const AllTicketsHeading = async () => {
   "use cache";
   cacheLife("max");
@@ -39,7 +38,6 @@ const AllTicketsHeading = async () => {
   );
 };
 
-// biome-ignore lint/suspicious/useAwait: needed for caching
 const MyTicketsHeading = async () => {
   "use cache";
   cacheLife("max");

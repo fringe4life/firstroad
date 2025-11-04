@@ -1,5 +1,6 @@
 "use server";
 
+import { updateTag } from "next/cache";
 import { headers } from "next/headers";
 import { RedirectType, redirect } from "next/navigation";
 import {
@@ -32,9 +33,7 @@ const signInSchema = object({
 const signin = async (_state: ActionState | undefined, formData: FormData) => {
   const { error } = await tryCatch(async () => {
     const formDataObj = Object.fromEntries(formData);
-
     const { email: userEmail, password } = parse(signInSchema, formDataObj);
-
     await auth.api.signInEmail({
       body: {
         email: userEmail,
@@ -47,9 +46,9 @@ const signin = async (_state: ActionState | undefined, formData: FormData) => {
   if (error) {
     return fromErrorToActionState(error, formData);
   }
-
-  // Redirect after successful authentication
-  redirect(homePath, RedirectType.replace);
+  updateTag("session");
+  // revalidatePath("/");
+  throw redirect(homePath, RedirectType.replace);
 };
 
 export { signin };

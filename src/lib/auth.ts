@@ -2,9 +2,10 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { createAuthMiddleware } from "better-auth/api";
 import { nextCookies } from "better-auth/next-js";
-import { emailOTP } from "better-auth/plugins";
+import { emailOTP, organization } from "better-auth/plugins";
 import { inngest } from "@/lib/inngest";
 import { prisma } from "@/lib/prisma";
+import { tryCatch } from "@/utils/try-catch";
 
 // Session configuration constants
 const MINUTES_IN_SECONDS = 60;
@@ -34,21 +35,24 @@ export const auth = betterAuth({
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {
         // Trigger Inngest event to handle OTP email asynchronously
-        await inngest.send({
-          name: "email.otp",
-          data: {
-            email,
-            otp,
-            type,
-            userName: undefined, // Will be populated by the event handler if needed
-          },
-        });
+        await tryCatch(async () =>
+          inngest.send({
+            name: "email.otp",
+            data: {
+              email,
+              otp,
+              type,
+              userName: undefined, // Will be populated by the event handler if needed
+            },
+          }),
+        );
       },
       otpLength: 6,
       expiresIn: 300, // 5 minutes
       allowedAttempts: 5,
       overrideDefaultEmailVerification: true, // Use OTP instead of verification links
     }),
+    organization(),
     nextCookies(), // nextCookies should be the last plugin
   ],
 
@@ -59,18 +63,16 @@ export const auth = betterAuth({
         const newSession = ctx.context.newSession;
         const user = newSession.user;
 
-        try {
-          // Trigger Inngest event to handle welcome email with 2-minute delay
-          await inngest.send({
+        // Trigger Inngest event to handle welcome email with 2-minute delay
+        await tryCatch(async () =>
+          inngest.send({
             name: "user.welcome",
             data: {
               email: user.email,
               userName: user.name,
             },
-          });
-        } catch (_error) {
-          // Don't throw the error to avoid breaking the sign-up flow
-        }
+          }),
+        );
       }
     }),
   },
@@ -101,13 +103,11 @@ export const auth = betterAuth({
     user: {
       create: {
         after: async (user) => {
-          try {
-            await prisma.userInfo.create({
+          await tryCatch(async () =>
+            prisma.userInfo.create({
               data: { userId: user.id },
-            });
-          } catch {
-            // Ignore if already exists or any race during parallel creations
-          }
+            }),
+          );
         },
       },
     },
@@ -140,28 +140,28 @@ export const auth = betterAuth({
       const resetUrl = `${baseUrl}/reset-password/${token}`;
 
       // Trigger Inngest event to handle password reset email asynchronously
-      await inngest.send({
-        name: "password.reset",
-        data: {
-          email: user.email,
-          resetUrl,
-          userName: user.name,
-        },
-      });
+      await tryCatch(async () =>
+        inngest.send({
+          name: "password.reset",
+          data: {
+            email: user.email,
+            resetUrl,
+            userName: user.name,
+          },
+        }),
+      );
     },
     onPasswordReset: async ({ user }) => {
       // Trigger Inngest event to handle password changed email asynchronously
-      try {
-        await inngest.send({
+      await tryCatch(async () =>
+        inngest.send({
           name: "password.changed",
           data: {
             email: user.email,
             userName: user.name,
           },
-        });
-      } catch {
-        // Don't throw the error to avoid breaking the password change flow
-      }
+        }),
+      );
     },
     resetPasswordTokenExpiresIn: 3600, // 1 hour
   },
@@ -192,14 +192,16 @@ export const auth = betterAuth({
       const verificationUrl = `${baseUrl}/verify-email?token=${token}`;
 
       // Trigger Inngest event to handle email verification asynchronously
-      await inngest.send({
-        name: "email.verification",
-        data: {
-          email: user.email,
-          verificationUrl,
-          userName: user.name,
-        },
-      });
+      await tryCatch(async () =>
+        inngest.send({
+          name: "email.verification",
+          data: {
+            email: user.email,
+            verificationUrl,
+            userName: user.name,
+          },
+        }),
+      );
     },
     sendOnSignUp: true,
     autoSignInAfterVerification: true,

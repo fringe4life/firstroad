@@ -1,20 +1,25 @@
 "use server";
 
-import { cookies, headers } from "next/headers";
+import { updateTag } from "next/cache";
+import { headers } from "next/headers";
 import { RedirectType, redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { homePath } from "@/path";
+import { fromErrorToActionState } from "@/utils/to-action-state";
+import { tryCatch } from "@/utils/try-catch";
 
 export const signOut = async () => {
-  // Sign out via Better Auth API
-  await auth.api.signOut({
-    headers: await headers(),
+  const { error } = await tryCatch(async () => {
+    await auth.api.signOut({
+      headers: await headers(),
+    });
   });
 
-  // Manually delete Better Auth cookies since signOut API doesn't remove them
-  const cookieStore = await cookies();
-  cookieStore.delete("session_token");
-  cookieStore.delete("session_data");
+  if (error) {
+    return fromErrorToActionState(error);
+  }
 
+  updateTag("session");
+  // revalidatePath("/");
   throw redirect(homePath, RedirectType.replace);
 };

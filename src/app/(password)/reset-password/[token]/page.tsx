@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
-import Spinner from "src/components/spinner";
 import { CardCompact } from "@/components/card-compact";
+import Spinner from "@/components/spinner";
 import ResetPasswordForm from "@/features/password/components/reset-password-form";
 import { signInPath } from "@/path";
 

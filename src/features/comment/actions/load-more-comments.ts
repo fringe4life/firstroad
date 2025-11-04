@@ -2,6 +2,7 @@
 
 import { getCommentsByTicketId } from "@/features/comment/queries/get-comments";
 import type { Comment } from "@/features/comment/types";
+import { tryCatch } from "@/utils/try-catch";
 
 export type LoadMoreState = {
   list: Comment[];
@@ -14,18 +15,17 @@ export const loadMoreComments = async (
   ticketId: string,
   cursor: string,
 ): Promise<LoadMoreState> => {
-  try {
-    const result = await getCommentsByTicketId(ticketId, cursor);
-    return {
-      list: result.list,
-      hasMore: result.hasMore,
-      nextCursor: result.nextCursor,
-    };
-  } catch {
-    return {
-      list: [],
-      hasMore: false,
-      nextCursor: null,
-    };
+  const { data } = await tryCatch(
+    async () => await getCommentsByTicketId(ticketId, cursor),
+  );
+
+  if (data) {
+    return data;
   }
+
+  return {
+    list: [],
+    hasMore: false,
+    nextCursor: null,
+  };
 };

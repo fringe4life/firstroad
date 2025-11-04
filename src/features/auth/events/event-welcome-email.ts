@@ -9,6 +9,7 @@ import {
 } from "valibot";
 import { sendWelcomeEmail } from "@/features/auth/utils/send-welcome-email";
 import { inngest } from "@/lib/inngest";
+import { tryCatch } from "@/utils/try-catch";
 
 const welcomeEmailSchema = object({
   email: pipe(string(), email()),
@@ -29,13 +30,17 @@ export const eventWelcomeEmail = inngest.createFunction(
     },
   },
   async ({ event }) => {
-    try {
-      const { email: userEmail, userName } = parse(
-        welcomeEmailSchema,
-        event.data,
-      );
-      await sendWelcomeEmail(userEmail, userName);
-    } catch {
+    const { data: parsed } = await tryCatch(async () =>
+      parse(welcomeEmailSchema, event.data),
+    );
+    if (!parsed) {
+      throw new Error("Invalid welcome email event data");
+    }
+
+    const { error: sendError } = await tryCatch(async () =>
+      sendWelcomeEmail(parsed.email, parsed.userName),
+    );
+    if (sendError) {
       throw new Error("Invalid welcome email event data");
     }
   },

@@ -1,7 +1,7 @@
 import { LucidePencil } from "lucide-react";
 import Link from "next/link";
-import { HasAuthSuspense } from "src/features/auth/components/has-auth";
 import { Button } from "@/components/ui/button";
+import { HasAuthSuspense } from "@/features/auth/components/has-auth";
 import { isOwner } from "@/features/auth/utils/owner";
 import TicketMoreMenu from "@/features/ticket/components/ticket-more-menu";
 import type { BaseTicket } from "@/features/ticket/types";

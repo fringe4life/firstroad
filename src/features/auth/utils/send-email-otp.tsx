@@ -1,6 +1,6 @@
-import EmailOTPVerification from "react-email-starter/emails/email-otp-verification";
 import { resend } from "@/lib/email";
 import { env } from "@/lib/env";
+import EmailOTPVerification from "../../../../react-email-starter/emails/email-otp-verification";
 
 type OTPType = "sign-in" | "email-verification" | "forget-password";
 

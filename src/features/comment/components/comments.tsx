@@ -7,8 +7,8 @@ import {
   useRef,
   useState,
 } from "react";
-import GenericComponent from "src/components/generic-component";
 import { CardCompact } from "@/components/card-compact";
+import GenericComponent from "@/components/generic-component";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { deleteComment } from "@/features/comment/actions/delete-comment";

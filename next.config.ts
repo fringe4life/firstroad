@@ -6,8 +6,6 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   experimental: {
     browserDebugInfoInTerminal: true,
-    clientSegmentCache: true,
-    turbopackFileSystemCacheForDev: true,
     viewTransition: true,
     mcpServer: true,
     authInterrupts: true,

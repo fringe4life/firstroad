@@ -4,18 +4,18 @@ import { cacheTag } from "next/cache";
 import { Inter } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "sonner";
-import { MobileSidebarProvider } from "src/features/navigation/context/context";
 import Header from "@/components/header";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import Sidebar from "@/features/navigation/components/sidebar";
+import { MobileSidebarProvider } from "@/features/navigation/context/context";
+import type { Scope } from "@/features/ticket/search-params";
 
 const inter = Inter({
   subsets: ["latin"],
 });
 
 // Cached metadata function to avoid endless server requests
-// biome-ignore lint/suspicious/useAwait: needed for "use cache"
-const getCachedMetadata = async (scope: string): Promise<Metadata> => {
+const getCachedMetadata = async (scope: Scope): Promise<Metadata> => {
   "use cache";
   cacheTag("metadata");
 
@@ -82,7 +82,7 @@ const getCachedMetadata = async (scope: string): Promise<Metadata> => {
 export const generateMetadata = async ({
   searchParams,
 }: {
-  searchParams?: Promise<{ scope?: string }>;
+  searchParams?: Promise<{ scope?: Scope }>;
 }): Promise<Metadata> => {
   // Handle cases where searchParams is undefined (non-home routes)
   if (!searchParams) {

@@ -1,12 +1,17 @@
 "use client";
 
 import { useQueryStates } from "nuqs";
+import { useTransition } from "react";
 import SortSelect, {
   type SortObject,
   type SortOption,
 } from "@/components/sort-select";
-import type { Prisma } from "@/generated/prisma/client";
-import { options as sortOptions, sortParser } from "../search-params";
+import {
+  options as PaginationOptions,
+  paginationParser,
+  options as sortOptions,
+  sortParser,
+} from "@/features/ticket/search-params";
 
 type TicketSortSelectProps = {
   options: readonly SortOption[];
@@ -14,11 +19,15 @@ type TicketSortSelectProps = {
 
 const TicketSortSelect = ({ options }: TicketSortSelectProps) => {
   const [sort, setSort] = useQueryStates(sortParser, sortOptions);
-
+  const [, setPagination] = useQueryStates(paginationParser, PaginationOptions);
+  const [, startTransition] = useTransition();
   const handleChange = (sortArg: SortObject): void => {
-    setSort({
-      ...sortArg,
-      sortValue: sort.sortValue as Prisma.SortOrder,
+    startTransition(async () => {
+      await setSort({
+        ...sortArg,
+        sortValue: sort.sortValue,
+      });
+      await setPagination({ page: 0 });
     });
   };
 
