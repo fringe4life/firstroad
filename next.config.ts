@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
     viewTransition: true,
     mcpServer: true,
     authInterrupts: true,
+    typedEnv: true,
   },
 };
 

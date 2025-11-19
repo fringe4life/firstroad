@@ -116,12 +116,17 @@
   --expanded-sidebar-width: 0;
   --auth-nav-width: 10.5rem;
   --padding-inline-main: 2rem;
+
   --max-content-widest: 30rem;
   --max-content-narrow: 26.25rem;
 }
 
 @utility max-content-* {
   inline-size: min(100%, --value(--max-content-*));
+}
+
+@utility main-inline-padding {
+  padding-inline: max(var(--padding-inline-main), 0.75rem);
 }
 
 @layer base {
@@ -368,21 +373,12 @@
 
 /* Shared element transitions for ticket cards */
 
-@view-transition {
-  navigation: auto;
-}
 ::view-transition-old(.ticket-card-exit):only-child {
   animation: --ticket-card-exit 0.3s ease-out;
 }
 
 ::view-transition-new(.ticket-card-enter):only-child {
   animation: --ticket-card-enter 0.3s ease-out;
-}
-
-/* Smooth transitions for ticket card shared elements */
-::view-transition-group(ticket-card) {
-  animation-duration: 0.3s;
-  animation-timing-function: ease-out;
 }
 
 ::view-transition-old(.slide-right-skew):only-child {

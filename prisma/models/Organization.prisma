@@ -1,11 +1,12 @@
 model Organization {
-    id        String   @id @default(cuid())
-    name      String
-    slug      String
-    logo      String?
-    metadata  String?
-    createdAt DateTime @default(now())
-
+    id          String       @id
+    name        String
+    slug        String
+    logo        String?
+    createdAt   DateTime
+    metadata    String?
     members     Member[]
     invitations Invitation[]
+
+    @@unique([slug])
 }

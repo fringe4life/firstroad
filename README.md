@@ -2,19 +2,19 @@
 
 <div align="center">
 
-[![Next.js](https://img.shields.io/badge/Next.js-16.0.1-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.0.3-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.2.0-61DAFB?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Prisma](https://img.shields.io/badge/Prisma-6.18.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
+[![Prisma](https://img.shields.io/badge/Prisma-7.0.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
 [![Better Auth](https://img.shields.io/badge/Better%20Auth-1.3.34-000000)](https://better-auth.com/)
-[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.16-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![Biome](https://img.shields.io/badge/Biome-2.3.3-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-6.2.1-000000)](https://ultracite.dev/)
-[![nuqs](https://img.shields.io/badge/nuqs-2.7.2-000000)](https://nuqs.47ng.com/)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.17-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Biome](https://img.shields.io/badge/Biome-2.3.6-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-6.3.4-000000)](https://ultracite.dev/)
+[![nuqs](https://img.shields.io/badge/nuqs-2.8.0-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.1.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
-[![Inngest](https://img.shields.io/badge/Inngest-3.44.5-000000)](https://www.inngest.com/)
-[![Resend](https://img.shields.io/badge/Resend-6.4.0-000000)](https://resend.com/)
-[![React Email](https://img.shields.io/badge/React%20Email-4.3.2-000000)](https://react.email/)
+[![Inngest](https://img.shields.io/badge/Inngest-3.45.1-000000)](https://www.inngest.com/)
+[![Resend](https://img.shields.io/badge/Resend-6.5.2-000000)](https://resend.com/)
+[![React Email](https://img.shields.io/badge/React%20Email-5.0.4-000000)](https://react.email/)
 
 </div>
 
@@ -23,6 +23,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 ## 🚀 Features
 
 - **🔐 Authentication**: Secure user authentication with Better Auth (email/password + OTP)
+- **🏢 Organization Management**: Create and manage organizations with member and invitation systems
 - **🎫 Ticket Management**: Create, edit, and manage tickets with status tracking
 - **💬 Comments System**: Add, edit, and delete comments on tickets with infinite pagination
 - **🌙 Dark Mode**: Beautiful light/dark theme with smooth transitions
@@ -47,20 +48,20 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 16 (App Router) with Turbopack
-- **Language**: TypeScript 5.9 with strict type checking
-- **Database**: PostgreSQL with Prisma Client (relationJoins preview, Neon adapter)
+- **Framework**: Next.js 16.0.3 (App Router) with Turbopack
+- **Language**: TypeScript 5.9.3 with strict type checking
+- **Database**: PostgreSQL with Prisma Client 7.0.0 (relationJoins preview, Neon adapter)
 - **Authentication**: Better Auth 1.3.34 with email/password provider and session cookie caching
-- **Styling**: Tailwind CSS v4 with shadcn/ui components
+- **Styling**: Tailwind CSS v4.1.17 with shadcn/ui components
 - **Icons**: Lucide React
 - **Forms**: React Hook Form with Valibot validation
 - **Notifications**: Sonner toast notifications
 - **Theme**: next-themes for dark/light mode
-- **URL Search Params**: nuqs for type-safe URL parameters
-- **Email**: React Email with Resend for transactional emails
-- **Background Jobs**: Inngest for background tasks and event handling
+- **URL Search Params**: nuqs 2.8.0 for type-safe URL parameters
+- **Email**: React Email 5.0.4 with Resend 6.5.2 for transactional emails
+- **Background Jobs**: Inngest 3.45.1 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
-- **Linting**: Biome 2.3.3 for fast formatting and linting with Ultracite 6.2.1 rules
+- **Linting**: Biome 2.3.6 for fast formatting and linting with Ultracite 6.3.4 rules
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 
@@ -73,9 +74,15 @@ This project leverages cutting-edge Next.js 16 features for optimal performance 
 - **Typed Routes**: Full type safety for all routes (`typedRoutes: true`)
 - **Turbopack**: Fast bundling for development and production
 - **React Compiler**: React 19 compiler for automatic performance optimization
+- **Cache Components**: Function-level caching with `cacheComponents: true`
 - **Parallel Routes**: Enhanced routing with simultaneous route rendering (`@auth`, `@tickets`, `@ticketForm`, `@header`, `@breadcrumbs`, `@comments`)
 - **Interception Routes**: Modal overlays with graceful fallback on hard refresh
-- **Client Segment Cache**: Improved caching for better performance
+- **Experimental Features**: 
+  - `browserDebugInfoInTerminal`: Enhanced debugging information
+  - `viewTransition`: Smooth page transitions
+  - `mcpServer`: Model Context Protocol server support
+  - `authInterrupts`: Authentication-aware route handling
+  - `typedEnv`: Type-safe environment variables
   
 ### Cache Components & PPR
   
@@ -239,6 +246,8 @@ RESEND_API_KEY="your-resend-api-key"
 RESEND_FROM="Your App <onboarding@resend.dev>"
 ```
 
+**Note**: `DIRECT_URL` is optional and only needed for connection pooling scenarios. The application works with just `DATABASE_URL` configured.
+
 ### 4. Set up the database
 
 ```bash
@@ -270,6 +279,7 @@ src/
 │   │   │   ├── password/  # Change password
 │   │   │   ├── profile/   # User profile
 │   │   │   └── _components/ # Account components
+│   │   ├── organisations/ # Organization management
 │   │   └── layout.tsx     # Auth layout
 │   ├── (password)/        # Public auth routes
 │   │   ├── sign-in/       # Sign in page
@@ -308,6 +318,10 @@ src/
 │   │   └── default.tsx    # Default null state
 │   ├── @header/           # Parallel route slot for headers
 │   │   ├── [...catchAll]/ # Catch-all route
+│   │   ├── account/       # Account header pages
+│   │   │   ├── password/  # Change password header
+│   │   │   └── profile/   # User profile header
+│   │   ├── organisations/ # Organization header
 │   │   ├── default.tsx    # Default null state
 │   │   └── page.tsx       # Home page header
 │   ├── @ticketForm/       # Parallel route slot for ticket forms
@@ -352,6 +366,9 @@ src/
 │   │   ├── components/   # Sidebar, nav-items, mobile-menu-button
 │   │   ├── context/      # Mobile sidebar context
 │   │   └── types/        # Navigation types
+│   ├── organisation/     # Organization management
+│   │   ├── components/   # Organization components (organisation-list, organisation-item)
+│   │   └── queries/      # Organization queries (get-organisations-for-user)
 │   ├── ticket/           # Ticket management
 │   │   ├── actions/      # Server actions
 │   │   ├── components/   # Ticket components
@@ -532,8 +549,9 @@ bun run lint             # Run Biome linting on src/
 bun run lint:fix         # Fix linting issues automatically
 bun run format           # Format code with Biome
 bun run check            # Run linting and formatting together
-bun run type             # Run TypeScript type checking
+bun run type             # Run TypeScript type checking (tsgo)
 bun run typegen          # Generate Next.js type definitions
+bun run postinstall      # Generate Prisma client (runs automatically after install)
 
 # Email Development
 bun run email:dev        # Start React Email preview server
@@ -565,7 +583,7 @@ The project uses Tailwind CSS v4 with custom configuration for dark mode, theme 
 
 ### Database
 
-PostgreSQL with Prisma Client using:
+PostgreSQL with Prisma Client 7.0.0 using:
 
 - **relationJoins** preview feature for optimized queries
 - **Client-side engine** for edge compatibility
@@ -579,6 +597,9 @@ PostgreSQL with Prisma Client using:
 - **Session**: Better Auth session model
 - **Verification**: Better Auth verification tokens
 - **UserInfo**: Extended user information
+- **Organization**: Organization management
+- **Member**: Organization membership
+- **Invitation**: Organization invitations
 - **Ticket**: Ticket management with unique slug field
 - **Comment**: Comment system
 
@@ -607,7 +628,7 @@ Inngest provides background job processing for:
 
 - Full TypeScript support with strict configuration
 - Typed routes with Next.js 16 (`typedRoutes: true`)
-- Type-safe URL search parameters with nuqs (inferParserType for scope narrowing)
+- Type-safe URL search parameters with nuqs 2.8.0 (inferParserType for scope narrowing)
 - Centralized auth types in `src/features/auth/types.ts`:
   - `ServerSession`: Full session with user object
   - `MaybeServerSession`: Session or null for DAL functions

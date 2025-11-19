@@ -1,18 +1,16 @@
 model User {
-  id            String  @id @default(cuid())
-  name          String?
-  email         String  @unique
-  emailVerified Boolean
+  id            String       @id
+  name          String
+  email         String
+  emailVerified Boolean      @default(false)
   image         String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now()) @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+  members       Member[]
+  invitations   Invitation[]
+  userInfo      UserInfo?
 
-  // Timestamps
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Relations
-  accounts    Account[]
-  sessions    Session[]
-  userInfo    UserInfo? // One-to-one relationship with UserInfo
-  member      Member?
-  invitations Invitation[]
+  @@unique([email])
 }

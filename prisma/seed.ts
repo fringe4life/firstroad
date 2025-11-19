@@ -5,7 +5,7 @@ import { createTickets } from "./seed-data/tickets";
 import "dotenv/config";
 
 const adapter = new PrismaNeon({
-  connectionString: process.env.DATABASE_URL || "",
+  connectionString: process.env.DATABASE_URL,
 });
 
 const prisma = new PrismaClient({ adapter });
@@ -13,6 +13,7 @@ const prisma = new PrismaClient({ adapter });
 const main = async () => {
   await prisma.comment.deleteMany();
   await prisma.ticket.deleteMany();
+
   const existingUsers = await prisma.user.findMany({
     select: { id: true },
     orderBy: { createdAt: "asc" },
@@ -36,15 +37,13 @@ const main = async () => {
     existingUsers.map((user) => user.id),
   );
 
-  await prisma.$transaction(async (tx) => {
-    await tx.comment.createMany({
-      data: comments,
-    });
+  await prisma.comment.createMany({
+    data: comments,
   });
 };
 
 main()
-  .catch((_e) => {
+  .catch(() => {
     process.exit(1);
   })
   .finally(async () => {

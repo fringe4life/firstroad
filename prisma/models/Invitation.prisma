@@ -1,14 +1,11 @@
 model Invitation {
-    id             String   @id @default(cuid())
-    email          String
-    inviterId      String
+    id             String       @id
     organizationId String
-    role           String
+    organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+    email          String
+    role           String?
     status         String
     expiresAt      DateTime
-
-    inviter      User         @relation(fields: [inviterId], references: [id], onDelete: Cascade)
-    organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-
-    @@unique([email, organizationId])
+    inviterId      String
+    user           User         @relation(fields: [inviterId], references: [id], onDelete: Cascade)
 }

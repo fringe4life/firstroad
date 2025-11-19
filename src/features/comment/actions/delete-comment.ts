@@ -25,10 +25,8 @@ export const deleteComment = async (commentId: string) => {
       return fromErrorToActionState("You can only delete your own comments");
     }
 
-    await prisma.$transaction(async (tx) => {
-      await tx.comment.delete({
-        where: { id: commentId },
-      });
+    await prisma.comment.delete({
+      where: { id: commentId },
     });
     updateTag("tickets");
     updateTag(`ticket-${comment.ticketId}`);

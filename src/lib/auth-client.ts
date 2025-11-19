@@ -1,4 +1,4 @@
-import { emailOTPClient } from "better-auth/client/plugins";
+import { emailOTPClient, organizationClient } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
 
 // Best practice:
@@ -11,7 +11,7 @@ export const authClient = createAuthClient({
     typeof window === "undefined"
       ? process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
       : undefined,
-  plugins: [emailOTPClient()],
+  plugins: [emailOTPClient(), organizationClient()],
   fetchOptions: {
     credentials: "include",
   },

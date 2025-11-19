@@ -1,6 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { cacheTag } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 import { Inter } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "sonner";
@@ -18,6 +18,7 @@ const inter = Inter({
 const getCachedMetadata = async (scope: Scope): Promise<Metadata> => {
   "use cache";
   cacheTag("metadata");
+  cacheLife("max");
 
   const baseMetadata = {
     title: {
@@ -115,7 +116,7 @@ const RootLayout = ({
             <Header />
             <div className="group/sidebar-parent layout-grid-cols grid grid-flow-col">
               <Sidebar />
-              <main className="main-grid-rows col-span-2 grid min-h-screen gap-y-8 overflow-x-clip px-(--padding-inline-main) py-24 transition-transform duration-200 group-has-[.sidebar:hover]/sidebar-parent:translate-x-(--sidebar-translation) md:col-start-2">
+              <main className="main-grid-rows main-inline-padding col-span-2 grid min-h-screen gap-y-8 overflow-x-clip py-24 transition-transform duration-200 group-has-[.sidebar:hover]/sidebar-parent:translate-x-(--sidebar-translation) md:col-start-2">
                 {header}
                 {breadcrumbs}
                 <div className="max-content-widest mx-auto grid gap-y-4">

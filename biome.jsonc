@@ -9,7 +9,6 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
       "nursery": {
         "useSortedClasses": "error"
       }
@@ -20,10 +19,8 @@
   },
   "javascript": {
     "formatter": {
-      "quoteStyle": "double",
       "trailingCommas": "all",
-      "semicolons": "always",
-      "jsxQuoteStyle": "double"
+      "semicolons": "always"
     }
   },
   "css": {

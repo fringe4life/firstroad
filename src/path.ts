@@ -23,6 +23,8 @@ const accountProfilePath: Route = "/account/profile";
 const accountPasswordPath: Route = "/account/password";
 const signOutPath: Route = "/sign-out";
 
+const organisationsPath: Route = "/organisations";
+
 export {
   homePath,
   forgotPasswordPath,
@@ -39,4 +41,5 @@ export {
   ticketPath,
   accountProfilePath,
   accountPasswordPath,
+  organisationsPath,
 };

@@ -1,11 +1,9 @@
 model Member {
-    id             String       @id @default(cuid())
-    userId         String       @unique
+    id             String       @id
     organizationId String
-    role           String
-    createdAt      DateTime     @default(now())
-    user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
     organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-
-    @@unique([userId, organizationId])
+    userId         String
+    user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+    role           String
+    createdAt      DateTime
 }
