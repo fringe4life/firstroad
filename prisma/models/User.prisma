@@ -5,12 +5,12 @@ model User {
   emailVerified Boolean      @default(false)
   image         String?
   createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @default(now()) @updatedAt
+  updatedAt     DateTime     @updatedAt
   sessions      Session[]
   accounts      Account[]
   members       Member[]
   invitations   Invitation[]
-  userInfo      UserInfo?
+  userInfo UserInfo?
 
   @@unique([email])
 }

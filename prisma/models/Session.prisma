@@ -11,4 +11,5 @@ model Session {
   activeOrganizationId String?
 
   @@unique([token])
+  @@index([userId])
 }

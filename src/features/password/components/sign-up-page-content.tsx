@@ -6,7 +6,7 @@ import { signInPath } from "@/path";
 import SignUpForm from "./sign-up-form";
 
 // biome-ignore lint/suspicious/useAwait: for use with use cache
-export async function SignUpPageContent() {
+export const SignUpPageContent = async () => {
   "use cache";
   cacheLife("max");
   return (
@@ -21,4 +21,4 @@ export async function SignUpPageContent() {
       title="Sign Up"
     />
   );
-}
+};

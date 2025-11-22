@@ -6,15 +6,15 @@
 [![React](https://img.shields.io/badge/React-19.2.0-61DAFB?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Prisma](https://img.shields.io/badge/Prisma-7.0.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
-[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.3.34-000000)](https://better-auth.com/)
+[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.4.0-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.17-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![Biome](https://img.shields.io/badge/Biome-2.3.6-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-6.3.4-000000)](https://ultracite.dev/)
-[![nuqs](https://img.shields.io/badge/nuqs-2.8.0-000000)](https://nuqs.47ng.com/)
+[![Biome](https://img.shields.io/badge/Biome-2.3.7-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-6.3.5-000000)](https://ultracite.dev/)
+[![nuqs](https://img.shields.io/badge/nuqs-2.8.1-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.1.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
-[![Inngest](https://img.shields.io/badge/Inngest-3.45.1-000000)](https://www.inngest.com/)
+[![Inngest](https://img.shields.io/badge/Inngest-3.46.0-000000)](https://www.inngest.com/)
 [![Resend](https://img.shields.io/badge/Resend-6.5.2-000000)](https://resend.com/)
-[![React Email](https://img.shields.io/badge/React%20Email-5.0.4-000000)](https://react.email/)
+[![React Email](https://img.shields.io/badge/React%20Email-5.0.5-000000)](https://react.email/)
 
 </div>
 
@@ -34,7 +34,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **📊 Infinite Pagination**: Efficient cursor-based pagination for comments
 - **🔒 Ownership System**: Users can only edit their own tickets and comments
 - **🎯 Type Safety**: Full TypeScript support with typed routes
-- **📧 Email Features**: Password reset, email verification, OTP authentication, and welcome emails with React Email templates
+- **📧 Email Features**: Password reset, email verification, OTP authentication, and welcome emails with React Email 5.0.5 templates
 - **🔗 Slug Generation**: Human-readable URLs using slugify package for ticket slugs
 - **🔄 Database Hooks**: Automatic UserInfo creation on user registration
 - **🔄 Parallel Routes**: Next.js parallel routes (@header, @breadcrumbs, @comments, @tickets, @ticketForm) for enhanced user experience
@@ -51,17 +51,17 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **Framework**: Next.js 16.0.3 (App Router) with Turbopack
 - **Language**: TypeScript 5.9.3 with strict type checking
 - **Database**: PostgreSQL with Prisma Client 7.0.0 (relationJoins preview, Neon adapter)
-- **Authentication**: Better Auth 1.3.34 with email/password provider and session cookie caching
+- **Authentication**: Better Auth 1.4.0 with email/password provider and session cookie caching
 - **Styling**: Tailwind CSS v4.1.17 with shadcn/ui components
 - **Icons**: Lucide React
 - **Forms**: React Hook Form with Valibot validation
 - **Notifications**: Sonner toast notifications
 - **Theme**: next-themes for dark/light mode
-- **URL Search Params**: nuqs 2.8.0 for type-safe URL parameters
-- **Email**: React Email 5.0.4 with Resend 6.5.2 for transactional emails
-- **Background Jobs**: Inngest 3.45.1 for background tasks and event handling
+- **URL Search Params**: nuqs 2.8.1 for type-safe URL parameters
+- **Email**: React Email 5.0.5 with Resend 6.5.2 for transactional emails
+- **Background Jobs**: Inngest 3.46.0 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
-- **Linting**: Biome 2.3.6 for fast formatting and linting with Ultracite 6.3.4 rules
+- **Linting**: Biome 2.3.7 for fast formatting and linting with Ultracite 6.3.5 rules
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 
@@ -246,7 +246,7 @@ RESEND_API_KEY="your-resend-api-key"
 RESEND_FROM="Your App <onboarding@resend.dev>"
 ```
 
-**Note**: `DIRECT_URL` is optional and only needed for connection pooling scenarios. The application works with just `DATABASE_URL` configured.
+**Note**: `DIRECT_URL` is optional and only needed for connection pooling scenarios. The application works with just `DATABASE_URL` configured. `DIRECT_URL` is not validated in the environment schema.
 
 ### 4. Set up the database
 
@@ -348,20 +348,27 @@ src/
 │   └── globals.css        # Global styles with custom variants
 ├── components/            # Reusable UI components
 │   ├── ui/               # shadcn/ui components
-│   ├── form/             # Form components
-│   ├── theme/            # Theme configuration
+│   ├── form/             # Form components (field-error, form, submit-button, use-action-feedback)
+│   ├── theme/            # Theme configuration (theme-provider, theme-switcher)
 │   ├── header.tsx        # Main application header
 │   ├── breadcrumbs.tsx   # Breadcrumb navigation
 │   ├── pagination.tsx    # Pagination component
+│   ├── card-compact.tsx  # Compact card component
+│   ├── confirm-dialog.tsx # Confirmation dialog
+│   ├── date-picker.tsx   # Date picker component
+│   ├── heading.tsx       # Heading component
+│   ├── placeholder.tsx   # Placeholder component
+│   ├── search-input.tsx  # Search input component
+│   ├── sort-select.tsx   # Sort select component
 │   └── ...               # Other shared components
 ├── features/             # Feature-based modules
 │   ├── auth/             # Authentication logic
 │   │   ├── actions/      # Server actions (send-otp-action, verify-otp-action, signout)
-│   │   ├── components/   # Auth components (auth-nav, auth-section, otp-send-form, otp-verify-form, account-dropdown, etc.)
+│   │   ├── components/   # Auth components (account-dropdown, auth-nav-skeleton, change-password-form, has-auth, otp-send-form, otp-verify-form, require-auth, sign-out-button, sign-out-form)
 │   │   ├── events/       # Inngest events (email-otp, email-verification, welcome-email)
-│   │   ├── queries/      # Server-side queries (getSession, getSessionOrRedirect)
+│   │   ├── queries/      # Server-side queries (get-session, get-session-or-redirect)
 │   │   ├── types.ts      # Centralized auth types
-│   │   └── utils/        # Auth utilities
+│   │   └── utils/        # Auth utilities (owner, send-email-otp, send-email-verification, send-password-changed-email, send-welcome-email)
 │   ├── navigation/       # Navigation components
 │   │   ├── components/   # Sidebar, nav-items, mobile-menu-button
 │   │   ├── context/      # Mobile sidebar context
@@ -370,23 +377,23 @@ src/
 │   │   ├── components/   # Organization components (organisation-list, organisation-item)
 │   │   └── queries/      # Organization queries (get-organisations-for-user)
 │   ├── ticket/           # Ticket management
-│   │   ├── actions/      # Server actions
-│   │   ├── components/   # Ticket components
-│   │   ├── queries/      # Data queries with "use cache"
+│   │   ├── actions/      # Server actions (delete-ticket, update-status, upsert-ticket)
+│   │   ├── components/   # Ticket components (ticket-controls-fallback, ticket-filter-dropdown, ticket-item, ticket-list, ticket-more-menu, ticket-owner-options, ticket-pagination, ticket-scope-toggle, ticket-search-input, ticket-select-sort, ticket-upsert-form)
+│   │   ├── queries/      # Data queries with "use cache" (get-all-ticket-slugs, get-ticket, get-tickets)
 │   │   ├── search-params.ts # Type-safe search parameters with nuqs
 │   │   ├── types.ts      # Ticket types
 │   │   └── utils/        # Ticket utilities (slug generation with slugify)
 │   ├── comment/          # Comment system
 │   │   ├── actions/      # Comment actions (load-more-comments, upsert-comment, delete-comment)
-│   │   ├── components/   # Comment components (comments, comment-item, time-ago)
-│   │   ├── queries/      # Comment queries
+│   │   ├── components/   # Comment components (comment-create-form, comment-delete-button, comment-edit-button, comment-item, comment-owner-buttons, comments, time-ago, time-ago-fallback)
+│   │   ├── queries/      # Comment queries (get-comments)
 │   │   └── types.ts      # Comment types
 │   ├── password/         # Password management
-│   │   ├── actions/      # Password actions (change-password, forgot-password, reset-password, signin, signup)
-│   │   ├── components/  # Password components (forms, page content)
-│   │   ├── emails/      # Password reset email templates
-│   │   ├── events/      # Password events (password-changed, password-reset)
-│   │   └── utils/       # Password utilities
+│   │   ├── actions/      # Password actions (change-password-action, forgot-password-action, reset-password-action, signin-action, signup-action)
+│   │   ├── components/  # Password components (change-password-form, forgot-password-form, forgot-password-page-content, reset-password-form, sign-in-form, sign-in-page-content, sign-up-form, sign-up-page-content)
+│   │   ├── emails/      # Password reset email templates (send-password-reset-email)
+│   │   ├── events/      # Password events (event-password-changed, event-password-reset)
+│   │   └── utils/       # Password utilities (send-password-reset-email)
 │   ├── types/            # Shared type definitions
 │   └── constants.tsx     # Shared constants
 ├── lib/                  # Utility libraries
@@ -401,6 +408,7 @@ src/
 ├── utils/                # Shared utilities
 │   ├── cookies.ts       # Cookie management
 │   ├── currency.ts      # Currency utilities
+│   ├── get-active-path.ts # Active path utilities
 │   ├── to-action-state.ts # Action state management
 │   ├── try-catch.ts     # Error handling utilities
 │   └── typed-links.ts   # Type-safe link generation
@@ -628,7 +636,7 @@ Inngest provides background job processing for:
 
 - Full TypeScript support with strict configuration
 - Typed routes with Next.js 16 (`typedRoutes: true`)
-- Type-safe URL search parameters with nuqs 2.8.0 (inferParserType for scope narrowing)
+- Type-safe URL search parameters with nuqs 2.8.1 (inferParserType for scope narrowing)
 - Centralized auth types in `src/features/auth/types.ts`:
   - `ServerSession`: Full session with user object
   - `MaybeServerSession`: Session or null for DAL functions

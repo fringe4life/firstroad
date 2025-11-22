@@ -15,8 +15,10 @@
     "incremental": true,
     "plugins": [
       {
-        "name": "next",
-        "directives": "typescript-plugin-directives"
+        "name": "next"
+      },
+      {
+        "name": "typescript-plugin-directives"
       }
     ],
     "paths": {

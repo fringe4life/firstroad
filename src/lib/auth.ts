@@ -1,6 +1,6 @@
-import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { createAuthMiddleware } from "better-auth/api";
+import { betterAuth } from "better-auth/minimal";
 import { nextCookies } from "better-auth/next-js";
 import { emailOTP, organization } from "better-auth/plugins";
 import { inngest } from "@/lib/inngest";
@@ -21,7 +21,7 @@ const SESSION_UPDATE_AGE_SECONDS = DAYS_IN_SECONDS; // 1 day
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "postgresql" }),
-
+  experimental: { joins: true },
   session: {
     cookieCache: {
       enabled: true,
