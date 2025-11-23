@@ -17,32 +17,3 @@ export const createSlug = (title: string): string =>
     strict: true,
     trim: true,
   });
-
-/**
- * Ensures a slug is unique by appending a number if necessary
- *
- * @param baseSlug - The base slug to make unique
- * @param existingSlugs - Array of existing slugs to check against
- * @returns A unique slug
- *
- * @example
- * ensureUniqueSlug("my-ticket", ["my-ticket", "my-ticket-1"]) // "my-ticket-2"
- */
-export const ensureUniqueSlug = (
-  baseSlug: string,
-  existingSlugs: string[],
-): string => {
-  if (!existingSlugs.includes(baseSlug)) {
-    return baseSlug;
-  }
-
-  let counter = 1;
-  let uniqueSlug = `${baseSlug}-${counter}`;
-
-  while (existingSlugs.includes(uniqueSlug)) {
-    counter += 1;
-    uniqueSlug = `${baseSlug}-${counter}`;
-  }
-
-  return uniqueSlug;
-};

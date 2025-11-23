@@ -1,7 +1,7 @@
 import type { Route } from "next";
 import { redirect } from "next/navigation";
 import { getSession } from "@/features/auth/queries/get-session";
-import type { ServerSession } from "@/features/auth/types";
+import type { MaybeServerSession, ServerSession } from "@/features/auth/types";
 import { signInPath } from "@/path";
 
 // Discriminated union for explicit behavior control
@@ -22,11 +22,11 @@ export function getSessionOrRedirect(
 ): Promise<ServerSession>;
 export function getSessionOrRedirect(
   options: Extract<GetSessionRedirectOptions, { when: "has-session" }>,
-): Promise<ServerSession | null>;
+): Promise<MaybeServerSession>;
 
 export async function getSessionOrRedirect(
   options?: GetSessionRedirectOptions,
-): Promise<ServerSession | null> {
+): Promise<MaybeServerSession> {
   const session = await getSession();
 
   // has-session branch (narrowed: redirectPath is required)
@@ -41,5 +41,5 @@ export async function getSessionOrRedirect(
   if (!session) {
     throw redirect(signInPath);
   }
-  return session as ServerSession;
+  return session;
 }

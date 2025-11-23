@@ -31,10 +31,7 @@ export const upsertComment = async (
 ): Promise<ActionState<CommentWithUserInfo>> => {
   const session = await getSessionOrRedirect();
 
-  const { data, error } = await tryCatch<
-    ActionState<CommentWithUserInfo>,
-    unknown
-  >(async () => {
+  const { data, error } = await tryCatch(async () => {
     // Verify the ticket exists
     const ticket = await prisma.ticket.findUnique({
       where: { id: ticketId },
@@ -73,7 +70,7 @@ export const upsertComment = async (
       create: {
         content: parsedData.content,
         ticketId,
-        userId: session.user?.id as string,
+        userId: session.user.id,
       },
       include: {
         userInfo: {

@@ -6,10 +6,10 @@
 [![React](https://img.shields.io/badge/React-19.2.0-61DAFB?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Prisma](https://img.shields.io/badge/Prisma-7.0.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
-[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.4.0-000000)](https://better-auth.com/)
+[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.4.1-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.17-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Biome](https://img.shields.io/badge/Biome-2.3.7-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-6.3.5-000000)](https://ultracite.dev/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-6.3.6-000000)](https://ultracite.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.8.1-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.1.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Inngest](https://img.shields.io/badge/Inngest-3.46.0-000000)](https://www.inngest.com/)
@@ -51,7 +51,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **Framework**: Next.js 16.0.3 (App Router) with Turbopack
 - **Language**: TypeScript 5.9.3 with strict type checking
 - **Database**: PostgreSQL with Prisma Client 7.0.0 (relationJoins preview, Neon adapter)
-- **Authentication**: Better Auth 1.4.0 with email/password provider and session cookie caching
+- **Authentication**: Better Auth 1.4.1 with email/password provider and session cookie caching
 - **Styling**: Tailwind CSS v4.1.17 with shadcn/ui components
 - **Icons**: Lucide React
 - **Forms**: React Hook Form with Valibot validation
@@ -61,7 +61,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **Email**: React Email 5.0.5 with Resend 6.5.2 for transactional emails
 - **Background Jobs**: Inngest 3.46.0 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
-- **Linting**: Biome 2.3.7 for fast formatting and linting with Ultracite 6.3.5 rules
+- **Linting**: Biome 2.3.7 for fast formatting and linting with Ultracite 6.3.6 rules
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 

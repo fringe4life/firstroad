@@ -1,4 +1,3 @@
-import type { getSession } from "@/features/auth/queries/get-session";
 import type { auth } from "@/lib/auth";
 import type { authClient } from "@/lib/auth-client";
 
@@ -15,4 +14,4 @@ export type User = ServerSession["user"];
 export type Session = ServerSession["session"];
 
 // Optional server session type (commonly used in DAL functions)
-export type MaybeServerSession = Awaited<ReturnType<typeof getSession>>;
+export type MaybeServerSession = ServerSession | null;

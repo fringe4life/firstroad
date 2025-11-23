@@ -16,7 +16,7 @@ import {
 } from "valibot";
 import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
-import { createSlug, ensureUniqueSlug } from "@/features/ticket/utils/slug";
+import { createSlug } from "@/features/ticket/utils/slug";
 import { prisma } from "@/lib/prisma";
 import { homePath, ticketPath } from "@/path";
 import { setCookieByKey } from "@/utils/cookies";
@@ -58,18 +58,7 @@ const upsertTicket = async (
     const data = parse(upsertSchema, Object.fromEntries(formData.entries()));
 
     // Generate slug from title
-    const baseSlug = createSlug(data.title);
-
-    // Get existing slugs to ensure uniqueness
-    const existingSlugs = await prisma.ticket.findMany({
-      select: { slug: true },
-      where: id ? { slug: { not: undefined } } : undefined, // Exclude current ticket when updating
-    });
-
-    const slug = ensureUniqueSlug(
-      baseSlug,
-      existingSlugs.map((t) => t.slug),
-    );
+    const slug = createSlug(data.title);
 
     const dbData = {
       ...data,

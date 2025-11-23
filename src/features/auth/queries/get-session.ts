@@ -1,14 +1,19 @@
 "use server";
 import { cacheTag } from "next/cache";
 import { headers } from "next/headers";
-import type { ServerSession } from "@/features/auth/types";
+import type { MaybeServerSession } from "@/features/auth/types";
 import { auth } from "@/lib/auth";
-
-export const getSession = async (): Promise<ServerSession | null> => {
+import { tryCatch } from "@/utils/try-catch";
+export const getSession = async (): Promise<MaybeServerSession> => {
   "use cache: private";
   cacheTag("session");
 
-  return await auth.api.getSession({
-    headers: await headers(),
-  });
+  const { data } = await tryCatch(
+    async () =>
+      await auth.api.getSession({
+        headers: await headers(),
+      }),
+  );
+
+  return data;
 };
