@@ -4,9 +4,7 @@ import TicketItem from "@/features/ticket/components/ticket-item";
 import { getAllTicketSlugs } from "@/features/ticket/queries/get-all-ticket-slugs";
 import { getTicketBySlug } from "@/features/ticket/queries/get-ticket";
 
-export async function generateStaticParams() {
-  return await getAllTicketSlugs();
-}
+export const generateStaticParams = async () => await getAllTicketSlugs();
 
 export const generateMetadata = async ({
   params,

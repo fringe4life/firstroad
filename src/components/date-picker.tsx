@@ -11,6 +11,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import type { Maybe } from "@/types";
 
 export type DateReset = {
   reset: () => void;
@@ -20,7 +21,7 @@ type DatePickerProps = {
   id: string;
   name: string;
   defaultValue?: string;
-  ref: React.RefObject<DateReset | null>;
+  ref: React.RefObject<Maybe<DateReset>>;
 };
 
 const DatePicker = ({ id, name, defaultValue, ref }: DatePickerProps) => {

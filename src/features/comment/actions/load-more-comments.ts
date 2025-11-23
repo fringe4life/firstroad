@@ -2,12 +2,13 @@
 
 import { getCommentsByTicketId } from "@/features/comment/queries/get-comments";
 import type { Comment } from "@/features/comment/types";
+import type { Maybe } from "@/types";
 import { tryCatch } from "@/utils/try-catch";
 
 export type LoadMoreState = {
   list: Comment[];
   hasMore: boolean;
-  nextCursor: string | null;
+  nextCursor: Maybe<string>;
   error?: string;
 };
 

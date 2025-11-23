@@ -1,7 +1,9 @@
+import type { Maybe } from "@/types";
+
 export type PaginationMetadata = {
   count: number;
   hasNextPage: boolean;
-  nextCursor?: string | null;
+  nextCursor: Maybe<string>;
 };
 
 export type PaginatedResult<T> = {

@@ -37,7 +37,7 @@ const getTicketsFromDB = async (
         },
       },
       orderBy,
-      take: takeAmount,
+      take: takeAmount + 1,
       skip,
     }),
     prisma.ticket.count({ where, orderBy }),
@@ -87,10 +87,11 @@ export const getAllTickets = async (
   );
 
   return {
-    list: tickets,
+    list: tickets.slice(0, -2),
     metadata: {
       count,
       hasNextPage: count > skip + takeAmount,
+      nextCursor: tickets[takeAmount]?.id ?? null,
     },
   };
 };

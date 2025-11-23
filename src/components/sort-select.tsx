@@ -22,9 +22,8 @@ type SortSelectProps = {
   onValueChange: (sort: SortObject) => void;
 };
 
-function createKey(option: SortOption | SortObject) {
-  return `${option.sortKey}_${option.sortValue}`;
-}
+const createKey = (option: SortOption | SortObject) =>
+  `${option.sortKey}_${option.sortValue}`;
 
 const SortSelect = ({ options, value, onValueChange }: SortSelectProps) => {
   const handleSortChange = (compositeKey: string) => {

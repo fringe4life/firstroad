@@ -21,6 +21,7 @@ import CommentCreateForm from "@/features/comment/components/comment-create-form
 import CommentOwnerButtons from "@/features/comment/components/comment-owner-buttons";
 import type { Comment } from "@/features/comment/types";
 import type { PaginatedResult } from "@/features/types/pagination";
+import type { Maybe } from "@/types";
 import CommentItem from "./comment-item";
 
 type CommentsProps = {
@@ -60,7 +61,7 @@ const Comments = ({
     },
   );
 
-  const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
+  const [editingCommentId, setEditingCommentId] = useState<Maybe<string>>(null);
   const [editingContent, setEditingContent] = useState<string>("");
   const formRef = useRef<HTMLDivElement>(null);
 

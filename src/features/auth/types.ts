@@ -1,5 +1,6 @@
 import type { auth } from "@/lib/auth";
 import type { authClient } from "@/lib/auth-client";
+import type { Maybe } from "@/types";
 
 // Server-side session type (from auth instance)
 export type ServerSession = typeof auth.$Infer.Session;
@@ -14,4 +15,4 @@ export type User = ServerSession["user"];
 export type Session = ServerSession["session"];
 
 // Optional server session type (commonly used in DAL functions)
-export type MaybeServerSession = ServerSession | null;
+export type MaybeServerSession = Maybe<ServerSession>;

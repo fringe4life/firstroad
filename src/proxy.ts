@@ -13,7 +13,7 @@ const authRoutes = [
 
 const protectedRoutes = ["/account"];
 
-export async function proxy(request: NextRequest) {
+export const proxy = async (request: NextRequest) => {
   const session = await auth.api.getSession({ headers: request.headers });
   const { pathname } = request.nextUrl;
 
@@ -33,7 +33,7 @@ export async function proxy(request: NextRequest) {
   }
 
   return NextResponse.next();
-}
+};
 
 export const config = {
   matcher: [
