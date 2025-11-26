@@ -1,6 +1,8 @@
 import {
   email,
+  examples,
   type InferOutput,
+  minLength,
   object,
   optional,
   parse,
@@ -13,7 +15,12 @@ import { inngest } from "@/lib/inngest";
 import { tryCatch } from "@/utils/try-catch";
 
 const emailVerificationSchema = object({
-  email: pipe(string(), email()),
+  email: pipe(
+    string(),
+    email(),
+    minLength(1, "Email is required"),
+    examples(["bob@gmail.com", "alice@yahoo.com", "john@protonmail.com"]),
+  ),
   verificationUrl: pipe(string(), url()),
   userName: optional(string()),
 });

@@ -1,8 +1,17 @@
 "use server";
 
+import type { Route } from "next";
 import { headers } from "next/headers";
 import { redirect, unstable_rethrow } from "next/navigation";
-import { email, minLength, object, parse, pipe, string } from "valibot";
+import {
+  email,
+  examples,
+  minLength,
+  object,
+  parse,
+  pipe,
+  string,
+} from "valibot";
 import { auth } from "@/lib/auth";
 import { setCookieByKey } from "@/utils/cookies";
 import type { ActionState } from "@/utils/to-action-state";
@@ -11,7 +20,12 @@ import { tryCatch } from "@/utils/try-catch";
 
 // Simplified schema for email-only validation
 const emailSchema = object({
-  email: pipe(string(), email(), minLength(1, "Email is required")),
+  email: pipe(
+    string(),
+    email(),
+    minLength(1, "Email is required"),
+    examples(["bob@gmail.com", "alice@yahoo.com", "john@protonmail.com"]),
+  ),
 });
 
 export const sendEmailVerificationOTP = async (
@@ -35,7 +49,7 @@ export const sendEmailVerificationOTP = async (
 
     // Redirect to verify page with email in URL
     const verifyUrl = `/verify-email/otp/verify?email=${encodeURIComponent(parsed.email)}`;
-    throw redirect(verifyUrl as `/verify-email/otp/verify?email=${string}`);
+    throw redirect(verifyUrl as Route);
   });
 
   if (error) {
@@ -64,11 +78,11 @@ export const sendSignInOTP = async (
     });
 
     // Set toast cookie to show success message
-    await setCookieByKey("toast", "Verification code sent to your email");
+    setCookieByKey("toast", "Verification code sent to your email");
 
     // Redirect to verify page with email in URL
     const verifyUrl = `/sign-in/otp/verify?email=${encodeURIComponent(parsed.email)}`;
-    throw redirect(verifyUrl as `/sign-in/otp/verify?email=${string}`);
+    throw redirect(verifyUrl as Route);
   });
 
   if (error) {

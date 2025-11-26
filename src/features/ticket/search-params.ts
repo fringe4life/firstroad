@@ -3,6 +3,7 @@ import {
   type inferParserType,
   type Options,
   parseAsInteger,
+  parseAsNumberLiteral,
   parseAsString,
   parseAsStringLiteral,
 } from "nuqs/server";
@@ -33,16 +34,18 @@ export const sortParser = {
 };
 
 const DEFAULT_PAGE = 0;
-const DEFAULT_LIMIT = 5;
+export const DEFAULT_LIMIT = 5;
+
+export const LIMITS = [5, 10, 25, 50, 100] as const;
 
 export const paginationParser = {
   page: parseAsInteger.withDefault(DEFAULT_PAGE),
-  limit: parseAsInteger.withDefault(DEFAULT_LIMIT),
+  limit: parseAsNumberLiteral(LIMITS).withDefault(DEFAULT_LIMIT),
 };
 
 export type PaginationType = {
   page: number;
-  limit: number;
+  limit: (typeof LIMITS)[number];
 };
 
 export const searchParamsParsers = {

@@ -10,7 +10,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { TicketPaginationProps } from "@/features/ticket/components/ticket-pagination";
-import type { PaginationType } from "@/features/ticket/search-params";
+import {
+  DEFAULT_LIMIT,
+  LIMITS,
+  type PaginationType,
+} from "@/features/ticket/search-params";
 
 type PaginationProps = {
   pagination: PaginationType;
@@ -50,10 +54,12 @@ const Pagination = ({
   };
 
   const handleLimitChange = (value: string) => {
+    const valueAsLimit: (typeof LIMITS)[number] =
+      LIMITS.find((l) => l.toString() === value) ?? DEFAULT_LIMIT;
     startTransition(() => {
       setPagination({
         ...pagination,
-        limit: Number.parseInt(value, 10),
+        limit: valueAsLimit,
         page: 0,
       });
     });
@@ -89,7 +95,7 @@ const Pagination = ({
       <SelectContent>
         <SelectItem value="5">5</SelectItem>
         <SelectItem value="10">10</SelectItem>
-        <SelectItem value="20">25</SelectItem>
+        <SelectItem value="25">25</SelectItem>
         <SelectItem value="50">50</SelectItem>
         <SelectItem value="100">100</SelectItem>
       </SelectContent>

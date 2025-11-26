@@ -1,6 +1,8 @@
 import {
   email,
+  examples,
   type InferOutput,
+  minLength,
   object,
   optional,
   parse,
@@ -12,7 +14,12 @@ import { sendPasswordResetEmail } from "@/features/password/utils/send-password-
 import { inngest } from "@/lib/inngest";
 
 const passwordResetSchema = object({
-  email: pipe(string(), email()),
+  email: pipe(
+    string(),
+    email(),
+    minLength(1, "Email is required"),
+    examples(["bob@gmail.com", "alice@yahoo.com", "john@protonmail.com"]),
+  ),
   resetUrl: pipe(string(), url()),
   userName: optional(string()),
 });

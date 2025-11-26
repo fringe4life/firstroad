@@ -1,5 +1,6 @@
 import {
   email,
+  examples,
   type InferOutput,
   literal,
   maxLength,
@@ -19,7 +20,12 @@ const MIN_OTP_LENGTH = 4;
 const MAX_OTP_LENGTH = 8;
 
 const emailOTPSchema = object({
-  email: pipe(string(), email()),
+  email: pipe(
+    string(),
+    email(),
+    minLength(1, "Email is required"),
+    examples(["bob@gmail.com", "alice@yahoo.com", "john@protonmail.com"]),
+  ),
   otp: pipe(string(), minLength(MIN_OTP_LENGTH), maxLength(MAX_OTP_LENGTH)),
   type: union([
     literal("sign-in"),

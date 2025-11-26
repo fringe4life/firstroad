@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 import { RedirectType, redirect } from "next/navigation";
 import {
   email,
+  examples,
   maxLength,
   minLength,
   object,
@@ -25,6 +26,7 @@ const signInSchema = object({
     string(),
     email(),
     minLength(1, "Email is required"),
+    examples(["bob@gmail.com", "alice@yahoo.com", "john@protonmail.com"]),
     maxLength(191),
   ),
   password: pipe(string(), minLength(6), maxLength(191)),

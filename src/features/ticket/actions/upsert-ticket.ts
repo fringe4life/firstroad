@@ -6,13 +6,13 @@ import { redirect } from "next/navigation";
 import {
   maxLength,
   minLength,
-  number,
+  minValue,
   object,
   parse,
   pipe,
   regex,
   string,
-  transform,
+  toNumber,
 } from "valibot";
 import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
@@ -32,7 +32,11 @@ const upsertSchema = object({
   title: pipe(string(), minLength(1), maxLength(191)),
   description: pipe(string(), minLength(1), maxLength(1024)),
   deadline: pipe(string(), regex(/^\d{4}-\d{2}-\d{2}$/, "Is required")),
-  bounty: pipe(string(), transform(Number), number()),
+  bounty: pipe(
+    string(),
+    toNumber(),
+    minValue(0, "Bounty must be greater than 0"),
+  ),
 });
 
 const upsertTicket = async (
