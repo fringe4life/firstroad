@@ -28,7 +28,7 @@ const CardCompact = ({
       <CardDescription>{description}</CardDescription>
     </CardHeader>
     <CardContent>{content}</CardContent>
-    {footer && <CardFooter>{footer}</CardFooter>}
+    {Boolean(footer) && <CardFooter>{footer}</CardFooter>}
   </Card>
 );
 

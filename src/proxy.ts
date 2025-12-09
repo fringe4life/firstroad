@@ -1,48 +1,37 @@
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
-import { homePath, signInPath } from "@/path";
+import { getCookieCache } from "better-auth/cookies";
+import { type NextRequest, NextResponse } from "next/server";
+// const authRoutes = [
+//   "/sign-in",
+//   "/sign-up",
+//   "/forgot-password",
+//   "/reset-password",
+//   "/verify-email",
+// ];
 
-const authRoutes = [
-  "/sign-in",
-  "/sign-up",
-  "/forgot-password",
-  "/reset-password",
-  "/verify-email",
-];
-
-const protectedRoutes = ["/account"];
+// const protectedRoutes = ["/account"];
 
 export const proxy = async (request: NextRequest) => {
-  const session = await auth.api.getSession({ headers: request.headers });
-  const { pathname } = request.nextUrl;
-
-  const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
-  const isProtectedRoute = protectedRoutes.some((route) =>
-    pathname.startsWith(route),
-  );
-
-  // Redirect authenticated users away from auth pages
-  if (session && isAuthRoute) {
-    return NextResponse.redirect(new URL(homePath, request.url));
-  }
-
-  // Redirect unauthenticated users away from protected pages
-  if (!session && isProtectedRoute) {
-    return NextResponse.redirect(new URL(signInPath, request.url));
+  const sessionCookie = await getCookieCache(request);
+  // THIS IS NOT SECURE!
+  if (sessionCookie) {
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();
 };
 
 export const config = {
-  matcher: [
-    "/tickets/:path*",
-    "/account/:path*",
-    "/sign-in",
-    "/sign-up",
-    "/forgot-password",
-    "/reset-password/:path*",
-    "/verify-email",
-  ],
+  matcher: ["/signin", "/signup"], // Specify the routes the middleware applies to
 };
+
+// export const config = {
+//   matcher: [
+//     "/tickets/:path*",
+//     "/account/:path*",
+//     "/sign-in",
+//     "/sign-up",
+//     "/forgot-password",
+//     "/reset-password/:path*",
+//     "/verify-email",
+//   ],
+// };

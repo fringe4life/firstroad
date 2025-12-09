@@ -2,6 +2,8 @@
 
 import { cacheTag } from "next/cache";
 import type { SearchParams } from "nuqs/server";
+import type { DatabaseQueryResult } from "@/features/pagination/types";
+import { transformToPaginatedResult } from "@/features/pagination/utils/to-paginated-result";
 import { searchParamsCache } from "@/features/ticket/search-params";
 import type { BaseTicket } from "@/features/ticket/types";
 import type { PaginatedResult } from "@/features/types/pagination";
@@ -11,6 +13,7 @@ import type {
   TicketWhereInput,
 } from "@/generated/prisma/models/Ticket";
 import { prisma } from "@/lib/prisma";
+import { tryCatch } from "@/utils/try-catch";
 
 // Cached database query - only the expensive part
 const getTicketsFromDB = async (
@@ -18,39 +21,42 @@ const getTicketsFromDB = async (
   orderBy: TicketOrderByWithRelationInput,
   takeAmount: number,
   skip: number,
-) => {
+): Promise<DatabaseQueryResult<BaseTicket>> => {
   "use cache";
   cacheTag("tickets");
 
-  return await prisma.$transaction([
-    prisma.ticket.findMany({
-      where,
-      include: {
-        userInfo: {
-          include: {
-            user: {
-              select: {
-                name: true,
+  const [{ data: items }, { data: totalRows }] = await Promise.all([
+    await tryCatch(async () =>
+      prisma.ticket.findMany({
+        where,
+        include: {
+          userInfo: {
+            include: {
+              user: {
+                select: {
+                  name: true,
+                },
               },
             },
           },
         },
-      },
-      orderBy,
-      take: takeAmount + 1,
-      skip,
-    }),
-    prisma.ticket.count({ where, orderBy }),
+        orderBy,
+        take: takeAmount + 1,
+        skip,
+      }),
+    ),
+    await tryCatch(async () => await prisma.ticket.count({ where, orderBy })),
   ]);
+
+  return { items, totalRows };
 };
 
 export const getAllTickets = async (
-  searchParams?: Promise<SearchParams>,
+  searchParams: Promise<SearchParams>,
   filterUserId?: string,
 ): Promise<PaginatedResult<BaseTicket>> => {
   // Parse search params (not cached - fast and user-specific)
-  const resolvedSearchParams =
-    searchParams instanceof Promise ? await searchParams : {};
+  const resolvedSearchParams = await searchParams;
   const { search, sortKey, sortValue, page, limit, scope } =
     searchParamsCache.parse(resolvedSearchParams);
 
@@ -79,19 +85,12 @@ export const getAllTickets = async (
   const takeAmount = limit;
 
   // Only cache the database transaction
-  const [tickets, count] = await getTicketsFromDB(
+  const { items, totalRows } = await getTicketsFromDB(
     where,
     orderBy,
     takeAmount,
     skip,
   );
 
-  return {
-    list: tickets.slice(0, -2),
-    metadata: {
-      count,
-      hasNextPage: count > skip + takeAmount,
-      nextCursor: tickets[takeAmount]?.id ?? null,
-    },
-  };
+  return transformToPaginatedResult({ items, totalRows }, { page, limit });
 };

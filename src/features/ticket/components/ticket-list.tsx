@@ -15,13 +15,24 @@ import { getAllTickets } from "@/features/ticket/queries/get-tickets";
 
 type TicketListProps = {
   userId?: string;
-  searchParams?: Promise<SearchParams>;
+  searchParams: Promise<SearchParams>;
 };
 
 const TicketList = async ({ userId, searchParams }: TicketListProps) => {
   const session = await getSession();
   const { list: tickets, metadata } = await getAllTickets(searchParams, userId);
-  const hasTickets = tickets.length > 0;
+  let ticketsElement = <Placeholder label="No tickets found" />;
+  if (tickets && tickets.length > 0) {
+    ticketsElement = (
+      <GenericComponent
+        Component={TicketItem}
+        className="grid gap-y-4"
+        items={tickets}
+        renderKey={(ticket) => ticket.slug}
+        renderProps={(ticket) => ({ isDetail: false, ticket })}
+      />
+    );
+  }
   return (
     <div className="grid justify-center gap-y-4">
       <Suspense fallback={<TicketControlsFallback />}>
@@ -42,17 +53,7 @@ const TicketList = async ({ userId, searchParams }: TicketListProps) => {
           </div>
         </div>
       </Suspense>
-      {hasTickets ? (
-        <GenericComponent
-          Component={TicketItem}
-          className="grid gap-y-4"
-          items={tickets}
-          renderKey={(ticket) => ticket.slug}
-          renderProps={(ticket) => ({ isDetail: false as const, ticket })}
-        />
-      ) : (
-        <Placeholder label="No tickets found" />
-      )}
+      {ticketsElement}
 
       <div className="max-content-narrow">
         <Suspense>

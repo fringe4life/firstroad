@@ -6,7 +6,14 @@ export type PaginationMetadata = {
   nextCursor: Maybe<string>;
 };
 
+type List<T> = Maybe<T[]>;
+
 export type PaginatedResult<T> = {
-  list: Maybe<T[]>;
+  list: List<T>;
   metadata: PaginationMetadata;
+};
+
+export type DatabaseQueryResult<T> = {
+  items: List<T>;
+  totalRows: Maybe<number>;
 };

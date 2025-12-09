@@ -3,7 +3,7 @@ import { HasAuthSuspense } from "@/features/auth/components/has-auth";
 import TicketList from "@/features/ticket/components/ticket-list";
 
 type TicketsProps = {
-  searchParams?: Promise<SearchParams>;
+  searchParams: Promise<SearchParams>;
 };
 
 const TicketsPage = ({ searchParams }: TicketsProps) => (

@@ -49,7 +49,6 @@ const signin = async (_state: ActionState | undefined, formData: FormData) => {
     return fromErrorToActionState(error, formData);
   }
   updateTag("session");
-  // revalidatePath("/");
   throw redirect(homePath, RedirectType.replace);
 };
 

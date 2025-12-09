@@ -18,7 +18,7 @@ const HeaderPage = ({ searchParams }: HeaderPageProps) => (
       const resolvedSearchParams =
         searchParams instanceof Promise ? await searchParams : {};
       const { scope } = searchParamsCache.parse(resolvedSearchParams);
-      if (session?.user && scope === "mine") {
+      if (Boolean(session?.user) && scope === "mine") {
         return <MyTicketsHeading />;
       }
 

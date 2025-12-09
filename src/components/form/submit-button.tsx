@@ -17,7 +17,7 @@ const SubmitButton = ({ label, icon, variant, size }: SubmitButtonProps) => {
   const { pending } = useFormStatus();
   return (
     <Button disabled={pending} size={size} type="submit" variant={variant}>
-      {pending && (
+      {Boolean(pending) && (
         <LucideLoaderCircle
           className={clsx({ "size-4 animate-spin": true, "mr-2": !!label })}
         />

@@ -44,18 +44,21 @@ const Comments = ({
   // Use useActionState for the load more action with initial state
   const [loadMoreState, loadMoreActionState, isPending] = useActionState(
     async (prevState: LoadMoreState, formData: FormData) => {
-      const cursor = formData.get("cursor") as string;
+      const cursor = String(formData.get("cursor"));
+      if (!cursor) {
+        return prevState;
+      }
       const newData = await loadMoreAction(ticketId, cursor);
 
       // Merge previous state with new data
       return {
-        list: [...prevState.list, ...newData.list],
+        list: [...(prevState.list ?? []), ...(newData.list ?? [])],
         hasMore: newData.hasMore,
         nextCursor: newData.nextCursor,
       };
     },
     {
-      list,
+      list: list ?? [],
       hasMore: metadata?.hasNextPage ?? false,
       nextCursor: metadata?.nextCursor ?? null,
     },
@@ -117,7 +120,7 @@ const Comments = ({
         <GenericComponent
           Component={CommentItem}
           className="grid gap-y-2"
-          items={loadMoreState.list}
+          items={loadMoreState.list ?? []}
           renderKey={(item) => item.id}
           renderProps={(item) => ({
             comment: item,

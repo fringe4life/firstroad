@@ -21,12 +21,13 @@ export const NavItems = () => {
 
         return (
           <div key={item.title}>
-            {item.seperator && <Separator />}
+            {Boolean(item.seperator) && <Separator />}
             <Link
               className={cn(
                 buttonVariants({ variant: "ghost" }),
                 "relative flex h-12 w-full justify-start",
-                isActive && "bg-muted font-bold hover:bg-muted-foreground",
+                Boolean(isActive) &&
+                  "bg-muted font-bold hover:bg-muted-foreground",
               )}
               href={item.href}
             >

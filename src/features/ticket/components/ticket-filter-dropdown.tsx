@@ -63,7 +63,7 @@ const TicketFilterDropdown = ({ session }: TicketFilterDropdownProps) => {
         <DropdownMenuLabel>View</DropdownMenuLabel>
         <DropdownMenuRadioGroup onValueChange={handleScopeChange} value={scope}>
           <DropdownMenuRadioItem value="all">All Tickets</DropdownMenuRadioItem>
-          {session?.user && (
+          {Boolean(session?.user) && (
             <DropdownMenuRadioItem value="mine">
               My Tickets
             </DropdownMenuRadioItem>

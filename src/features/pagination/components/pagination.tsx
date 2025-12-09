@@ -1,3 +1,4 @@
+"use client";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import type { MouseEventHandler } from "react";
 import { startTransition } from "react";
@@ -9,19 +10,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { TicketPaginationProps } from "@/features/ticket/components/ticket-pagination";
 import {
   DEFAULT_LIMIT,
   LIMITS,
+  type LimitItem,
   type PaginationType,
-} from "@/features/ticket/search-params";
+} from "@/features/pagination/pagination-search-params";
+import type { PaginationMetadata } from "@/features/pagination/types";
 
 type PaginationProps = {
   pagination: PaginationType;
   setPagination: (pagination: PaginationType) => void;
-  metadata: TicketPaginationProps["metadata"];
+  metadata: PaginationMetadata;
 };
-
 const Pagination = ({
   pagination,
   setPagination,
@@ -53,7 +54,7 @@ const Pagination = ({
   };
 
   const handleLimitChange = (value: string) => {
-    const valueAsLimit: (typeof LIMITS)[number] =
+    const valueAsLimit: LimitItem =
       LIMITS.find((l) => l.toString() === value) ?? DEFAULT_LIMIT;
     startTransition(() => {
       setPagination({

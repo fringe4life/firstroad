@@ -30,7 +30,7 @@ const OTPVerifyForm = ({
   return (
     <Form action={action} state={state || EMPTY_ACTION_STATE}>
       <div className="space-y-4">
-        {email && (
+        {Boolean(email) && (
           <p className="text-muted-foreground text-sm">
             Code sent to: <span className="font-medium">{email}</span>
           </p>
@@ -54,7 +54,7 @@ const OTPVerifyForm = ({
         </div>
 
         {/* Hidden email field for form submission */}
-        {email && <input name="email" type="hidden" value={email} />}
+        {Boolean(email) && <input name="email" type="hidden" value={email} />}
 
         <SubmitButton label={submitLabel} />
       </div>

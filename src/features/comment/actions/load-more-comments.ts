@@ -6,7 +6,7 @@ import type { Maybe } from "@/types";
 import { tryCatch } from "@/utils/try-catch";
 
 export type LoadMoreState = {
-  list: Comment[];
+  list: Maybe<Comment[]>;
   hasMore: boolean;
   nextCursor: Maybe<string>;
   error?: string;

@@ -22,7 +22,7 @@ const TicketOwnerOptions = ({
         <Button disabled size="icon" variant="outline">
           <LucidePencil className="size-4" />
         </Button>
-        {isDetail && (
+        {Boolean(isDetail) && (
           <Button disabled size="icon" variant="outline">
             <div className="size-4" />
           </Button>

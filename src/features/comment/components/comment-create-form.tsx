@@ -91,7 +91,7 @@ const CommentCreateForm = ({
       </div>
       <div className="flex gap-2">
         <SubmitButton label={commentId ? "Update comment" : "Post comment"} />
-        {commentId && onCancel && (
+        {Boolean(commentId) && Boolean(onCancel) && (
           <button
             className="rounded-md border px-4 py-2 text-sm hover:bg-gray-50"
             onClick={onCancel}
