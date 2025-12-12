@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { TICKET_NOT_FOUND } from "@/features/constants";
 import TicketItem from "@/features/ticket/components/ticket-item";
 import { getAllTicketSlugs } from "@/features/ticket/queries/get-all-ticket-slugs";
 import { getTicketBySlug } from "@/features/ticket/queries/get-ticket";
@@ -13,10 +14,7 @@ export const generateMetadata = async ({
   const ticket = await getTicketBySlug(slug);
 
   if (!ticket) {
-    return {
-      title: "Ticket Not Found",
-      description: "The requested ticket could not be found.",
-    };
+    return TICKET_NOT_FOUND;
   }
 
   return {

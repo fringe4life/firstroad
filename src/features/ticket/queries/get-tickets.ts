@@ -26,7 +26,7 @@ const getTicketsFromDB = async (
   cacheTag("tickets");
 
   const [{ data: items }, { data: totalRows }] = await Promise.all([
-    await tryCatch(async () =>
+    tryCatch(() =>
       prisma.ticket.findMany({
         where,
         include: {
@@ -45,7 +45,7 @@ const getTicketsFromDB = async (
         skip,
       }),
     ),
-    await tryCatch(async () => await prisma.ticket.count({ where, orderBy })),
+    tryCatch(() => prisma.ticket.count({ where, orderBy })),
   ]);
 
   return { items, totalRows };

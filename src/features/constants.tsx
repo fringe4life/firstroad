@@ -1,4 +1,5 @@
 import { Check, File, Pencil } from "lucide-react";
+import type { Metadata } from "next";
 import type { SortOption } from "@/components/sort-select";
 import type { Prisma } from "@/generated/prisma/client";
 
@@ -30,3 +31,8 @@ const TICKET_SORT_OPTIONS: readonly SortOption[] = [
 // Sort orders used in UI and parsers - matches Prisma.SortOrder
 const SORT_ORDERS: Prisma.SortOrder[] = ["asc", "desc"] as const;
 export { TICKET_ICONS, TICKET_STATUS_LABELS, SORT_ORDERS, TICKET_SORT_OPTIONS };
+
+export const TICKET_NOT_FOUND: Metadata = {
+  title: "Ticket Not Found",
+  description: "The requested ticket could not be found.",
+};

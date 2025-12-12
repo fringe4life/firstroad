@@ -9,12 +9,12 @@
 [![Better Auth](https://img.shields.io/badge/Better%20Auth-1.4.6-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.18-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Biome](https://img.shields.io/badge/Biome-2.3.8-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-6.3.12-000000)](https://ultracite.dev/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-6.4.0-000000)](https://ultracite.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.8.5-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.2.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Inngest](https://img.shields.io/badge/Inngest-3.47.0-000000)](https://www.inngest.com/)
 [![Resend](https://img.shields.io/badge/Resend-6.6.0-000000)](https://resend.com/)
-[![React Email](https://img.shields.io/badge/React%20Email-5.0.7-000000)](https://react.email/)
+[![React Email](https://img.shields.io/badge/React%20Email-5.0.8-000000)](https://react.email/)
 
 </div>
 
@@ -34,7 +34,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **📊 Infinite Pagination**: Efficient cursor-based pagination for comments
 - **🔒 Ownership System**: Users can only edit their own tickets and comments
 - **🎯 Type Safety**: Full TypeScript support with typed routes
-- **📧 Email Features**: Password reset, email verification, OTP authentication, and welcome emails with React Email 5.0.7 templates
+- **📧 Email Features**: Password reset, email verification, OTP authentication, and welcome emails with React Email 5.0.8 templates
 - **🔗 Slug Generation**: Human-readable URLs using slugify package for ticket slugs
 - **🔄 Database Hooks**: Automatic UserInfo creation on user registration
 - **🔄 Parallel Routes**: Next.js parallel routes (@header, @breadcrumbs, @comments, @tickets, @ticketForm) for enhanced user experience
@@ -58,10 +58,10 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **Notifications**: Sonner toast notifications
 - **Theme**: next-themes for dark/light mode
 - **URL Search Params**: nuqs 2.8.5 for type-safe URL parameters
-- **Email**: React Email 5.0.7 with Resend 6.6.0 for transactional emails
+- **Email**: React Email 5.0.8 with Resend 6.6.0 for transactional emails
 - **Background Jobs**: Inngest 3.47.0 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
-- **Linting**: Biome 2.3.8 for fast formatting and linting with Ultracite 6.3.12 rules
+- **Linting**: Biome 2.3.8 for fast formatting and linting with Ultracite 6.4.0 rules
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 
@@ -352,7 +352,6 @@ src/
 │   ├── theme/            # Theme configuration (theme-provider, theme-switcher)
 │   ├── header.tsx        # Main application header
 │   ├── breadcrumbs.tsx   # Breadcrumb navigation
-│   ├── pagination.tsx    # Pagination component
 │   ├── card-compact.tsx  # Compact card component
 │   ├── confirm-dialog.tsx # Confirmation dialog
 │   ├── date-picker.tsx   # Date picker component
@@ -376,6 +375,11 @@ src/
 │   ├── organisation/     # Organization management
 │   │   ├── components/   # Organization components (organisation-list, organisation-item)
 │   │   └── queries/      # Organization queries (get-organisations-for-user)
+│   ├── pagination/       # Pagination system
+│   │   ├── components/   # Pagination components (nuqs-pagination, pagination)
+│   │   ├── pagination-search-params.ts # Type-safe pagination search parameters
+│   │   ├── types.ts      # Pagination types
+│   │   └── utils/        # Pagination utilities (to-paginated-result)
 │   ├── ticket/           # Ticket management
 │   │   ├── actions/      # Server actions (delete-ticket, update-status, upsert-ticket)
 │   │   ├── components/   # Ticket components (ticket-controls-fallback, ticket-filter-dropdown, ticket-item, ticket-list, ticket-more-menu, ticket-owner-options, ticket-pagination, ticket-scope-toggle, ticket-search-input, ticket-select-sort, ticket-upsert-form)

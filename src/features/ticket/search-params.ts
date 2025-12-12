@@ -28,9 +28,7 @@ export type Scope = inferParserType<typeof scopeParser>;
 
 export const sortParser = {
   sortKey: parseAsString.withDefault("createdAt"),
-  sortValue: parseAsStringLiteral(SORT_ORDERS as readonly string[]).withDefault(
-    "desc",
-  ),
+  sortValue: parseAsStringLiteral(SORT_ORDERS).withDefault("desc"),
 };
 
 const DEFAULT_PAGE = 0;

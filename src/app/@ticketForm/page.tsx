@@ -1,32 +1,23 @@
 import { CardCompact } from "@/components/card-compact";
-import { HasAuthSuspense } from "@/features/auth/components/has-auth";
+import { getSession } from "@/features/auth/queries/get-session";
 import { upsertTicket } from "@/features/ticket/actions/upsert-ticket";
 import TicketUpsertForm from "@/features/ticket/components/ticket-upsert-form";
 
-const TicketFormPage = () => (
-  <HasAuthSuspense fallback={<TicketFormSkeleton />}>
-    {(session) => {
-      if (!session?.user) {
-        return null; // No form for unauthenticated users
-      }
+const TicketFormPage = async () => {
+  const session = await getSession();
 
-      return (
-        <CardCompact
-          className="max-content-narrow self-center"
-          content={<TicketUpsertForm upsertTicketAction={upsertTicket} />}
-          description="A new ticket will be created"
-          title="Create Ticket"
-        />
-      );
-    }}
-  </HasAuthSuspense>
-);
+  if (!session?.user) {
+    return null;
+  }
 
-// Loading skeleton for the form
-const TicketFormSkeleton = () => (
-  <div className="max-content-narrow self-center">
-    <div className="h-32 animate-pulse rounded-lg bg-muted-foreground" />
-  </div>
-);
+  return (
+    <CardCompact
+      className="max-content-narrow self-center"
+      content={<TicketUpsertForm upsertTicketAction={upsertTicket} />}
+      description="A new ticket will be created"
+      title="Create Ticket"
+    />
+  );
+};
 
 export default TicketFormPage;
