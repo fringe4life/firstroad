@@ -9,7 +9,7 @@
 [![Better Auth](https://img.shields.io/badge/Better%20Auth-1.4.6-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.18-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Biome](https://img.shields.io/badge/Biome-2.3.8-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-6.3.10-000000)](https://ultracite.dev/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-6.3.12-000000)](https://ultracite.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.8.5-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.2.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Inngest](https://img.shields.io/badge/Inngest-3.47.0-000000)](https://www.inngest.com/)
@@ -61,7 +61,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **Email**: React Email 5.0.7 with Resend 6.6.0 for transactional emails
 - **Background Jobs**: Inngest 3.47.0 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
-- **Linting**: Biome 2.3.8 for fast formatting and linting with Ultracite 6.3.10 rules
+- **Linting**: Biome 2.3.8 for fast formatting and linting with Ultracite 6.3.12 rules
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 
@@ -574,6 +574,13 @@ bun run reset:tickets    # Reset only ticket and comment data (preserves users)
 
 # Background Jobs (Inngest)
 bun run inngest          # Start Inngest dev server for local testing
+
+# Ultracite (Code Quality)
+bun run ultracite        # Run Ultracite checks
+bun run ultracite:fix    # Fix Ultracite issues automatically
+bun run ultracite:doctor # Diagnose code quality issues
+bun run ultracite:check  # Check code quality
+bun run ultracite:format # Format code with Ultracite
 
 # Deployment
 bun run deploy           # Deploy to Vercel production

@@ -1,26 +1,24 @@
-import type { SearchParams } from "nuqs/server";
-import { Suspense } from "react";
+import { Suspense, ViewTransition } from "react";
 import GenericComponent from "@/components/generic-component";
 import Placeholder from "@/components/placeholder";
 import { getSession } from "@/features/auth/queries/get-session";
 import { TICKET_SORT_OPTIONS } from "@/features/constants";
+import Pagination from "@/features/pagination/components/nuqs-pagination";
 import TicketControlsFallback from "@/features/ticket/components/ticket-controls-fallback";
 import TicketFilterDropdown from "@/features/ticket/components/ticket-filter-dropdown";
 import TicketItem from "@/features/ticket/components/ticket-item";
-import TicketPagination from "@/features/ticket/components/ticket-pagination";
 import TicketScopeToggle from "@/features/ticket/components/ticket-scope-toggle";
 import TicketSearchInput from "@/features/ticket/components/ticket-search-input";
 import TicketSortSelect from "@/features/ticket/components/ticket-select-sort";
 import { getAllTickets } from "@/features/ticket/queries/get-tickets";
+import type { SearchParamsProps } from "@/types";
 
-type TicketListProps = {
-  userId?: string;
-  searchParams: Promise<SearchParams>;
-};
-
-const TicketList = async ({ userId, searchParams }: TicketListProps) => {
+const TicketList = async ({ searchParams }: SearchParamsProps) => {
   const session = await getSession();
-  const { list: tickets, metadata } = await getAllTickets(searchParams, userId);
+  const { list: tickets, metadata } = await getAllTickets(
+    searchParams,
+    session?.user?.id,
+  );
   let ticketsElement = <Placeholder label="No tickets found" />;
   if (tickets && tickets.length > 0) {
     ticketsElement = (
@@ -56,9 +54,11 @@ const TicketList = async ({ userId, searchParams }: TicketListProps) => {
       {ticketsElement}
 
       <div className="max-content-narrow">
-        <Suspense>
-          <TicketPagination metadata={metadata} />
-        </Suspense>
+        <ViewTransition>
+          <Suspense>
+            <Pagination metadata={metadata} />
+          </Suspense>
+        </ViewTransition>
       </div>
     </div>
   );

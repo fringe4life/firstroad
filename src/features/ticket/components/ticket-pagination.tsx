@@ -1,7 +1,7 @@
 "use client";
 
 import { useQueryStates } from "nuqs";
-import Pagination from "@/components/pagination";
+import Pagination from "@/features/pagination/components/pagination";
 import {
   options as PaginationOptions,
   paginationParser,

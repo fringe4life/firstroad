@@ -22,7 +22,12 @@
     "prepare": "husky",
     "inngest": "bunx inngest-cli dev -u http://localhost:3000/api/inngest",
     "deploy": "vercel deploy --prod",
-    "deploy:prod": "vercel build && vercel deploy --prebuilt --archive=tgz"
+    "deploy:prod": "vercel build && vercel deploy --prebuilt --archive=tgz",
+    "ultracite": "bun x ultracite",
+    "ultracite:fix": "bun x ultracite fix",
+    "ultracite:doctor": "bun x ultracite doctor",
+    "ultracite:check": "bun x ultracite check",
+    "ultracite:format": "bun x ultracite format"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
@@ -87,7 +92,7 @@
     "tailwindcss": "^4.1.18",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "ultracite": "6.3.10",
+    "ultracite": "6.3.12",
     "zod": "^4.1.13"
   },
   "trustedDependencies": [

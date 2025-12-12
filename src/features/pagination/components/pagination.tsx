@@ -36,8 +36,8 @@ const Pagination = ({
   const label = `${startOffset} - ${actualEndOffset} of ${metadata.count}`;
 
   const handleNextPage: MouseEventHandler<HTMLButtonElement> = () => {
-    startTransition(() => {
-      setPagination({
+    startTransition(async () => {
+      await setPagination({
         ...pagination,
         page: page + 1,
       });
@@ -45,8 +45,8 @@ const Pagination = ({
   };
 
   const handlePreviousPage: MouseEventHandler<HTMLButtonElement> = () => {
-    startTransition(() => {
-      setPagination({
+    startTransition(async () => {
+      await setPagination({
         ...pagination,
         page: page - 1,
       });
@@ -56,8 +56,8 @@ const Pagination = ({
   const handleLimitChange = (value: string) => {
     const valueAsLimit: LimitItem =
       LIMITS.find((l) => l.toString() === value) ?? DEFAULT_LIMIT;
-    startTransition(() => {
-      setPagination({
+    startTransition(async () => {
+      await setPagination({
         ...pagination,
         limit: valueAsLimit,
         page: 0,
