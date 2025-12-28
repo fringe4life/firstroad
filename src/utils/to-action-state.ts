@@ -1,14 +1,14 @@
 import { APIError } from "better-auth";
 import { flatten, ValiError } from "valibot";
 
-export type ActionState<T = unknown> = {
+export interface ActionState<T = unknown> {
   message: string;
   payload?: FormData;
   fieldErrors: Record<string, string[] | undefined>;
   status?: "SUCCESS" | "ERROR";
   timestamp: number;
   data?: T;
-};
+}
 
 export const EMPTY_ACTION_STATE: ActionState = {
   message: "",

@@ -13,11 +13,11 @@ import { Label } from "@/components/ui/label";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 import type { verifyEmailVerificationOTP } from "../actions/verify-otp-action";
 
-type OTPVerifyFormProps = {
+interface OTPVerifyFormProps {
   verifyOTPAction: typeof verifyEmailVerificationOTP;
   submitLabel: string;
   email?: string;
-};
+}
 
 const OTPVerifyForm = ({
   verifyOTPAction,

@@ -10,10 +10,10 @@ import {
   Text,
 } from "@react-email/components";
 
-type PasswordChangedEmailProps = {
+interface PasswordChangedEmailProps {
   toName: string;
   appUrl: string;
-};
+}
 
 const PasswordChangedEmail = ({
   toName,

@@ -3,11 +3,7 @@ import Breadcrumbs from "@/components/breadcrumbs";
 import { getTicketBySlug } from "@/features/ticket/queries/get-ticket";
 import { homePath, ticketPath } from "@/path";
 
-const BreadcrumbsEditPage = async ({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) => {
+const BreadcrumbsEditPage = async ({ params }: PageProps<"/[slug]/edit">) => {
   const { slug } = await params;
 
   const ticket = await getTicketBySlug(slug);

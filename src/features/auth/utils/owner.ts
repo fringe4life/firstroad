@@ -1,18 +1,16 @@
-import type { MaybeServerSession } from "@/features/auth/types";
+import type { User } from "@/features/auth/types";
 import type { Maybe } from "@/types";
 
-type Entity = {
+interface Entity {
   userId: Maybe<string>;
-};
+}
 
-export type IsOwner = {
+export interface IsOwner {
   isOwner: boolean;
-};
+}
 
-export const isOwner = (
-  session: MaybeServerSession,
-  { userId }: Entity,
-): boolean => (userId ? session?.user?.id === userId : false);
+export const isOwner = (user: Maybe<User>, { userId }: Entity): boolean =>
+  userId ? user?.id === userId : false;
 
 /**
  * Maps entities to include isOwner property based on session
@@ -23,7 +21,7 @@ export const isOwner = (
  * const commentsWithOwnership = withOwnership(session, comments);
  */
 export const withOwnership = <T extends Entity>(
-  session: MaybeServerSession,
+  session: Maybe<User>,
   entities: T[],
 ): Array<T & IsOwner> =>
   entities.map((entity) => ({

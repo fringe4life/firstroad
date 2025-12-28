@@ -20,7 +20,7 @@ const TicketEditFormPage = async ({ params }: PageProps<"/[slug]/edit">) => {
 
   return (
     <RequireAuthSuspense
-      authorize={(session) => isOwner(session, ticket)}
+      authorize={(user) => isOwner(user, ticket)}
       fallback={
         <CardCompact
           className="max-content-widest self-center"

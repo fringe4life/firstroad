@@ -15,7 +15,7 @@ import {
 import { useToggle } from "@/hooks/use-toggle";
 import { type ActionState, EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 
-type UseConfirmDialogProps = {
+interface UseConfirmDialogProps {
   action: () => Promise<ActionState>;
   trigger: (props: {
     isPending: boolean;
@@ -27,7 +27,7 @@ type UseConfirmDialogProps = {
   onSuccess?: (result: ActionState) => void;
   onError?: (result: ActionState) => void;
   onIsPending?: (isPending: boolean) => void;
-};
+}
 
 const useConfirmDialog = ({
   action,

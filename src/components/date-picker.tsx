@@ -13,16 +13,16 @@ import {
 } from "@/components/ui/popover";
 import type { Maybe } from "@/types";
 
-export type DateReset = {
+export interface DateReset {
   reset: () => void;
-};
+}
 
-type DatePickerProps = {
+interface DatePickerProps {
   id: string;
   name: string;
   defaultValue?: string;
   ref: React.RefObject<Maybe<DateReset>>;
-};
+}
 
 const DatePicker = ({ id, name, defaultValue, ref }: DatePickerProps) => {
   const [date, setDate] = useState<Date | undefined>(() =>

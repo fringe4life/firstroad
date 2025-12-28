@@ -13,9 +13,9 @@ export const metadata: Metadata = {
     "Set a new password for your First Road account. Enter your new password below.",
 };
 
-type ResetPasswordFormProps = {
+interface ResetPasswordFormProps {
   tokenPromise: PageProps<"/reset-password/[token]">["params"];
-};
+}
 
 const SuspendResetPasswordForm = async ({
   tokenPromise,

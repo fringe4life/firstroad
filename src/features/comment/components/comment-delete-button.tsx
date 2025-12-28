@@ -5,10 +5,10 @@ import useConfirmDialog from "@/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import { deleteComment } from "@/features/comment/actions/delete-comment";
 
-type CommentDeleteButtonProps = {
+interface CommentDeleteButtonProps {
   id: string;
   onDeleteComment: (commentId: string) => void;
-};
+}
 
 const CommentDeleteButton = ({
   id,

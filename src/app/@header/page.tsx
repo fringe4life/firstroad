@@ -4,9 +4,9 @@ import Heading from "@/components/heading";
 import { HasAuthSuspense } from "@/features/auth/components/has-auth";
 import { searchParamsCache } from "@/features/ticket/search-params";
 
-type HeaderPageProps = {
+interface HeaderPageProps {
   searchParams?: Promise<SearchParams>;
-};
+}
 
 const HeaderPage = ({ searchParams }: HeaderPageProps) => (
   <HasAuthSuspense
@@ -14,11 +14,11 @@ const HeaderPage = ({ searchParams }: HeaderPageProps) => (
       <div className="h-(--heading-height) animate-pulse rounded-lg bg-muted" />
     }
   >
-    {async (session) => {
+    {async (user) => {
       const resolvedSearchParams =
         searchParams instanceof Promise ? await searchParams : {};
       const { scope } = searchParamsCache.parse(resolvedSearchParams);
-      if (Boolean(session?.user) && scope === "mine") {
+      if (Boolean(user) && scope === "mine") {
         return <MyTicketsHeading />;
       }
 

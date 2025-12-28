@@ -2,15 +2,16 @@
 
 import { getCommentsByTicketId } from "@/features/comment/queries/get-comments";
 import type { Comment } from "@/features/comment/types";
+import type { List } from "@/features/pagination/types";
 import type { Maybe } from "@/types";
 import { tryCatch } from "@/utils/try-catch";
 
-export type LoadMoreState = {
-  list: Maybe<Comment[]>;
+export interface LoadMoreState {
+  list: List<Comment>;
   hasMore: boolean;
   nextCursor: Maybe<string>;
   error?: string;
-};
+}
 
 export const loadMoreComments = async (
   ticketId: string,

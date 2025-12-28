@@ -4,14 +4,14 @@ import { debounce, useQueryState, useQueryStates } from "nuqs";
 import { useTransition } from "react";
 import SearchInput from "@/components/search-input";
 import {
-  options as PaginationOptions,
+  options,
   paginationParser,
-  searchParser,
-} from "@/features/ticket/search-params";
+} from "@/features/pagination/pagination-search-params";
+import { searchParser } from "@/features/ticket/search-params";
 
-type TicketSearchInputProps = {
+interface TicketSearchInputProps {
   placeholder?: string;
-};
+}
 
 const DEBOUNCE_DELAY_MS = 250;
 
@@ -19,7 +19,7 @@ const TicketSearchInput = ({
   placeholder = "Search tickets ...",
 }: TicketSearchInputProps) => {
   const [search, setSearch] = useQueryState("search", searchParser);
-  const [, setPagination] = useQueryStates(paginationParser, PaginationOptions);
+  const [, setPagination] = useQueryStates(paginationParser, options);
   const [, startTransition] = useTransition();
   return (
     <SearchInput

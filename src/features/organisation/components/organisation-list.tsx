@@ -7,6 +7,8 @@ const OrganisationList = async () => {
   return (
     <GenericComponent
       Component={OrganisationItem}
+      className="grid gap-y-4"
+      emptyStateMessage="No Organisations Found"
       items={organisations}
       renderKey={(organisation) => organisation.id}
       renderProps={(organisation) => ({ organisation })}

@@ -2,7 +2,7 @@
 
 import { updateTag } from "next/cache";
 import { redirect } from "next/navigation";
-import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
+import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
 import { prisma } from "@/lib/prisma";
 import { homePath } from "@/path";
@@ -11,7 +11,7 @@ import { fromErrorToActionState } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
 
 export const deleteTicket = async (id: string) => {
-  const session = await getSessionOrRedirect();
+  const user = await getUserOrRedirect();
 
   const { error } = await tryCatch(async () => {
     await prisma.$transaction(async (tx) => {
@@ -21,7 +21,7 @@ export const deleteTicket = async (id: string) => {
         },
       });
 
-      if (!(ticket && isOwner(session, ticket))) {
+      if (!(ticket && isOwner(user, ticket))) {
         throw new Error("Ticket Not Found");
       }
 

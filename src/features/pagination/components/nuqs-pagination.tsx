@@ -6,13 +6,9 @@ import {
   options as PaginationOptions,
   paginationParser,
 } from "@/features/pagination/pagination-search-params";
-import type { PaginationMetadata } from "@/features/pagination/types";
+import type { PaginationComponentProps } from "@/features/pagination/types";
 
-export type PaginationProps = {
-  metadata: PaginationMetadata;
-};
-
-const Pagination = ({ metadata }: PaginationProps) => {
+const Pagination = ({ metadata }: PaginationComponentProps) => {
   const [pagination, setPagination] = useQueryStates(
     paginationParser,
     PaginationOptions,

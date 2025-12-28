@@ -9,14 +9,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { type ActionState, EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 import { upsertComment } from "../actions/upsert-comment";
 
-type CommentCreateFormProps = {
+interface CommentCreateFormProps {
   ticketId: string;
   commentId?: string;
   initialContent?: string;
   onCancel?: () => void;
   onSuccess?: () => void;
   upsertCommentAction: typeof upsertComment;
-};
+}
 
 const CommentCreateForm = ({
   ticketId,

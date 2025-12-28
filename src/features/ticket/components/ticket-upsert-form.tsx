@@ -13,10 +13,10 @@ import { fromCent } from "@/utils/currency";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 import type { upsertTicket } from "../actions/upsert-ticket";
 
-type TicketUpsertFormProps = {
+interface TicketUpsertFormProps {
   ticket?: Ticket;
   upsertTicketAction: typeof upsertTicket;
-};
+}
 
 const TicketUpsertForm = ({
   ticket,

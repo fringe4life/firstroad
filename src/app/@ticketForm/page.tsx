@@ -1,12 +1,12 @@
 import { CardCompact } from "@/components/card-compact";
-import { getSession } from "@/features/auth/queries/get-session";
+import { getUser } from "@/features/auth/queries/get-user";
 import { upsertTicket } from "@/features/ticket/actions/upsert-ticket";
 import TicketUpsertForm from "@/features/ticket/components/ticket-upsert-form";
 
 const TicketFormPage = async () => {
-  const session = await getSession();
+  const { hasUser } = await getUser();
 
-  if (!session?.user) {
+  if (!hasUser) {
     return null;
   }
 

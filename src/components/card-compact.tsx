@@ -7,13 +7,13 @@ import {
   CardTitle,
 } from "./ui/card";
 
-type CardCompactProps = {
+interface CardCompactProps {
   title: string;
   description: string;
   content: React.ReactNode;
   footer?: React.ReactNode;
   className?: string;
-};
+}
 
 const CardCompact = ({
   title,

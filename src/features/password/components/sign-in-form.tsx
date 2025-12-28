@@ -9,9 +9,9 @@ import { Label } from "@/components/ui/label";
 import type { signin } from "@/features/password/actions/signin-action";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 
-type SignInFormProps = {
+interface SignInFormProps {
   signinAction: typeof signin;
-};
+}
 
 const SignInForm = ({ signinAction }: SignInFormProps) => {
   const [state, action] = useActionState(signinAction, EMPTY_ACTION_STATE);

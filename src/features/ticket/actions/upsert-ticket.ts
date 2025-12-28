@@ -14,11 +14,12 @@ import {
   string,
   toNumber,
 } from "valibot";
-import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
+import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
 import { createSlug } from "@/features/ticket/utils/slug";
 import { prisma } from "@/lib/prisma";
 import { homePath, ticketPath } from "@/path";
+import type { Maybe } from "@/types";
 import { setCookieByKey } from "@/utils/cookies";
 import { toCent } from "@/utils/currency";
 import {
@@ -40,11 +41,11 @@ const upsertSchema = object({
 });
 
 const upsertTicket = async (
-  id: string | undefined,
+  id: Maybe<string>,
   _state: ActionState,
   formData: FormData,
 ): Promise<ActionState> => {
-  const session = await getSessionOrRedirect();
+  const user = await getUserOrRedirect();
 
   const { error } = await tryCatch(async () => {
     if (id) {
@@ -54,7 +55,7 @@ const upsertTicket = async (
         },
       });
 
-      if (!(ticket && isOwner(session, ticket))) {
+      if (!(ticket && isOwner(user, ticket))) {
         return toActionState("Ticket Not Found", "ERROR");
       }
     }
@@ -69,7 +70,7 @@ const upsertTicket = async (
       slug,
       deadline: new Date(data.deadline),
       bounty: toCent(data.bounty),
-      userId: session.user?.id as string,
+      userId: user.id,
     };
     const ticket = await prisma.ticket.upsert({
       where: {

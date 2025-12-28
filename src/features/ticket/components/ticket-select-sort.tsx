@@ -11,11 +11,11 @@ import {
   paginationParser,
   options as sortOptions,
   sortParser,
-} from "@/features/ticket/search-params";
+} from "@/features/pagination/pagination-search-params";
 
-type TicketSortSelectProps = {
+interface TicketSortSelectProps {
   options: readonly SortOption[];
-};
+}
 
 const TicketSortSelect = ({ options }: TicketSortSelectProps) => {
   const [sort, setSort] = useQueryStates(sortParser, sortOptions);

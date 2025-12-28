@@ -30,7 +30,7 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!.next", "!dist", "!build", "!src/generated"]
+    "includes": ["!.next", "!dist", "!build", "!src/generated"]
   },
   "overrides": [
     {

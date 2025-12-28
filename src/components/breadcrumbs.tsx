@@ -11,12 +11,12 @@ import {
   BreadcrumbSeparator,
 } from "./ui/breadcrumb";
 
-type BreadcrumbsProps = {
+interface BreadcrumbsProps {
   breadcrumbs: {
     title: string;
     href?: Route;
   }[];
-};
+}
 
 const Breadcrumbs = ({ breadcrumbs }: BreadcrumbsProps) => (
   <Breadcrumb>

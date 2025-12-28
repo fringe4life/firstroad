@@ -1,4 +1,4 @@
-import TicketFormSkeleton from "@/features/ticket/components/ticket-form-skeleton";
+import TicketFormSkeleton from "@/features/ticket/components/skeletons/ticket-form-skeleton";
 
 const TicketFormLoading = () => <TicketFormSkeleton />;
 

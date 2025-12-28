@@ -2,12 +2,13 @@
 
 import { cacheTag } from "next/cache";
 import type { SearchParams } from "nuqs/server";
-import type { DatabaseQueryResult } from "@/features/pagination/types";
+import type {
+  DatabaseQueryResult,
+  PaginatedResult,
+} from "@/features/pagination/types";
 import { transformToPaginatedResult } from "@/features/pagination/utils/to-paginated-result";
 import { searchParamsCache } from "@/features/ticket/search-params";
 import type { BaseTicket } from "@/features/ticket/types";
-import type { PaginatedResult } from "@/features/types/pagination";
-import type { Prisma } from "@/generated/prisma/client";
 import type {
   TicketOrderByWithRelationInput,
   TicketWhereInput,
@@ -62,11 +63,11 @@ export const getAllTickets = async (
 
   // Build orderBy based on sort parameter
   let orderBy: TicketOrderByWithRelationInput = {
-    createdAt: sortValue as Prisma.SortOrder,
+    createdAt: sortValue,
   }; // default
 
   if (sortKey === "bounty") {
-    orderBy = { bounty: sortValue as Prisma.SortOrder };
+    orderBy = { bounty: sortValue };
   }
 
   // Server-side validation: if scope is 'mine' but no user, default to 'all'

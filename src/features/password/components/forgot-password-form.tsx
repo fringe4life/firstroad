@@ -9,9 +9,9 @@ import { Label } from "@/components/ui/label";
 import type { forgotPassword } from "@/features/password/actions/forgot-password-action";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 
-type ForgotPasswordFormProps = {
+interface ForgotPasswordFormProps {
   forgotPasswordAction: typeof forgotPassword;
-};
+}
 
 const ForgotPasswordForm = ({
   forgotPasswordAction,

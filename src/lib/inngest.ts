@@ -6,6 +6,7 @@ import type { PasswordChangedEventData } from "@/features/password/events/event-
 import type { PasswordResetEventData } from "@/features/password/events/event-password-reset";
 
 // Define the event schemas for Inngest
+// biome-ignore lint/style/useConsistentTypeDefinitions: needs to be a type for inngest
 type Events = {
   "password.reset": {
     data: PasswordResetEventData;

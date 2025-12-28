@@ -1,5 +1,11 @@
-type Success<T> = { data: T; error: null };
-type Failure<E> = { data: null; error: E };
+interface Success<T> {
+  data: T;
+  error: null;
+}
+interface Failure<E> {
+  data: null;
+  error: E;
+}
 
 type Result<T, E> = Success<T> | Failure<E>;
 

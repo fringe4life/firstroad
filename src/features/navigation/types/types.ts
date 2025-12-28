@@ -1,8 +1,8 @@
 import type { Route } from "next";
 
-export type NavItem = {
+export interface NavItem {
   title: string;
   icon: React.ReactElement;
   href: Route;
   seperator?: boolean;
-};
+}

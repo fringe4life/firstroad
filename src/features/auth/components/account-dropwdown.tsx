@@ -14,9 +14,9 @@ import type { User } from "@/features/auth/types";
 import { accountPasswordPath, accountProfilePath } from "@/path";
 import SignOutButton from "./sign-out-button";
 
-type AccountDropdownProps = {
+interface AccountDropdownProps {
   user: User;
-};
+}
 
 const AccountDropdown = ({ user }: AccountDropdownProps) => (
   <DropdownMenu>

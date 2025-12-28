@@ -3,7 +3,7 @@
 
 import { updateTag } from "next/cache";
 import { maxLength, minLength, object, parse, pipe, string } from "valibot";
-import { getSessionOrRedirect } from "@/features/auth/queries/get-session-or-redirect";
+import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
 import type { CommentWithUserInfo } from "@/features/comment/types";
 import { prisma } from "@/lib/prisma";
@@ -29,7 +29,7 @@ export const upsertComment = async (
   _state: ActionState<unknown>,
   formData: FormData,
 ): Promise<ActionState<CommentWithUserInfo>> => {
-  const session = await getSessionOrRedirect();
+  const user = await getUserOrRedirect();
 
   const { data, error } = await tryCatch(async () => {
     // Verify the ticket exists
@@ -47,7 +47,7 @@ export const upsertComment = async (
         where: { id: commentId },
       });
 
-      if (!(comment && isOwner(session, comment))) {
+      if (!(comment && isOwner(user, comment))) {
         return toActionState(
           "Comment not found or you don't have permission to edit it",
           "ERROR",
@@ -70,7 +70,7 @@ export const upsertComment = async (
       create: {
         content: parsedData.content,
         ticketId,
-        userId: session.user.id,
+        userId: user.id,
       },
       include: {
         userInfo: {
@@ -95,7 +95,7 @@ export const upsertComment = async (
     // Add isOwner property to the comment
     const commentWithOwnership = {
       ...comment,
-      isOwner: isOwner(session, comment),
+      isOwner: isOwner(user, comment),
     };
 
     return toActionState(

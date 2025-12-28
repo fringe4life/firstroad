@@ -2,8 +2,8 @@ import type { Route } from "next";
 import { headers } from "next/headers";
 import { redirect, unauthorized } from "next/navigation";
 import { Suspense } from "react";
-import { getSession } from "@/features/auth/queries/get-session";
-import type { ServerSession } from "@/features/auth/types";
+import { getUser } from "@/features/auth/queries/get-user";
+import type { User } from "@/features/auth/types";
 import { signInPath } from "@/path";
 
 // RequireAuth component that ensures user is authenticated and optionally authorized
@@ -12,13 +12,13 @@ const RequireAuth = async ({
   redirectPath,
   authorize,
 }: {
-  children: (session: ServerSession) => React.ReactNode;
+  children: (user: User) => React.ReactNode;
   redirectPath?: string;
-  authorize?: (session: ServerSession) => boolean;
+  authorize?: (user: User) => boolean;
 }) => {
-  const session = await getSession();
+  const { user, hasUser } = await getUser();
 
-  if (!session) {
+  if (!(hasUser && user)) {
     // Not authenticated - redirect to sign-in
     const headersList = await headers();
     const pathname =
@@ -35,11 +35,11 @@ const RequireAuth = async ({
   }
 
   // Check authorization if provided
-  if (authorize && !authorize(session)) {
+  if (authorize && !authorize(user)) {
     unauthorized();
   }
 
-  return <>{children(session)}</>;
+  return <>{children(user)}</>;
 };
 
 // Suspense wrapper that requires authentication and optionally authorization
@@ -49,10 +49,10 @@ export const RequireAuthSuspense = ({
   redirectPath,
   authorize,
 }: {
-  children: (session: ServerSession) => React.ReactNode;
+  children: (user: User) => React.ReactNode;
   fallback: React.ReactNode;
   redirectPath?: string;
-  authorize: (session: ServerSession) => boolean;
+  authorize: (user: User) => boolean;
 }) => (
   <Suspense fallback={fallback}>
     <RequireAuth authorize={authorize} redirectPath={redirectPath}>

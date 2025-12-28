@@ -29,9 +29,7 @@ const Header = () => (
       </Suspense>
 
       <HasAuthSuspense fallback={<AuthNavSkeleton />}>
-        {(session) => {
-          const user = session?.user ?? null;
-
+        {(user) => {
           if (user) {
             return <AccountDropdown user={user} />;
           }

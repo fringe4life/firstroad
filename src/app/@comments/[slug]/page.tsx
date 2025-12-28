@@ -27,7 +27,7 @@ const CommentsPage = async ({ params }: PageProps<"/[slug]">) => {
 
   return (
     <HasAuthSuspense fallback={<div>Loading auth...</div>}>
-      {(session) => (
+      {(user) => (
         <Comments
           deleteCommentAction={deleteComment}
           list={commentsData.list}
@@ -39,7 +39,7 @@ const CommentsPage = async ({ params }: PageProps<"/[slug]">) => {
           }}
           ticketId={ticket.id}
           upsertCommentAction={upsertComment}
-          userId={session?.user?.id}
+          userId={user?.id}
         />
       )}
     </HasAuthSuspense>

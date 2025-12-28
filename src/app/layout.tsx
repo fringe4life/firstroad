@@ -8,7 +8,7 @@ import Header from "@/components/header";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import Sidebar from "@/features/navigation/components/sidebar";
 import { MobileSidebarProvider } from "@/features/navigation/context/context";
-import type { Scope } from "@/features/ticket/search-params";
+import type { Scope } from "@/features/ticket/types";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -66,8 +66,7 @@ const getCachedMetadata = async (scope: Scope): Promise<Metadata> => {
   };
 
   const scopeMetadata =
-    scopeSpecificMetadata[scope as keyof typeof scopeSpecificMetadata] ||
-    scopeSpecificMetadata.all;
+    scopeSpecificMetadata[scope] || scopeSpecificMetadata.all;
 
   return {
     ...baseMetadata,

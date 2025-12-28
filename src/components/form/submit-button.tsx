@@ -6,12 +6,12 @@ import { cloneElement } from "react";
 import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
 
-type SubmitButtonProps = {
+interface SubmitButtonProps {
   label?: string;
   icon?: React.ReactElement<SVGAElement>;
   variant?: React.ComponentProps<typeof Button>["variant"];
   size?: React.ComponentProps<typeof Button>["size"];
-};
+}
 
 const SubmitButton = ({ label, icon, variant, size }: SubmitButtonProps) => {
   const { pending } = useFormStatus();

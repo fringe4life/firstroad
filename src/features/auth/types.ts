@@ -11,8 +11,10 @@ export type ClientSession = typeof authClient.$Infer.Session;
 // User type (extracted from session)
 export type User = ServerSession["user"];
 
+export interface UserProp {
+  user: Maybe<User>;
+  hasUser: boolean;
+}
+
 // Session type (extracted from session)
 export type Session = ServerSession["session"];
-
-// Optional server session type (commonly used in DAL functions)
-export type MaybeServerSession = Maybe<ServerSession>;

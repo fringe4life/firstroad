@@ -2,11 +2,11 @@ import type { SearchParams } from "nuqs/server";
 
 export type Maybe<T> = T | null | undefined;
 
-export type SearchParamsProps = {
+export interface SearchParamsProps {
   searchParams: Promise<SearchParams>;
-};
+}
 
-export type ErrorProps = {
+export interface ErrorProps {
   error: Error;
   reset: () => void;
-};
+}

@@ -16,10 +16,10 @@ import { updateStatus } from "@/features/ticket/actions/update-status";
 import type { TicketStatus } from "@/generated/prisma/enums";
 import type { TicketModel } from "@/generated/prisma/models/Ticket";
 
-type TicketMoreMenuProps = {
+interface TicketMoreMenuProps {
   ticket: TicketModel;
   trigger: React.ReactNode;
-};
+}
 
 const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
   const [getDeleteButton, deleteDialog, isPending] = useConfirmDialog({

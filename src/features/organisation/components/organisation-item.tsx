@@ -1,10 +1,10 @@
 import { format } from "date-fns";
-import type { getOrganisationByUser } from "../queries/get-organisations-for-user";
+import type { BaseOrganisation } from "../types";
 
 const OrganisationItem = ({
   organisation,
 }: {
-  organisation: Awaited<ReturnType<typeof getOrganisationByUser>>[number];
+  organisation: BaseOrganisation;
 }) => (
   <div>
     <h1>{organisation.name}</h1>

@@ -2,19 +2,19 @@
 
 <div align="center">
 
-[![Next.js](https://img.shields.io/badge/Next.js-16.0.10-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.1.1-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.2.3-61DAFB?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Prisma](https://img.shields.io/badge/Prisma-7.1.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
-[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.4.6-000000)](https://better-auth.com/)
+[![Prisma](https://img.shields.io/badge/Prisma-7.2.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
+[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.4.9-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.18-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![Biome](https://img.shields.io/badge/Biome-2.3.8-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-6.4.0-000000)](https://ultracite.dev/)
-[![nuqs](https://img.shields.io/badge/nuqs-2.8.5-000000)](https://nuqs.47ng.com/)
+[![Biome](https://img.shields.io/badge/Biome-2.3.10-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-6.5.0-000000)](https://ultracite.dev/)
+[![nuqs](https://img.shields.io/badge/nuqs-2.8.6-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.2.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
-[![Inngest](https://img.shields.io/badge/Inngest-3.47.0-000000)](https://www.inngest.com/)
+[![Inngest](https://img.shields.io/badge/Inngest-3.48.1-000000)](https://www.inngest.com/)
 [![Resend](https://img.shields.io/badge/Resend-6.6.0-000000)](https://resend.com/)
-[![React Email](https://img.shields.io/badge/React%20Email-5.0.8-000000)](https://react.email/)
+[![React Email](https://img.shields.io/badge/React%20Email-5.1.0-000000)](https://react.email/)
 
 </div>
 
@@ -48,20 +48,20 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 16.0.10 (App Router) with Turbopack
+- **Framework**: Next.js 16.1.1 (App Router) with Turbopack
 - **Language**: TypeScript 5.9.3 with strict type checking
-- **Database**: PostgreSQL with Prisma Client 7.1.0 (relationJoins preview, Neon adapter)
-- **Authentication**: Better Auth 1.4.6 with email/password provider and session cookie caching
+- **Database**: PostgreSQL with Prisma Client 7.2.0 (relationJoins preview, Neon adapter)
+- **Authentication**: Better Auth 1.4.9 with email/password provider and session cookie caching
 - **Styling**: Tailwind CSS v4.1.18 with shadcn/ui components
 - **Icons**: Lucide React
 - **Forms**: React Hook Form with Valibot validation
 - **Notifications**: Sonner toast notifications
 - **Theme**: next-themes for dark/light mode
-- **URL Search Params**: nuqs 2.8.5 for type-safe URL parameters
-- **Email**: React Email 5.0.8 with Resend 6.6.0 for transactional emails
-- **Background Jobs**: Inngest 3.47.0 for background tasks and event handling
+- **URL Search Params**: nuqs 2.8.6 for type-safe URL parameters
+- **Email**: React Email 5.1.0 with Resend 6.6.0 for transactional emails
+- **Background Jobs**: Inngest 3.48.1 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
-- **Linting**: Biome 2.3.8 for fast formatting and linting with Ultracite 6.4.0 rules
+- **Linting**: Biome 2.3.10 for fast formatting and linting with Ultracite 6.5.0 rules
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 
@@ -365,7 +365,7 @@ src/
 │   │   ├── actions/      # Server actions (send-otp-action, verify-otp-action, signout)
 │   │   ├── components/   # Auth components (account-dropdown, auth-nav-skeleton, change-password-form, has-auth, otp-send-form, otp-verify-form, require-auth, sign-out-button, sign-out-form)
 │   │   ├── events/       # Inngest events (email-otp, email-verification, welcome-email)
-│   │   ├── queries/      # Server-side queries (get-session, get-session-or-redirect)
+│   │   ├── queries/      # Server-side queries (get-user, get-user-or-redirect)
 │   │   ├── types.ts      # Centralized auth types
 │   │   └── utils/        # Auth utilities (owner, send-email-otp, send-email-verification, send-password-changed-email, send-welcome-email)
 │   ├── navigation/       # Navigation components
@@ -382,7 +382,7 @@ src/
 │   │   └── utils/        # Pagination utilities (to-paginated-result)
 │   ├── ticket/           # Ticket management
 │   │   ├── actions/      # Server actions (delete-ticket, update-status, upsert-ticket)
-│   │   ├── components/   # Ticket components (ticket-controls-fallback, ticket-filter-dropdown, ticket-item, ticket-list, ticket-more-menu, ticket-owner-options, ticket-pagination, ticket-scope-toggle, ticket-search-input, ticket-select-sort, ticket-upsert-form)
+│   │   ├── components/   # Ticket components (ticket-filter-dropdown, ticket-item, ticket-list, ticket-more-menu, ticket-owner-options, ticket-pagination, ticket-scope-toggle, ticket-search-input, ticket-select-sort, ticket-upsert-form, skeletons)
 │   │   ├── queries/      # Data queries with "use cache" (get-all-ticket-slugs, get-ticket, get-tickets)
 │   │   ├── search-params.ts # Type-safe search parameters with nuqs
 │   │   ├── types.ts      # Ticket types
@@ -468,7 +468,7 @@ The application uses Better Auth with multiple authentication methods:
 ## 🔄 Dynamic Rendering & Session Management
 
 - **Dynamic Rendering**: Use of `connection()` from `next/server` opts routes/components into dynamic rendering
-- **Session Management**: Centralized `getSession()` in `src/features/auth/queries/get-session.ts`
+- **User Management**: Centralized `getUser()` in `src/features/auth/queries/get-user.ts` with cached user data
 - **HasAuthSuspense Pattern**: Suspense-wrapped session injection for auth-dependent components
 - **Background Jobs**: Inngest handles async operations like password reset emails
 
@@ -602,7 +602,7 @@ The project uses Tailwind CSS v4 with custom configuration for dark mode, theme 
 
 ### Database
 
-PostgreSQL with Prisma Client 7.0.1 using:
+PostgreSQL with Prisma Client 7.2.0 using:
 
 - **relationJoins** preview feature for optimized queries
 - **Client-side engine** for edge compatibility
@@ -647,7 +647,7 @@ Inngest provides background job processing for:
 
 - Full TypeScript support with strict configuration
 - Typed routes with Next.js 16 (`typedRoutes: true`)
-- Type-safe URL search parameters with nuqs 2.8.5 (inferParserType for scope narrowing)
+- Type-safe URL search parameters with nuqs 2.8.6 (inferParserType for scope narrowing)
 - Centralized auth types in `src/features/auth/types.ts`:
   - `ServerSession`: Full session with user object
   - `MaybeServerSession`: Session or null for DAL functions

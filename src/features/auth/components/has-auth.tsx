@@ -1,15 +1,16 @@
 import { Suspense } from "react";
-import { getSession } from "@/features/auth/queries/get-session";
-import type { MaybeServerSession } from "@/features/auth/types";
+import { getUser } from "@/features/auth/queries/get-user";
+import type { User } from "@/features/auth/types";
+import type { Maybe } from "@/types";
 
 // HasAuth component that provides session to children
 export const HasAuth = async ({
   children,
 }: {
-  children: (session: MaybeServerSession) => React.ReactNode;
+  children: (user: Maybe<User>) => React.ReactNode;
 }) => {
-  const session = await getSession();
-  return <>{children(session)}</>;
+  const { user } = await getUser();
+  return <>{children(user)}</>;
 };
 
 // Suspense wrapper for dynamic auth-dependent content
@@ -17,7 +18,7 @@ export const HasAuthSuspense = ({
   children,
   fallback,
 }: {
-  children: (session: MaybeServerSession) => React.ReactNode;
+  children: (user: Maybe<User>) => React.ReactNode;
   fallback: React.ReactNode;
 }) => (
   <Suspense fallback={fallback}>

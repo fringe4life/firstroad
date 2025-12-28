@@ -4,13 +4,8 @@ import { Button } from "@/components/ui/button";
 import { HasAuthSuspense } from "@/features/auth/components/has-auth";
 import { isOwner } from "@/features/auth/utils/owner";
 import TicketMoreMenu from "@/features/ticket/components/ticket-more-menu";
-import type { BaseTicket } from "@/features/ticket/types";
+import type { TicketOwnerOptionsProps } from "@/features/ticket/types";
 import { ticketEditPath } from "@/path";
-
-type TicketOwnerOptionsProps = {
-  ticket: BaseTicket;
-  isDetail?: boolean;
-};
 
 const TicketOwnerOptions = ({
   ticket,

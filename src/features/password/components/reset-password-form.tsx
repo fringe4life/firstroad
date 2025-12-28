@@ -9,9 +9,9 @@ import { Label } from "@/components/ui/label";
 import { resetPassword } from "@/features/password/actions/reset-password-action";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 
-type ResetPasswordFormProps = {
+interface ResetPasswordFormProps {
   token: string;
-};
+}
 
 const ResetPasswordForm = ({ token }: ResetPasswordFormProps) => {
   const [state, action] = useActionState(resetPassword, EMPTY_ACTION_STATE);

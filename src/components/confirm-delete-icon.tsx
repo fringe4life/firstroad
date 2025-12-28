@@ -1,9 +1,9 @@
 import { LucideLoaderCircle, LucideTrash } from "lucide-react";
 import { Activity } from "react";
 
-type ConfirmDeleteIconProps = {
+interface ConfirmDeleteIconProps {
   isPending: boolean;
-};
+}
 
 const ConfirmDeleteIcon = ({ isPending }: ConfirmDeleteIconProps) => (
   <>

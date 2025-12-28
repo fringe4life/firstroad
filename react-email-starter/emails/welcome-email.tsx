@@ -10,10 +10,10 @@ import {
   Text,
 } from "@react-email/components";
 
-type WelcomeEmailProps = {
+interface WelcomeEmailProps {
   toName: string;
   appUrl: string;
-};
+}
 
 const WelcomeEmail = ({ toName, appUrl }: WelcomeEmailProps) => (
   <Html>

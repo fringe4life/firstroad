@@ -7,9 +7,9 @@ import { verifyEmailVerificationOTP } from "@/features/auth/actions/verify-otp-a
 import OTPVerifyForm from "@/features/auth/components/otp-verify-form";
 import { verifyEmailPath } from "@/path";
 
-type VerifyEmailOTPVerifyPageProps = {
+interface VerifyEmailOTPVerifyPageProps {
   searchParams: Promise<{ email?: string }>;
-};
+}
 
 const VerifyEmailOTPVerifyForm = async ({
   searchParams,

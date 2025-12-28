@@ -9,12 +9,12 @@ import { Label } from "@/components/ui/label";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 import type { sendEmailVerificationOTP } from "../actions/send-otp-action";
 
-type OTPSendFormProps = {
+interface OTPSendFormProps {
   sendOTPAction: typeof sendEmailVerificationOTP;
   title: string;
   description: string;
   submitLabel: string;
-};
+}
 
 const OTPSendForm = ({
   sendOTPAction,

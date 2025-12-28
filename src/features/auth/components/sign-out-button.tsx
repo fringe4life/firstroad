@@ -7,9 +7,9 @@ import { homePath } from "@/path";
 import { tryCatch } from "@/utils/try-catch";
 import { signOut } from "../actions/signout";
 
-type SignOutButtonProps = {
+interface SignOutButtonProps {
   className?: string;
-};
+}
 
 const SignOutButton = ({ className }: SignOutButtonProps) => {
   const router = useRouter();

@@ -10,14 +10,10 @@ import {
   Text,
 } from "@react-email/components";
 
-type EmailVerificationProps = {
+interface EmailVerificationProps {
   toName: string;
   url: string;
-};
-
-const _baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "";
+}
 
 const EmailVerification = ({ toName, url }: EmailVerificationProps) => (
   <Html>

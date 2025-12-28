@@ -11,14 +11,9 @@ import {
 } from "@/components/ui/card";
 import { TICKET_ICONS } from "@/features/constants";
 import TicketOwnerOptions from "@/features/ticket/components/ticket-owner-options";
-import type { BaseTicket } from "@/features/ticket/types";
+import type { TicketItemProps } from "@/features/ticket/types";
 import { ticketPath } from "@/path";
 import { toCurrencyFromCent } from "@/utils/currency";
-
-type TicketItemProps = {
-  ticket: BaseTicket;
-  isDetail?: boolean;
-};
 
 const TicketItem = ({ ticket, isDetail = false }: TicketItemProps) => {
   const detailButton = (

@@ -10,14 +10,14 @@ import {
   Text,
 } from "@react-email/components";
 
-type EmailPasswordResetProps = {
+interface EmailPasswordResetProps {
   toName: string;
   url: string;
-};
+}
 
-const _baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "";
+// const _baseUrl = process.env.VERCEL_URL
+//   ? `https://${process.env.VERCEL_URL}`
+//   : "";
 
 const EmailPasswordReset = ({ toName, url }: EmailPasswordResetProps) => (
   <Html>

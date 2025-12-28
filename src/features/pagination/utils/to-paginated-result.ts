@@ -1,7 +1,7 @@
-import type { PaginationType } from "@/features/pagination/pagination-search-params";
 import type {
   DatabaseQueryResult,
   PaginatedResult,
+  PaginationType,
 } from "@/features/pagination/types";
 
 export const transformToPaginatedResult = <T>(

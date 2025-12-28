@@ -20,7 +20,7 @@ import type { upsertComment } from "@/features/comment/actions/upsert-comment";
 import CommentCreateForm from "@/features/comment/components/comment-create-form";
 import CommentOwnerButtons from "@/features/comment/components/comment-owner-buttons";
 import type { Comment } from "@/features/comment/types";
-import type { PaginatedResult } from "@/features/types/pagination";
+import type { PaginatedResult } from "@/features/pagination/types";
 import type { Maybe } from "@/types";
 import CommentItem from "./comment-item";
 
@@ -120,7 +120,8 @@ const Comments = ({
         <GenericComponent
           Component={CommentItem}
           className="grid gap-y-2"
-          items={loadMoreState.list ?? []}
+          emptyStateMessage="No Comments Found"
+          items={loadMoreState.list}
           renderKey={(item) => item.id}
           renderProps={(item) => ({
             comment: item,

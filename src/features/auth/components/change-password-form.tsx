@@ -10,9 +10,9 @@ import { Label } from "@/components/ui/label";
 import type { changePassword } from "@/features/password/actions/change-password-action";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 
-type ChangePasswordFormProps = {
+interface ChangePasswordFormProps {
   changePasswordAction: typeof changePassword;
-};
+}
 
 const ChangePasswordForm = ({
   changePasswordAction,

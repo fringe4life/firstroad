@@ -9,18 +9,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export type SortOption = {
+export interface SortOption {
   label: string;
   sortKey: string;
   sortValue: string;
-};
+}
 
-export type SortObject = Omit<SortOption, "label">;
-type SortSelectProps = {
+export interface SortObject extends Omit<SortOption, "label"> {}
+interface SortSelectProps {
   options: readonly SortOption[];
   value: SortObject;
   onValueChange: (sort: SortObject) => void;
-};
+}
 
 const createKey = (option: SortOption | SortObject) =>
   `${option.sortKey}_${option.sortValue}`;

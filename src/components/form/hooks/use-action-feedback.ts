@@ -3,14 +3,14 @@
 import { useEffect, useEffectEvent, useRef } from "react";
 import type { ActionState } from "../../../utils/to-action-state";
 
-type onArgs = {
+interface onArgs {
   state: ActionState;
-};
+}
 
-export type FeedBackOption = {
+export interface FeedBackOption {
   onSuccess?: (onArgs: onArgs) => void;
   onError?: (onArgs: onArgs) => void;
-};
+}
 
 const useActionFeedback = (
   state: ActionState,

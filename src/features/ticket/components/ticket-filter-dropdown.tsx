@@ -12,24 +12,27 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { MaybeServerSession } from "@/features/auth/types";
-import { scopeParser, sortParser } from "@/features/ticket/search-params";
+import type { User } from "@/features/auth/types";
+import { sortParser } from "@/features/pagination/pagination-search-params";
+import { scopeParser } from "@/features/ticket/search-params";
 import type { Prisma } from "@/generated/prisma/client";
+import type { Maybe } from "@/types";
 
-type TicketFilterDropdownProps = {
-  session: MaybeServerSession;
-};
+interface TicketFilterDropdownProps {
+  user: Maybe<User>;
+}
 
 /**
  * Mobile filter dropdown that combines scope and sort options
  * Only visible on mobile screens (hidden on sm+)
  */
-const TicketFilterDropdown = ({ session }: TicketFilterDropdownProps) => {
+const TicketFilterDropdown = ({ user }: TicketFilterDropdownProps) => {
   const [scope, setScope] = useQueryState("scope", scopeParser);
   const [sort, setSort] = useQueryStates(sortParser);
 
+  const hasUser = Boolean(user?.id);
   const handleScopeChange = (newScope: string) => {
-    if (newScope === "mine" && !session?.user) {
+    if (newScope === "mine" && !hasUser) {
       setScope("all");
       toast.info("Please sign in to view your tickets");
       return;
@@ -63,7 +66,7 @@ const TicketFilterDropdown = ({ session }: TicketFilterDropdownProps) => {
         <DropdownMenuLabel>View</DropdownMenuLabel>
         <DropdownMenuRadioGroup onValueChange={handleScopeChange} value={scope}>
           <DropdownMenuRadioItem value="all">All Tickets</DropdownMenuRadioItem>
-          {Boolean(session?.user) && (
+          {hasUser && (
             <DropdownMenuRadioItem value="mine">
               My Tickets
             </DropdownMenuRadioItem>

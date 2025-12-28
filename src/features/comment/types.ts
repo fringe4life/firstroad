@@ -12,7 +12,7 @@ export type Comment = CommentModelWithUserInfo & {
 // Comment type with required user info (for actions)
 export type CommentWithUserInfo = Comment;
 
-export type TimeAgoProps = {
+export interface TimeAgoProps {
   createdAt: string;
   updatedAt: string;
-};
+}

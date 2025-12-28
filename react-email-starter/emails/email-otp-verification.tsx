@@ -9,11 +9,11 @@ import {
   Text,
 } from "@react-email/components";
 
-type EmailOTPVerificationProps = {
+interface EmailOTPVerificationProps {
   toName: string;
   otp: string;
   type: "sign-in" | "email-verification" | "forget-password";
-};
+}
 
 const EmailOTPVerification = ({
   toName,

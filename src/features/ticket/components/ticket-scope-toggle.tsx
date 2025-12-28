@@ -4,22 +4,25 @@ import { useQueryState } from "nuqs";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
-import type { MaybeServerSession } from "@/features/auth/types";
+import type { User } from "@/features/auth/types";
 import { scopeParser } from "@/features/ticket/search-params";
+import type { Maybe } from "@/types";
 
-type TicketScopeToggleProps = {
-  session: MaybeServerSession;
-};
+interface TicketScopeToggleProps {
+  user: Maybe<User>;
+}
 
 /**
  * Desktop scope toggle using ButtonGroup for "All Tickets" vs "My Tickets"
  * Only visible on sm+ screens (hidden on mobile)
  */
-const TicketScopeToggle = ({ session }: TicketScopeToggleProps) => {
+const TicketScopeToggle = ({ user }: TicketScopeToggleProps) => {
   const [scope, setScope] = useQueryState("scope", scopeParser);
 
+  const hasUser = Boolean(user?.id);
+
   const handleScopeChange = (newScope: "all" | "mine") => {
-    if (newScope === "mine" && !session?.user) {
+    if (newScope === "mine" && !hasUser) {
       setScope("all");
       toast.info("Please sign in to view your tickets");
       return;
@@ -39,10 +42,10 @@ const TicketScopeToggle = ({ session }: TicketScopeToggleProps) => {
       </Button>
       <Button
         className="flex-1"
-        disabled={!session?.user}
+        disabled={!hasUser}
         onClick={() => handleScopeChange("mine")}
         size="sm"
-        title={session?.user ? "" : "Sign in to view your tickets"}
+        title={hasUser ? "" : "Sign in to view your tickets"}
         variant={scope === "mine" ? "default" : "outline"}
       >
         My Tickets

@@ -10,19 +10,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  DEFAULT_LIMIT,
-  LIMITS,
-  type LimitItem,
-  type PaginationType,
-} from "@/features/pagination/pagination-search-params";
-import type { PaginationMetadata } from "@/features/pagination/types";
+import { DEFAULT_LIMIT, LIMITS } from "@/features/pagination/constants";
+import type { LimitItem, PaginationProps } from "@/features/pagination/types";
 
-type PaginationProps = {
-  pagination: PaginationType;
-  setPagination: (pagination: PaginationType) => void;
-  metadata: PaginationMetadata;
-};
 const Pagination = ({
   pagination,
   setPagination,
