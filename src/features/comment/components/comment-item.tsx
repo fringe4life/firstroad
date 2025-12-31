@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import type { Comment } from "@/features/comment/types";
-import TimeAgo from "./time-ago";
+import { TimeAgo } from "./time-ago";
 
 interface CommentItemProps {
   comment: Comment;

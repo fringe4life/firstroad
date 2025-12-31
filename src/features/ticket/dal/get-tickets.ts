@@ -1,11 +1,8 @@
 "use server";
 
-import { cacheTag } from "next/cache";
 import type { SearchParams } from "nuqs/server";
-import type {
-  DatabaseQueryResult,
-  PaginatedResult,
-} from "@/features/pagination/types";
+import { paginateItems } from "@/features/pagination/dal/paginate-items";
+import type { PaginatedResult } from "@/features/pagination/types";
 import { transformToPaginatedResult } from "@/features/pagination/utils/to-paginated-result";
 import { searchParamsCache } from "@/features/ticket/search-params";
 import type { BaseTicket } from "@/features/ticket/types";
@@ -13,44 +10,8 @@ import type {
   TicketOrderByWithRelationInput,
   TicketWhereInput,
 } from "@/generated/prisma/models/Ticket";
-import { prisma } from "@/lib/prisma";
-import { tryCatch } from "@/utils/try-catch";
-
-// Cached database query - only the expensive part
-const getTicketsFromDB = async (
-  where: TicketWhereInput,
-  orderBy: TicketOrderByWithRelationInput,
-  takeAmount: number,
-  skip: number,
-): Promise<DatabaseQueryResult<BaseTicket>> => {
-  "use cache";
-  cacheTag("tickets");
-
-  const [{ data: items }, { data: totalRows }] = await Promise.all([
-    tryCatch(() =>
-      prisma.ticket.findMany({
-        where,
-        include: {
-          userInfo: {
-            include: {
-              user: {
-                select: {
-                  name: true,
-                },
-              },
-            },
-          },
-        },
-        orderBy,
-        take: takeAmount + 1,
-        skip,
-      }),
-    ),
-    tryCatch(() => prisma.ticket.count({ where, orderBy })),
-  ]);
-
-  return { items, totalRows };
-};
+import { getTicketList } from "../queries/get-ticket-list";
+import { getTicketsCount } from "../queries/get-tickets-count";
 
 export const getAllTickets = async (
   searchParams: Promise<SearchParams>,
@@ -86,12 +47,13 @@ export const getAllTickets = async (
   const takeAmount = limit;
 
   // Only cache the database transaction
-  const { items, totalRows } = await getTicketsFromDB(
-    where,
-    orderBy,
-    takeAmount,
-    skip,
-  );
+  const { items, totalRows } = await paginateItems({
+    getItems: () => getTicketList({ where, orderBy, takeAmount, skip }),
+    getTotalRows: () => getTicketsCount({ where, orderBy }),
+  });
 
-  return transformToPaginatedResult({ items, totalRows }, { page, limit });
+  return transformToPaginatedResult(
+    { items, totalRows },
+    { page, limit, type: "offset" },
+  );
 };

@@ -1,10 +1,10 @@
 import { resend } from "@/lib/email";
-import { env } from "@/lib/env";
-import WelcomeEmail from "../../../../react-email-starter/emails/welcome-email";
+import WelcomeEmail from "../../../../emails/welcome-email";
 
 export const sendWelcomeEmail = async (email: string, userName?: string) =>
   await resend.emails.send({
-    from: env.RESEND_FROM,
+    // biome-ignore lint/style/noNonNullAssertion: will exist
+    from: process.env.NEXT_PUBLIC_RESEND_FROM!,
     to: email,
     subject: "Welcome to TicketBounty! 🎉",
     react: (

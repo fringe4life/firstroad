@@ -12,21 +12,20 @@ import GenericComponent from "@/components/generic-component";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { deleteComment } from "@/features/comment/actions/delete-comment";
-import type {
-  LoadMoreState,
-  loadMoreComments,
-} from "@/features/comment/actions/load-more-comments";
+
 import type { upsertComment } from "@/features/comment/actions/upsert-comment";
 import CommentCreateForm from "@/features/comment/components/comment-create-form";
 import CommentOwnerButtons from "@/features/comment/components/comment-owner-buttons";
-import type { Comment } from "@/features/comment/types";
+import type { Comment, CommentWithUserInfo } from "@/features/comment/types";
+import { NO_PAGINATION } from "@/features/pagination/constants";
 import type { PaginatedResult } from "@/features/pagination/types";
 import type { Maybe } from "@/types";
+import type { getCommentsByTicketId } from "../dal/get-comments";
 import CommentItem from "./comment-item";
 
 type CommentsProps = {
   ticketId: string;
-  loadMoreAction: typeof loadMoreComments;
+  loadMoreAction: typeof getCommentsByTicketId;
   upsertCommentAction: typeof upsertComment;
   deleteCommentAction: typeof deleteComment;
   userId?: string;
@@ -43,24 +42,21 @@ const Comments = ({
 }: CommentsProps) => {
   // Use useActionState for the load more action with initial state
   const [loadMoreState, loadMoreActionState, isPending] = useActionState(
-    async (prevState: LoadMoreState, formData: FormData) => {
-      const cursor = String(formData.get("cursor"));
-      if (!cursor) {
-        return prevState;
-      }
-      const newData = await loadMoreAction(ticketId, cursor);
+    async (prevState: PaginatedResult<CommentWithUserInfo>) => {
+      const newData = await loadMoreAction(
+        ticketId,
+        prevState.metadata.nextCursor ?? "",
+      );
 
       // Merge previous state with new data
       return {
         list: [...(prevState.list ?? []), ...(newData.list ?? [])],
-        hasMore: newData.hasMore,
-        nextCursor: newData.nextCursor,
+        metadata: { ...prevState.metadata, ...newData.metadata },
       };
     },
     {
       list: list ?? [],
-      hasMore: metadata?.hasNextPage ?? false,
-      nextCursor: metadata?.nextCursor ?? null,
+      metadata: metadata ?? NO_PAGINATION,
     },
   );
 
@@ -84,8 +80,8 @@ const Comments = ({
   const handleLoadMore = () => {
     startTransition(() => {
       const formData = new FormData();
-      formData.append("cursor", loadMoreState.nextCursor ?? "");
-      loadMoreActionState(formData);
+      formData.append("cursor", loadMoreState.metadata.nextCursor ?? "");
+      loadMoreActionState();
     });
   };
 
@@ -142,7 +138,9 @@ const Comments = ({
           <Skeleton />
           <Skeleton />
         </Activity>
-        <Activity mode={loadMoreState.hasMore ? "visible" : "hidden"}>
+        <Activity
+          mode={loadMoreState.metadata.hasNextPage ? "visible" : "hidden"}
+        >
           <div className="flex justify-center pt-2">
             <Button
               className="w-full"

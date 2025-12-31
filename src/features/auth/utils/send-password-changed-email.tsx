@@ -1,13 +1,13 @@
 import { resend } from "@/lib/email";
-import { env } from "@/lib/env";
-import PasswordChangedEmail from "../../../../react-email-starter/emails/password-changed-email";
+import PasswordChangedEmail from "../../../../emails/password-changed-email";
 
 export const sendPasswordChangedEmail = async (
   email: string,
   userName?: string,
 ) =>
   await resend.emails.send({
-    from: env.RESEND_FROM,
+    // biome-ignore lint/style/noNonNullAssertion: will exist
+    from: process.env.NEXT_PUBLIC_RESEND_FROM!,
     to: email,
     subject: "Password Changed - TicketBounty",
     react: (

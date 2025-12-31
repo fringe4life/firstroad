@@ -16,20 +16,35 @@ export interface PaginatedResult<T> extends PaginationMetadataObject {
   list: List<T>;
 }
 
-export interface DatabaseQueryResult<T> {
+export interface RawPaginationAccess<T> {
+  getItems: () => Promise<List<T>>;
+  getTotalRows: () => Promise<Maybe<number>>;
+}
+
+export interface RawPaginationResult<T> {
   items: List<T>;
   totalRows: Maybe<number>;
 }
 
 export type LimitItem = (typeof LIMITS)[number];
-export interface PaginationType {
+
+export type PaginationType = OffsetPaginationType | CursorPaginationType;
+
+export interface OffsetPaginationType {
   page: number;
   limit: LimitItem;
+  type: "offset";
+}
+
+export interface CursorPaginationType {
+  cursor: Maybe<string>;
+  limit: number;
+  type: "cursor";
 }
 
 export interface PaginationComponentProps extends PaginationMetadataObject {}
 
 export interface PaginationProps extends PaginationMetadataObject {
-  pagination: PaginationType;
-  setPagination: (pagination: PaginationType) => void;
+  pagination: OffsetPaginationType;
+  setPagination: (pagination: Omit<OffsetPaginationType, "type">) => void;
 }

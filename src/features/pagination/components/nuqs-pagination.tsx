@@ -1,7 +1,7 @@
 "use client";
 
 import { useQueryStates } from "nuqs";
-import PaginationComponent from "@/features/pagination/components/pagination";
+import { OffsetPagination } from "@/features/pagination/components/pagination";
 import {
   options as PaginationOptions,
   paginationParser,
@@ -15,12 +15,12 @@ const Pagination = ({ metadata }: PaginationComponentProps) => {
   );
 
   return (
-    <PaginationComponent
+    <OffsetPagination
       metadata={metadata}
-      pagination={pagination}
+      pagination={{ ...pagination, type: "offset" }}
       setPagination={setPagination}
     />
   );
 };
 
-export default Pagination;
+export { Pagination };

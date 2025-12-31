@@ -1,10 +1,9 @@
 import { notFound } from "next/navigation";
 import { HasAuthSuspense } from "@/features/auth/components/has-auth";
 import { deleteComment } from "@/features/comment/actions/delete-comment";
-import { loadMoreComments } from "@/features/comment/actions/load-more-comments";
 import { upsertComment } from "@/features/comment/actions/upsert-comment";
 import Comments from "@/features/comment/components/comments";
-import { getCommentsByTicketId } from "@/features/comment/queries/get-comments";
+import { getCommentsByTicketId } from "@/features/comment/dal/get-comments";
 import { getTicketBySlug } from "@/features/ticket/queries/get-ticket";
 
 const INITIAL_COMMENTS_COUNT = 3;
@@ -19,7 +18,7 @@ const CommentsPage = async ({ params }: PageProps<"/[slug]">) => {
   }
 
   // Prerender the first 3 comments
-  const commentsData = await getCommentsByTicketId(
+  const { list, metadata } = await getCommentsByTicketId(
     ticket.id,
     undefined,
     INITIAL_COMMENTS_COUNT,
@@ -30,13 +29,9 @@ const CommentsPage = async ({ params }: PageProps<"/[slug]">) => {
       {(user) => (
         <Comments
           deleteCommentAction={deleteComment}
-          list={commentsData.list}
-          loadMoreAction={loadMoreComments}
-          metadata={{
-            count: commentsData.list.length,
-            hasNextPage: commentsData.hasMore,
-            nextCursor: commentsData.nextCursor,
-          }}
+          list={list}
+          loadMoreAction={getCommentsByTicketId}
+          metadata={{ ...metadata }}
           ticketId={ticket.id}
           upsertCommentAction={upsertComment}
           userId={user?.id}

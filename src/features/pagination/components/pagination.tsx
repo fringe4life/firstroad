@@ -13,7 +13,7 @@ import {
 import { DEFAULT_LIMIT, LIMITS } from "@/features/pagination/constants";
 import type { LimitItem, PaginationProps } from "@/features/pagination/types";
 
-const Pagination = ({
+const OffsetPagination = ({
   pagination,
   setPagination,
   metadata,
@@ -104,4 +104,4 @@ const Pagination = ({
   );
 };
 
-export default Pagination;
+export { OffsetPagination };

@@ -20,7 +20,7 @@ const envSchema = object({
     minLength(1, "NEXT_PUBLIC_APP_URL is required"),
   ),
   RESEND_API_KEY: pipe(string(), minLength(1, "RESEND_API_KEY is required")),
-  RESEND_FROM: pipe(
+  NEXT_PUBLIC_RESEND_FROM: pipe(
     string(),
     minLength(
       1,

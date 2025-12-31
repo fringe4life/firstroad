@@ -19,9 +19,9 @@
     "postinstall": "prisma generate",
     "typegen": "next typegen",
     "reset:tickets": "tsx scripts/reset-ticket-data.ts",
-    "email:dev": "email dev --dir react-email-starter/emails",
-    "email:build": "email build --dir react-email-starter/emails",
-    "email:export": "email export --dir react-email-starter/emails",
+    "email:dev": "email dev --dir ./emails",
+    "email:build": "email build --dir ./emails",
+    "email:export": "email export --dir ./emails",
     "prepare": "husky",
     "inngest": "bunx inngest-cli dev -u http://localhost:3000/api/inngest",
     "deploy": "vercel deploy --prod",
@@ -30,7 +30,6 @@
     "ultracite:fix": "bun x ultracite fix",
     "ultracite:doctor": "bun x ultracite doctor",
     "ultracite:check": "bun x ultracite check",
-    "ultracite:format": "bun x ultracite format",
     "ultracite:upgrade": "bun x ultracite@latest init --pm bun --editors vscode --hooks cursor --agents cursor --frameworks next --quiet"
   },
   "dependencies": {
@@ -49,9 +48,9 @@
     "@radix-ui/react-slot": "^1.2.4",
     "@radix-ui/react-tabs": "^1.1.13",
     "@radix-ui/react-tooltip": "^1.2.8",
-    "@react-email/components": "^1.0.2",
+    "@react-email/components": "^1.0.3",
     "babel-plugin-react-compiler": "^1.0.0",
-    "better-auth": "^1.4.9",
+    "better-auth": "^1.4.10",
     "big.js": "^7.0.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -80,24 +79,24 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.10",
-    "@react-email/preview-server": "^5.1.0",
+    "@react-email/preview-server": "^5.1.1",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/big.js": "^6.2.2",
     "@types/node": "^25.0.3",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@types/ws": "^8.18.1",
-    "@typescript/native-preview": "^7.0.0-dev.20251228.1",
+    "@typescript/native-preview": "^7.0.0-dev.20251231.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "prisma": "^7.2.0",
-    "react-email": "^5.1.0",
+    "react-email": "^5.1.1",
     "shadcn": "^3.6.2",
     "tailwindcss": "^4.1.18",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "ultracite": "6.5.0",
-    "zod": "^4.2.1"
+    "zod": "^4.3.2"
   },
   "trustedDependencies": [
     "@prisma/client",
@@ -120,7 +119,7 @@
     "valibot": "^1.2.0",
     "express": "^5.2.0",
     "@modelcontextprotocol/sdk": "^1.24.0",
-    "next": ">=16.0.10",
+    "next": ">=16.1.1",
     "@trpc/server": ">=11.8.0"
   }
 }
