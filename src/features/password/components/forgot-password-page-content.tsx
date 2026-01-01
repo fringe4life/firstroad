@@ -3,7 +3,7 @@ import Link from "next/link";
 import { CardCompact } from "@/components/card-compact";
 import { forgotPassword } from "@/features/password/actions/forgot-password-action";
 import { signInPath } from "@/path";
-import ForgotPasswordForm from "./forgot-password-form";
+import { ForgotPasswordForm } from "./forgot-password-form";
 
 // biome-ignore lint/suspicious/useAwait: for use with use cache
 export async function ForgotPasswordPageContent() {

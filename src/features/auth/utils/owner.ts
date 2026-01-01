@@ -9,7 +9,7 @@ export interface IsOwner {
   isOwner: boolean;
 }
 
-export const isOwner = (user: Maybe<User>, { userId }: Entity): boolean =>
+const isOwner = (user: Maybe<User>, { userId }: Entity): boolean =>
   userId ? user?.id === userId : false;
 
 /**
@@ -20,7 +20,7 @@ export const isOwner = (user: Maybe<User>, { userId }: Entity): boolean =>
  * const ticketsWithOwnership = withOwnership(session, tickets);
  * const commentsWithOwnership = withOwnership(session, comments);
  */
-export const withOwnership = <T extends Entity>(
+const withOwnership = <T extends Entity>(
   session: Maybe<User>,
   entities: T[],
 ): Array<T & IsOwner> =>
@@ -28,3 +28,5 @@ export const withOwnership = <T extends Entity>(
     ...entity,
     isOwner: isOwner(session, entity),
   }));
+
+export { isOwner, withOwnership };

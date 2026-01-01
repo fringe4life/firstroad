@@ -14,4 +14,4 @@ const FieldError = ({ actionState, name }: FieldErrorProps) => {
 
   return null;
 };
-export default FieldError;
+export { FieldError };

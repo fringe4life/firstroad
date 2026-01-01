@@ -1,9 +1,9 @@
 "use client";
 
 import { useActionState, useId } from "react";
-import FieldError from "@/components/form/field-error";
-import Form from "@/components/form/form";
-import SubmitButton from "@/components/form/submit-button";
+import { FieldError } from "@/components/form/field-error";
+import { Form } from "@/components/form/form";
+import { SubmitButton } from "@/components/form/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { signin } from "@/features/password/actions/signin-action";
@@ -43,4 +43,4 @@ const SignInForm = ({ signinAction }: SignInFormProps) => {
   );
 };
 
-export default SignInForm;
+export { SignInForm };

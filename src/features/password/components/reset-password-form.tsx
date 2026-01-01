@@ -1,9 +1,9 @@
 "use client";
 
 import { useActionState, useId } from "react";
-import FieldError from "@/components/form/field-error";
-import Form from "@/components/form/form";
-import SubmitButton from "@/components/form/submit-button";
+import { FieldError } from "@/components/form/field-error";
+import { Form } from "@/components/form/form";
+import { SubmitButton } from "@/components/form/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { resetPassword } from "@/features/password/actions/reset-password-action";
@@ -50,4 +50,4 @@ const ResetPasswordForm = ({ token }: ResetPasswordFormProps) => {
   );
 };
 
-export default ResetPasswordForm;
+export { ResetPasswordForm };

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { CardCompact } from "@/components/card-compact";
 import { sendEmailVerificationOTP } from "@/features/auth/actions/send-otp-action";
-import OTPSendForm from "@/features/auth/components/otp-send-form";
+import { OTPSendForm } from "@/features/auth/components/otp-send-form";
 import { verifyEmailPath } from "@/path";
 
 const VerifyEmailOTPSendPage = () => (

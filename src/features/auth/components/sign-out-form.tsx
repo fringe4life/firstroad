@@ -11,4 +11,4 @@ const SignOutForm = () => (
   </Form>
 );
 
-export default SignOutForm;
+export { SignOutForm };

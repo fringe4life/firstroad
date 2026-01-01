@@ -1,9 +1,9 @@
 "use client";
 
 import { useActionState, useId } from "react";
-import FieldError from "@/components/form/field-error";
-import Form from "@/components/form/form";
-import SubmitButton from "@/components/form/submit-button";
+import { FieldError } from "@/components/form/field-error";
+import { Form } from "@/components/form/form";
+import { SubmitButton } from "@/components/form/submit-button";
 import {
   InputOTP,
   InputOTPGroup,
@@ -62,4 +62,4 @@ const OTPVerifyForm = ({
   );
 };
 
-export default OTPVerifyForm;
+export { OTPVerifyForm };

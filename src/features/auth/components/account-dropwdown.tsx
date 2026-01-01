@@ -10,9 +10,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { SignOutButton } from "@/features/auth/components/sign-out-button";
 import type { User } from "@/features/auth/types";
 import { accountPasswordPath, accountProfilePath } from "@/path";
-import SignOutButton from "./sign-out-button";
 
 interface AccountDropdownProps {
   user: User;
@@ -49,4 +49,4 @@ const AccountDropdown = ({ user }: AccountDropdownProps) => (
   </DropdownMenu>
 );
 
-export default AccountDropdown;
+export { AccountDropdown };

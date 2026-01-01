@@ -37,4 +37,4 @@ const SignOutButton = ({ className }: SignOutButtonProps) => {
   );
 };
 
-export default SignOutButton;
+export { SignOutButton };

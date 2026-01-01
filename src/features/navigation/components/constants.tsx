@@ -12,7 +12,7 @@ import type { NavItem } from "../types/types";
 const allTicketsLink = createTicketScopeLink(homePath);
 const myTicketsLink = createTicketScopeLink(homePath);
 
-export const navItems: NavItem[] = [
+const navItems: NavItem[] = [
   {
     title: "All Tickets",
     icon: <LucideLibrary />,
@@ -36,5 +36,6 @@ export const navItems: NavItem[] = [
   },
 ];
 
-export const closedClassName =
+const closedClassName =
   "text-background opacity-0 transition-all duration-300 group-hover:z-40 group-hover:ml-4 group-hover:rounded group-hover:bg-foreground group-hover:p-2 group-hover:opacity-100";
+export { navItems, closedClassName };

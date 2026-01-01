@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { NavItems } from "./nav-items";
+import { NavItems } from "@/features/navigation/components/nav-items";
 import { SidebarClient } from "./sidebar-client";
 
 const Sidebar = () => (
@@ -22,4 +22,4 @@ const Sidebar = () => (
   </>
 );
 
-export default Sidebar;
+export { Sidebar };

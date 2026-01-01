@@ -22,4 +22,4 @@ const AccountTabs = () => {
   );
 };
 
-export default AccountTabs;
+export { AccountTabs };

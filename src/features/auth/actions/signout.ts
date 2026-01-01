@@ -8,7 +8,7 @@ import { homePath } from "@/path";
 import { fromErrorToActionState } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
 
-export const signOut = async () => {
+const signOut = async () => {
   const { error } = await tryCatch(async () => {
     await auth.api.signOut({
       headers: await headers(),
@@ -20,6 +20,7 @@ export const signOut = async () => {
   }
 
   updateTag("session");
-  // revalidatePath("/");
   throw redirect(homePath, RedirectType.replace);
 };
+
+export { signOut };

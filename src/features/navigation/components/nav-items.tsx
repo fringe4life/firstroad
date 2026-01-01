@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { navItems } from "./constants";
 
-export const NavItems = () => {
+const NavItems = () => {
   const pathname = usePathname();
 
   return (
@@ -44,3 +44,4 @@ export const NavItems = () => {
     </>
   );
 };
+export { NavItems };

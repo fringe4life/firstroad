@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { CardCompact } from "@/components/card-compact";
 import { Spinner } from "@/components/spinner";
 import { verifyEmailVerificationOTP } from "@/features/auth/actions/verify-otp-action";
-import OTPVerifyForm from "@/features/auth/components/otp-verify-form";
+import { OTPVerifyForm } from "@/features/auth/components/otp-verify-form";
 import { verifyEmailPath } from "@/path";
 
 interface VerifyEmailOTPVerifyPageProps {

@@ -38,4 +38,4 @@ const MobileMenuButton = () => {
   );
 };
 
-export default MobileMenuButton;
+export { MobileMenuButton };

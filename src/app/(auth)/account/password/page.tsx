@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { CardCompact } from "@/components/card-compact";
 import { changePassword } from "@/features/password/actions/change-password-action";
-import ChangePasswordForm from "@/features/password/components/change-password-form";
+import { ChangePasswordForm } from "@/features/password/components/change-password-form";
 
 export const metadata: Metadata = {
   title: "Password",

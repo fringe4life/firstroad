@@ -43,7 +43,7 @@ const RequireAuth = async ({
 };
 
 // Suspense wrapper that requires authentication and optionally authorization
-export const RequireAuthSuspense = ({
+const RequireAuthSuspense = ({
   children,
   fallback,
   redirectPath,
@@ -60,3 +60,4 @@ export const RequireAuthSuspense = ({
     </RequireAuth>
   </Suspense>
 );
+export { RequireAuthSuspense };

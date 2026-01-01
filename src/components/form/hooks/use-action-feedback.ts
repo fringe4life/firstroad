@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useEffectEvent, useRef } from "react";
-import type { ActionState } from "../../../utils/to-action-state";
+import type { ActionState } from "@/utils/to-action-state";
 
 interface onArgs {
   state: ActionState;

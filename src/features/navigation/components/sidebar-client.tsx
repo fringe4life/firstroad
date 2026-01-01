@@ -7,10 +7,10 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { useMobileSidebar } from "../context/context";
-import { NavItems } from "./nav-items";
+import { NavItems } from "@/features/navigation/components/nav-items";
+import { useMobileSidebar } from "@/features/navigation/context/context";
 
-export const SidebarClient = () => {
+const SidebarClient = () => {
   const { isOpen, close } = useMobileSidebar();
 
   return (
@@ -28,3 +28,5 @@ export const SidebarClient = () => {
     </Activity>
   );
 };
+
+export { SidebarClient };

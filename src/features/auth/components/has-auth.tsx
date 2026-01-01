@@ -4,7 +4,7 @@ import type { User } from "@/features/auth/types";
 import type { Maybe } from "@/types";
 
 // HasAuth component that provides session to children
-export const HasAuth = async ({
+const HasAuth = async ({
   children,
 }: {
   children: (user: Maybe<User>) => React.ReactNode;
@@ -14,7 +14,7 @@ export const HasAuth = async ({
 };
 
 // Suspense wrapper for dynamic auth-dependent content
-export const HasAuthSuspense = ({
+const HasAuthSuspense = ({
   children,
   fallback,
 }: {
@@ -25,3 +25,4 @@ export const HasAuthSuspense = ({
     <HasAuth>{children}</HasAuth>
   </Suspense>
 );
+export { HasAuthSuspense };

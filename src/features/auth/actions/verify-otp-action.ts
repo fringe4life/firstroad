@@ -28,7 +28,7 @@ const otpSchema = object({
   ),
 });
 
-export const verifyEmailVerificationOTP = async (
+const verifyEmailVerificationOTP = async (
   _prevState: ActionState,
   formData: FormData,
 ): Promise<ActionState> => {
@@ -58,7 +58,7 @@ export const verifyEmailVerificationOTP = async (
   return toActionState("OTP verified successfully", "SUCCESS");
 };
 
-export const verifySignInOTP = async (
+const verifySignInOTP = async (
   _prevState: ActionState,
   formData: FormData,
 ): Promise<ActionState> => {
@@ -87,3 +87,5 @@ export const verifySignInOTP = async (
   // This should never be reached due to redirect, but satisfies TypeScript
   return toActionState("OTP verified successfully", "SUCCESS");
 };
+
+export { verifyEmailVerificationOTP, verifySignInOTP };

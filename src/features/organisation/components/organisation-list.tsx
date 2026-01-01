@@ -16,4 +16,4 @@ const OrganisationList = async () => {
   );
 };
 
-export default OrganisationList;
+export { OrganisationList };

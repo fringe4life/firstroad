@@ -1,8 +1,8 @@
 "use client";
 
 import { useActionState, useEffect, useEffectEvent } from "react";
-import Form from "@/components/form/form";
-import SubmitButton from "@/components/form/submit-button";
+import { Form } from "@/components/form/form";
+import { SubmitButton } from "@/components/form/submit-button";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

@@ -33,4 +33,4 @@ const SubmitButton = ({ label, icon, variant, size }: SubmitButtonProps) => {
     </Button>
   );
 };
-export default SubmitButton;
+export { SubmitButton };

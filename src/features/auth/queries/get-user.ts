@@ -4,7 +4,8 @@ import { headers } from "next/headers";
 import type { UserProp } from "@/features/auth/types";
 import { auth } from "@/lib/auth";
 import { tryCatch } from "@/utils/try-catch";
-export const getUser = async (): Promise<UserProp> => {
+
+const getUser = async (): Promise<UserProp> => {
   "use cache: private";
   cacheTag("session");
 
@@ -22,3 +23,5 @@ export const getUser = async (): Promise<UserProp> => {
     hasUser,
   };
 };
+
+export { getUser };

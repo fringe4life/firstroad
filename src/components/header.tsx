@@ -3,10 +3,10 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { ThemeSwitcher } from "@/components/theme/theme-switcher";
 import { buttonVariants } from "@/components/ui/button";
-import AccountDropdown from "@/features/auth/components/account-dropwdown";
-import AuthNavSkeleton from "@/features/auth/components/auth-nav-skeleton";
+import { AccountDropdown } from "@/features/auth/components/account-dropwdown";
+import { AuthNavSkeleton } from "@/features/auth/components/auth-nav-skeleton";
 import { HasAuthSuspense } from "@/features/auth/components/has-auth";
-import MobileMenuButton from "@/features/navigation/components/mobile-menu-button";
+import { MobileMenuButton } from "@/features/navigation/components/mobile-menu-button";
 import { homePath, signInPath, signUpPath } from "@/path";
 
 const Header = () => (

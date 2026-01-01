@@ -1,9 +1,9 @@
 "use client";
 
 import { useActionState, useId } from "react";
-import FieldError from "@/components/form/field-error";
-import Form from "@/components/form/form";
-import SubmitButton from "@/components/form/submit-button";
+import { FieldError } from "@/components/form/field-error";
+import { Form } from "@/components/form/form";
+import { SubmitButton } from "@/components/form/submit-button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -79,4 +79,4 @@ const ChangePasswordForm = ({
   );
 };
 
-export default ChangePasswordForm;
+export { ChangePasswordForm };

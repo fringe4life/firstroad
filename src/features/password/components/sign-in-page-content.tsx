@@ -2,7 +2,7 @@ import Link from "next/link";
 import { CardCompact } from "@/components/card-compact";
 import { signin } from "@/features/password/actions/signin-action";
 import { forgotPasswordPath, signUpPath } from "@/path";
-import SignInForm from "./sign-in-form";
+import { SignInForm } from "./sign-in-form";
 
 const SignInPageContent = () => (
   <CardCompact
