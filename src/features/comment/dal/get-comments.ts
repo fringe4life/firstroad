@@ -4,6 +4,7 @@ import { cacheTag } from "next/cache";
 import { paginateItems } from "@/features/pagination/dal/paginate-items";
 import type { PaginatedResult } from "@/features/pagination/types";
 import { transformToPaginatedResult } from "@/features/pagination/utils/to-paginated-result";
+import { commentsCache, commentsForTicketCache } from "@/utils/cache-tags";
 import { getCommentsCount } from "../queries/get-comments-count";
 import { getCommentsList } from "../queries/get-comments-list";
 import type { CommentWithUserInfo } from "../types";
@@ -14,8 +15,8 @@ export const getCommentsByTicketId = async (
   take = 3,
 ): Promise<PaginatedResult<CommentWithUserInfo>> => {
   "use cache";
-  cacheTag("comments");
-  cacheTag(`comments-${ticketId}`);
+  cacheTag(commentsCache());
+  cacheTag(commentsForTicketCache(ticketId));
   // Only cache the database query
   const { items, itemsCount } = await paginateItems({
     getItems: () => getCommentsList({ ticketId, cursor, take }),

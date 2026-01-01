@@ -5,6 +5,7 @@ import { tryCatch } from "@/utils/try-catch";
 import type { BaseOrganisation, Member } from "../types";
 
 const getOrganisationByUser = async (): Promise<Maybe<BaseOrganisation[]>> => {
+  "use cache: private";
   const { user, hasUser } = await getUser();
   if (!(hasUser && user)) {
     return null;

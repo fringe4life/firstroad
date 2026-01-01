@@ -6,7 +6,7 @@ import { Form } from "@/components/form/form";
 import { SubmitButton } from "@/components/form/submit-button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { type ActionState, EMPTY_ACTION_STATE } from "@/utils/to-action-state";
+import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 import { upsertComment } from "../actions/upsert-comment";
 
 interface CommentCreateFormProps {
@@ -26,13 +26,11 @@ const CommentCreateForm = ({
   onSuccess,
 }: CommentCreateFormProps) => {
   // Create a wrapper function that matches useActionState signature
-  const commentAction = (
-    prevState: ActionState<unknown>,
-    formData: FormData,
-  ): Promise<ActionState<unknown>> =>
-    upsertComment(commentId, ticketId, prevState, formData);
 
-  const [state, formAction] = useActionState(commentAction, EMPTY_ACTION_STATE);
+  const [state, formAction] = useActionState(
+    upsertComment.bind(null, commentId, ticketId),
+    EMPTY_ACTION_STATE,
+  );
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const contentId = useId();

@@ -1,10 +1,10 @@
 "use server";
 
-import { updateTag } from "next/cache";
 import { headers } from "next/headers";
 import { RedirectType, redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { homePath } from "@/path";
+import { invalidateSession } from "@/utils/invalidate-cache";
 import { fromErrorToActionState } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
 
@@ -19,7 +19,7 @@ const signOut = async () => {
     return fromErrorToActionState(error);
   }
 
-  updateTag("session");
+  invalidateSession();
   throw redirect(homePath, RedirectType.replace);
 };
 

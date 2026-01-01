@@ -1,6 +1,6 @@
 import { GenericComponent } from "@/components/generic-component";
-import { getOrganisationByUser } from "../queries/get-organisations-for-user";
-import { OrganisationItem } from "./organisation-item";
+import { OrganisationItem } from "@/features/organisation/components/organisation-item";
+import { getOrganisationByUser } from "@/features/organisation/queries/get-organisations-for-user";
 
 const OrganisationList = async () => {
   const organisations = await getOrganisationByUser();

@@ -411,9 +411,11 @@ src/
 │   ├── prisma.ts        # Database client
 │   └── utils.ts         # Shared utilities
 ├── utils/                # Shared utilities
+│   ├── cache-tags.ts    # Centralized cache tag functions (like path.ts)
 │   ├── cookies.ts       # Cookie management
 │   ├── currency.ts      # Currency utilities
 │   ├── get-active-path.ts # Active path utilities
+│   ├── invalidate-cache.ts # Cache invalidation utilities
 │   ├── to-action-state.ts # Action state management
 │   ├── try-catch.ts     # Error handling utilities
 │   └── typed-links.ts   # Type-safe link generation
@@ -666,6 +668,18 @@ Centralized type-safe route definitions in `src/path.ts`:
 - Dynamic routes with `as Route` assertions
 - Slug-based ticket routes (`ticketPath(slug)`, `ticketEditPath(slug)`)
 - Consistent path usage across the application
+
+### Cache Management
+
+Centralized cache tag system for consistent cache invalidation:
+
+- **`src/utils/cache-tags.ts`**: Centralized cache tag functions (similar to `path.ts`)
+  - `ticketsCache()`, `ticketCache(slug)`, `commentsCache()`, `commentsForTicketCache(ticketId)`, `commentCache(commentId)`, `sessionCache()`
+- **`src/utils/invalidate-cache.ts`**: High-level invalidation functions
+  - `invalidateTicketAndList(slug)`, `invalidateCommentAndTicketComments(...)`, `invalidateSession()`, etc.
+- Ensures consistency between `cacheTag()` and `updateTag()` calls
+- All ticket-related cache operations use slugs (not IDs) for consistency
+- Single source of truth for cache tag strings
 
 ## 🚀 Deployment
 

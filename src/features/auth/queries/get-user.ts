@@ -3,11 +3,12 @@ import { cacheTag } from "next/cache";
 import { headers } from "next/headers";
 import type { UserProp } from "@/features/auth/types";
 import { auth } from "@/lib/auth";
+import { sessionCache } from "@/utils/cache-tags";
 import { tryCatch } from "@/utils/try-catch";
 
 const getUser = async (): Promise<UserProp> => {
   "use cache: private";
-  cacheTag("session");
+  cacheTag(sessionCache());
 
   const { data: session } = await tryCatch(
     async () =>

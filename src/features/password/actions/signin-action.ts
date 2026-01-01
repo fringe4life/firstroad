@@ -1,6 +1,5 @@
 "use server";
 
-import { updateTag } from "next/cache";
 import { headers } from "next/headers";
 import { RedirectType, redirect } from "next/navigation";
 import {
@@ -15,6 +14,7 @@ import {
 } from "valibot";
 import { auth } from "@/lib/auth";
 import { homePath } from "@/path";
+import { invalidateSession } from "@/utils/invalidate-cache";
 import {
   type ActionState,
   fromErrorToActionState,
@@ -48,7 +48,7 @@ const signin = async (_state: ActionState | undefined, formData: FormData) => {
   if (error) {
     return fromErrorToActionState(error, formData);
   }
-  updateTag("session");
+  invalidateSession();
   throw redirect(homePath, RedirectType.replace);
 };
 

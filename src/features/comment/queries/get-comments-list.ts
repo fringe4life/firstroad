@@ -1,6 +1,11 @@
-import { prisma } from "@/lib/prisma";
+"use cache";
 
-const getCommentsList = ({
+import { cacheTag } from "next/cache";
+import { prisma } from "@/lib/prisma";
+import { commentsCache } from "@/utils/cache-tags";
+
+// biome-ignore lint/suspicious/useAwait: needs to be for "use cache"
+const getCommentsList = async ({
   ticketId,
   cursor,
   take,
@@ -8,8 +13,9 @@ const getCommentsList = ({
   ticketId: string;
   cursor?: string;
   take: number;
-}) =>
-  prisma.comment.findMany({
+}) => {
+  cacheTag(commentsCache());
+  return prisma.comment.findMany({
     where: {
       ticketId,
     },
@@ -33,5 +39,6 @@ const getCommentsList = ({
       : undefined,
     skip: cursor ? 1 : undefined, // Skip the cursor record itself
   });
+};
 
 export { getCommentsList };

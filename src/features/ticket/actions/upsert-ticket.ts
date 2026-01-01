@@ -1,16 +1,15 @@
 /** biome-ignore-all lint/style/noMagicNumbers: numbers are called in a max function */
 "use server";
 
-import { updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import {
   maxLength,
   minLength,
   minValue,
   object,
-  parse,
   pipe,
   regex,
+  safeParse,
   string,
   toNumber,
 } from "valibot";
@@ -22,6 +21,7 @@ import { homePath, ticketPath } from "@/path";
 import type { Maybe } from "@/types";
 import { setCookieByKey } from "@/utils/cookies";
 import { toCent } from "@/utils/currency";
+import { invalidateTicketAndList } from "@/utils/invalidate-cache";
 import {
   type ActionState,
   fromErrorToActionState,
@@ -60,16 +60,22 @@ const upsertTicket = async (
       }
     }
 
-    const data = parse(upsertSchema, Object.fromEntries(formData.entries()));
+    const result = safeParse(
+      upsertSchema,
+      Object.fromEntries(formData.entries()),
+    );
+    if (!result.success) {
+      return fromErrorToActionState(result.issues, formData);
+    }
 
     // Generate slug from title
-    const slug = createSlug(data.title);
+    const slug = createSlug(result.output.title);
 
     const dbData = {
-      ...data,
+      ...result.output,
       slug,
-      deadline: new Date(data.deadline),
-      bounty: toCent(data.bounty),
+      deadline: new Date(result.output.deadline),
+      bounty: toCent(result.output.bounty),
       userId: user.id,
     };
     const ticket = await prisma.ticket.upsert({
@@ -80,12 +86,8 @@ const upsertTicket = async (
       create: dbData,
     });
 
-    updateTag("tickets");
-    if (ticket.id) {
-      updateTag(`ticket-${ticket.id}`);
-    }
     if (ticket.slug) {
-      updateTag(`ticket-slug-${ticket.slug}`);
+      invalidateTicketAndList(ticket.slug);
     }
   });
 
@@ -99,8 +101,14 @@ const upsertTicket = async (
   }
 
   // For new tickets, redirect to the ticket page using the slug
-  const data = parse(upsertSchema, Object.fromEntries(formData.entries()));
-  const slug = createSlug(data.title);
+  const result = safeParse(
+    upsertSchema,
+    Object.fromEntries(formData.entries()),
+  );
+  if (!result.success) {
+    return fromErrorToActionState(result.issues, formData);
+  }
+  const slug = createSlug(result.output.title);
   setCookieByKey("toast", "Ticket created");
   redirect(ticketPath(slug));
 };

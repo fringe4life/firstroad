@@ -1,10 +1,13 @@
+import { cacheTag } from "next/cache";
 import type {
   TicketOrderByWithRelationInput,
   TicketWhereInput,
 } from "@/generated/prisma/models";
 import { prisma } from "@/lib/prisma";
+import { ticketsCache } from "@/utils/cache-tags";
 
-const getTicketList = ({
+// biome-ignore lint/suspicious/useAwait: needed for use cache
+const getTicketList = async ({
   where,
   orderBy,
   takeAmount,
@@ -14,8 +17,10 @@ const getTicketList = ({
   orderBy: TicketOrderByWithRelationInput;
   takeAmount: number;
   skip: number;
-}) =>
-  prisma.ticket.findMany({
+}) => {
+  "use cache";
+  cacheTag(ticketsCache());
+  return prisma.ticket.findMany({
     where,
     include: {
       userInfo: {
@@ -32,5 +37,6 @@ const getTicketList = ({
     take: takeAmount + 1,
     skip,
   });
+};
 
 export { getTicketList };
