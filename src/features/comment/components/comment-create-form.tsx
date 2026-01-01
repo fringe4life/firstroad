@@ -105,4 +105,4 @@ const CommentCreateForm = ({
   );
 };
 
-export default CommentCreateForm;
+export { CommentCreateForm };

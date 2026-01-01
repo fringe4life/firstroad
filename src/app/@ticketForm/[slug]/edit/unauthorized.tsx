@@ -2,7 +2,7 @@ import { ShieldX } from "lucide-react";
 import type { Route } from "next";
 import { headers } from "next/headers";
 import Link from "next/link";
-import Placeholder from "@/components/placeholder";
+import { Placeholder } from "@/components/placeholder";
 import { buttonVariants } from "@/components/ui/button";
 import { signInPath } from "@/path";
 

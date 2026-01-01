@@ -60,5 +60,9 @@
       }
     }
   ],
-  "extends": ["ultracite/core", "ultracite/react", "ultracite/next"]
+  "extends": [
+    "ultracite/biome/react",
+    "ultracite/biome/core",
+    "ultracite/biome/next"
+  ]
 }

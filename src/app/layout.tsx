@@ -4,7 +4,7 @@ import { cacheLife, cacheTag } from "next/cache";
 import { Inter } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "sonner";
-import Header from "@/components/header";
+import { Header } from "@/components/header";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import Sidebar from "@/features/navigation/components/sidebar";
 import { MobileSidebarProvider } from "@/features/navigation/context/context";

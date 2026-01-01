@@ -29,4 +29,4 @@ const TimeAgoClient = ({ createdAt, updatedAt }: TimeAgoProps) => {
   );
 };
 
-export default TimeAgoClient;
+export { TimeAgoClient };

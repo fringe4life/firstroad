@@ -5,4 +5,4 @@ const TicketFormSkeleton = () => (
   </div>
 );
 
-export default TicketFormSkeleton;
+export { TicketFormSkeleton };

@@ -15,4 +15,4 @@ const OrganisationItem = ({
   </div>
 );
 
-export default OrganisationItem;
+export { OrganisationItem };

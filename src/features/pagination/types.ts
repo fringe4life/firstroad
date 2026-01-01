@@ -18,12 +18,12 @@ export interface PaginatedResult<T> extends PaginationMetadataObject {
 
 export interface RawPaginationAccess<T> {
   getItems: () => Promise<List<T>>;
-  getTotalRows: () => Promise<Maybe<number>>;
+  getItemsCount: () => Promise<Maybe<number>>;
 }
 
 export interface RawPaginationResult<T> {
   items: List<T>;
-  totalRows: Maybe<number>;
+  itemsCount: Maybe<number>;
 }
 
 export type LimitItem = (typeof LIMITS)[number];

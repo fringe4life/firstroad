@@ -16,4 +16,4 @@ const ConfirmDeleteIcon = ({ isPending }: ConfirmDeleteIconProps) => (
   </>
 );
 
-export default ConfirmDeleteIcon;
+export { ConfirmDeleteIcon };

@@ -11,9 +11,11 @@ import slugify from "slugify";
  * createSlug("Toggle Dark Theme") // "toggle-dark-theme"
  * createSlug("Fix Bug #123") // "fix-bug-123"
  */
-export const createSlug = (title: string): string =>
+const createSlug = (title: string): string =>
   slugify(title, {
     lower: true,
     strict: true,
     trim: true,
   });
+
+export { createSlug };

@@ -74,4 +74,4 @@ const TicketItem = ({ ticket, isDetail = false }: TicketItemProps) => {
   );
 };
 
-export default TicketItem;
+export { TicketItem };

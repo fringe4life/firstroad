@@ -3,7 +3,7 @@ import { CardCompact } from "@/components/card-compact";
 import { RequireAuthSuspense } from "@/features/auth/components/require-auth";
 import { isOwner } from "@/features/auth/utils/owner";
 import { upsertTicket } from "@/features/ticket/actions/upsert-ticket";
-import TicketUpsertForm from "@/features/ticket/components/ticket-upsert-form";
+import { TicketUpsertForm } from "@/features/ticket/components/ticket-upsert-form";
 import { getTicketBySlug } from "@/features/ticket/queries/get-ticket";
 import { ticketEditPath } from "@/path";
 

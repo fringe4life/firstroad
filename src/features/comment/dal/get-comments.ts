@@ -1,5 +1,6 @@
 "use server";
 
+import { cacheTag } from "next/cache";
 import { paginateItems } from "@/features/pagination/dal/paginate-items";
 import type { PaginatedResult } from "@/features/pagination/types";
 import { transformToPaginatedResult } from "@/features/pagination/utils/to-paginated-result";
@@ -12,14 +13,17 @@ export const getCommentsByTicketId = async (
   cursor?: string,
   take = 3,
 ): Promise<PaginatedResult<CommentWithUserInfo>> => {
+  "use cache";
+  cacheTag("comments");
+  cacheTag(`comments-${ticketId}`);
   // Only cache the database query
-  const { items, totalRows } = await paginateItems({
+  const { items, itemsCount } = await paginateItems({
     getItems: () => getCommentsList({ ticketId, cursor, take }),
-    getTotalRows: () => getCommentsCount({ ticketId }),
+    getItemsCount: () => getCommentsCount({ ticketId }),
   });
 
   return transformToPaginatedResult(
-    { items, totalRows },
+    { items, itemsCount },
     { cursor, limit: take, type: "cursor" },
   );
 };

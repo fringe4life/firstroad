@@ -11,4 +11,4 @@ const TicketControlsFallback = async () => (
   </div>
 );
 
-export default TicketControlsFallback;
+export { TicketControlsFallback };

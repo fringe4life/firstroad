@@ -49,4 +49,4 @@ const SortSelect = ({ options, value, onValueChange }: SortSelectProps) => {
   );
 };
 
-export default SortSelect;
+export { SortSelect };

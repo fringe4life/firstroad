@@ -8,20 +8,20 @@ import {
   useState,
 } from "react";
 import { CardCompact } from "@/components/card-compact";
-import GenericComponent from "@/components/generic-component";
+import { GenericComponent } from "@/components/generic-component";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { deleteComment } from "@/features/comment/actions/delete-comment";
 
 import type { upsertComment } from "@/features/comment/actions/upsert-comment";
-import CommentCreateForm from "@/features/comment/components/comment-create-form";
-import CommentOwnerButtons from "@/features/comment/components/comment-owner-buttons";
+import { CommentCreateForm } from "@/features/comment/components/comment-create-form";
+import { CommentOwnerButtons } from "@/features/comment/components/comment-owner-buttons";
 import type { Comment, CommentWithUserInfo } from "@/features/comment/types";
 import { NO_PAGINATION } from "@/features/pagination/constants";
 import type { PaginatedResult } from "@/features/pagination/types";
 import type { Maybe } from "@/types";
 import type { getCommentsByTicketId } from "../dal/get-comments";
-import CommentItem from "./comment-item";
+import { CommentItem } from "./comment-item";
 
 type CommentsProps = {
   ticketId: string;
@@ -31,7 +31,7 @@ type CommentsProps = {
   userId?: string;
 } & PaginatedResult<Comment>;
 
-const Comments = ({
+const CommentList = ({
   list,
   metadata,
   ticketId,
@@ -157,4 +157,4 @@ const Comments = ({
   );
 };
 
-export default Comments;
+export { CommentList };

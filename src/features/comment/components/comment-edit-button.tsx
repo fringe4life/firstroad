@@ -21,4 +21,4 @@ const CommentEditButton = ({ comment, onEdit }: CommentEditButtonProps) => {
   );
 };
 
-export default CommentEditButton;
+export { CommentEditButton };

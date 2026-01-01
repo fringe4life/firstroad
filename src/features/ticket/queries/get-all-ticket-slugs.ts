@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 
-export const getAllTicketSlugs = async () => {
+const getAllTicketSlugs = async () => {
   const tickets = await prisma.ticket.findMany({
     select: { slug: true },
   });
@@ -9,3 +9,5 @@ export const getAllTicketSlugs = async () => {
     slug: ticket.slug,
   }));
 };
+
+export { getAllTicketSlugs };

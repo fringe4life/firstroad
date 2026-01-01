@@ -47,13 +47,13 @@ export const getAllTickets = async (
   const takeAmount = limit;
 
   // Only cache the database transaction
-  const { items, totalRows } = await paginateItems({
+  const { items, itemsCount } = await paginateItems({
     getItems: () => getTicketList({ where, orderBy, takeAmount, skip }),
-    getTotalRows: () => getTicketsCount({ where, orderBy }),
+    getItemsCount: () => getTicketsCount({ where, orderBy }),
   });
 
   return transformToPaginatedResult(
-    { items, totalRows },
+    { items, itemsCount },
     { page, limit, type: "offset" },
   );
 };

@@ -1,7 +1,7 @@
 "use client";
 import { toast } from "sonner";
-import ConfirmDeleteIcon from "@/components/confirm-delete-icon";
-import useConfirmDialog from "@/components/confirm-dialog";
+import { ConfirmDeleteIcon } from "@/components/confirm-delete-icon";
+import { useConfirmDialog } from "@/components/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -80,4 +80,4 @@ const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
   );
 };
 
-export default TicketMoreMenu;
+export { TicketMoreMenu };

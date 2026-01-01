@@ -1,7 +1,7 @@
 import { CardCompact } from "@/components/card-compact";
 import { getUser } from "@/features/auth/queries/get-user";
 import { upsertTicket } from "@/features/ticket/actions/upsert-ticket";
-import TicketUpsertForm from "@/features/ticket/components/ticket-upsert-form";
+import { TicketUpsertForm } from "@/features/ticket/components/ticket-upsert-form";
 
 const TicketFormPage = async () => {
   const { hasUser } = await getUser();

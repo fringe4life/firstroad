@@ -13,4 +13,4 @@ const TicketListSkeleton = () => (
   </div>
 );
 
-export default TicketListSkeleton;
+export { TicketListSkeleton };

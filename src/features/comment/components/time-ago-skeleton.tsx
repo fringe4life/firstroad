@@ -6,4 +6,4 @@ const TimeAgoFallback = () => (
   </div>
 );
 
-export default TimeAgoFallback;
+export { TimeAgoFallback };

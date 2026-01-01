@@ -92,4 +92,4 @@ const TicketFilterDropdown = ({ user }: TicketFilterDropdownProps) => {
   );
 };
 
-export default TicketFilterDropdown;
+export { TicketFilterDropdown };

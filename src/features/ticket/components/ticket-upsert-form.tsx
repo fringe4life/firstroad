@@ -1,7 +1,8 @@
 "use client";
 
 import { Suspense, useActionState, useId, useRef } from "react";
-import DatePicker, { type DateReset } from "@/components/date-picker";
+import { DatePicker, type DateReset } from "@/components/date-picker";
+
 import FieldError from "@/components/form/field-error";
 import Form from "@/components/form/form";
 import SubmitButton from "@/components/form/submit-button";
@@ -98,4 +99,4 @@ const TicketUpsertForm = ({
   );
 };
 
-export default TicketUpsertForm;
+export { TicketUpsertForm };

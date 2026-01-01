@@ -3,7 +3,7 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { CardCompact } from "@/components/card-compact";
-import Spinner from "@/components/spinner";
+import { Spinner } from "@/components/spinner";
 import ResetPasswordForm from "@/features/password/components/reset-password-form";
 import { signInPath } from "@/path";
 

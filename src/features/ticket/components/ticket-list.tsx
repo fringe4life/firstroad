@@ -1,14 +1,14 @@
 import { Suspense, ViewTransition } from "react";
-import GenericComponent from "@/components/generic-component";
+import { GenericComponent } from "@/components/generic-component";
 import { getUser } from "@/features/auth/queries/get-user";
 import { TICKET_SORT_OPTIONS } from "@/features/constants";
 import { Pagination } from "@/features/pagination/components/nuqs-pagination";
-import TicketControlsFallback from "@/features/ticket/components/skeletons/ticket-controls-skeleton";
-import TicketFilterDropdown from "@/features/ticket/components/ticket-filter-dropdown";
-import TicketItem from "@/features/ticket/components/ticket-item";
-import TicketScopeToggle from "@/features/ticket/components/ticket-scope-toggle";
-import TicketSearchInput from "@/features/ticket/components/ticket-search-input";
-import TicketSortSelect from "@/features/ticket/components/ticket-select-sort";
+import { TicketControlsFallback } from "@/features/ticket/components/skeletons/ticket-controls-skeleton";
+import { TicketFilterDropdown } from "@/features/ticket/components/ticket-filter-dropdown";
+import { TicketItem } from "@/features/ticket/components/ticket-item";
+import { TicketScopeToggle } from "@/features/ticket/components/ticket-scope-toggle";
+import { TicketSearchInput } from "@/features/ticket/components/ticket-search-input";
+import { TicketSortSelect } from "@/features/ticket/components/ticket-select-sort";
 import { getAllTickets } from "@/features/ticket/dal/get-tickets";
 import type { SearchParamsProps } from "@/types";
 
@@ -59,4 +59,4 @@ const TicketList = async ({ searchParams }: SearchParamsProps) => {
   );
 };
 
-export default TicketList;
+export { TicketList };

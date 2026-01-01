@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { HasAuthSuspense } from "@/features/auth/components/has-auth";
 import { deleteComment } from "@/features/comment/actions/delete-comment";
 import { upsertComment } from "@/features/comment/actions/upsert-comment";
-import Comments from "@/features/comment/components/comments";
+import { CommentList } from "@/features/comment/components/comment-list";
 import { getCommentsByTicketId } from "@/features/comment/dal/get-comments";
 import { getTicketBySlug } from "@/features/ticket/queries/get-ticket";
 
@@ -27,7 +27,7 @@ const CommentsPage = async ({ params }: PageProps<"/[slug]">) => {
   return (
     <HasAuthSuspense fallback={<div>Loading auth...</div>}>
       {(user) => (
-        <Comments
+        <CommentList
           deleteCommentAction={deleteComment}
           list={list}
           loadMoreAction={getCommentsByTicketId}

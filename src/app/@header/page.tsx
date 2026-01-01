@@ -1,6 +1,6 @@
 import { cacheLife } from "next/cache";
 import type { SearchParams } from "nuqs/server";
-import Heading from "@/components/heading";
+import { Heading } from "@/components/heading";
 import { HasAuthSuspense } from "@/features/auth/components/has-auth";
 import { searchParamsCache } from "@/features/ticket/search-params";
 

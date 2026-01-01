@@ -2,9 +2,10 @@
 
 import { useQueryStates } from "nuqs";
 import { useTransition } from "react";
-import SortSelect, {
+import {
   type SortObject,
   type SortOption,
+  SortSelect,
 } from "@/components/sort-select";
 import {
   options as PaginationOptions,
@@ -36,4 +37,4 @@ const TicketSortSelect = ({ options }: TicketSortSelectProps) => {
   );
 };
 
-export default TicketSortSelect;
+export { TicketSortSelect };

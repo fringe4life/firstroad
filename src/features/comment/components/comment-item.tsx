@@ -49,4 +49,4 @@ const CommentItem = ({ comment, buttons }: CommentItemProps) => {
   );
 };
 
-export default CommentItem;
+export { CommentItem };

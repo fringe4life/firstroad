@@ -22,4 +22,4 @@ const Placeholder = ({
     })}
   </div>
 );
-export default Placeholder;
+export { Placeholder };

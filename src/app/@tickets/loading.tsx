@@ -1,4 +1,4 @@
-import TicketListSkeleton from "@/features/ticket/components/skeletons/ticket-list-skeleton";
+import { TicketListSkeleton } from "@/features/ticket/components/skeletons/ticket-list-skeleton";
 
 const TicketsLoading = () => <TicketListSkeleton />;
 

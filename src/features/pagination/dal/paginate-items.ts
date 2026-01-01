@@ -1,15 +1,18 @@
+import type {
+  RawPaginationAccess,
+  RawPaginationResult,
+} from "@/features/pagination/types";
 import { tryCatch } from "@/utils/try-catch";
-import type { RawPaginationAccess, RawPaginationResult } from "../types";
 
 const paginateItems = async <T>({
   getItems,
-  getTotalRows,
+  getItemsCount,
 }: RawPaginationAccess<T>): Promise<RawPaginationResult<T>> => {
-  const [{ data: items }, { data: totalRows }] = await Promise.all([
+  const [{ data: items }, { data: itemsCount }] = await Promise.all([
     tryCatch(() => getItems()),
-    tryCatch(() => getTotalRows()),
+    tryCatch(() => getItemsCount()),
   ]);
 
-  return { items, totalRows };
+  return { items, itemsCount };
 };
 export { paginateItems };

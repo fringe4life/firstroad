@@ -2,7 +2,7 @@
 
 import { debounce, useQueryState, useQueryStates } from "nuqs";
 import { useTransition } from "react";
-import SearchInput from "@/components/search-input";
+import { SearchInput } from "@/components/search-input";
 import {
   options,
   paginationParser,
@@ -38,4 +38,4 @@ const TicketSearchInput = ({
   );
 };
 
-export default TicketSearchInput;
+export { TicketSearchInput };

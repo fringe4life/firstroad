@@ -51,4 +51,4 @@ const Breadcrumbs = ({ breadcrumbs }: BreadcrumbsProps) => (
   </Breadcrumb>
 );
 
-export default Breadcrumbs;
+export { Breadcrumbs };

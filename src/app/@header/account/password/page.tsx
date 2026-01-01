@@ -1,5 +1,5 @@
 import AccountTabs from "@/app/(auth)/account/_components/account-tabs";
-import Heading from "@/components/heading";
+import { Heading } from "@/components/heading";
 
 const AccountProfileHeader = () => (
   <Heading

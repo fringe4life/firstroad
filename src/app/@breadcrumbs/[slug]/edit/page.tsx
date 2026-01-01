@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import Breadcrumbs from "@/components/breadcrumbs";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import { getTicketBySlug } from "@/features/ticket/queries/get-ticket";
 import { homePath, ticketPath } from "@/path";
 

@@ -54,4 +54,4 @@ const TicketScopeToggle = ({ user }: TicketScopeToggleProps) => {
   );
 };
 
-export default TicketScopeToggle;
+export { TicketScopeToggle };

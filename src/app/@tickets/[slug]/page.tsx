@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { TICKET_NOT_FOUND } from "@/features/constants";
-import TicketItem from "@/features/ticket/components/ticket-item";
+import { TicketItem } from "@/features/ticket/components/ticket-item";
 import { getAllTicketSlugs } from "@/features/ticket/queries/get-all-ticket-slugs";
 import { getTicketBySlug } from "@/features/ticket/queries/get-ticket";
 

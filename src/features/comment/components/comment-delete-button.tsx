@@ -1,7 +1,7 @@
 "use client";
 
-import ConfirmDeleteIcon from "@/components/confirm-delete-icon";
-import useConfirmDialog from "@/components/confirm-dialog";
+import { ConfirmDeleteIcon } from "@/components/confirm-delete-icon";
+import { useConfirmDialog } from "@/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import { deleteComment } from "@/features/comment/actions/delete-comment";
 
@@ -50,4 +50,4 @@ const CommentDeleteButton = ({
   );
 };
 
-export default CommentDeleteButton;
+export { CommentDeleteButton };

@@ -30,7 +30,7 @@
     "ultracite:fix": "bun x ultracite fix",
     "ultracite:doctor": "bun x ultracite doctor",
     "ultracite:check": "bun x ultracite check",
-    "ultracite:upgrade": "bun x ultracite@latest init --pm bun --editors vscode --hooks cursor --agents cursor --frameworks next --quiet"
+    "ultracite:upgrade": "bun x ultracite@latest init --pm bun --linter biome --editors vscode --hooks cursor --frameworks next --quiet"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
@@ -95,8 +95,7 @@
     "tailwindcss": "^4.1.18",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "ultracite": "6.5.0",
-    "zod": "^4.3.2"
+    "ultracite": "7.0.3"
   },
   "trustedDependencies": [
     "@prisma/client",
@@ -120,6 +119,7 @@
     "express": "^5.2.0",
     "@modelcontextprotocol/sdk": "^1.24.0",
     "next": ">=16.1.1",
-    "@trpc/server": ">=11.8.0"
+    "@trpc/server": ">=11.8.0",
+    "qs": ">=6.14.1"
   }
 }

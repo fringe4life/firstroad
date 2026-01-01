@@ -65,4 +65,4 @@ const DatePicker = ({ id, name, defaultValue, ref }: DatePickerProps) => {
   );
 };
 
-export default DatePicker;
+export { DatePicker };

@@ -1,4 +1,4 @@
-import Placeholder from "@/components/placeholder";
+import { Placeholder } from "@/components/placeholder";
 import type { List } from "@/features/pagination/types";
 
 export interface GenericComponentProps<
@@ -42,4 +42,4 @@ const GenericComponent = <T, P, E extends React.ElementType = "div">({
   );
 };
 
-export default GenericComponent;
+export { GenericComponent };

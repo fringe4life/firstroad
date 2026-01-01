@@ -8,8 +8,8 @@ import { fromErrorToActionState, toActionState } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
 
 export const deleteComment = async (commentId: string) => {
+  const user = await getUserOrRedirect();
   const { error } = await tryCatch(async () => {
-    const user = await getUserOrRedirect();
     const comment = await prisma.comment.findUnique({
       where: { id: commentId },
       include: {

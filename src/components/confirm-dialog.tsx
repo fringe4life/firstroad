@@ -116,4 +116,4 @@ const useConfirmDialog = ({
   return [getTriggerElement, dialog, isPending] as const;
 };
 
-export default useConfirmDialog;
+export { useConfirmDialog };

@@ -1,5 +1,5 @@
-import CommentDeleteButton from "@/features/comment/components/comment-delete-button";
-import CommentEditButton from "@/features/comment/components/comment-edit-button";
+import { CommentDeleteButton } from "@/features/comment/components/comment-delete-button";
+import { CommentEditButton } from "@/features/comment/components/comment-edit-button";
 import type { Comment } from "@/features/comment/types";
 
 interface CommentOwnerButtonsProps {
@@ -19,4 +19,4 @@ const CommentOwnerButtons = ({
   </div>
 );
 
-export default CommentOwnerButtons;
+export { CommentOwnerButtons };
