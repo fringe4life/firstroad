@@ -37,7 +37,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **📧 Email Features**: Password reset, email verification, OTP authentication, and welcome emails with React Email 5.1.1 templates
 - **🔗 Slug Generation**: Human-readable URLs using slugify package for ticket slugs
 - **🔄 Database Hooks**: Automatic UserInfo creation on user registration
-- **🔄 Parallel Routes**: Next.js parallel routes (@header, @breadcrumbs, @comments, @tickets, @ticketForm) for enhanced user experience
+- **🔄 Parallel Routes**: Next.js parallel routes (@auth) for authentication modals with interception routes
 - **⚡ React Compiler**: React 19 compiler for automatic performance optimization
 - **📬 Background Jobs**: Inngest for async event handling and email processing
 - **⚡ PPR Navigation**: Partial Prerendering with dynamic auth components
@@ -75,7 +75,7 @@ This project leverages cutting-edge Next.js 16 features for optimal performance 
 - **Turbopack**: Fast bundling for development and production
 - **React Compiler**: React 19 compiler for automatic performance optimization
 - **Cache Components**: Function-level caching with `cacheComponents: true`
-- **Parallel Routes**: Enhanced routing with simultaneous route rendering (`@auth`, `@tickets`, `@ticketForm`, `@header`, `@breadcrumbs`, `@comments`)
+- **Parallel Routes**: Authentication modals with interception routes (`@auth`)
 - **Interception Routes**: Modal overlays with graceful fallback on hard refresh
 - **Experimental Features**: 
   - `browserDebugInfoInTerminal`: Enhanced debugging information
@@ -280,6 +280,13 @@ src/
 │   │   │   ├── profile/   # User profile
 │   │   │   └── _components/ # Account components
 │   │   ├── organisations/ # Organization management
+│   │   ├── tickets/       # Ticket management pages
+│   │   │   ├── [slug]/    # Dynamic ticket routes
+│   │   │   │   ├── edit/  # Edit ticket page
+│   │   │   │   ├── not-found.tsx # Ticket not found
+│   │   │   │   └── page.tsx # Ticket detail page
+│   │   │   ├── error.tsx  # Error boundary
+│   │   │   └── page.tsx   # Tickets list page
 │   │   └── layout.tsx     # Auth layout
 │   ├── (password)/        # Public auth routes
 │   │   ├── sign-in/       # Sign in page
@@ -305,45 +312,10 @@ src/
 │   │   ├── (.)forgot-password/ # Intercepted forgot-password modal
 │   │   ├── [...catchAll]/ # Catch-all for closing modals
 │   │   └── default.tsx    # Default null state
-│   ├── @breadcrumbs/      # Parallel route slot for breadcrumbs
-│   │   ├── [slug]/        # Dynamic breadcrumb routes
-│   │   │   ├── edit/      # Edit ticket breadcrumbs
-│   │   │   └── page.tsx   # Ticket detail breadcrumbs
-│   │   ├── [...catchAll]/ # Catch-all route
-│   │   └── default.tsx    # Default null state
-│   ├── @comments/         # Parallel route slot for comments
-│   │   ├── [slug]/        # Dynamic comment routes
-│   │   │   └── page.tsx   # Ticket comments
-│   │   ├── [...catchAll]/ # Catch-all route
-│   │   └── default.tsx    # Default null state
-│   ├── @header/           # Parallel route slot for headers
-│   │   ├── [...catchAll]/ # Catch-all route
-│   │   ├── account/       # Account header pages
-│   │   │   ├── password/  # Change password header
-│   │   │   └── profile/   # User profile header
-│   │   ├── organisations/ # Organization header
-│   │   ├── default.tsx    # Default null state
-│   │   └── page.tsx       # Home page header
-│   ├── @ticketForm/       # Parallel route slot for ticket forms
-│   │   ├── [slug]/        # Dynamic ticket edit forms
-│   │   │   ├── edit/      # Edit ticket form
-│   │   │   └── unauthorized.tsx # Unauthorized access page
-│   │   ├── [...catchAll]/ # Catch-all route
-│   │   ├── default.tsx    # Default state
-│   │   └── page.tsx       # Create ticket form
-│   ├── @tickets/          # Parallel route slot for tickets list
-│   │   ├── [slug]/        # Dynamic ticket routes
-│   │   │   ├── edit/      # Edit ticket page
-│   │   │   ├── not-found.tsx # Ticket not found
-│   │   │   └── page.tsx   # Ticket detail page
-│   │   ├── [...catchAll]/ # Catch-all route
-│   │   ├── default.tsx    # Default state
-│   │   ├── error.tsx      # Error boundary
-│   │   └── page.tsx       # Tickets list view
 │   ├── api/               # API routes
 │   │   ├── auth/          # Authentication API
 │   │   └── inngest/       # Background jobs
-│   ├── layout.tsx         # Root layout with parallel slots
+│   ├── layout.tsx         # Root layout with auth parallel slot
 │   ├── page.tsx           # Home page
 │   └── globals.css        # Global styles with custom variants
 ├── components/            # Reusable UI components
@@ -382,7 +354,7 @@ src/
 │   │   └── utils/        # Pagination utilities (to-paginated-result)
 │   ├── ticket/           # Ticket management
 │   │   ├── actions/      # Server actions (delete-ticket, update-status, upsert-ticket)
-│   │   ├── components/   # Ticket components (ticket-filter-dropdown, ticket-item, ticket-list, ticket-more-menu, ticket-owner-options, ticket-pagination, ticket-scope-toggle, ticket-search-input, ticket-select-sort, ticket-upsert-form, skeletons)
+│   │   ├── components/   # Ticket components (ticket-filter-dropdown, ticket-item, ticket-list, ticket-more-menu, ticket-owner-options, ticket-search-input, ticket-select-sort, ticket-upsert-form, skeletons)
 │   │   ├── queries/      # Data queries with "use cache" (get-all-ticket-slugs, get-ticket, get-tickets)
 │   │   ├── search-params.ts # Type-safe search parameters with nuqs
 │   │   ├── types.ts      # Ticket types
@@ -482,20 +454,28 @@ The application uses Better Auth with multiple authentication methods:
 Components use the `HasAuthSuspense` pattern for session-dependent rendering:
 
 ```typescript
-// In page components (e.g., @header/page.tsx)
-const HeaderPage = ({ searchParams }: HeaderPageProps) => (
-  <HasAuthSuspense
-    fallback={<div className="h-(--heading-height) animate-pulse rounded-lg bg-muted" />}
-  >
-    {async (session) => {
-      const { scope } = searchParamsCache.parse(resolvedSearchParams);
-      if (session?.user && scope === "mine") {
-        return <MyTicketsHeading />;
-      }
-      return <AllTicketsHeading />;
-    }}
-  </HasAuthSuspense>
-);
+// In page components (e.g., ticket detail page)
+<TicketItem
+  comments={
+    <HasAuthSuspense fallback={<div>Loading Comments...</div>}>
+      {(user) => (
+        <CommentList
+          deleteCommentAction={deleteComment}
+          list={list}
+          loadMoreAction={getCommentsByTicketSlug}
+          metadata={metadata}
+          ticketId={ticket.id}
+          ticketSlug={ticket.slug}
+          upsertCommentAction={upsertComment}
+          userId={user?.id}
+          userName={user?.name}
+        />
+      )}
+    </HasAuthSuspense>
+  }
+  isDetail={true}
+  ticket={ticket}
+/>
 
 // Static components with caching
 const AllTicketsHeading = async () => {
@@ -523,7 +503,7 @@ This pattern enables:
 - **Scope Filtering**: Toggle between "All Tickets" and "My Tickets" with type-safe URL parameters
 - **Deadline Tracking**: Set and manage ticket deadlines
 - **Slug-based URLs**: Human-readable URLs using ticket slugs (e.g., `/this-ticket-title`)
-- **Parallel Display**: View ticket creation form and list simultaneously
+- **Unified Ticket Pages**: Ticket creation form and list displayed on the same page
 - **Responsive Controls**: Desktop button groups and mobile dropdowns for filtering
 
 ### Sample Data
