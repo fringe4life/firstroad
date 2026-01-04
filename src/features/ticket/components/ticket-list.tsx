@@ -12,12 +12,10 @@ import type { TicketListProps } from "@/features/ticket/types";
 
 const TicketList = async ({ searchParams, userId }: TicketListProps) => {
   const { list: tickets, metadata } = await getTickets(searchParams, userId);
-  console.log({ length: tickets?.length });
-  console.log("HELLO");
   return (
-    <div className="grid justify-center gap-y-4">
+    <div className="max-content-widest mx-auto grid justify-items-center gap-y-4">
       <Suspense fallback={<TicketControlsFallback />}>
-        {/* Desktop: Stacked layout with scope toggle below */}
+        {/* Desktop: Stacked layout */}
         <div className="max-content-narrow hidden gap-y-2 sm:grid">
           <div className="grid grid-flow-col grid-cols-2 gap-x-2">
             <TicketSearchInput placeholder="Search tickets ..." />
@@ -35,7 +33,7 @@ const TicketList = async ({ searchParams, userId }: TicketListProps) => {
       </Suspense>
       <GenericComponent
         Component={TicketItem}
-        className="grid gap-y-4"
+        className="grid justify-items-center gap-y-4"
         emptyStateMessage="No Tickets Found"
         items={tickets}
         renderKey={(ticket) => ticket.slug}
