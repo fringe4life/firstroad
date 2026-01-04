@@ -1,7 +1,7 @@
 import { SquareArrowOutUpRight } from "lucide-react";
 import Link from "next/link";
 import { ViewTransition } from "react";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -21,11 +21,13 @@ const TicketItem = ({
   comments,
 }: TicketItemProps) => {
   const detailButton = (
-    <Button asChild size="icon" variant="outline">
-      <Link href={ticketPath(ticket.slug)} prefetch>
-        <SquareArrowOutUpRight className="size-4" />
-      </Link>
-    </Button>
+    <Link
+      className={buttonVariants({ variant: "outline", size: "icon" })}
+      href={ticketPath(ticket.slug)}
+      prefetch
+    >
+      <SquareArrowOutUpRight className="aspect-square w-10" />
+    </Link>
   );
 
   return (

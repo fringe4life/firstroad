@@ -26,7 +26,7 @@ const TicketsPage = ({ searchParams }: PageProps<"/tickets">) => {
     <>
       <Heading description="All your tickets at one place" title="My Tickets" />
       <CardCompact
-        className="max-content-widest self-center"
+        className="max-content-narrow justify-self-center"
         content={
           <Suspense fallback={<TicketFormSkeleton />}>
             <TicketUpsertForm upsertTicketAction={upsertTicket} />

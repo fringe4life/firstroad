@@ -1,7 +1,7 @@
 import { RedirectToast } from "@/components/redirect-toast";
 
 const TicketLayout = ({ children }: LayoutProps<"/">) => (
-  <div className="grid justify-center gap-y-8">
+  <div className="grid w-full gap-y-8">
     {children}
     <RedirectToast />
   </div>

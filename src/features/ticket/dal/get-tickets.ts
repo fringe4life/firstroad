@@ -45,11 +45,12 @@ export const getTickets = async (
 
   console.log({ where, orderBy, takeAmount, skip });
 
-  // Only cache the database transaction
+  // data access layer
   const result = await paginateItems({
     getItems: () => getTicketList({ where, orderBy, takeAmount, skip }),
     getItemsCount: () => getTicketsCount({ where, orderBy }),
   });
 
+  // data transfer object
   return transformToPaginatedResult(result, { page, limit, type: "offset" });
 };

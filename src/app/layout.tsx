@@ -48,7 +48,7 @@ const RootLayout = ({ children, auth }: LayoutProps<"/">) => (
             <Header />
             <div className="layout-grid-cols grid grid-flow-col">
               <Sidebar />
-              <main className="main-inline-padding col-span-2 grid min-h-screen gap-y-8 overflow-x-clip py-24 md:col-start-2">
+              <main className="main-inline-padding col-span-2 min-h-screen overflow-x-clip py-24 md:col-start-2">
                 {children}
               </main>
             </div>

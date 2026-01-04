@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 };
 
 const HomePage = ({ searchParams }: PageProps<"/">) => (
-  <>
+  <div className="grid h-full grid-rows-[min-content_min-content_1fr] gap-y-8">
     <Heading
       description="Tickets by everyone at one place"
       title="All Tickets"
@@ -24,6 +24,6 @@ const HomePage = ({ searchParams }: PageProps<"/">) => (
     <Suspense fallback={<TicketListSkeleton />}>
       <TicketList searchParams={searchParams} />
     </Suspense>
-  </>
+  </div>
 );
 export default HomePage;

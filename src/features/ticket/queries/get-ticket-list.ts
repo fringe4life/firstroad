@@ -34,7 +34,7 @@ const getTicketList = async ({
       },
     },
     orderBy,
-    take: takeAmount + 1,
+    take: takeAmount,
     skip,
   });
 };

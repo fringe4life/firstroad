@@ -41,11 +41,18 @@ const upsertSchema = object({
 });
 
 const upsertTicket = async (
-  id: Maybe<string>,
+  id: Exclude<Maybe<string>, null>,
   _state: ActionState,
   formData: FormData,
 ): Promise<ActionState> => {
   const user = await getUserOrRedirect();
+
+  const formDataObject = Object.fromEntries(formData.entries());
+  const result = safeParse(upsertSchema, formDataObject);
+  if (!result.success) {
+    return fromErrorToActionState(result.issues, formData);
+  }
+  const slug = createSlug(result.output.title);
 
   const { error } = await tryCatch(async () => {
     if (id) {
@@ -60,27 +67,20 @@ const upsertTicket = async (
       }
     }
 
-    const result = safeParse(
-      upsertSchema,
-      Object.fromEntries(formData.entries()),
-    );
-    if (!result.success) {
-      return fromErrorToActionState(result.issues, formData);
-    }
-
-    // Generate slug from title
-    const slug = createSlug(result.output.title);
+    const {
+      output: { deadline, bounty, title },
+    } = result;
 
     const dbData = {
-      ...result.output,
+      title,
       slug,
-      deadline: new Date(result.output.deadline),
-      bounty: toCent(result.output.bounty),
+      deadline: new Date(deadline),
+      bounty: toCent(bounty),
       userId: user.id,
     };
     const ticket = await prisma.ticket.upsert({
       where: {
-        id: id || "",
+        id,
       },
       update: dbData,
       create: dbData,
@@ -100,15 +100,6 @@ const upsertTicket = async (
     redirect(ticketsPath());
   }
 
-  // For new tickets, redirect to the ticket page using the slug
-  const result = safeParse(
-    upsertSchema,
-    Object.fromEntries(formData.entries()),
-  );
-  if (!result.success) {
-    return fromErrorToActionState(result.issues, formData);
-  }
-  const slug = createSlug(result.output.title);
   setCookieByKey("toast", "Ticket created");
   redirect(ticketPath(slug));
 };
