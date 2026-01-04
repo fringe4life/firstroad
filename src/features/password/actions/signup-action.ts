@@ -14,7 +14,7 @@ import {
   string,
 } from "valibot";
 import { auth } from "@/lib/auth";
-import { homePath } from "@/path";
+import { ticketsPath } from "@/path";
 import {
   type ActionState,
   fromErrorToActionState,
@@ -64,7 +64,7 @@ const signup = async (_state: ActionState | undefined, formData: FormData) => {
       headers: await headers(),
     });
 
-    throw redirect(homePath);
+    throw redirect(ticketsPath());
   });
 
   if (error) {

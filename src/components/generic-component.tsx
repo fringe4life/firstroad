@@ -1,5 +1,5 @@
 import { Placeholder } from "@/components/placeholder";
-import type { List } from "@/features/pagination/types";
+import type { List } from "@/types";
 
 export interface GenericComponentProps<
   T,

@@ -1,10 +1,10 @@
 "use client";
 
 import { formatDistanceToNow } from "date-fns";
-import type { TimeAgoProps } from "../types";
+import type { Time } from "../types";
 
 // Client component that handles the dynamic time calculation
-const TimeAgoClient = ({ createdAt, updatedAt }: TimeAgoProps) => {
+const TimeAgoClient = <T extends Time>({ createdAt, updatedAt }: T) => {
   const createdDate = new Date(createdAt);
   const updatedDate = new Date(updatedAt);
 

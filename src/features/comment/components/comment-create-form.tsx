@@ -1,37 +1,32 @@
 "use client";
 
-import { useActionState, useEffect, useId, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 import { FieldError } from "@/components/form/field-error";
 import { Form } from "@/components/form/form";
 import { SubmitButton } from "@/components/form/submit-button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
-import { upsertComment } from "../actions/upsert-comment";
+import type { Maybe } from "@/types";
+import type { ActionState } from "@/utils/to-action-state";
+import type { CommentWithUserInfo } from "../types";
 
 interface CommentCreateFormProps {
-  ticketId: string;
+  action: (formData: FormData) => void;
+  state: ActionState<CommentWithUserInfo>;
   commentId?: string;
-  initialContent?: string;
+  initialContent?: Exclude<Maybe<string>, null>;
   onCancel?: () => void;
-  onSuccess?: () => void;
-  upsertCommentAction: typeof upsertComment;
+  onSuccessState?: (state: ActionState<CommentWithUserInfo>) => void;
 }
 
 const CommentCreateForm = ({
-  ticketId,
+  action,
+  state,
   commentId,
   initialContent = "",
   onCancel,
-  onSuccess,
+  onSuccessState,
 }: CommentCreateFormProps) => {
-  // Create a wrapper function that matches useActionState signature
-
-  const [state, formAction] = useActionState(
-    upsertComment.bind(null, commentId, ticketId),
-    EMPTY_ACTION_STATE,
-  );
-
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const contentId = useId();
 
@@ -49,14 +44,14 @@ const CommentCreateForm = ({
     }
   }, [commentId]);
 
-  const handleSuccess = () => {
+  const handleSuccess = (stateArg: ActionState<unknown>) => {
     // Reset form on success
     if (textareaRef.current) {
       textareaRef.current.value = "";
     }
-    // Call onSuccess callback to refresh data
-    if (onSuccess) {
-      onSuccess();
+    // Call onSuccessState callback with the action state (includes returned comment)
+    if (onSuccessState) {
+      onSuccessState(stateArg as ActionState<CommentWithUserInfo>);
     }
     // Call onCancel if provided (for edit mode)
     if (onCancel) {
@@ -66,10 +61,10 @@ const CommentCreateForm = ({
 
   return (
     <Form
-      action={formAction}
+      action={action}
       className="grid gap-y-2"
       onSuccessState={handleSuccess}
-      state={state}
+      state={state as ActionState<unknown>}
     >
       <div>
         <Label htmlFor={contentId}>

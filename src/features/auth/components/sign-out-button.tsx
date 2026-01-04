@@ -26,7 +26,7 @@ const SignOutButton = ({ className }: SignOutButtonProps) => {
           if (error) {
             unstable_rethrow(error);
           }
-          router.replace(homePath);
+          router.replace(homePath());
         });
       }}
       type="button"

@@ -9,18 +9,18 @@ import { getCommentsCount } from "../queries/get-comments-count";
 import { getCommentsList } from "../queries/get-comments-list";
 import type { CommentWithUserInfo } from "../types";
 
-export const getCommentsByTicketId = async (
-  ticketId: string,
+export const getCommentsByTicketSlug = async (
+  ticketSlug: string,
   cursor?: string,
   take = 3,
 ): Promise<PaginatedResult<CommentWithUserInfo>> => {
   "use cache";
   cacheTag(commentsCache());
-  cacheTag(commentsForTicketCache(ticketId));
+  cacheTag(commentsForTicketCache(ticketSlug));
   // Only cache the database query
   const { items, itemsCount } = await paginateItems({
-    getItems: () => getCommentsList({ ticketId, cursor, take }),
-    getItemsCount: () => getCommentsCount({ ticketId }),
+    getItems: () => getCommentsList({ ticketSlug, cursor, take }),
+    getItemsCount: () => getCommentsCount({ ticketSlug }),
   });
 
   return transformToPaginatedResult(

@@ -1,5 +1,7 @@
 # Layout Shift Prevention Pattern
 
+## this documentation now is kept for historic reasons (i.e. these methods are mostly unused)
+
 This document explains how we prevent Cumulative Layout Shift (CLS) when using React Suspense boundaries and dynamic layouts.
 
 ## The Problem
@@ -112,7 +114,7 @@ const SidebarSkeleton = () => (
   has-[.sidebar:hover]:[--expanded-sidebar-width:15rem]
   has-[.sidebar:focus-within]:[--expanded-sidebar-width:15rem]
 ">
-  <div className="group/sidebar-parent grid grid-flow-col grid-cols-[var(--side-width)_1fr]">
+  <div className="group/sidebar-parent grid grid-flow-col layout-grid-cols">
     <Suspense fallback={<SidebarSkeleton />}>
       <Sidebar />
     </Suspense>

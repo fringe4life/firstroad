@@ -13,7 +13,7 @@ import {
   string,
 } from "valibot";
 import { auth } from "@/lib/auth";
-import { homePath } from "@/path";
+import { accountProfilePath, ticketsPath } from "@/path";
 import type { ActionState } from "@/utils/to-action-state";
 import { fromErrorToActionState, toActionState } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
@@ -46,7 +46,7 @@ const verifyEmailVerificationOTP = async (
     });
 
     // Redirect to account profile
-    throw redirect(homePath);
+    throw redirect(accountProfilePath);
   });
 
   if (error) {
@@ -76,7 +76,7 @@ const verifySignInOTP = async (
     });
 
     // Redirect to tickets page
-    throw redirect(homePath);
+    throw redirect(ticketsPath());
   });
 
   if (error) {

@@ -4,22 +4,23 @@ import type { SearchParams } from "nuqs/server";
 import { paginateItems } from "@/features/pagination/dal/paginate-items";
 import type { PaginatedResult } from "@/features/pagination/types";
 import { transformToPaginatedResult } from "@/features/pagination/utils/to-paginated-result";
+import { getTicketList } from "@/features/ticket/queries/get-ticket-list";
+import { getTicketsCount } from "@/features/ticket/queries/get-tickets-count";
 import { searchParamsCache } from "@/features/ticket/search-params";
 import type { BaseTicket } from "@/features/ticket/types";
 import type {
   TicketOrderByWithRelationInput,
   TicketWhereInput,
 } from "@/generated/prisma/models/Ticket";
-import { getTicketList } from "../queries/get-ticket-list";
-import { getTicketsCount } from "../queries/get-tickets-count";
+import type { Maybe } from "@/types";
 
-export const getAllTickets = async (
+export const getTickets = async (
   searchParams: Promise<SearchParams>,
-  filterUserId?: string,
+  filterUserId?: Exclude<Maybe<string>, null>,
 ): Promise<PaginatedResult<BaseTicket>> => {
   // Parse search params (not cached - fast and user-specific)
   const resolvedSearchParams = await searchParams;
-  const { search, sortKey, sortValue, page, limit, scope } =
+  const { search, sortKey, sortValue, page, limit } =
     searchParamsCache.parse(resolvedSearchParams);
 
   // Build orderBy based on sort parameter
@@ -31,29 +32,24 @@ export const getAllTickets = async (
     orderBy = { bounty: sortValue };
   }
 
-  // Server-side validation: if scope is 'mine' but no user, default to 'all'
-  const effectiveScope = scope === "mine" && !filterUserId ? "all" : scope;
-
   const where: TicketWhereInput = {
-    // Only filter by userId if scope is 'mine' and user is authenticated
-    ...(effectiveScope === "mine" && filterUserId && { userId: filterUserId }),
     title: {
       contains: search,
       mode: "insensitive",
     },
+    userId: filterUserId,
   };
 
   const skip = page * limit;
   const takeAmount = limit;
 
+  console.log({ where, orderBy, takeAmount, skip });
+
   // Only cache the database transaction
-  const { items, itemsCount } = await paginateItems({
+  const result = await paginateItems({
     getItems: () => getTicketList({ where, orderBy, takeAmount, skip }),
     getItemsCount: () => getTicketsCount({ where, orderBy }),
   });
 
-  return transformToPaginatedResult(
-    { items, itemsCount },
-    { page, limit, type: "offset" },
-  );
+  return transformToPaginatedResult(result, { page, limit, type: "offset" });
 };

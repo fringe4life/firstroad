@@ -7,8 +7,8 @@ model Comment {
     ticketId String
     ticket   Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
 
-    userId   String?
-    userInfo UserInfo? @relation(fields: [userId], references: [userId], onDelete: SetNull)
+    userId   String
+    userInfo UserInfo? @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
     @@index([userId])
     @@index([ticketId])

@@ -2,6 +2,8 @@ import type { SearchParams } from "nuqs/server";
 
 export type Maybe<T> = T | null | undefined;
 
+export type List<T> = Maybe<T[]>;
+
 export interface SearchParamsProps {
   searchParams: Promise<SearchParams>;
 }

@@ -1,6 +1,6 @@
 import type { Route } from "next";
 import { headers } from "next/headers";
-import { redirect, unauthorized } from "next/navigation";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { getUser } from "@/features/auth/queries/get-user";
 import type { User } from "@/features/auth/types";
@@ -10,11 +10,9 @@ import { signInPath } from "@/path";
 const RequireAuth = async ({
   children,
   redirectPath,
-  authorize,
 }: {
   children: (user: User) => React.ReactNode;
   redirectPath?: string;
-  authorize?: (user: User) => boolean;
 }) => {
   const { user, hasUser } = await getUser();
 
@@ -34,11 +32,6 @@ const RequireAuth = async ({
     redirect(redirectUrl);
   }
 
-  // Check authorization if provided
-  if (authorize && !authorize(user)) {
-    unauthorized();
-  }
-
   return <>{children(user)}</>;
 };
 
@@ -47,17 +40,13 @@ const RequireAuthSuspense = ({
   children,
   fallback,
   redirectPath,
-  authorize,
 }: {
   children: (user: User) => React.ReactNode;
   fallback: React.ReactNode;
   redirectPath?: string;
-  authorize: (user: User) => boolean;
 }) => (
   <Suspense fallback={fallback}>
-    <RequireAuth authorize={authorize} redirectPath={redirectPath}>
-      {children}
-    </RequireAuth>
+    <RequireAuth redirectPath={redirectPath}>{children}</RequireAuth>
   </Suspense>
 );
 export { RequireAuthSuspense };

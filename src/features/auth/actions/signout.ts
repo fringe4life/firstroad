@@ -20,7 +20,7 @@ const signOut = async () => {
   }
 
   invalidateSession();
-  throw redirect(homePath, RedirectType.replace);
+  throw redirect(homePath(), RedirectType.replace);
 };
 
 export { signOut };

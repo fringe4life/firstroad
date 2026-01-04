@@ -17,7 +17,7 @@ import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect"
 import { isOwner } from "@/features/auth/utils/owner";
 import { createSlug } from "@/features/ticket/utils/slug";
 import { prisma } from "@/lib/prisma";
-import { homePath, ticketPath } from "@/path";
+import { ticketPath, ticketsPath } from "@/path";
 import type { Maybe } from "@/types";
 import { setCookieByKey } from "@/utils/cookies";
 import { toCent } from "@/utils/currency";
@@ -97,7 +97,7 @@ const upsertTicket = async (
 
   if (id) {
     setCookieByKey("toast", "Ticket updated");
-    redirect(homePath);
+    redirect(ticketsPath());
   }
 
   // For new tickets, redirect to the ticket page using the slug

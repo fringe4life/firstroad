@@ -1,21 +1,21 @@
-import type { Maybe } from "@/types";
+import type { List, Maybe } from "@/types";
 import type { LIMITS } from "./constants";
 
-export type List<T> = Maybe<T[]>;
-
-interface PaginationMetadataObject {
-  metadata: PaginationMetadata;
-}
+/**
+ * PAGINATION METADATA types
+ */
 export interface PaginationMetadata {
   count: number;
   hasNextPage: boolean;
   nextCursor: Maybe<string>;
 }
-
-export interface PaginatedResult<T> extends PaginationMetadataObject {
-  list: List<T>;
+interface PaginationMetadataObject {
+  metadata: PaginationMetadata;
 }
 
+/**
+ * PAGINATION types
+ */
 export interface RawPaginationAccess<T> {
   getItems: () => Promise<List<T>>;
   getItemsCount: () => Promise<Maybe<number>>;
@@ -26,7 +26,13 @@ export interface RawPaginationResult<T> {
   itemsCount: Maybe<number>;
 }
 
-export type LimitItem = (typeof LIMITS)[number];
+export interface PaginatedResult<T> extends PaginationMetadataObject {
+  list: List<T>;
+}
+
+/**
+ * PAGINATION COMPONENT types
+ */
 
 export type PaginationType = OffsetPaginationType | CursorPaginationType;
 
@@ -48,3 +54,5 @@ export interface PaginationProps extends PaginationMetadataObject {
   pagination: OffsetPaginationType;
   setPagination: (pagination: Omit<OffsetPaginationType, "type">) => void;
 }
+
+export type LimitItem = (typeof LIMITS)[number];

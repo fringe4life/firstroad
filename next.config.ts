@@ -8,7 +8,6 @@ const nextConfig: NextConfig = {
     browserDebugInfoInTerminal: true,
     viewTransition: true,
     mcpServer: true,
-    authInterrupts: true,
     typedEnv: true,
   },
 };

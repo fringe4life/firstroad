@@ -15,6 +15,8 @@ const Form = ({
   state,
   onSuccessState,
   onErrorState,
+  onSubmit,
+  ...formProps
 }: FormProps) => {
   useActionFeedback(state, {
     onSuccess: ({ state: stateArg }) => {
@@ -31,7 +33,12 @@ const Form = ({
     },
   });
   return (
-    <form action={action} className="grid gap-y-2">
+    <form
+      action={action}
+      className="grid gap-y-2"
+      onSubmit={onSubmit}
+      {...formProps}
+    >
       {children}
     </form>
   );

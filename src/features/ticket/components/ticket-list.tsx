@@ -1,24 +1,19 @@
 import { Suspense, ViewTransition } from "react";
 import { GenericComponent } from "@/components/generic-component";
-import { getUser } from "@/features/auth/queries/get-user";
 import { TICKET_SORT_OPTIONS } from "@/features/constants";
 import { Pagination } from "@/features/pagination/components/nuqs-pagination";
 import { TicketControlsFallback } from "@/features/ticket/components/skeletons/ticket-controls-skeleton";
 import { TicketFilterDropdown } from "@/features/ticket/components/ticket-filter-dropdown";
 import { TicketItem } from "@/features/ticket/components/ticket-item";
-import { TicketScopeToggle } from "@/features/ticket/components/ticket-scope-toggle";
 import { TicketSearchInput } from "@/features/ticket/components/ticket-search-input";
 import { TicketSortSelect } from "@/features/ticket/components/ticket-select-sort";
-import { getAllTickets } from "@/features/ticket/dal/get-tickets";
-import type { SearchParamsProps } from "@/types";
+import { getTickets } from "@/features/ticket/dal/get-tickets";
+import type { TicketListProps } from "@/features/ticket/types";
 
-const TicketList = async ({ searchParams }: SearchParamsProps) => {
-  const { user } = await getUser();
-  const { list: tickets, metadata } = await getAllTickets(
-    searchParams,
-    user?.id,
-  );
-
+const TicketList = async ({ searchParams, userId }: TicketListProps) => {
+  const { list: tickets, metadata } = await getTickets(searchParams, userId);
+  console.log({ length: tickets?.length });
+  console.log("HELLO");
   return (
     <div className="grid justify-center gap-y-4">
       <Suspense fallback={<TicketControlsFallback />}>
@@ -28,14 +23,13 @@ const TicketList = async ({ searchParams }: SearchParamsProps) => {
             <TicketSearchInput placeholder="Search tickets ..." />
             <TicketSortSelect options={TICKET_SORT_OPTIONS} />
           </div>
-          <TicketScopeToggle user={user} />
         </div>
 
         {/* Mobile: Two-column layout with dropdown */}
         <div className="max-content-narrow grid gap-y-2 sm:hidden">
           <div className="grid grid-flow-col grid-cols-2 gap-x-2">
             <TicketSearchInput placeholder="Search tickets ..." />
-            <TicketFilterDropdown user={user} />
+            <TicketFilterDropdown />
           </div>
         </div>
       </Suspense>

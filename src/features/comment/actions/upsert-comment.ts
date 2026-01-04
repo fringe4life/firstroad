@@ -1,13 +1,12 @@
 /** biome-ignore-all lint/style/noMagicNumbers: are well explained zod schema */
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { maxLength, minLength, object, parse, pipe, string } from "valibot";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
 import type { CommentWithUserInfo } from "@/features/comment/types";
 import { prisma } from "@/lib/prisma";
-import { ticketPath } from "@/path";
+import type { Maybe } from "@/types";
 import { invalidateCommentAndTicketComments } from "@/utils/invalidate-cache";
 import {
   type ActionState,
@@ -25,20 +24,12 @@ const upsertCommentSchema = object({
 });
 
 export const upsertComment = async (
-  commentId: string | undefined,
-
+  commentId: Exclude<Maybe<string>, null>,
   ticketId: string,
   _state: ActionState<unknown>,
   formData: FormData,
 ): Promise<ActionState<CommentWithUserInfo>> => {
-  console.log("[upsertComment] Starting", {
-    commentId,
-    ticketId,
-    formDataEntries: Object.fromEntries(formData.entries()),
-  });
-
   const user = await getUserOrRedirect();
-  console.log("[upsertComment] User authenticated", { userId: user.id });
 
   const { data: ticket, error } = await tryCatch(() =>
     // Verify the ticket exists
@@ -47,17 +38,13 @@ export const upsertComment = async (
     }),
   );
   if (error) {
-    console.error("[upsertComment] Ticket lookup error", { error, ticketId });
     return fromErrorToActionState(error);
   }
   if (!ticket) {
-    console.warn("[upsertComment] Ticket not found", { ticketId });
     return toActionState("Ticket not found", "ERROR");
   }
-  console.log("[upsertComment] Ticket verified", { ticketId: ticket.id });
 
   if (commentId) {
-    console.log("[upsertComment] Updating existing comment", { commentId });
     // If updating, verify comment exists and user owns it
     const { data: comment, error: commentError } = await tryCatch(() =>
       prisma.comment.findUnique({
@@ -65,47 +52,24 @@ export const upsertComment = async (
       }),
     );
     if (commentError) {
-      console.error("[upsertComment] Comment lookup error", {
-        error: commentError,
-        commentId,
-      });
       return fromErrorToActionState(commentError);
     }
     if (!comment) {
-      console.warn("[upsertComment] Comment not found", { commentId });
       return toActionState("Comment not found", "ERROR");
     }
 
     const userIsOwner = isOwner(user, comment);
-    console.log("[upsertComment] Ownership check", {
-      commentId,
-      userId: user.id,
-      commentUserId: comment.userId,
-      isOwner: userIsOwner,
-    });
 
     if (!userIsOwner) {
-      console.warn("[upsertComment] User does not own comment", {
-        commentId,
-        userId: user.id,
-        commentUserId: comment.userId,
-      });
       return toActionState(
         "Comment not found or you don't have permission to edit it",
         "ERROR",
       );
     }
-  } else {
-    console.log("[upsertComment] Creating new comment");
   }
 
   const formDataObject = Object.fromEntries(formData.entries());
-  console.log("[upsertComment] Parsing form data", { formDataObject });
-
   const parsedData = parse(upsertCommentSchema, formDataObject);
-  console.log("[upsertComment] Form data validated", {
-    contentLength: parsedData.content.length,
-  });
 
   const upsertData = commentId
     ? {
@@ -127,13 +91,6 @@ export const upsertComment = async (
         },
       };
 
-  console.log("[upsertComment] Upserting comment", {
-    commentId: commentId || "new",
-    ticketId,
-    userId: user.id,
-    contentLength: parsedData.content.length,
-  });
-
   const { data: comment, error: commentError } = await tryCatch(() =>
     prisma.comment.upsert({
       ...upsertData,
@@ -151,31 +108,12 @@ export const upsertComment = async (
     }),
   );
   if (commentError) {
-    console.error("[upsertComment] Comment upsert error", {
-      error: commentError,
-      commentId,
-      ticketId,
-    });
     return fromErrorToActionState(commentError);
   }
   if (!comment) {
-    console.error("[upsertComment] Comment upsert returned null", {
-      commentId,
-      ticketId,
-    });
     return toActionState("Comment not found", "ERROR");
   }
-  console.log("[upsertComment] Comment upserted successfully", {
-    commentId: comment.id,
-    ticketId: comment.ticketId,
-  });
 
-  console.log("[upsertComment] Updating cache tags", {
-    ticketId,
-    commentId: comment.id,
-  });
-  invalidateCommentAndTicketComments(comment.id, ticketId, ticket.slug);
-  revalidatePath(ticketPath(ticket.slug));
   // Add isOwner property to the comment
   const commentWithOwnership = {
     ...comment,
@@ -185,11 +123,9 @@ export const upsertComment = async (
   const successMessage = commentId
     ? "Comment updated successfully"
     : "Comment created successfully";
-  console.log("[upsertComment] Returning success", {
-    commentId: comment.id,
-    message: successMessage,
-  });
 
+  invalidateCommentAndTicketComments(comment.id, ticketId, ticket.slug);
+  // revalidatePath(ticketPath(ticket.slug));
   return toActionState(
     successMessage,
     "SUCCESS",

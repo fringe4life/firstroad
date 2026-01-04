@@ -3,11 +3,11 @@
 import { ConfirmDeleteIcon } from "@/components/confirm-delete-icon";
 import { useConfirmDialog } from "@/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
-import { deleteComment } from "@/features/comment/actions/delete-comment";
+import type { ActionState } from "@/utils/to-action-state";
 
 interface CommentDeleteButtonProps {
   id: string;
-  onDeleteComment: (commentId: string) => void;
+  onDeleteComment: (commentId: string) => Promise<ActionState<string>>;
 }
 
 const CommentDeleteButton = ({
@@ -15,7 +15,7 @@ const CommentDeleteButton = ({
   onDeleteComment,
 }: CommentDeleteButtonProps) => {
   const [getDeleteButton, deleteDialog, isPending] = useConfirmDialog({
-    action: deleteComment.bind(null, id),
+    action: () => onDeleteComment(id),
     trigger: ({ isPending: isPendingArg, onClick }) => (
       <Button
         disabled={isPendingArg}
@@ -30,9 +30,6 @@ const CommentDeleteButton = ({
     description:
       "Are you sure you want to delete this comment? This action cannot be undone.",
     closeOnSubmit: true, // Close dialog immediately for optimistic updates
-    onSuccess: () => {
-      onDeleteComment(id);
-    },
     onError: () => {
       // Error is handled by the form's onError callback
     },

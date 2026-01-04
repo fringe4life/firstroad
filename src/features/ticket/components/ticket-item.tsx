@@ -15,7 +15,11 @@ import type { TicketItemProps } from "@/features/ticket/types";
 import { ticketPath } from "@/path";
 import { toCurrencyFromCent } from "@/utils/currency";
 
-const TicketItem = ({ ticket, isDetail = false }: TicketItemProps) => {
+const TicketItem = ({
+  ticket,
+  isDetail = false,
+  comments,
+}: TicketItemProps) => {
   const detailButton = (
     <Button asChild size="icon" variant="outline">
       <Link href={ticketPath(ticket.slug)} prefetch>
@@ -69,6 +73,7 @@ const TicketItem = ({ ticket, isDetail = false }: TicketItemProps) => {
             )}
           </div>
         </div>
+        {comments}
       </div>
     </ViewTransition>
   );

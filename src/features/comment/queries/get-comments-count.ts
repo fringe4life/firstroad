@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 
-const getCommentsCount = ({ ticketId }: { ticketId: string }) =>
-  prisma.comment.count({ where: { ticketId } });
+const getCommentsCount = ({ ticketSlug }: { ticketSlug: string }) =>
+  prisma.comment.count({ where: { ticket: { slug: ticketSlug } } });
 
 export { getCommentsCount };

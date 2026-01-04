@@ -9,6 +9,7 @@ import { tryCatch } from "@/utils/try-catch";
 
 export const deleteComment = async (commentId: string) => {
   const user = await getUserOrRedirect();
+
   const { data: comment, error } = await tryCatch(() =>
     prisma.comment.findUnique({
       where: { id: commentId },
@@ -21,10 +22,14 @@ export const deleteComment = async (commentId: string) => {
     return fromErrorToActionState(error);
   }
   if (!comment) {
-    return fromErrorToActionState("Comment not found");
+    // Return success instead of error if comment is already deleted
+    // This handles race conditions where optimistic delete already removed it
+    return toActionState("Comment already deleted", "SUCCESS");
   }
 
-  if (!isOwner(user, comment)) {
+  const userIsOwner = isOwner(user, comment);
+
+  if (!userIsOwner) {
     return fromErrorToActionState("You can only delete your own comments");
   }
 
@@ -36,6 +41,7 @@ export const deleteComment = async (commentId: string) => {
   if (deleteError) {
     return fromErrorToActionState(deleteError);
   }
+
   if (comment.ticket.slug) {
     invalidateCommentAndTicketComments(
       commentId,

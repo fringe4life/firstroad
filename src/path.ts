@@ -1,8 +1,10 @@
 import type { Route } from "next";
 
-const homePath: Route = "/";
+const homePath = (): Route => "/";
 
-const ticketPath = (slug: string): Route => `${homePath}${slug}` as Route;
+const ticketsPath = (): Route => "/tickets";
+
+const ticketPath = (slug: string): Route => `${ticketsPath()}/${slug}` as Route;
 
 const ticketEditPath = (slug: string): Route =>
   `${ticketPath(slug)}/edit` as Route;
@@ -27,6 +29,7 @@ const organisationsPath: Route = "/organisations";
 
 export {
   homePath,
+  ticketsPath,
   forgotPasswordPath,
   resetPasswordPath,
   verifyEmailPath,

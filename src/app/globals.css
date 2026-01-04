@@ -113,7 +113,7 @@
   ); /* h2 + p + separator + gap */
 
   --side-width: 0;
-  --expanded-sidebar-width: 0;
+  --expanded-sidebar-width: 15rem;
   --auth-nav-width: 10.5rem;
   --padding-inline-main: 2rem;
 
@@ -248,104 +248,102 @@
 }
 
 /* View Transition Animations */
-@media (prefers-reduced-motion: no-preference) {
-  /* Slide forward (list → detail) */
-  ::view-transition-old(.slide-forward) {
-    animation:
-      150ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
-      400ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
-  }
+/* Slide forward (list → detail) */
+::view-transition-old(.slide-forward) {
+  animation:
+    150ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
+    400ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
+}
 
-  ::view-transition-new(.slide-forward) {
-    animation:
-      210ms cubic-bezier(0, 0, 0.2, 1) 150ms both fade-in,
-      400ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
-  }
+::view-transition-new(.slide-forward) {
+  animation:
+    210ms cubic-bezier(0, 0, 0.2, 1) 150ms both fade-in,
+    400ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
+}
 
-  /* Slide back (detail → list) */
-  ::view-transition-old(.slide-back) {
-    animation:
-      150ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
-      400ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-right;
-  }
+/* Slide back (detail → list) */
+::view-transition-old(.slide-back) {
+  animation:
+    150ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
+    400ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-right;
+}
 
-  ::view-transition-new(.slide-back) {
-    animation:
-      210ms cubic-bezier(0, 0, 0.2, 1) 150ms both fade-in,
-      400ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-left;
-  }
+::view-transition-new(.slide-back) {
+  animation:
+    210ms cubic-bezier(0, 0, 0.2, 1) 150ms both fade-in,
+    400ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-left;
+}
 
-  /* Keyframe definitions */
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
+/* Keyframe definitions */
+@keyframes fade-in {
+  from {
+    opacity: 0;
   }
+}
 
-  @keyframes fade-out {
-    to {
-      opacity: 0;
-    }
+@keyframes fade-out {
+  to {
+    opacity: 0;
   }
+}
 
-  @keyframes --slide-to-right {
-    to {
-      translate: 3.125rem 0;
-    }
+@keyframes --slide-to-right {
+  to {
+    translate: 3.125rem 0;
   }
+}
 
-  @keyframes --slide-from-right {
-    from {
-      translate: 3.125rem; /* 50px */
-    }
+@keyframes --slide-from-right {
+  from {
+    translate: 3.125rem; /* 50px */
   }
+}
 
-  @keyframes --slide-left {
-    from {
-      transform: translateX(-100%);
-      opacity: 0;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
+@keyframes --slide-left {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
   }
-
-  @keyframes --slide-to-left {
-    to {
-      translate: -3.125rem 0;
-    }
+  to {
+    transform: translateX(0);
+    opacity: 1;
   }
+}
 
-  @keyframes --slide-from-left {
-    from {
-      translate: -3.125rem 0;
-    }
+@keyframes --slide-to-left {
+  to {
+    translate: -3.125rem 0;
   }
+}
 
-  /* Slide animations for Suspense loading states */
-  ::view-transition-old(.slide-down) {
-    animation:
-      150ms ease-out both --fade-out,
-      150ms ease-out both --slide-down;
+@keyframes --slide-from-left {
+  from {
+    translate: -3.125rem 0;
   }
+}
 
-  ::view-transition-new(.slide-up) {
-    animation:
-      210ms ease-in 150ms both --fade-in,
-      400ms ease-in both --slide-up;
+/* Slide animations for Suspense loading states */
+::view-transition-old(.slide-down) {
+  animation:
+    150ms ease-out both --fade-out,
+    150ms ease-out both --slide-down;
+}
+
+::view-transition-new(.slide-up) {
+  animation:
+    210ms ease-in 150ms both --fade-in,
+    400ms ease-in both --slide-up;
+}
+
+@keyframes --slide-up {
+  from {
+    transform: translateY(0.625rem); /* 10px */
   }
+}
 
-  @keyframes --slide-up {
-    from {
-      transform: translateY(0.625rem); /* 10px */
-    }
-  }
-
-  @keyframes --slide-down {
-    to {
-      transform: translateY(0.625rem); /* 10px */
-    }
+@keyframes --slide-down {
+  to {
+    transform: translateY(0.625rem); /* 10px */
   }
 }
 

@@ -1,11 +1,12 @@
 import { CommentDeleteButton } from "@/features/comment/components/comment-delete-button";
 import { CommentEditButton } from "@/features/comment/components/comment-edit-button";
 import type { Comment } from "@/features/comment/types";
+import type { ActionState } from "@/utils/to-action-state";
 
 interface CommentOwnerButtonsProps {
   comment: Comment;
   onEdit: (commentId: string, content: string) => void;
-  onDeleteComment: (commentId: string) => void;
+  onDeleteComment: (commentId: string) => Promise<ActionState<string>>;
 }
 
 const CommentOwnerButtons = ({

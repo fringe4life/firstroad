@@ -19,8 +19,6 @@ const CommentItem = ({ comment, buttons }: CommentItemProps) => {
     .toUpperCase()
     .slice(0, 2);
 
-  // Time display is now handled by the TimeAgo client component
-
   return (
     <div className="flex gap-2">
       <Card className="max-content-narrow gap-0">

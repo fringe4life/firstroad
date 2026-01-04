@@ -13,7 +13,7 @@ import {
   string,
 } from "valibot";
 import { auth } from "@/lib/auth";
-import { homePath } from "@/path";
+import { ticketsPath } from "@/path";
 import { invalidateSession } from "@/utils/invalidate-cache";
 import {
   type ActionState,
@@ -49,7 +49,7 @@ const signin = async (_state: ActionState | undefined, formData: FormData) => {
     return fromErrorToActionState(error, formData);
   }
   invalidateSession();
-  throw redirect(homePath, RedirectType.replace);
+  throw redirect(ticketsPath(), RedirectType.replace);
 };
 
 export { signin };

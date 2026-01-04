@@ -17,7 +17,7 @@ const Header = () => (
       </Suspense>
       <Link
         className={buttonVariants({ variant: "ghost", size: "lg" })}
-        href={homePath}
+        href={homePath()}
       >
         <Kanban />
         <h1 className="font-semibold text-lg">TicketBounty</h1>

@@ -11,15 +11,19 @@ import {
   BreadcrumbSeparator,
 } from "./ui/breadcrumb";
 
-interface BreadcrumbsProps {
-  breadcrumbs: {
-    title: string;
-    href?: Route;
-  }[];
+interface BreadcrumbItemProps {
+  title: string;
+  href?: Route;
 }
 
-const Breadcrumbs = ({ breadcrumbs }: BreadcrumbsProps) => (
-  <Breadcrumb>
+interface BreadcrumbsProps<T> {
+  breadcrumbs: T[];
+}
+
+const Breadcrumbs = <T extends BreadcrumbItemProps>({
+  breadcrumbs,
+}: BreadcrumbsProps<T>) => (
+  <Breadcrumb className="self-start">
     <BreadcrumbList>
       {breadcrumbs.map((breadcrumb, index) => {
         let breadcrumbItem = (

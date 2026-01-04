@@ -34,7 +34,7 @@ const NavItems = () => {
               {cloneElement(item.icon, {
                 className: "w-5 aspect-square",
               } as React.HTMLAttributes<HTMLElement>)}
-              <span className="absolute left-12 text-base opacity-0 transition-opacity duration-200 hover:opacity-100 group-has-[.sidebar:focus-within]/sidebar-parent:opacity-75 group-has-[.sidebar:hover]/sidebar-parent:opacity-75">
+              <span className="absolute left-12 text-base opacity-0 transition-opacity duration-200 hover:opacity-100">
                 {item.title}
               </span>
             </Link>

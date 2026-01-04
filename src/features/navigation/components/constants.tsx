@@ -4,24 +4,24 @@ import {
   LucideLibrary,
   LucideUsers,
 } from "lucide-react";
-import { accountProfilePath, homePath, organisationsPath } from "@/path";
-import { createTicketScopeLink } from "@/utils/typed-links";
+import {
+  accountProfilePath,
+  homePath,
+  organisationsPath,
+  ticketsPath,
+} from "@/path";
 import type { NavItem } from "../types/types";
-
-// Create typed links for ticket scope navigation
-const allTicketsLink = createTicketScopeLink(homePath);
-const myTicketsLink = createTicketScopeLink(homePath);
 
 const navItems: NavItem[] = [
   {
     title: "All Tickets",
     icon: <LucideLibrary />,
-    href: allTicketsLink({ scope: "all" }),
+    href: homePath(),
   },
   {
     title: "My Tickets",
     icon: <LucideBook />,
-    href: myTicketsLink({ scope: "mine" }),
+    href: ticketsPath(),
   },
   {
     seperator: true,
