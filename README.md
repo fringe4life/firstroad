@@ -9,7 +9,7 @@
 [![Better Auth](https://img.shields.io/badge/Better%20Auth-1.4.10-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.18-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Biome](https://img.shields.io/badge/Biome-2.3.11-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-7.0.7-000000)](https://ultracite.dev/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-7.0.8-000000)](https://ultracite.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.8.6-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.2.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Inngest](https://img.shields.io/badge/Inngest-3.48.1-000000)](https://www.inngest.com/)
@@ -22,7 +22,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 
 ## 🚀 Features
 
-- **🔐 Authentication**: Secure user authentication with Better Auth (email/password + OTP)
+- **🔐 Authentication**: Secure user authentication with Better Auth (email/password + OTP) with email enumeration protection
 - **🏢 Organization Management**: Create and manage organizations with member and invitation systems
 - **🎫 Ticket Management**: Create, edit, and manage tickets with status tracking
 - **💬 Comments System**: Add, edit, and delete comments on tickets with infinite pagination
@@ -61,7 +61,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **Email**: React Email 5.1.1 with Resend 6.6.0 for transactional emails
 - **Background Jobs**: Inngest 3.48.1 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
-- **Linting**: Biome 2.3.11 for fast formatting and linting with Ultracite 7.0.7 rules
+- **Linting**: Biome 2.3.11 for fast formatting and linting with Ultracite 7.0.8 rules
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 
@@ -336,8 +336,9 @@ src/
 │   ├── auth/             # Authentication logic
 │   │   ├── actions/      # Server actions (send-otp-action, verify-otp-action, signout)
 │   │   ├── components/   # Auth components (account-dropdown, auth-nav-skeleton, change-password-form, has-auth, otp-send-form, otp-verify-form, require-auth, sign-out-button, sign-out-form)
+│   │   ├── dto/          # Data transfer objects (item-with-ownership, items-with-ownership)
 │   │   ├── events/       # Inngest events (email-otp, email-verification, welcome-email)
-│   │   ├── queries/      # Server-side queries (get-user, get-user-or-redirect)
+│   │   ├── queries/      # Server-side queries (get-user, get-user-or-redirect, user-exists)
 │   │   ├── types.ts      # Centralized auth types
 │   │   └── utils/        # Auth utilities (owner, send-email-otp, send-email-verification, send-password-changed-email, send-welcome-email)
 │   ├── navigation/       # Navigation components
@@ -365,7 +366,7 @@ src/
 │   │   ├── constants.ts  # Comment constants (INITIAL_EDITING_STATE)
 │   │   ├── dal/         # Data access layer (get-comments)
 │   │   ├── hooks/        # Comment hooks (use-comment-optimistic)
-│   │   ├── queries/      # Comment queries (get-comments-count, get-comments-list)
+│   │   ├── queries/      # Comment queries (find-comment, get-comments-count, get-comments-list)
 │   │   └── types.ts      # Comment types (Comment, CommentWithUserInfo, CommentState, EditingState)
 │   ├── password/         # Password management
 │   │   ├── actions/      # Password actions (change-password-action, forgot-password-action, reset-password-action, signin-action, signup-action)

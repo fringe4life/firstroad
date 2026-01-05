@@ -23,7 +23,7 @@ interface BreadcrumbsProps<T> {
 const Breadcrumbs = <T extends BreadcrumbItemProps>({
   breadcrumbs,
 }: BreadcrumbsProps<T>) => (
-  <Breadcrumb className="self-start">
+  <Breadcrumb className="self-start justify-self-stretch">
     <BreadcrumbList>
       {breadcrumbs.map((breadcrumb, index) => {
         let breadcrumbItem = (

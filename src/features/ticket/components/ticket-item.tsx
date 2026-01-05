@@ -37,7 +37,7 @@ const TicketItem = ({
       name={`ticket-${ticket.id}`}
     >
       <div
-        className="max-content-narrow detail:max-content-widest grid gap-y-4"
+        className="max-content-narrow detail:max-content-widest grid gap-y-4 justify-self-center"
         data-detail={isDetail}
       >
         <div className="grid grid-flow-col grid-cols-[1fr_36px] gap-x-2">
