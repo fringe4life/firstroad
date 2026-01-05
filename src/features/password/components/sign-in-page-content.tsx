@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { CardCompact } from "@/components/card-compact";
 import { signin } from "@/features/password/actions/signin-action";
-import { forgotPasswordPath, signUpPath } from "@/path";
+import { forgotPasswordPath, signInOTPSendPath, signUpPath } from "@/path";
 import { SignInForm } from "./sign-in-form";
 
 const SignInPageContent = () => (
@@ -18,6 +18,12 @@ const SignInPageContent = () => (
           href={forgotPasswordPath}
         >
           Forgot Password?
+        </Link>
+        <Link
+          className="text-muted-foreground text-sm"
+          href={signInOTPSendPath}
+        >
+          Sign in with OTP
         </Link>
       </div>
     }

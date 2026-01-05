@@ -1,28 +1,31 @@
 "use server";
 
 import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
+import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { prisma } from "@/lib/prisma";
 import { invalidateCommentAndTicketComments } from "@/utils/invalidate-cache";
 import { fromErrorToActionState, toActionState } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
 
 export const deleteComment = async (commentId: string) => {
-  // const user = await getUserOrRedirect();
+  const user = await getUserOrRedirect();
 
   // verify comment exists
   const { data: commentWithOwnership, error: commentError } = await tryCatch(
     () =>
-      itemWithOwnership(() =>
-        prisma.comment.findUnique({
-          where: { id: commentId },
-          include: {
-            ticket: {
-              select: {
-                slug: true,
+      itemWithOwnership(
+        () =>
+          prisma.comment.findUnique({
+            where: { id: commentId },
+            include: {
+              ticket: {
+                select: {
+                  slug: true,
+                },
               },
             },
-          },
-        }),
+          }),
+        user,
       ),
   );
   if (commentError) {
@@ -41,13 +44,11 @@ export const deleteComment = async (commentId: string) => {
     return fromErrorToActionState(deleteError);
   }
 
-  if (commentWithOwnership.ticket.slug) {
-    invalidateCommentAndTicketComments(
-      commentId,
-      commentWithOwnership.ticketId,
-      commentWithOwnership.ticket.slug,
-    );
-  }
+  invalidateCommentAndTicketComments(
+    commentWithOwnership.id,
+    commentWithOwnership.ticketId,
+    commentWithOwnership.ticket.slug,
+  );
 
   return toActionState("Comment deleted successfully", "SUCCESS");
 };

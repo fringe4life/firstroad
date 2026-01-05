@@ -8,10 +8,11 @@ import {
   examples,
   minLength,
   object,
-  parse,
   pipe,
+  safeParse,
   string,
 } from "valibot";
+import { userExists } from "@/features/auth/queries/user-exists";
 import { auth } from "@/lib/auth";
 import { setCookieByKey } from "@/utils/cookies";
 import type { ActionState } from "@/utils/to-action-state";
@@ -34,27 +35,47 @@ const sendEmailVerificationOTP = async (
 ): Promise<ActionState> => {
   const formDataObject = Object.fromEntries(formData.entries());
 
-  const { error } = await tryCatch(async () => {
-    const parsed = parse(emailSchema, formDataObject);
-    await auth.api.sendVerificationOTP({
-      body: {
-        email: parsed.email,
-        type: "email-verification",
-      },
-      headers: await headers(),
-    });
+  // Parse email first
+  const result = safeParse(emailSchema, formDataObject);
+  if (!result.success) {
+    return fromErrorToActionState(result.issues, formData);
+  }
 
+  // Check if user exists to prevent email enumeration
+  const { data: exists, error: dbError } = await tryCatch(async () =>
+    userExists(result.output.email),
+  );
+
+  if (dbError) {
+    return toActionState("Something went wrong", "ERROR", formData);
+  }
+
+  const { error } = await tryCatch(async () => {
+    // If user doesn't exist, return success without calling Better Auth
+    // This prevents email enumeration attacks
+    if (exists) {
+      // call verification function
+      await auth.api.sendVerificationOTP({
+        body: {
+          email: result.output.email,
+          type: "email-verification",
+        },
+        headers: await headers(),
+      });
+    }
+
+    // proceed with the other steps
     // Set toast cookie to show success message
-    await setCookieByKey("toast", "Verification code sent to your email");
+    setCookieByKey("toast", "Verification code sent to your email");
 
     // Redirect to verify page with email in URL
-    const verifyUrl = `/verify-email/otp/verify?email=${encodeURIComponent(parsed.email)}`;
+    const verifyUrl = `/verify-email/otp/verify?email=${encodeURIComponent(result.output.email)}`;
     throw redirect(verifyUrl as Route);
   });
 
   if (error) {
     unstable_rethrow(error);
-    return fromErrorToActionState(error, formData);
+    return fromErrorToActionState(new Error("Something went wrong"), formData);
   }
 
   // This should never be reached due to redirect, but satisfies TypeScript
@@ -67,27 +88,46 @@ const sendSignInOTP = async (
 ): Promise<ActionState> => {
   const formDataObject = Object.fromEntries(formData.entries());
 
-  const { error } = await tryCatch(async () => {
-    const parsed = parse(emailSchema, formDataObject);
-    await auth.api.sendVerificationOTP({
-      body: {
-        email: parsed.email,
-        type: "sign-in",
-      },
-      headers: await headers(),
-    });
+  // Parse email first
+  const result = safeParse(emailSchema, formDataObject);
+  if (!result.success) {
+    return fromErrorToActionState(result.issues, formData);
+  }
 
+  // Check if user exists to prevent email enumeration
+  const { data: exists, error: dbError } = await tryCatch(async () =>
+    userExists(result.output.email),
+  );
+
+  if (dbError) {
+    return toActionState("Something went wrong", "ERROR", formData);
+  }
+
+  const { error } = await tryCatch(async () => {
+    // If user exists call verififcation function
+    // This prevents email enumeration attacks
+    if (exists) {
+      await auth.api.sendVerificationOTP({
+        body: {
+          email: result.output.email,
+          type: "sign-in",
+        },
+        headers: await headers(),
+      });
+    }
+
+    // proceed with the other steps
     // Set toast cookie to show success message
     setCookieByKey("toast", "Verification code sent to your email");
 
     // Redirect to verify page with email in URL
-    const verifyUrl = `/sign-in/otp/verify?email=${encodeURIComponent(parsed.email)}`;
+    const verifyUrl = `/sign-in/otp/verify?email=${encodeURIComponent(result.output.email)}`;
     throw redirect(verifyUrl as Route);
   });
 
   if (error) {
     unstable_rethrow(error);
-    return fromErrorToActionState(error, formData);
+    return fromErrorToActionState(new Error("Something went wrong"), formData);
   }
 
   // This should never be reached due to redirect, but satisfies TypeScript

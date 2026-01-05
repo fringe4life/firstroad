@@ -18,13 +18,14 @@ export const getCommentsByTicketSlug = async (
   cacheTag(commentsCache());
   cacheTag(commentsForTicketCache(ticketSlug));
   // Only cache the database query
-  const { items, itemsCount } = await paginateItems({
+  const result = await paginateItems({
     getItems: () => getCommentsList({ ticketSlug, cursor, take }),
     getItemsCount: () => getCommentsCount({ ticketSlug }),
   });
 
-  return transformToPaginatedResult(
-    { items, itemsCount },
-    { cursor, limit: take, type: "cursor" },
-  );
+  return transformToPaginatedResult(result, {
+    cursor,
+    limit: take,
+    type: "cursor",
+  });
 };

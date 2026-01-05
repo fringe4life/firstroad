@@ -33,7 +33,7 @@ const TicketList = async ({ searchParams, userId }: TicketListProps) => {
       </Suspense>
       <GenericComponent
         Component={TicketItem}
-        className="grid justify-items-center gap-y-4"
+        className="grid h-full justify-items-center gap-y-4 self-start justify-self-stretch"
         emptyStateMessage="No tickets found"
         errorStateMessage="Failed to fetch tickets"
         items={tickets}

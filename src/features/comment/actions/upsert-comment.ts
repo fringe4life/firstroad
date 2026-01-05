@@ -16,7 +16,7 @@ import {
   toActionState,
 } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
-import { findComment } from "../queries/find-ticket";
+import { findComment } from "../queries/find-comment";
 
 const upsertCommentSchema = object({
   content: pipe(
@@ -46,7 +46,7 @@ export const upsertComment = async (
   if (commentId) {
     // If updating, verify comment exists and user owns it
     const { data: commentWithOwnership, error: commentError } = await tryCatch(
-      () => itemWithOwnership(() => findComment(commentId)),
+      () => itemWithOwnership(() => findComment(commentId), user),
     );
     if (commentError) {
       return fromErrorToActionState(commentError);
@@ -99,7 +99,6 @@ export const upsertComment = async (
     : "Comment created successfully";
 
   invalidateCommentAndTicketComments(comment.id, ticketId, ticket.slug);
-  // revalidatePath(ticketPath(ticket.slug));
   return toActionState(
     successMessage,
     "SUCCESS",

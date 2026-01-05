@@ -2,6 +2,12 @@ import type { List, Maybe } from "@/types";
 import type { IsOwner, User, UserVerifiable } from "../types";
 import { isOwner } from "../utils/owner";
 
+/**
+ * @abstract DAL helper for adding ownership information to a list of items
+ * @param itemsPromise a function that returns a promise of a list of items
+ * @param user the user to check ownership against
+ * @returns the list of items with the isOwner property
+ */
 const itemsWithOwnership = async <T extends UserVerifiable>(
   itemsPromise: () => Promise<List<T>>,
   user: Maybe<User>,
