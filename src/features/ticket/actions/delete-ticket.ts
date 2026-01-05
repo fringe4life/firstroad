@@ -1,39 +1,37 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
-import { isOwner } from "@/features/auth/utils/owner";
+import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
 import { prisma } from "@/lib/prisma";
 import { ticketsPath } from "@/path";
 import { setCookieByKey } from "@/utils/cookies";
 import { invalidateTicketAndList } from "@/utils/invalidate-cache";
 import { fromErrorToActionState } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
+import { findTicket } from "../queries/find-ticket";
 
 export const deleteTicket = async (id: string) => {
-  const user = await getUserOrRedirect();
+  const { data: slug, error } = await tryCatch(async () => {
+    // verify ticket exists and user is owner
+    const ticket = await itemWithOwnership(() => findTicket(id));
 
-  const { error } = await tryCatch(async () => {
-    await prisma.$transaction(async (tx) => {
-      const ticket = await tx.ticket.findUnique({
-        where: {
-          id,
-        },
-      });
+    // check if user is owner
+    if (!ticket?.isOwner) {
+      throw new Error("Ticket Not Found");
+    }
+    // delete ticket
+    await prisma.ticket.delete({ where: { id } });
 
-      if (!(ticket && isOwner(user, ticket))) {
-        throw new Error("Ticket Not Found");
-      }
-
-      await tx.ticket.delete({ where: { id } });
-      if (ticket.slug) {
-        invalidateTicketAndList(ticket.slug);
-      }
-    });
+    return ticket.slug;
   });
 
   if (error) {
     return fromErrorToActionState(error);
+  }
+
+  // invalidate cache
+  if (slug) {
+    invalidateTicketAndList(slug);
   }
 
   setCookieByKey("toast", "Ticket deleted");

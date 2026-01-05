@@ -13,8 +13,8 @@ import {
   string,
   toNumber,
 } from "valibot";
+import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
-import { isOwner } from "@/features/auth/utils/owner";
 import { createSlug } from "@/features/ticket/utils/slug";
 import { prisma } from "@/lib/prisma";
 import { ticketPath, ticketsPath } from "@/path";
@@ -25,9 +25,9 @@ import { invalidateTicketAndList } from "@/utils/invalidate-cache";
 import {
   type ActionState,
   fromErrorToActionState,
-  toActionState,
 } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
+import { findTicket } from "../queries/find-ticket";
 
 const upsertSchema = object({
   title: pipe(string(), minLength(1), maxLength(191)),
@@ -56,14 +56,9 @@ const upsertTicket = async (
 
   const { error } = await tryCatch(async () => {
     if (id) {
-      const ticket = await prisma.ticket.findUnique({
-        where: {
-          id,
-        },
-      });
-
-      if (!(ticket && isOwner(user, ticket))) {
-        return toActionState("Ticket Not Found", "ERROR");
+      const ticket = await itemWithOwnership(() => findTicket(id));
+      if (!ticket?.isOwner) {
+        throw new Error("Ticket Not Found");
       }
     }
 

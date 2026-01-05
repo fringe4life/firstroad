@@ -26,7 +26,7 @@ export const getTickets = async (
   // Build orderBy based on sort parameter
   let orderBy: TicketOrderByWithRelationInput = {
     createdAt: sortValue,
-  }; // default
+  };
 
   if (sortKey === "bounty") {
     orderBy = { bounty: sortValue };
@@ -42,8 +42,6 @@ export const getTickets = async (
 
   const skip = page * limit;
   const takeAmount = limit;
-
-  console.log({ where, orderBy, takeAmount, skip });
 
   // data access layer
   const result = await paginateItems({

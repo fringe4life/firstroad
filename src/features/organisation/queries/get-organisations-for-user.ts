@@ -7,7 +7,7 @@ import type { BaseOrganisation, Member } from "../types";
 const getOrganisationByUser = async (): Promise<Maybe<BaseOrganisation[]>> => {
   "use cache: private";
   const { user, hasUser } = await getUser();
-  if (!(hasUser && user)) {
+  if (!hasUser) {
     return null;
   }
   const userId = user.id;

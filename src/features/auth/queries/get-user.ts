@@ -17,12 +17,10 @@ const getUser = async (): Promise<UserProp> => {
       }),
   );
 
-  const hasUser = Boolean(session?.user?.id);
-
-  return {
-    user: session?.user,
-    hasUser,
-  };
+  if (session?.user) {
+    return { user: session.user, hasUser: true };
+  }
+  return { user: null, hasUser: false };
 };
 
 export { getUser };

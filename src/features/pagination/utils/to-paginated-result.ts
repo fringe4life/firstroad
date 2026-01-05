@@ -2,12 +2,18 @@ import { NO_PAGINATION } from "@/features/pagination/constants";
 import type {
   PaginatedResult,
   PaginationType,
-  RawPaginationResult,
+  RawPaginatedResult,
 } from "@/features/pagination/types";
-import type { Id, Maybe } from "@/types";
+import type { Id } from "@/types";
 
+/**
+ * @abstract transformation function to convert raw pagination result to paginated result
+ * @param RawPaginationResult { items, itemsCount }
+ * @param PaginationType { type, page, limit }
+ * @returns PaginatedResult { list, metadata }
+ */
 const transformToPaginatedResult = <T extends Id>(
-  { items, itemsCount }: RawPaginationResult<T>,
+  { items, itemsCount }: RawPaginatedResult<T>,
   pagination: PaginationType,
 ): PaginatedResult<T> => {
   if (pagination.type === "offset") {
@@ -25,13 +31,12 @@ const transformToPaginatedResult = <T extends Id>(
       },
     };
   }
+  // TODO: fix this to also determine hasPreviousPage, to reverse items if needed etc
   if (pagination.type === "cursor") {
     const list = items;
     const totalCount = itemsCount ?? 0;
     const hasNextPage = list ? list.length > pagination.limit : false;
-    const nextCursor: Maybe<string> = hasNextPage
-      ? (list?.at(-1)?.id ?? null)
-      : null;
+    const nextCursor = hasNextPage ? (list?.at(-1)?.id ?? null) : null;
 
     return {
       list,

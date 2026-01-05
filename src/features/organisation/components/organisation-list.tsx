@@ -8,9 +8,9 @@ const OrganisationList = async () => {
     <GenericComponent
       Component={OrganisationItem}
       className="grid gap-y-4"
-      emptyStateMessage="No Organisations Found"
+      emptyStateMessage="No organisations found"
+      errorStateMessage="Failed to fetch organisations"
       items={organisations}
-      renderKey={(organisation) => organisation.id}
       renderProps={(organisation) => ({ organisation })}
     />
   );

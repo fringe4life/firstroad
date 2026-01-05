@@ -2,9 +2,11 @@
 "use server";
 
 import { maxLength, minLength, object, parse, pipe, string } from "valibot";
+import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
 import type { CommentWithUserInfo } from "@/features/comment/types";
+import { findTicket } from "@/features/ticket/queries/find-ticket";
 import { prisma } from "@/lib/prisma";
 import type { Maybe } from "@/types";
 import { invalidateCommentAndTicketComments } from "@/utils/invalidate-cache";
@@ -14,6 +16,7 @@ import {
   toActionState,
 } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
+import { findComment } from "../queries/find-ticket";
 
 const upsertCommentSchema = object({
   content: pipe(
@@ -31,12 +34,8 @@ export const upsertComment = async (
 ): Promise<ActionState<CommentWithUserInfo>> => {
   const user = await getUserOrRedirect();
 
-  const { data: ticket, error } = await tryCatch(() =>
-    // Verify the ticket exists
-    prisma.ticket.findUnique({
-      where: { id: ticketId },
-    }),
-  );
+  // Verify the ticket exists
+  const { data: ticket, error } = await tryCatch(() => findTicket(ticketId));
   if (error) {
     return fromErrorToActionState(error);
   }
@@ -46,54 +45,29 @@ export const upsertComment = async (
 
   if (commentId) {
     // If updating, verify comment exists and user owns it
-    const { data: comment, error: commentError } = await tryCatch(() =>
-      prisma.comment.findUnique({
-        where: { id: commentId },
-      }),
+    const { data: commentWithOwnership, error: commentError } = await tryCatch(
+      () => itemWithOwnership(() => findComment(commentId)),
     );
     if (commentError) {
       return fromErrorToActionState(commentError);
     }
-    if (!comment) {
+    if (!commentWithOwnership?.isOwner) {
       return toActionState("Comment not found", "ERROR");
-    }
-
-    const userIsOwner = isOwner(user, comment);
-
-    if (!userIsOwner) {
-      return toActionState(
-        "Comment not found or you don't have permission to edit it",
-        "ERROR",
-      );
     }
   }
 
   const formDataObject = Object.fromEntries(formData.entries());
   const parsedData = parse(upsertCommentSchema, formDataObject);
 
-  const upsertData = commentId
-    ? {
-        where: { id: commentId },
-        update: { content: parsedData.content },
-        create: {
-          content: parsedData.content,
-          ticketId,
-          userId: user.id,
-        },
-      }
-    : {
-        where: { id: "" },
-        update: { content: parsedData.content },
-        create: {
-          content: parsedData.content,
-          ticketId,
-          userId: user.id,
-        },
-      };
-
   const { data: comment, error: commentError } = await tryCatch(() =>
     prisma.comment.upsert({
-      ...upsertData,
+      where: { id: commentId },
+      update: { content: parsedData.content },
+      create: {
+        content: parsedData.content,
+        ticketId,
+        userId: user.id,
+      },
       include: {
         userInfo: {
           include: {
@@ -111,7 +85,7 @@ export const upsertComment = async (
     return fromErrorToActionState(commentError);
   }
   if (!comment) {
-    return toActionState("Comment not found", "ERROR");
+    return toActionState("Comment not created", "ERROR");
   }
 
   // Add isOwner property to the comment

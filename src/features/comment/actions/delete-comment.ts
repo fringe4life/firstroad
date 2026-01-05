@@ -1,36 +1,35 @@
 "use server";
 
-import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
-import { isOwner } from "@/features/auth/utils/owner";
+import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
 import { prisma } from "@/lib/prisma";
 import { invalidateCommentAndTicketComments } from "@/utils/invalidate-cache";
 import { fromErrorToActionState, toActionState } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
 
 export const deleteComment = async (commentId: string) => {
-  const user = await getUserOrRedirect();
+  // const user = await getUserOrRedirect();
 
-  const { data: comment, error } = await tryCatch(() =>
-    prisma.comment.findUnique({
-      where: { id: commentId },
-      include: {
-        ticket: true,
-      },
-    }),
+  // verify comment exists
+  const { data: commentWithOwnership, error: commentError } = await tryCatch(
+    () =>
+      itemWithOwnership(() =>
+        prisma.comment.findUnique({
+          where: { id: commentId },
+          include: {
+            ticket: {
+              select: {
+                slug: true,
+              },
+            },
+          },
+        }),
+      ),
   );
-  if (error) {
-    return fromErrorToActionState(error);
+  if (commentError) {
+    return fromErrorToActionState(commentError);
   }
-  if (!comment) {
-    // Return success instead of error if comment is already deleted
-    // This handles race conditions where optimistic delete already removed it
-    return toActionState("Comment already deleted", "SUCCESS");
-  }
-
-  const userIsOwner = isOwner(user, comment);
-
-  if (!userIsOwner) {
-    return fromErrorToActionState("You can only delete your own comments");
+  if (!commentWithOwnership?.isOwner) {
+    return toActionState("Comment not found", "ERROR");
   }
 
   const { error: deleteError } = await tryCatch(() =>
@@ -42,11 +41,11 @@ export const deleteComment = async (commentId: string) => {
     return fromErrorToActionState(deleteError);
   }
 
-  if (comment.ticket.slug) {
+  if (commentWithOwnership.ticket.slug) {
     invalidateCommentAndTicketComments(
       commentId,
-      comment.ticketId,
-      comment.ticket.slug,
+      commentWithOwnership.ticketId,
+      commentWithOwnership.ticket.slug,
     );
   }
 

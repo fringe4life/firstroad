@@ -16,7 +16,7 @@ const RequireAuth = async ({
 }) => {
   const { user, hasUser } = await getUser();
 
-  if (!(hasUser && user)) {
+  if (!hasUser) {
     // Not authenticated - redirect to sign-in
     const headersList = await headers();
     const pathname =

@@ -21,7 +21,7 @@ export interface RawPaginationAccess<T> {
   getItemsCount: () => Promise<Maybe<number>>;
 }
 
-export interface RawPaginationResult<T> {
+export interface RawPaginatedResult<T> {
   items: List<T>;
   itemsCount: Maybe<number>;
 }

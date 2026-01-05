@@ -34,9 +34,9 @@ const TicketList = async ({ searchParams, userId }: TicketListProps) => {
       <GenericComponent
         Component={TicketItem}
         className="grid justify-items-center gap-y-4"
-        emptyStateMessage="No Tickets Found"
+        emptyStateMessage="No tickets found"
+        errorStateMessage="Failed to fetch tickets"
         items={tickets}
-        renderKey={(ticket) => ticket.slug}
         renderProps={(ticket) => ({ isDetail: false, ticket })}
       />
 
