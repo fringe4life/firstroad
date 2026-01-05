@@ -16,7 +16,7 @@ const SignInOTPSendPage = async () => (
     }
     description="Enter your email address to receive a sign-in code"
     footer={
-      <Link className="text-muted-foreground text-sm" href={signInPath}>
+      <Link className="text-muted-foreground text-sm" href={signInPath()}>
         Back to Sign In
       </Link>
     }

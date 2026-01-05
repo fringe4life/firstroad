@@ -3,7 +3,6 @@
 
 import { headers } from "next/headers";
 import { redirect, unstable_rethrow } from "next/navigation";
-import { connection } from "next/server";
 import {
   forward,
   literal,
@@ -78,7 +77,6 @@ export async function changePassword(
   _prevState: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  await connection();
   const formDataObject = Object.fromEntries(formData.entries());
 
   // Validate form data with Valibot schema
@@ -99,7 +97,7 @@ export async function changePassword(
     });
 
     setCookieByKey("toast", "Password successfully changed");
-    throw redirect(accountProfilePath);
+    throw redirect(accountProfilePath());
   });
 
   if (error) {

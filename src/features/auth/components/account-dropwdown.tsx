@@ -30,13 +30,13 @@ const AccountDropdown = ({ user }: AccountDropdownProps) => (
       <DropdownMenuLabel>My Account</DropdownMenuLabel>
       <DropdownMenuSeparator />
       <DropdownMenuItem asChild>
-        <Link href={accountProfilePath}>
+        <Link href={accountProfilePath()}>
           <LucideUser className="mr-2 aspect-square h-4" />
           <span>Profile</span>
         </Link>
       </DropdownMenuItem>
       <DropdownMenuItem asChild>
-        <Link href={accountPasswordPath}>
+        <Link href={accountPasswordPath()}>
           <LucideLock className="mr-2 aspect-square h-4" />
           <span>Password</span>
         </Link>

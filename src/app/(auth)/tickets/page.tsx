@@ -37,7 +37,7 @@ const TicketsPage = ({ searchParams }: PageProps<"/tickets">) => {
       />
       <RequireAuthSuspense
         fallback={<TicketListSkeleton />}
-        redirectPath={signInPath}
+        redirectPath={signInPath()}
       >
         {async (user) => (
           <TicketList searchParams={searchParams} userId={user.id} />

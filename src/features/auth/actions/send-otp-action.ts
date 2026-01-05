@@ -14,6 +14,7 @@ import {
 } from "valibot";
 import { userExists } from "@/features/auth/queries/user-exists";
 import { auth } from "@/lib/auth";
+import { signInOTPVerifyPath, verifyEmailOTPVerifyPath } from "@/path";
 import { setCookieByKey } from "@/utils/cookies";
 import type { ActionState } from "@/utils/to-action-state";
 import { fromErrorToActionState, toActionState } from "@/utils/to-action-state";
@@ -51,10 +52,8 @@ const sendEmailVerificationOTP = async (
   }
 
   const { error } = await tryCatch(async () => {
-    // If user doesn't exist, return success without calling Better Auth
-    // This prevents email enumeration attacks
+    // If user exists call verification function
     if (exists) {
-      // call verification function
       await auth.api.sendVerificationOTP({
         body: {
           email: result.output.email,
@@ -69,7 +68,7 @@ const sendEmailVerificationOTP = async (
     setCookieByKey("toast", "Verification code sent to your email");
 
     // Redirect to verify page with email in URL
-    const verifyUrl = `/verify-email/otp/verify?email=${encodeURIComponent(result.output.email)}`;
+    const verifyUrl = `${verifyEmailOTPVerifyPath()}?email=${encodeURIComponent(result.output.email)}`;
     throw redirect(verifyUrl as Route);
   });
 
@@ -121,7 +120,7 @@ const sendSignInOTP = async (
     setCookieByKey("toast", "Verification code sent to your email");
 
     // Redirect to verify page with email in URL
-    const verifyUrl = `/sign-in/otp/verify?email=${encodeURIComponent(result.output.email)}`;
+    const verifyUrl = `${signInOTPVerifyPath()}?email=${encodeURIComponent(result.output.email)}`;
     throw redirect(verifyUrl as Route);
   });
 

@@ -14,7 +14,7 @@ export const SignUpPageContent = async () => {
       content={<SignUpForm signupAction={signup} />}
       description="Create an accout to get started"
       footer={
-        <Link className="text-muted-foreground text-sm" href={signInPath}>
+        <Link className="text-muted-foreground text-sm" href={signInPath()}>
           Have an account? sign in here
         </Link>
       }

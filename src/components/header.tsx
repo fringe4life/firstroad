@@ -38,13 +38,13 @@ const Header = () => (
             <>
               <Link
                 className={buttonVariants({ variant: "outline" })}
-                href={signUpPath}
+                href={signUpPath()}
               >
                 Sign Up
               </Link>
               <Link
                 className={buttonVariants({ variant: "default" })}
-                href={signInPath}
+                href={signInPath()}
               >
                 Sign In
               </Link>

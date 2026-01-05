@@ -10,18 +10,18 @@ const SignInPageContent = () => (
     description="Sign in to your account"
     footer={
       <div className="flex w-full justify-between">
-        <Link className="text-muted-foreground text-sm" href={signUpPath}>
+        <Link className="text-muted-foreground text-sm" href={signUpPath()}>
           No account yet?
         </Link>
         <Link
           className="text-muted-foreground text-sm"
-          href={forgotPasswordPath}
+          href={forgotPasswordPath()}
         >
           Forgot Password?
         </Link>
         <Link
           className="text-muted-foreground text-sm"
-          href={signInOTPSendPath}
+          href={signInOTPSendPath()}
         >
           Sign in with OTP
         </Link>

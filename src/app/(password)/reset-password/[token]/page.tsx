@@ -36,7 +36,7 @@ const ResetPasswordPage = ({
     }
     description="Enter your new password below"
     footer={
-      <Link className="text-muted-foreground text-sm" href={signInPath}>
+      <Link className="text-muted-foreground text-sm" href={signInPath()}>
         Back to Sign In
       </Link>
     }

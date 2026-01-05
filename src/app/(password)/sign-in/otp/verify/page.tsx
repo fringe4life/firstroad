@@ -33,7 +33,7 @@ const SignInOTPVerifyPage = ({ searchParams }: SignInOTPVerifyPageProps) => (
     }
     description="Enter the sign-in code sent to your email"
     footer={
-      <Link className="text-muted-foreground text-sm" href={signInPath}>
+      <Link className="text-muted-foreground text-sm" href={signInPath()}>
         Back to Sign In
       </Link>
     }

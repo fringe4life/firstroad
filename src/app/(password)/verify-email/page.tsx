@@ -14,7 +14,7 @@ const VerifyEmailPage = async () => (
       <div className="pt-4">
         <Link
           className="inline-block rounded-md bg-primary px-6 py-2 text-primary-foreground transition-colors hover:bg-primary/90"
-          href={signInPath}
+          href={signInPath()}
         >
           Back to Sign In
         </Link>

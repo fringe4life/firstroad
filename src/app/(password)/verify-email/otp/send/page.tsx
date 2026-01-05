@@ -16,7 +16,7 @@ const VerifyEmailOTPSendPage = () => (
     }
     description="Enter your email address to receive a verification code"
     footer={
-      <Link className="text-muted-foreground text-sm" href={verifyEmailPath}>
+      <Link className="text-muted-foreground text-sm" href={verifyEmailPath()}>
         Back to Email Verification
       </Link>
     }

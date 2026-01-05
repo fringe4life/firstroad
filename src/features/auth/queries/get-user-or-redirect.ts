@@ -40,7 +40,7 @@ export async function getUserOrRedirect(
 
   // default: no-session branch
   if (!hasUser) {
-    throw redirect(signInPath);
+    throw redirect(signInPath());
   }
   return user;
 }

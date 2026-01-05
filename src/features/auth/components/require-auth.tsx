@@ -26,8 +26,8 @@ const RequireAuth = async ({
       headersList.get("referer");
 
     const redirectUrl = pathname
-      ? (`${signInPath}?callbackUrl=${encodeURIComponent(pathname)}` as Route)
-      : signInPath;
+      ? (`${signInPath()}?callbackUrl=${encodeURIComponent(pathname)}` as Route)
+      : signInPath();
 
     redirect(redirectUrl);
   }

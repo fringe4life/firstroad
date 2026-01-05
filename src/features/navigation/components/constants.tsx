@@ -27,12 +27,12 @@ const navItems: NavItem[] = [
     seperator: true,
     title: "Account",
     icon: <LucideCircleUser />,
-    href: accountProfilePath,
+    href: accountProfilePath(),
   },
   {
     title: "Organisation",
     icon: <LucideUsers />,
-    href: organisationsPath,
+    href: organisationsPath(),
   },
 ];
 
