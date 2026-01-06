@@ -1,5 +1,4 @@
 import { resend } from "@/lib/email";
-import EmailPasswordReset from "../../../../emails/password-reset-email";
 
 export const sendEmailPasswordReset = async (
   username: string,
@@ -13,6 +12,12 @@ export const sendEmailPasswordReset = async (
     from: process.env.NEXT_PUBLIC_RESEND_FROM!,
     to: email,
     subject: "Password Reset from TicketBounty",
-    react: <EmailPasswordReset toName={username} url={passwordResetLink} />,
+    template: {
+      id: "password-reset-email",
+      variables: {
+        TO_NAME: username,
+        URL: passwordResetLink,
+      },
+    },
   });
 };

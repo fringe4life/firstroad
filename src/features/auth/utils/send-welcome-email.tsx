@@ -1,5 +1,4 @@
 import { resend } from "@/lib/email";
-import WelcomeEmail from "../../../../emails/welcome-email";
 
 export const sendWelcomeEmail = async (email: string, userName?: string) =>
   await resend.emails.send({
@@ -7,10 +6,11 @@ export const sendWelcomeEmail = async (email: string, userName?: string) =>
     from: process.env.NEXT_PUBLIC_RESEND_FROM!,
     to: email,
     subject: "Welcome to TicketBounty! 🎉",
-    react: (
-      <WelcomeEmail
-        appUrl={process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}
-        toName={userName || email}
-      />
-    ),
+    template: {
+      id: "welcome-email",
+      variables: {
+        TO_NAME: userName || email,
+        APP_URL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+      },
+    },
   });

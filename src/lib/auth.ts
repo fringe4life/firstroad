@@ -21,6 +21,8 @@ const SESSION_UPDATE_AGE_SECONDS = DAYS_IN_SECONDS; // 1 day
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "postgresql" }),
+  basePath: "/auth",
+  baseURL: process.env.NEXT_PUBLIC_APP_URL,
   experimental: { joins: true },
   session: {
     cookieCache: {
@@ -35,7 +37,7 @@ export const auth = betterAuth({
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {
         // Trigger Inngest event to handle OTP email asynchronously
-        await tryCatch(async () =>
+        await tryCatch(() =>
           inngest.send({
             name: "email.otp",
             data: {
@@ -64,7 +66,7 @@ export const auth = betterAuth({
         const user = newSession.user;
 
         // Trigger Inngest event to handle welcome email with 2-minute delay
-        await tryCatch(async () =>
+        await tryCatch(() =>
           inngest.send({
             name: "user.welcome",
             data: {
@@ -103,7 +105,7 @@ export const auth = betterAuth({
     user: {
       create: {
         after: async (user) => {
-          await tryCatch(async () =>
+          await tryCatch(() =>
             prisma.userInfo.create({
               data: { userId: user.id },
             }),
@@ -140,7 +142,7 @@ export const auth = betterAuth({
       const resetUrl = `${baseUrl}/reset-password/${token}`;
 
       // Trigger Inngest event to handle password reset email asynchronously
-      await tryCatch(async () =>
+      await tryCatch(() =>
         inngest.send({
           name: "password.reset",
           data: {
@@ -153,7 +155,7 @@ export const auth = betterAuth({
     },
     onPasswordReset: async ({ user }) => {
       // Trigger Inngest event to handle password changed email asynchronously
-      await tryCatch(async () =>
+      await tryCatch(() =>
         inngest.send({
           name: "password.changed",
           data: {
@@ -192,7 +194,7 @@ export const auth = betterAuth({
       const verificationUrl = `${baseUrl}/verify-email?token=${token}`;
 
       // Trigger Inngest event to handle email verification asynchronously
-      await tryCatch(async () =>
+      await tryCatch(() =>
         inngest.send({
           name: "email.verification",
           data: {

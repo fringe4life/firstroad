@@ -34,7 +34,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **📊 Infinite Pagination**: Efficient cursor-based pagination for comments
 - **🔒 Ownership System**: Users can only edit their own tickets and comments
 - **🎯 Type Safety**: Full TypeScript support with typed routes
-- **📧 Email Features**: Password reset, email verification, OTP authentication, and welcome emails with React Email 5.1.1 templates
+- **📧 Email Features**: Password reset, email verification, OTP authentication, and welcome emails with Resend templates
 - **🔗 Slug Generation**: Human-readable URLs using slugify package for ticket slugs
 - **🔄 Database Hooks**: Automatic UserInfo creation on user registration
 - **🔄 Parallel Routes**: Next.js parallel routes (@auth) for authentication modals with interception routes
@@ -43,7 +43,6 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **⚡ PPR Navigation**: Partial Prerendering with dynamic auth components
 - **🔐 Session Management**: Cookie-based session caching for improved performance
 - **🔗 Slug-based Routing**: Human-readable URLs using ticket slugs instead of IDs
-- **🎯 Scope Filtering**: Type-safe "all" vs "mine" ticket filtering with nuqs
 - **📱 Responsive Controls**: Desktop button groups and mobile dropdowns for ticket filtering
 
 ## 🛠️ Tech Stack
@@ -59,6 +58,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **Theme**: next-themes for dark/light mode
 - **URL Search Params**: nuqs 2.8.6 for type-safe URL parameters
 - **Email**: React Email 5.1.1 with Resend 6.6.0 for transactional emails
+- **API Framework**: Elysia 1.4.21 with @elysiajs/cors 1.4.1 for unified API routes
 - **Background Jobs**: Inngest 3.48.1 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
 - **Linting**: Biome 2.3.11 for fast formatting and linting with Ultracite 7.0.8 rules
@@ -312,9 +312,8 @@ src/
 │   │   ├── (.)forgot-password/ # Intercepted forgot-password modal
 │   │   ├── [...catchAll]/ # Catch-all for closing modals
 │   │   └── default.tsx    # Default null state
-│   ├── api/               # API routes
-│   │   ├── auth/          # Authentication API
-│   │   └── inngest/       # Background jobs
+│   ├── api/               # API routes (Elysia catch-all handler)
+│   │   └── [[...slugs]]/  # Unified API route handler
 │   ├── layout.tsx         # Root layout with auth parallel slot
 │   ├── page.tsx           # Home page
 │   └── globals.css        # Global styles with custom variants
@@ -477,13 +476,6 @@ Components use the `HasAuthSuspense` pattern for session-dependent rendering:
   isDetail={true}
   ticket={ticket}
 />
-
-// Static components with caching
-const AllTicketsHeading = async () => {
-  "use cache";
-  cacheLife("max");
-  return <Heading description="Tickets by everyone at one place" title="All Tickets" />;
-};
 ```
 
 This pattern enables:
@@ -615,7 +607,7 @@ PostgreSQL with Prisma Client 7.2.0 using:
 Better Auth configured with:
 
 - Email/password authentication
-- Password reset functionality with React Email templates via Inngest events
+- Password reset functionality with Resend templates via Inngest events
 - Email verification
 - Rate limiting for production security
 - Database hooks for UserInfo creation
@@ -631,14 +623,90 @@ Inngest provides background job processing for:
 - Welcome emails (2-minute delay)
 - Async event handling
 
+### Email Templates (Resend)
+
+The application uses Resend 6.6.0 for transactional emails with published templates. All email sending functions use Resend's template API instead of inline React Email components.
+
+**Template IDs:**
+- `email-otp-verification` - OTP codes for sign-in, email verification, and password reset
+- `email-verification` - Email verification links
+- `password-reset-email` - Password reset links
+- `password-changed-email` - Password change confirmation
+- `welcome-email` - Welcome message for new users
+
+**Template Variables:**
+
+All templates use UPPERCASE_SNAKE_CASE variable names (Resend requirement). Variables are passed via the `template.variables` object in `resend.emails.send()`:
+
+- **`email-otp-verification`**:
+  - `TO_NAME` - Recipient name or email address
+  - `OTP` - One-time password code
+  - `TYPE` - Subject line text (computed from OTP type)
+
+- **`email-verification`**:
+  - `TO_NAME` - Recipient name or email address
+  - `URL` - Email verification link
+
+- **`password-reset-email`**:
+  - `TO_NAME` - Recipient name or email address
+  - `URL` - Password reset link
+
+- **`password-changed-email`**:
+  - `TO_NAME` - Recipient name or email address
+  - `APP_URL` - Application base URL
+
+- **`welcome-email`**:
+  - `TO_NAME` - Recipient name or email address
+  - `APP_URL` - Application base URL
+
+**Usage in Templates:**
+
+Variables are accessed in Resend template HTML using triple curly braces: `{{{VARIABLE_NAME}}}`. For example:
+
+```html
+<h1>Hello {{{TO_NAME}}}</h1>
+<a href="{{{URL}}}">Verify Email</a>
+```
+
+**API Key Requirements:**
+
+Resend templates require an API key with `full_access` permissions (not just `sending_access`) to create and manage templates. The `RESEND_API_KEY` environment variable must be configured with a full-access key.
+
+### API Routes (Elysia)
+
+The application uses Elysia 1.4.21 as a unified API framework for handling all API routes through a single catch-all handler (`src/app/api/[[...slugs]]/route.ts`).
+
+**Features:**
+- **Unified API Handler**: Single Elysia instance handles all API routes
+- **CORS Support**: Configured with `@elysiajs/cors` for cross-origin requests
+- **Better Auth Integration**: Auth routes mounted at `/auth` via `auth.handler`
+- **Inngest Webhooks**: Background job webhooks handled at `/api/inngest`
+- **Next.js Route Handlers**: Exports GET, POST, PUT, DELETE, OPTIONS handlers for Next.js App Router
+
+**Route Structure:**
+- `/api/auth/*` - Better Auth authentication endpoints
+- `/api/inngest` - Inngest webhook endpoint for background jobs
+
+**Configuration:**
+- CORS origin: `process.env.NEXT_PUBLIC_APP_URL`
+- Methods: GET, POST, PUT, DELETE, OPTIONS
+- Credentials: enabled
+- Allowed headers: Content-Type, Authorization
+
+**Benefits:**
+- Type-safe API routes with Elysia's TypeScript support
+- Unified middleware and CORS configuration
+- Better Auth and Inngest integration in a single handler
+- Simplified API route management
+
 ### Type Safety
 
 - Full TypeScript support with strict configuration
 - Typed routes with Next.js 16 (`typedRoutes: true`)
-- Type-safe URL search parameters with nuqs 2.8.6 (inferParserType for scope narrowing)
+- Type-safe URL search parameters with nuqs 2.8.6
 - Centralized auth types in `src/features/auth/types.ts`:
   - `ServerSession`: Full session with user object
-  - `MaybeServerSession`: Session or null for DAL functions
+  - `Maybe<User>`: Session or null for DAL functions
   - `ClientSession`: Client-side session type
 - HasAuthSuspense pattern with session injection for auth-dependent components
 - Shared utilities in `src/utils/` for better organization
