@@ -2,10 +2,10 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { maxLength, minLength, object, pipe, safeParse, string } from "valibot";
-import { createSlug } from "@/features/ticket/utils/slug";
 import { auth } from "@/lib/auth";
 import { ticketsPath } from "@/path";
 import { setCookieByKey } from "@/utils/cookies";
+import { createSlug } from "@/utils/slug";
 import {
   type ActionState,
   fromErrorToActionState,

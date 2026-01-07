@@ -6,8 +6,8 @@ import { SearchInput } from "@/components/search-input";
 import {
   options,
   paginationParser,
+  searchParser,
 } from "@/features/pagination/pagination-search-params";
-import { searchParser } from "@/features/ticket/search-params";
 
 interface TicketSearchInputProps {
   placeholder?: string;

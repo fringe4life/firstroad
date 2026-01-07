@@ -11,6 +11,7 @@ import { auth } from "@/lib/auth";
 import { inngest } from "@/lib/inngest";
 
 const app = new Elysia()
+  .use(openapi())
   .use(
     cors({
       origin: process.env.NEXT_PUBLIC_APP_URL,
@@ -19,7 +20,6 @@ const app = new Elysia()
       allowedHeaders: ["Content-Type", "Authorization"],
     }),
   )
-  .use(openapi())
   .mount("/auth", auth.handler);
 
 export const GET = app.handle;

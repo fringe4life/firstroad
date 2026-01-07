@@ -15,13 +15,13 @@ import {
 } from "valibot";
 import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
-import { createSlug } from "@/features/ticket/utils/slug";
 import { prisma } from "@/lib/prisma";
 import { ticketPath, ticketsPath } from "@/path";
 import type { Maybe } from "@/types";
 import { setCookieByKey } from "@/utils/cookies";
 import { toCent } from "@/utils/currency";
 import { invalidateTicketAndList } from "@/utils/invalidate-cache";
+import { createSlug } from "@/utils/slug";
 import {
   type ActionState,
   fromErrorToActionState,

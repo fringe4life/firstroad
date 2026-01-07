@@ -2,11 +2,11 @@
 
 import type { SearchParams } from "nuqs/server";
 import { paginateItems } from "@/features/pagination/dal/paginate-items";
+import { searchParamsCache } from "@/features/pagination/pagination-search-params";
 import type { PaginatedResult } from "@/features/pagination/types";
 import { transformToPaginatedResult } from "@/features/pagination/utils/to-paginated-result";
 import { getTicketList } from "@/features/ticket/queries/get-ticket-list";
 import { getTicketsCount } from "@/features/ticket/queries/get-tickets-count";
-import { searchParamsCache } from "@/features/ticket/search-params";
 import type { BaseTicket } from "@/features/ticket/types";
 import type {
   TicketOrderByWithRelationInput,

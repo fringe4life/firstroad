@@ -9,12 +9,13 @@
 [![Better Auth](https://img.shields.io/badge/Better%20Auth-1.4.10-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.18-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Biome](https://img.shields.io/badge/Biome-2.3.11-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-7.0.8-000000)](https://ultracite.dev/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-7.0.9-000000)](https://ultracite.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.8.6-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.2.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
+[![Elysia](https://img.shields.io/badge/Elysia-1.4.21-000000)](https://elysiajs.com/)
 [![Inngest](https://img.shields.io/badge/Inngest-3.48.1-000000)](https://www.inngest.com/)
 [![Resend](https://img.shields.io/badge/Resend-6.6.0-000000)](https://resend.com/)
-[![React Email](https://img.shields.io/badge/React%20Email-5.1.1-000000)](https://react.email/)
+[![React Email](https://img.shields.io/badge/React%20Email-5.2.1-000000)](https://react.email/)
 
 </div>
 
@@ -57,11 +58,11 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **Notifications**: Sonner toast notifications
 - **Theme**: next-themes for dark/light mode
 - **URL Search Params**: nuqs 2.8.6 for type-safe URL parameters
-- **Email**: React Email 5.1.1 with Resend 6.6.0 for transactional emails
+- **Email**: React Email 5.2.1 with Resend 6.6.0 for transactional emails
 - **API Framework**: Elysia 1.4.21 with @elysiajs/cors 1.4.1 for unified API routes
 - **Background Jobs**: Inngest 3.48.1 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
-- **Linting**: Biome 2.3.11 for fast formatting and linting with Ultracite 7.0.8 rules
+- **Linting**: Biome 2.3.11 for fast formatting and linting with Ultracite 7.0.9 rules
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 
@@ -364,10 +365,9 @@ src/
 │   ├── ticket/           # Ticket management
 │   │   ├── actions/      # Server actions (delete-ticket, update-status, upsert-ticket)
 │   │   ├── components/   # Ticket components (ticket-filter-dropdown, ticket-item, ticket-list, ticket-more-menu, ticket-owner-options, ticket-search-input, ticket-select-sort, ticket-upsert-form, skeletons)
-│   │   ├── queries/      # Data queries with "use cache" (get-all-ticket-slugs, get-ticket, get-tickets)
-│   │   ├── search-params.ts # Type-safe search parameters with nuqs
-│   │   ├── types.ts      # Ticket types
-│   │   └── utils/        # Ticket utilities (slug generation with slugify)
+│   │   ├── dal/         # Data access layer (get-tickets)
+│   │   ├── queries/      # Data queries with "use cache" (get-all-ticket-slugs, get-ticket, get-ticket-list, get-tickets-count)
+│   │   └── types.ts      # Ticket types
 │   ├── comment/          # Comment system
 │   │   ├── actions/      # Comment actions (upsert-comment, delete-comment)
 │   │   ├── components/   # Comment components (comment-create-form, comment-delete-button, comment-edit-button, comment-item, comment-list, comment-owner-buttons, time-ago, time-ago-skeleton)
@@ -399,6 +399,7 @@ src/
 │   ├── currency.ts      # Currency utilities
 │   ├── get-active-path.ts # Active path utilities
 │   ├── invalidate-cache.ts # Cache invalidation utilities
+│   ├── slug.ts          # Slug generation utility (moved from ticket/utils)
 │   ├── to-action-state.ts # Action state management
 │   ├── try-catch.ts     # Error handling utilities
 │   └── typed-links.ts   # Type-safe link generation

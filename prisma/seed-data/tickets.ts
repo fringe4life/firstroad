@@ -1,5 +1,5 @@
-import { createSlug } from "@/features/ticket/utils/slug";
 import type { Prisma, Ticket } from "@/generated/prisma/client";
+import { createSlug } from "@/utils/slug";
 
 const getRandomUserId = (ids: string[]) =>
   ids[Math.floor(Math.random() * ids.length)];
