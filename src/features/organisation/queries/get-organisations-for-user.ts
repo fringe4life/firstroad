@@ -1,4 +1,4 @@
-import { getUser } from "@/features/auth/queries/get-user";
+import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { prisma } from "@/lib/prisma";
 import type { Maybe } from "@/types";
 import { tryCatch } from "@/utils/try-catch";
@@ -6,11 +6,10 @@ import type { BaseOrganisation, Member } from "../types";
 
 const getOrganisationByUser = async (): Promise<Maybe<BaseOrganisation[]>> => {
   "use cache: private";
-  const { user, hasUser } = await getUser();
-  if (!hasUser) {
-    return null;
-  }
-  const userId = user.id;
+  const { id: userId } = await getUserOrRedirect({
+    checkOrganistation: false,
+  });
+
   const { data: organisations } = await tryCatch(() =>
     prisma.organization.findMany({
       where: {

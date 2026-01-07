@@ -6,6 +6,7 @@ import { emailOTP, organization } from "better-auth/plugins";
 import { inngest } from "@/lib/inngest";
 import { prisma } from "@/lib/prisma";
 import { tryCatch } from "@/utils/try-catch";
+import { env } from "./env";
 
 // Session configuration constants
 const MINUTES_IN_SECONDS = 60;
@@ -21,7 +22,7 @@ const SESSION_UPDATE_AGE_SECONDS = DAYS_IN_SECONDS; // 1 day
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "postgresql" }),
-  basePath: "/auth",
+  basePath: "/api",
   baseURL: process.env.NEXT_PUBLIC_APP_URL,
   experimental: { joins: true },
   session: {
@@ -208,5 +209,12 @@ export const auth = betterAuth({
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
     expiresIn: 3600, // 1 hour
+  },
+  socialProviders: {
+    github: {
+      clientId: env.GITHUB_CLIENT_ID,
+      clientSecret: env.GITHUB_CLIENT_SECRET,
+      // callbackURL: "http://localhost:3000/auth/api/auth/callback/github",
+    },
   },
 });

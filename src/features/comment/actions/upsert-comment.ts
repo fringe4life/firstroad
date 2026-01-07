@@ -1,12 +1,13 @@
 /** biome-ignore-all lint/style/noMagicNumbers: are well explained zod schema */
 "use server";
 
-import { maxLength, minLength, object, parse, pipe, string } from "valibot";
+import { maxLength, minLength, object, pipe, safeParse, string } from "valibot";
 import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
 import type { CommentWithUserInfo } from "@/features/comment/types";
 import { findTicket } from "@/features/ticket/queries/find-ticket";
+import type { CommentWhereUniqueInput } from "@/generated/prisma/models";
 import { prisma } from "@/lib/prisma";
 import type { Maybe } from "@/types";
 import { invalidateCommentAndTicketComments } from "@/utils/invalidate-cache";
@@ -32,7 +33,10 @@ export const upsertComment = async (
   _state: ActionState<unknown>,
   formData: FormData,
 ): Promise<ActionState<CommentWithUserInfo>> => {
-  const user = await getUserOrRedirect();
+  const user = await getUserOrRedirect({
+    checkOrganistation: false,
+    checkEmailVerified: false,
+  });
 
   // Verify the ticket exists
   const { data: ticket, error } = await tryCatch(() => findTicket(ticketId));
@@ -57,14 +61,24 @@ export const upsertComment = async (
   }
 
   const formDataObject = Object.fromEntries(formData.entries());
-  const parsedData = parse(upsertCommentSchema, formDataObject);
+  const parsedData = safeParse(upsertCommentSchema, formDataObject);
+
+  if (!parsedData.success) {
+    return fromErrorToActionState(parsedData.issues, formData);
+  }
+
+  const {
+    output: { content },
+  } = parsedData;
+
+  const whereClause: CommentWhereUniqueInput = { id: commentId ?? "" };
 
   const { data: comment, error: commentError } = await tryCatch(() =>
     prisma.comment.upsert({
-      where: { id: commentId },
-      update: { content: parsedData.content },
+      where: whereClause,
+      update: { content },
       create: {
-        content: parsedData.content,
+        content,
         ticketId,
         userId: user.id,
       },

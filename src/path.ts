@@ -14,7 +14,7 @@ const signUpPath = (): Route => "/sign-up";
 const forgotPasswordPath = (): Route => "/forgot-password";
 const resetPasswordPath = (token: string): Route =>
   `/reset-password/${token}` as Route;
-const verifyEmailPath = (): Route => "/verify-email";
+
 const verifyEmailOTPSendPath = (): Route => "/verify-email/otp/send";
 const verifyEmailOTPVerifyPath = (): Route => "/verify-email/otp/verify";
 
@@ -27,12 +27,14 @@ const signOutPath = (): Route => "/sign-out";
 
 const organisationsPath = (): Route => "/organisations";
 
+const onboardingPath = (): Route => "/onboarding";
+
 export {
+  onboardingPath,
   homePath,
   ticketsPath,
   forgotPasswordPath,
   resetPasswordPath,
-  verifyEmailPath,
   verifyEmailOTPSendPath,
   verifyEmailOTPVerifyPath,
   signInPath,

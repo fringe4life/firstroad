@@ -4,15 +4,22 @@ interface HeadingProps {
   title: string;
   description?: string;
   tabs?: React.ReactNode;
+  actions?: React.ReactNode;
 }
-const Heading = ({ title, description, tabs }: HeadingProps) => (
+const Heading = ({ title, description, tabs, actions }: HeadingProps) => (
   <>
     {tabs}
-    <div className="w-full justify-self-stretch px-8">
-      <h2 className="font-bold text-3xl tracking-tight">{title}</h2>
-      {description ? (
-        <p className="text-muted-foreground text-sm">{description}</p>
-      ) : null}
+    <div
+      className="flex h-min w-full items-center justify-between self-start px-8"
+      data-heading
+    >
+      <div className="w-full justify-self-stretch">
+        <h2 className="font-bold text-3xl tracking-tight">{title}</h2>
+        {description ? (
+          <p className="text-muted-foreground text-sm">{description}</p>
+        ) : null}
+      </div>
+      <div className="flex items-center gap-x-2"> {actions}</div>
     </div>
     <Separator />
   </>

@@ -1,4 +1,5 @@
 import { cors } from "@elysiajs/cors";
+import { openapi } from "@elysiajs/openapi";
 import { Elysia } from "elysia";
 import { serve } from "inngest/bun";
 import { eventEmailOTP } from "@/features/auth/events/event-email-otp";
@@ -18,6 +19,7 @@ const app = new Elysia()
       allowedHeaders: ["Content-Type", "Authorization"],
     }),
   )
+  .use(openapi())
   .mount("/auth", auth.handler);
 
 export const GET = app.handle;

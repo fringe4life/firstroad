@@ -2,7 +2,7 @@ import Link from "next/link";
 import { CardCompact } from "@/components/card-compact";
 import { sendEmailVerificationOTP } from "@/features/auth/actions/send-otp-action";
 import { OTPSendForm } from "@/features/auth/components/otp-send-form";
-import { verifyEmailPath } from "@/path";
+import { verifyEmailOTPSendPath } from "@/path";
 
 const VerifyEmailOTPSendPage = () => (
   <CardCompact
@@ -16,7 +16,10 @@ const VerifyEmailOTPSendPage = () => (
     }
     description="Enter your email address to receive a verification code"
     footer={
-      <Link className="text-muted-foreground text-sm" href={verifyEmailPath()}>
+      <Link
+        className="text-muted-foreground text-sm"
+        href={verifyEmailOTPSendPath()}
+      >
         Back to Email Verification
       </Link>
     }

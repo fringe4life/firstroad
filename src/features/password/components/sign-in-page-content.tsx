@@ -2,6 +2,7 @@ import Link from "next/link";
 import { CardCompact } from "@/components/card-compact";
 import { signin } from "@/features/password/actions/signin-action";
 import { forgotPasswordPath, signInOTPSendPath, signUpPath } from "@/path";
+import { GithubLoginButton } from "./github-login-button";
 import { SignInForm } from "./sign-in-form";
 
 const SignInPageContent = () => (
@@ -25,6 +26,7 @@ const SignInPageContent = () => (
         >
           Sign in with OTP
         </Link>
+        <GithubLoginButton />
       </div>
     }
     title="Sign in"

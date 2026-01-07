@@ -1,46 +1,39 @@
-import type { Route } from "next";
 import { redirect } from "next/navigation";
 import { getUser } from "@/features/auth/queries/get-user";
 import type { User } from "@/features/auth/types";
-import { signInPath } from "@/path";
-import type { Maybe } from "@/types";
+import { getOrganisationByUser } from "@/features/organisation/queries/get-organisations-for-user";
+import { onboardingPath, signInPath, verifyEmailOTPSendPath } from "@/path";
 
-// Discriminated union for explicit behavior control
-// - when: "no-session" (default) → redirect to sign-in when session is missing
-// - when: "has-session" → redirect to provided path when session exists
-export type GetUserRedirectOptions =
-  | {
-      when?: "no-session";
-    }
-  | {
-      when: "has-session";
-      redirectPath: Route;
-    };
+export interface GetUserRedirectOptions {
+  checkEmailVerified?: boolean;
+  checkOrganistation?: boolean;
+}
 
-// Overloads
-export function getUserOrRedirect(
-  options?: Extract<GetUserRedirectOptions, { when?: "no-session" }>,
-): Promise<User>;
-export function getUserOrRedirect(
-  options: Extract<GetUserRedirectOptions, { when: "has-session" }>,
-): Promise<Maybe<User>>;
-
-export async function getUserOrRedirect(
+export const getUserOrRedirect = async (
   options?: GetUserRedirectOptions,
-): Promise<Maybe<User>> {
+): Promise<User> => {
   const { user, hasUser } = await getUser();
-
-  // has-session branch (narrowed: redirectPath is required)
-  if (options?.when === "has-session") {
-    if (hasUser) {
-      throw redirect(options.redirectPath);
-    }
-    return user;
-  }
 
   // default: no-session branch
   if (!hasUser) {
     throw redirect(signInPath());
   }
+  const { checkEmailVerified = true, checkOrganistation = true } =
+    options ?? {};
+
+  const userNeedsEmailVerification = checkEmailVerified && !user.emailVerified;
+
+  if (userNeedsEmailVerification) {
+    throw redirect(verifyEmailOTPSendPath());
+  }
+
+  if (checkOrganistation) {
+    const organisations = await getOrganisationByUser();
+
+    if (!organisations || organisations.length === 0) {
+      throw redirect(onboardingPath());
+    }
+  }
+
   return user;
-}
+};

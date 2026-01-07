@@ -22,7 +22,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 
 ## 🚀 Features
 
-- **🔐 Authentication**: Secure user authentication with Better Auth (email/password + OTP) with email enumeration protection
+- **🔐 Authentication**: Secure user authentication with Better Auth (email/password + OTP + GitHub OAuth) with email enumeration protection
 - **🏢 Organization Management**: Create and manage organizations with member and invitation systems
 - **🎫 Ticket Management**: Create, edit, and manage tickets with status tracking
 - **💬 Comments System**: Add, edit, and delete comments on tickets with infinite pagination
@@ -244,6 +244,11 @@ RESEND_API_KEY="your-resend-api-key"
 # NEXT_PUBLIC_RESEND_FROM should be an email address, not an HTTP URL
 # Format: "Your App Name <your-email@domain.com>" or just "your-email@domain.com"
 NEXT_PUBLIC_RESEND_FROM="Your App <onboarding@resend.dev>"
+
+# Social Authentication (GitHub)
+# Docs: https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app
+GITHUB_CLIENT_ID="your-github-client-id"
+GITHUB_CLIENT_SECRET="your-github-client-secret"
 ```
 
 **Note**: `DIRECT_URL` is optional and only needed for connection pooling scenarios. The application works with just `DATABASE_URL` configured. `DIRECT_URL` is not validated in the environment schema.
@@ -280,6 +285,8 @@ src/
 │   │   │   ├── profile/   # User profile
 │   │   │   └── _components/ # Account components
 │   │   ├── organisations/ # Organization management
+│   │   │   ├── create/    # Create organization page
+│   │   │   └── page.tsx  # Organizations list page
 │   │   ├── tickets/       # Ticket management pages
 │   │   │   ├── [slug]/    # Dynamic ticket routes
 │   │   │   │   ├── edit/  # Edit ticket page
@@ -304,7 +311,7 @@ src/
 │   │   │   ├── otp/       # OTP email verification
 │   │   │   │   ├── send/  # Send verification OTP
 │   │   │   │   └── verify/ # Verify email OTP
-│   │   │   └── page.tsx   # Email verification page
+│   │   ├── onboarding/    # User onboarding page
 │   │   └── layout.tsx     # Password layout
 │   ├── @auth/             # Parallel route slot for auth modals
 │   │   ├── (.)sign-in/    # Intercepted sign-in modal
@@ -336,6 +343,7 @@ src/
 │   │   ├── actions/      # Server actions (send-otp-action, verify-otp-action, signout)
 │   │   ├── components/   # Auth components (account-dropdown, auth-nav-skeleton, change-password-form, has-auth, otp-send-form, otp-verify-form, require-auth, sign-out-button, sign-out-form)
 │   │   ├── dto/          # Data transfer objects (item-with-ownership, items-with-ownership)
+│   │   ├── dto/          # Data transfer objects (item-with-ownership, items-with-ownership)
 │   │   ├── events/       # Inngest events (email-otp, email-verification, welcome-email)
 │   │   ├── queries/      # Server-side queries (get-user, get-user-or-redirect, user-exists)
 │   │   ├── types.ts      # Centralized auth types
@@ -345,7 +353,8 @@ src/
 │   │   ├── context/      # Mobile sidebar context
 │   │   └── types/        # Navigation types
 │   ├── organisation/     # Organization management
-│   │   ├── components/   # Organization components (organisation-list, organisation-item)
+│   │   ├── actions/      # Organization actions (create-organisation)
+│   │   ├── components/   # Organization components (create-organisation-form, organisation-list, organisation-item)
 │   │   └── queries/      # Organization queries (get-organisations-for-user)
 │   ├── pagination/       # Pagination system
 │   │   ├── components/   # Pagination components (nuqs-pagination, pagination)
@@ -368,8 +377,8 @@ src/
 │   │   ├── queries/      # Comment queries (find-comment, get-comments-count, get-comments-list)
 │   │   └── types.ts      # Comment types (Comment, CommentWithUserInfo, CommentState, EditingState)
 │   ├── password/         # Password management
-│   │   ├── actions/      # Password actions (change-password-action, forgot-password-action, reset-password-action, signin-action, signup-action)
-│   │   ├── components/  # Password components (change-password-form, forgot-password-form, forgot-password-page-content, reset-password-form, sign-in-form, sign-in-page-content, sign-up-form, sign-up-page-content)
+│   │   ├── actions/      # Password actions (change-password-action, forgot-password-action, github-signin, reset-password-action, signin-action, signup-action)
+│   │   ├── components/  # Password components (change-password-form, forgot-password-form, forgot-password-page-content, github-login-button, reset-password-form, sign-in-form, sign-in-page-content, sign-up-form, sign-up-page-content)
 │   │   ├── emails/      # Password reset email templates (send-password-reset-email)
 │   │   ├── events/      # Password events (event-password-changed, event-password-reset)
 │   │   └── utils/       # Password utilities (send-password-reset-email)
@@ -406,6 +415,7 @@ The application uses Better Auth with multiple authentication methods:
 
 - **Sign Up**: Create new accounts with email and password
 - **Sign In**: Secure login with credential validation or OTP
+- **Social Login**: GitHub OAuth authentication with automatic redirect to tickets page
 - **OTP Authentication**: One-time password authentication via email
   - **Sign-in OTP**: Alternative login method using one-time passwords
   - **Email Verification OTP**: Verify email addresses with OTP codes
@@ -421,10 +431,11 @@ The application uses Better Auth with multiple authentication methods:
 1. **Registration**: Users sign up with email/password
 2. **Email Verification**: Verification email sent automatically
 3. **Welcome Email**: Delayed welcome email sent 2 minutes after signup
-4. **Login**: Users sign in with verified credentials or OTP
-5. **OTP Login**: Alternative login method using one-time passwords
-6. **Password Reset**: Users can request password reset via email
-7. **Session Management**: Secure sessions with automatic UserInfo creation
+4. **Login**: Users sign in with verified credentials, OTP, or GitHub OAuth
+5. **Social Login**: GitHub OAuth integration with automatic redirect to tickets page
+6. **OTP Login**: Alternative login method using one-time passwords
+7. **Password Reset**: Users can request password reset via email
+8. **Session Management**: Secure sessions with automatic UserInfo creation
 
 ### OTP Authentication Routes
 

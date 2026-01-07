@@ -5,7 +5,7 @@ import { CardCompact } from "@/components/card-compact";
 import { Spinner } from "@/components/spinner";
 import { verifyEmailVerificationOTP } from "@/features/auth/actions/verify-otp-action";
 import { OTPVerifyForm } from "@/features/auth/components/otp-verify-form";
-import { verifyEmailPath } from "@/path";
+import { verifyEmailOTPSendPath } from "@/path";
 
 interface VerifyEmailOTPVerifyPageProps {
   searchParams: Promise<{ email?: string }>;
@@ -36,8 +36,11 @@ const VerifyEmailOTPVerifyPage = ({
     }
     description="Enter the verification code sent to your email"
     footer={
-      <Link className="text-muted-foreground text-sm" href={verifyEmailPath()}>
-        Back to Email Verification
+      <Link
+        className="text-muted-foreground text-sm"
+        href={verifyEmailOTPSendPath()}
+      >
+        Back to Send Email Verification
       </Link>
     }
     title="Verify Your Email"

@@ -27,6 +27,14 @@ const envSchema = object({
       "RESEND_FROM is required (e.g. 'Your App <onboarding@resend.dev>' or 'noreply@yourdomain.com')",
     ),
   ),
+  GITHUB_CLIENT_ID: pipe(
+    string(),
+    minLength(1, "GITHUB_CLIENT_ID is required"),
+  ),
+  GITHUB_CLIENT_SECRET: pipe(
+    string(),
+    minLength(1, "GITHUB_CLIENT_SECRET is required"),
+  ),
 });
 
 // Export validated environment variables

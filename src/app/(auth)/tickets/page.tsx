@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 
 const TicketsPage = ({ searchParams }: PageProps<"/tickets">) => {
   return (
-    <>
+    <div className="grid h-full w-full grid-rows-[min-content_min-content_min-content_1fr] gap-y-8">
       <Heading description="All your tickets at one place" title="My Tickets" />
       <CardCompact
         className="max-content-narrow justify-self-center"
@@ -43,7 +43,7 @@ const TicketsPage = ({ searchParams }: PageProps<"/tickets">) => {
           <TicketList searchParams={searchParams} userId={user.id} />
         )}
       </RequireAuthSuspense>
-    </>
+    </div>
   );
 };
 

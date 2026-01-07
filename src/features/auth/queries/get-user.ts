@@ -17,6 +17,7 @@ const getUser = async (): Promise<UserProp> => {
       }),
   );
 
+  // TODO need to expire session if expiresAt < Date.now()
   if (session?.user) {
     return { user: session.user, hasUser: true };
   }
