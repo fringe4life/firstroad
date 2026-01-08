@@ -295,7 +295,6 @@ src/
 │   │   │   │   └── page.tsx # Ticket detail page
 │   │   │   ├── error.tsx  # Error boundary
 │   │   │   └── page.tsx   # Tickets list page
-│   │   └── layout.tsx     # Auth layout
 │   ├── (password)/        # Public auth routes
 │   │   ├── sign-in/       # Sign in page
 │   │   │   ├── otp/       # OTP authentication
@@ -322,6 +321,8 @@ src/
 │   │   └── default.tsx    # Default null state
 │   ├── api/               # API routes (Elysia catch-all handler)
 │   │   └── [[...slugs]]/  # Unified API route handler
+│   │       ├── route.ts  # Next.js route handlers
+│   │       └── inngest-plugin.ts # Inngest Elysia plugin
 │   ├── layout.tsx         # Root layout with auth parallel slot
 │   ├── page.tsx           # Home page
 │   └── globals.css        # Global styles with custom variants
@@ -385,6 +386,7 @@ src/
 │   ├── types/            # Shared type definitions
 │   └── constants.tsx     # Shared constants
 ├── lib/                  # Utility libraries
+│   ├── app.ts           # Elysia app instance with /api prefix
 │   ├── auth.ts          # Better Auth configuration
 │   ├── auth-client.ts   # Client-side auth instance
 │   ├── big.ts           # Big.js configuration
@@ -688,11 +690,16 @@ Resend templates require an API key with `full_access` permissions (not just `se
 
 The application uses Elysia 1.4.21 as a unified API framework for handling all API routes through a single catch-all handler (`src/app/api/[[...slugs]]/route.ts`).
 
+**Architecture:**
+- **Centralized App Instance**: Elysia app created in `src/lib/app.ts` with `/api` prefix
+- **Plugin Pattern**: Inngest handler implemented as Elysia plugin in `inngest-plugin.ts`
+- **OpenAPI Support**: Automatic API documentation with `@elysiajs/openapi` 1.4.13
+
 **Features:**
 - **Unified API Handler**: Single Elysia instance handles all API routes
-- **CORS Support**: Configured with `@elysiajs/cors` for cross-origin requests
+- **CORS Support**: Configured with `@elysiajs/cors` 1.4.1 for cross-origin requests
 - **Better Auth Integration**: Auth routes mounted at `/auth` via `auth.handler`
-- **Inngest Webhooks**: Background job webhooks handled at `/api/inngest`
+- **Inngest Webhooks**: Background job webhooks handled at `/api/inngest` via Elysia plugin
 - **Next.js Route Handlers**: Exports GET, POST, PUT, DELETE, OPTIONS handlers for Next.js App Router
 
 **Route Structure:**
@@ -709,7 +716,8 @@ The application uses Elysia 1.4.21 as a unified API framework for handling all A
 - Type-safe API routes with Elysia's TypeScript support
 - Unified middleware and CORS configuration
 - Better Auth and Inngest integration in a single handler
-- Simplified API route management
+- Plugin-based architecture for modular route management
+- Automatic OpenAPI documentation generation
 
 ### Type Safety
 
@@ -789,3 +797,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [React Email](https://react.email/) - Email templates
 - [Inngest](https://www.inngest.com/) - Background job processing
 - [Valibot](https://valibot.dev/) - Lightweight schema validation
+- [Elysia](https://elysiajs.com/) - API 
