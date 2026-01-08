@@ -9,9 +9,9 @@ interface CommentItemProps {
 }
 
 const CommentItem = ({ comment, buttons }: CommentItemProps) => {
-  const { updatedAt, createdAt, content, userInfo } = comment;
+  const { updatedAt, createdAt, content, user } = comment;
 
-  const userName = userInfo?.user?.name || "Anonymous";
+  const userName = user?.name || "Anonymous";
   const userInitials = userName
     .split(" ")
     .map((n) => n[0])

@@ -16,13 +16,9 @@ export const getTicketBySlug = async (
     prisma.ticket.findUnique({
       where: { slug },
       include: {
-        userInfo: {
-          include: {
-            user: {
-              select: {
-                name: true,
-              },
-            },
+        user: {
+          select: {
+            name: true,
           },
         },
       },

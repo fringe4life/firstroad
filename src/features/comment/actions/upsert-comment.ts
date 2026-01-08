@@ -83,13 +83,9 @@ export const upsertComment = async (
         userId: user.id,
       },
       include: {
-        userInfo: {
-          include: {
-            user: {
-              select: {
-                name: true,
-              },
-            },
+        user: {
+          select: {
+            name: true,
           },
         },
       },

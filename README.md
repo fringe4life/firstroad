@@ -37,7 +37,6 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **🎯 Type Safety**: Full TypeScript support with typed routes
 - **📧 Email Features**: Password reset, email verification, OTP authentication, and welcome emails with Resend templates
 - **🔗 Slug Generation**: Human-readable URLs using slugify package for ticket slugs
-- **🔄 Database Hooks**: Automatic UserInfo creation on user registration
 - **🔄 Parallel Routes**: Next.js parallel routes (@auth) for authentication modals with interception routes
 - **⚡ React Compiler**: React 19 compiler for automatic performance optimization
 - **📬 Background Jobs**: Inngest for async event handling and email processing
@@ -427,7 +426,6 @@ The application uses Better Auth with multiple authentication methods:
 - **Welcome Emails**: Delayed welcome emails sent 2 minutes after signup
 - **Protected Routes**: Automatic redirection for unauthenticated users
 - **User Sessions**: Secure session management
-- **Database Hooks**: Automatic UserInfo creation on user registration
 
 ### Authentication Flow
 
@@ -438,7 +436,7 @@ The application uses Better Auth with multiple authentication methods:
 5. **Social Login**: GitHub OAuth integration with automatic redirect to tickets page
 6. **OTP Login**: Alternative login method using one-time passwords
 7. **Password Reset**: Users can request password reset via email
-8. **Session Management**: Secure sessions with automatic UserInfo creation
+8. **Session Management**: Secure sessions with cookie-based caching
 
 ### OTP Authentication Routes
 
@@ -606,16 +604,15 @@ PostgreSQL with Prisma Client 7.2.0 using:
 
 **Database Models:**
 
-- **User**: Better Auth user model
+- **User**: Better Auth user model with direct relations to tickets and comments
 - **Account**: Better Auth account model
 - **Session**: Better Auth session model
 - **Verification**: Better Auth verification tokens
-- **UserInfo**: Extended user information
 - **Organization**: Organization management
 - **Member**: Organization membership
 - **Invitation**: Organization invitations
-- **Ticket**: Ticket management with unique slug field
-- **Comment**: Comment system
+- **Ticket**: Ticket management with unique slug field (direct relation to User)
+- **Comment**: Comment system (direct relation to User)
 
 ### Authentication & Background Jobs
 
@@ -625,7 +622,6 @@ Better Auth configured with:
 - Password reset functionality with Resend templates via Inngest events
 - Email verification
 - Rate limiting for production security
-- Database hooks for UserInfo creation
 - Prisma Client with Neon driver adapter
 - Session cookie caching (5-minute cache duration)
 - Session expiration (7 days) and update age (1 day)

@@ -3,7 +3,7 @@ import type { Maybe } from "@/types";
 import type { PaginatedResult } from "../pagination/types";
 
 type CommentModelWithUserInfo = CommentGetPayload<{
-  include: { userInfo: { include: { user: { select: { name: true } } } } };
+  include: { user: { select: { name: true } } };
 }>;
 
 // Comment type with additional properties for UI

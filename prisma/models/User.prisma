@@ -10,7 +10,8 @@ model User {
   accounts      Account[]
   members       Member[]
   invitations   Invitation[]
-  userInfo UserInfo?
+  tickets       Ticket[]
+  comments      Comment[]
 
   @@unique([email])
 }

@@ -1,4 +1,3 @@
-
 model Invitation {
   id             String       @id
   organizationId String

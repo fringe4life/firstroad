@@ -20,13 +20,9 @@ const getCommentsList = async ({
       ticket: { slug: ticketSlug },
     },
     include: {
-      userInfo: {
-        include: {
-          user: {
-            select: {
-              name: true,
-            },
-          },
+      user: {
+        select: {
+          name: true,
         },
       },
     },

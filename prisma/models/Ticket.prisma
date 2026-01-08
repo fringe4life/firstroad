@@ -13,8 +13,8 @@ model Ticket {
   bounty      Int
 
   // Relations
-  userId   String
-  userInfo UserInfo @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Timestamps
   createdAt DateTime @default(now())

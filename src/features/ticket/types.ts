@@ -1,8 +1,8 @@
 import type { TicketGetPayload } from "@/generated/prisma/models/Ticket";
 import type { Maybe, SearchParamsProps } from "@/types";
-// Base ticket with userInfo for display
+// Base ticket with user for display
 export type BaseTicket = TicketGetPayload<{
-  include: { userInfo: { include: { user: { select: { name: true } } } } };
+  include: { user: { select: { name: true } } };
 }>;
 
 export interface TicketListProps extends SearchParamsProps {

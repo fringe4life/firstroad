@@ -23,13 +23,9 @@ const getTicketList = async ({
   return prisma.ticket.findMany({
     where,
     include: {
-      userInfo: {
-        include: {
-          user: {
-            select: {
-              name: true,
-            },
-          },
+      user: {
+        select: {
+          name: true,
         },
       },
     },

@@ -55,8 +55,7 @@ const TicketItem = ({
             </CardContent>
             <CardFooter className="flex justify-between">
               <p className="text-muted-foreground text-sm">
-                {ticket.deadline.toLocaleDateString()} by{" "}
-                {ticket.userInfo.user.name}
+                {ticket.deadline.toLocaleDateString()} by {ticket.user.name}
               </p>
               <p className="text-muted-foreground text-sm">
                 {toCurrencyFromCent(ticket.bounty)}

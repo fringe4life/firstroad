@@ -101,11 +101,8 @@ const CommentList = ({
               content,
               ticketId,
               userId,
-              userInfo: {
-                userId,
-                user: {
-                  name: userName,
-                },
+              user: {
+                name: userName,
               },
             },
           });
@@ -237,7 +234,7 @@ const CommentList = ({
           renderProps={(item) => ({
             comment: item,
             buttons:
-              userId === item.userInfo?.userId ? (
+              userId === item.userId ? (
                 <CommentOwnerButtons
                   comment={item}
                   onDeleteComment={handleDelete}
