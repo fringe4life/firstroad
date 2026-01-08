@@ -1,10 +1,16 @@
 import { cors } from "@elysiajs/cors";
 import { openapi } from "@elysiajs/openapi";
+import { t } from "elysia";
+import { LIMITS } from "@/features/pagination/constants";
+import { getTicketsApi } from "@/features/ticket/dal/get-tickets-api";
+import { getTicketBySlugApi } from "@/features/ticket/queries/get-ticket-api";
+import type { SortOrder } from "@/generated/prisma/internal/prismaNamespace";
 import { app } from "@/lib/app";
 import { auth } from "@/lib/auth";
 import { inngestHandler } from "./inngest-plugin";
 
 // apply cors to all routes
+app.use(openapi());
 app.use(
   cors({
     origin: process.env.NEXT_PUBLIC_APP_URL,
@@ -13,9 +19,61 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
-app.use(openapi());
 // mount the auth handler with Elysia
-app.mount("/auth", auth.handler);
+app.mount("/auth", auth.handler, { detail: { tags: ["auth"] } });
+
+app.get(
+  "/tickets",
+  async ({ query, status }) => {
+    const { search, sortKey, sortValue, page, limit } = query;
+    const tickets = await getTicketsApi({
+      search,
+      sortKey,
+      sortValue: sortValue as SortOrder,
+      page,
+      limit,
+    });
+    if (!tickets) {
+      return status(404, "Tickets not found");
+    }
+    return tickets;
+  },
+  {
+    query: t.Object({
+      search: t.Optional(t.Union([t.String(), t.Undefined()])),
+      sortKey: t.String({
+        enum: ["bounty", "createdAt"],
+        default: "createdAt",
+      }),
+      sortValue: t.String({ enum: ["asc", "desc"], default: "desc" }),
+      page: t.Number({ default: 0, min: 0 }),
+      limit: t.Number({ enum: LIMITS, default: 10, min: 10, max: 100 }),
+    }),
+    detail: {
+      tags: ["tickets"],
+    },
+  },
+);
+
+app.get(
+  "/tickets/:slug",
+  async ({ params, status }) => {
+    const { slug } = params;
+    const ticket = await getTicketBySlugApi(slug);
+    if (!ticket) {
+      return status(404, "Ticket not found");
+    }
+    return ticket;
+  },
+  {
+    params: t.Object({
+      slug: t.String(),
+    }),
+    detail: {
+      tags: ["tickets", "ticket"],
+    },
+  },
+);
 
 // export the Elysia app as a Next.js route handlers
 export const GET = app.handle;

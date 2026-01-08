@@ -6,6 +6,14 @@ generator client {
   runtime         = "bun"
 }
 
+generator prismabox {
+  provider                    = "prismabox"
+  typeboxImportDependencyName = "elysia"
+  typeboxImportVariableName   = "t"
+  inputModel                  = true
+  output                      = "../src/generated/prismabox"
+}
+
 datasource db {
   provider = "postgresql"
 }

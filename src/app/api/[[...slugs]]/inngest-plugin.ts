@@ -20,6 +20,8 @@ const handler = serve({
   functions,
 });
 
-export const inngestHandler = app.all("/inngest", ({ request }) =>
-  handler(request),
+export const inngestHandler = app.all(
+  "/inngest",
+  ({ request }) => handler(request),
+  { detail: { tags: ["inngest"] } },
 );

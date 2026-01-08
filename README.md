@@ -13,8 +13,8 @@
 [![nuqs](https://img.shields.io/badge/nuqs-2.8.6-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.2.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Elysia](https://img.shields.io/badge/Elysia-1.4.21-000000)](https://elysiajs.com/)
-[![Inngest](https://img.shields.io/badge/Inngest-3.48.1-000000)](https://www.inngest.com/)
-[![Resend](https://img.shields.io/badge/Resend-6.6.0-000000)](https://resend.com/)
+[![Inngest](https://img.shields.io/badge/Inngest-3.49.0-000000)](https://www.inngest.com/)
+[![Resend](https://img.shields.io/badge/Resend-6.7.0-000000)](https://resend.com/)
 [![React Email](https://img.shields.io/badge/React%20Email-5.2.1-000000)](https://react.email/)
 
 </div>
@@ -365,8 +365,8 @@ src/
 │   ├── ticket/           # Ticket management
 │   │   ├── actions/      # Server actions (delete-ticket, update-status, upsert-ticket)
 │   │   ├── components/   # Ticket components (ticket-filter-dropdown, ticket-item, ticket-list, ticket-more-menu, ticket-owner-options, ticket-search-input, ticket-select-sort, ticket-upsert-form, skeletons)
-│   │   ├── dal/         # Data access layer (get-tickets)
-│   │   ├── queries/      # Data queries with "use cache" (get-all-ticket-slugs, get-ticket, get-ticket-list, get-tickets-count)
+│   │   ├── dal/         # Data access layer (get-tickets, get-tickets-api)
+│   │   ├── queries/      # Data queries (get-all-ticket-slugs, get-ticket, get-ticket-api, get-ticket-list, get-ticket-list-api, get-tickets-count)
 │   │   └── types.ts      # Ticket types
 │   ├── comment/          # Comment system
 │   │   ├── actions/      # Comment actions (upsert-comment, delete-comment)
@@ -690,7 +690,7 @@ The application uses Elysia 1.4.21 as a unified API framework for handling all A
 **Architecture:**
 - **Centralized App Instance**: Elysia app created in `src/lib/app.ts` with `/api` prefix
 - **Plugin Pattern**: Inngest handler implemented as Elysia plugin in `inngest-plugin.ts`
-- **OpenAPI Support**: Automatic API documentation with `@elysiajs/openapi` 1.4.13
+- **OpenAPI Support**: Automatic API documentation with `@elysiajs/openapi` 1.4.13 (currently disabled due to specPath maximum call stack size exceeded error)
 
 **Features:**
 - **Unified API Handler**: Single Elysia instance handles all API routes
@@ -701,6 +701,8 @@ The application uses Elysia 1.4.21 as a unified API framework for handling all A
 
 **Route Structure:**
 - `/api/auth/*` - Better Auth authentication endpoints
+- `/api/tickets` - GET endpoint for listing tickets with pagination, search, and sorting
+- `/api/tickets/:slug` - GET endpoint for retrieving a single ticket by slug
 - `/api/inngest` - Inngest webhook endpoint for background jobs
 
 **Configuration:**
@@ -714,7 +716,10 @@ The application uses Elysia 1.4.21 as a unified API framework for handling all A
 - Unified middleware and CORS configuration
 - Better Auth and Inngest integration in a single handler
 - Plugin-based architecture for modular route management
-- Automatic OpenAPI documentation generation
+- Automatic OpenAPI documentation generation (currently disabled - see known issues)
+
+**Known Issues:**
+- OpenAPI plugin causes "Maximum call stack size exceeded" error at specPath, likely due to circular references when introspecting mounted routes (Better Auth handler). OpenAPI generation is currently disabled until this issue is resolved.
 
 ### Type Safety
 
@@ -794,4 +799,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [React Email](https://react.email/) - Email templates
 - [Inngest](https://www.inngest.com/) - Background job processing
 - [Valibot](https://valibot.dev/) - Lightweight schema validation
-- [Elysia](https://elysiajs.com/) - API 
+- [Elysia](https://elysiajs.com/) - Typesafe, fast API management
