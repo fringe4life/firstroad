@@ -89,7 +89,7 @@
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@types/ws": "^8.18.1",
-    "@typescript/native-preview": "^7.0.0-dev.20260107.1",
+    "@typescript/native-preview": "^7.0.0-dev.20260108.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "prisma": "^7.2.0",
@@ -98,7 +98,7 @@
     "tailwindcss": "^4.1.18",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "ultracite": "7.0.9"
+    "ultracite": "7.0.10"
   },
   "trustedDependencies": [
     "@prisma/client",
@@ -120,7 +120,7 @@
     "body-parser": "^2.2.1",
     "valibot": "^1.2.0",
     "express": "^5.2.0",
-    "@modelcontextprotocol/sdk": "^1.25.0",
+    "@modelcontextprotocol/sdk": ">=1.25.2",
     "@trpc/server": ">=11.8.0",
     "qs": ">=6.14.1"
   }

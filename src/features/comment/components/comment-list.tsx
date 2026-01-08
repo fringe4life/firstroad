@@ -246,16 +246,16 @@ const CommentList = ({
           })}
         />
         <Activity mode={isPending ? "visible" : "hidden"}>
-          <Skeleton />
-          <Skeleton />
-          <Skeleton />
+          <Skeleton className="h-30" />
+          <Skeleton className="h-30" />
+          <Skeleton className="h-30" />
         </Activity>
         <Activity
           mode={commentsState.metadata.hasNextPage ? "visible" : "hidden"}
         >
           <div className="flex justify-center pt-2">
             <Button
-              className="w-full"
+              className="w-full text-right italic"
               disabled={isPending}
               onClick={handleLoadMore}
               variant="ghost"

@@ -29,4 +29,5 @@ type Events = {
 export const inngest = new Inngest({
   id: "firstroad",
   schemas: new EventSchemas().fromRecord<Events>(),
+  checkpointing: true,
 });

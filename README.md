@@ -9,7 +9,7 @@
 [![Better Auth](https://img.shields.io/badge/Better%20Auth-1.4.10-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.18-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Biome](https://img.shields.io/badge/Biome-2.3.11-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-7.0.9-000000)](https://ultracite.dev/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-7.0.10-000000)](https://ultracite.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.8.6-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.2.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Elysia](https://img.shields.io/badge/Elysia-1.4.21-000000)](https://elysiajs.com/)
@@ -61,7 +61,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **API Framework**: Elysia 1.4.21 with @elysiajs/cors 1.4.1 for unified API routes
 - **Background Jobs**: Inngest 3.48.1 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
-- **Linting**: Biome 2.3.11 for fast formatting and linting with Ultracite 7.0.9 rules
+- **Linting**: Biome 2.3.11 for fast formatting and linting with Ultracite 7.0.10 rules
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 
@@ -694,8 +694,8 @@ The application uses Elysia 1.4.21 as a unified API framework for handling all A
 
 **Features:**
 - **Unified API Handler**: Single Elysia instance handles all API routes
-- **CORS Support**: Configured with `@elysiajs/cors` 1.4.1 for cross-origin requests
-- **Better Auth Integration**: Auth routes mounted at `/auth` via `auth.handler`
+- **CORS Support**: Configured with `@elysiajs/cors` 1.4.1 for cross-origin requests (applied after auth handler to protect auth routes)
+- **Better Auth Integration**: Auth routes mounted at `/auth` via `auth.handler` (protected from CORS)
 - **Inngest Webhooks**: Background job webhooks handled at `/api/inngest` via Elysia plugin
 - **Next.js Route Handlers**: Exports GET, POST, PUT, DELETE, OPTIONS handlers for Next.js App Router
 
