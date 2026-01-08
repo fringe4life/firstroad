@@ -327,7 +327,7 @@ src/
 │   ├── page.tsx           # Home page
 │   └── globals.css        # Global styles with custom variants
 ├── components/            # Reusable UI components
-│   ├── ui/               # shadcn/ui components
+│   ├── ui/               # shadcn/ui components (table, button, card, dialog, etc.)
 │   ├── form/             # Form components (field-error, form, submit-button, use-action-feedback)
 │   ├── theme/            # Theme configuration (theme-provider, theme-switcher)
 │   ├── header.tsx        # Main application header
@@ -356,7 +356,7 @@ src/
 │   │   └── types/        # Navigation types
 │   ├── organisation/     # Organization management
 │   │   ├── actions/      # Organization actions (create-organisation)
-│   │   ├── components/   # Organization components (create-organisation-form, organisation-list, organisation-item)
+│   │   ├── components/   # Organization components (create-organisation-form, organisation-action-buttons, organisation-item, organisation-list)
 │   │   └── queries/      # Organization queries (get-organisations-for-user)
 │   ├── pagination/       # Pagination system
 │   │   ├── components/   # Pagination components (nuqs-pagination, pagination)
@@ -542,6 +542,7 @@ Built with shadcn/ui and Tailwind CSS:
 - **Customizable**: Easy to modify and extend
 - **Loading States**: Skeleton components for better UX
 - **Card Components**: Consistent card layouts for auth pages
+- **Table Components**: shadcn Table component for data display (used in organisation list)
 
 ## 🚀 Available Scripts
 

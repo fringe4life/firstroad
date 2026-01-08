@@ -6,8 +6,12 @@ import {
   parseAsString,
   parseAsStringLiteral,
 } from "nuqs/server";
-import { SORT_ORDERS } from "../constants";
-import { DEFAULT_LIMIT, DEFAULT_PAGE, LIMITS } from "./constants";
+import {
+  DEFAULT_LIMIT,
+  DEFAULT_PAGE,
+  LIMITS,
+  SORT_ORDERS,
+} from "@/features/pagination/constants";
 
 export const options: Options = {
   clearOnDefault: true,
