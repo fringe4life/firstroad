@@ -1,30 +1,50 @@
-import { GenericComponent } from "@/components/generic-component";
-import { Table, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { OrganisationItem } from "@/features/organisation/components/organisation-item";
-import { getOrganisationByUser } from "@/features/organisation/queries/get-organisations-for-user";
+import { Bug, CircleSlash2 } from "lucide-react";
+import { Placeholder } from "@/components/placeholder";
+import { TableBody, TableCell, TableRow } from "@/components/ui/table";
+import type { ActiveOrganizationId } from "@/features/auth/types";
+import type { List, UnsuccessfulState } from "@/types";
+import type { BaseOrganisation } from "../types";
+import { OrganisationItem } from "./organisation-item";
 
-const OrganisationList = async () => {
-  const organisations = await getOrganisationByUser();
-  return (
-    <Table>
-      <TableHeader>
+interface OrganisationListProps
+  extends UnsuccessfulState,
+    ActiveOrganizationId {
+  organisations: List<BaseOrganisation>;
+}
+
+const OrganisationList = ({
+  organisations,
+  activeOrganizationId,
+  emptyStateMessage,
+  errorStateMessage = "Failed to fetch organisations",
+}: OrganisationListProps) => {
+  const isError = !organisations;
+  const isEmpty = !isError && organisations.length === 0;
+  const message = isError ? errorStateMessage : emptyStateMessage;
+  const icon = isError ? <Bug /> : <CircleSlash2 />;
+
+  if (isError || isEmpty) {
+    return (
+      <TableBody className="h-full">
         <TableRow>
-          <TableHead>ID</TableHead>
-          <TableHead>Name</TableHead>
-          <TableHead>Joined At</TableHead>
-          <TableHead>Members</TableHead>
-          <TableHead>""</TableHead>
+          <TableCell colSpan={5}>
+            <Placeholder icon={icon} label={message} />
+          </TableCell>
         </TableRow>
-      </TableHeader>
-      <GenericComponent
-        as="tbody"
-        Component={OrganisationItem}
-        emptyStateMessage="No organisations found"
-        errorStateMessage="Failed to fetch organisations"
-        items={organisations}
-        renderProps={(organisation) => ({ organisation })}
-      />
-    </Table>
+      </TableBody>
+    );
+  }
+
+  return (
+    <TableBody>
+      {organisations.map((organisation) => (
+        <OrganisationItem
+          activeOrganizationId={activeOrganizationId}
+          key={organisation.id}
+          organisation={organisation}
+        />
+      ))}
+    </TableBody>
   );
 };
 

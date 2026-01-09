@@ -355,7 +355,7 @@ src/
 │   │   └── types/        # Navigation types
 │   ├── organisation/     # Organization management
 │   │   ├── actions/      # Organization actions (create-organisation)
-│   │   ├── components/   # Organization components (create-organisation-form, organisation-action-buttons, organisation-item, organisation-list)
+│   │   ├── components/   # Organization components (create-organisation-form, organisation-action-buttons, organisation-item, organisation-list, organisations)
 │   │   └── queries/      # Organization queries (get-organisations-for-user)
 │   ├── pagination/       # Pagination system
 │   │   ├── components/   # Pagination components (nuqs-pagination, pagination)
@@ -417,7 +417,7 @@ The application uses Better Auth with multiple authentication methods:
 
 - **Sign Up**: Create new accounts with email and password
 - **Sign In**: Secure login with credential validation or OTP
-- **Social Login**: GitHub OAuth authentication with automatic redirect to tickets page
+- **Social Login**: GitHub OAuth authentication (working) with automatic redirect to tickets page
 - **OTP Authentication**: One-time password authentication via email
   - **Sign-in OTP**: Alternative login method using one-time passwords
   - **Email Verification OTP**: Verify email addresses with OTP codes

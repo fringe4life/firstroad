@@ -20,7 +20,12 @@ app.use(
   }),
 );
 // mount the auth handler with Elysia
-app.mount("/auth", auth.handler, { detail: { tags: ["auth"] } });
+app.mount("/auth", auth.handler, {
+  detail: {
+    tags: ["auth"],
+    description: "Authentication endpoints from better auth",
+  },
+});
 
 app.get(
   "/tickets",
@@ -51,6 +56,7 @@ app.get(
     }),
     detail: {
       tags: ["tickets"],
+      description: "List tickets with pagination, search, and sorting",
     },
   },
 );
@@ -71,6 +77,7 @@ app.get(
     }),
     detail: {
       tags: ["tickets", "ticket"],
+      description: "Get a single ticket by slug",
     },
   },
 );

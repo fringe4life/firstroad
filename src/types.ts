@@ -16,3 +16,8 @@ export interface ErrorProps {
 export interface Id {
   id: string;
 }
+
+export interface UnsuccessfulState {
+  emptyStateMessage: string;
+  errorStateMessage?: string;
+}

@@ -19,7 +19,15 @@ const getUser = async (): Promise<UserProp> => {
 
   // TODO need to expire session if expiresAt < Date.now()
   if (session?.user) {
-    return { user: session.user, hasUser: true };
+    // Extract activeOrganizationId from session.session and append to user
+    const activeOrganizationId = session.session?.activeOrganizationId ?? null;
+    return {
+      user: {
+        ...session.user,
+        activeOrganizationId,
+      },
+      hasUser: true,
+    };
   }
   return { user: null, hasUser: false };
 };

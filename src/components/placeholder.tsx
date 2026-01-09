@@ -1,3 +1,4 @@
+"use client";
 import { MessageSquareWarning } from "lucide-react";
 import { cloneElement } from "react";
 

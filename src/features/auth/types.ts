@@ -8,8 +8,14 @@ export type ServerSession = typeof auth.$Infer.Session;
 // Client-side session type (from authClient instance)
 export type ClientSession = typeof authClient.$Infer.Session;
 
-// User type (extracted from session)
-export type User = ServerSession["user"];
+// Base user type (extracted from session)
+type BaseUser = ServerSession["user"];
+
+export interface ActiveOrganizationId
+  extends Pick<ServerSession["session"], "activeOrganizationId"> {}
+
+// Extended user type with activeOrganizationId appended
+export type User = BaseUser & ActiveOrganizationId;
 
 export type UserProp = NoUser | HasUser;
 

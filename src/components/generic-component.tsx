@@ -1,12 +1,12 @@
 import { Bug, CircleSlash2 } from "lucide-react";
 import { Placeholder } from "@/components/placeholder";
-import type { Id, List } from "@/types";
+import type { Id, List, UnsuccessfulState } from "@/types";
 
 export interface GenericComponentProps<
   T,
   P,
   E extends React.ElementType = "div",
-> {
+> extends UnsuccessfulState {
   Component: React.ComponentType<P>;
   items: List<T>;
   renderProps: (item: T, index: number) => P;
@@ -14,8 +14,6 @@ export interface GenericComponentProps<
   className?: string;
   as?: E;
   wrapperProps?: React.ComponentPropsWithoutRef<E>;
-  emptyStateMessage: string;
-  errorStateMessage?: string;
 }
 const GenericComponent = <
   T extends Id,

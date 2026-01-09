@@ -22,7 +22,7 @@ const SESSION_UPDATE_AGE_SECONDS = DAYS_IN_SECONDS; // 1 day
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "postgresql" }),
-  basePath: "/api",
+  basePath: "/auth",
   baseURL: process.env.NEXT_PUBLIC_APP_URL,
   experimental: { joins: true },
   session: {
@@ -200,7 +200,7 @@ export const auth = betterAuth({
     github: {
       clientId: env.GITHUB_CLIENT_ID,
       clientSecret: env.GITHUB_CLIENT_SECRET,
-      // callbackURL: "http://localhost:3000/auth/api/auth/callback/github",
+      redirectURI: "http://localhost:3000/api/auth/callback/github",
     },
   },
 });
