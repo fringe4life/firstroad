@@ -19,17 +19,10 @@ const commentsForTicketCache = (ticketId: string): string => {
 const commentCache = (commentId: string): string => {
   return `comment-${commentId}`;
 };
-
-// Session cache tag
-const sessionCache = (): string => {
-  return "session";
-};
-
 export {
   ticketsCache,
   ticketCache,
   commentsCache,
   commentsForTicketCache,
   commentCache,
-  sessionCache,
 };

@@ -1,29 +1,32 @@
 "use server";
-import { cacheTag } from "next/cache";
 import { headers } from "next/headers";
 import type { UserProp } from "@/features/auth/types";
 import { auth } from "@/lib/auth";
-import { sessionCache } from "@/utils/cache-tags";
 import { tryCatch } from "@/utils/try-catch";
 
 const getUser = async (): Promise<UserProp> => {
-  "use cache: private";
-  cacheTag(sessionCache());
-
-  const { data: session } = await tryCatch(
+  const { data: authSession } = await tryCatch(
     async () =>
       await auth.api.getSession({
         headers: await headers(),
       }),
   );
+  if (authSession?.user && authSession.session) {
+    const expiresAt = new Date(authSession.session.expiresAt).getTime();
+    const now = Date.now();
 
-  // TODO need to expire session if expiresAt < Date.now()
-  if (session?.user) {
+    // DEFENSIVE coding just to ensure session is not expired
+    // If session is expired, return no user (Better Auth handles cleanup automatically)
+    if (expiresAt < now) {
+      // If session is expired, return no user (Better Auth handles cleanup automatically)
+      return { user: null, hasUser: false };
+    }
     // Extract activeOrganizationId from session.session and append to user
-    const activeOrganizationId = session.session?.activeOrganizationId ?? null;
+    const activeOrganizationId =
+      authSession.session?.activeOrganizationId ?? null;
     return {
       user: {
-        ...session.user,
+        ...authSession.user,
         activeOrganizationId,
       },
       hasUser: true,

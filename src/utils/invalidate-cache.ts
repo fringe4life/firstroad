@@ -3,7 +3,6 @@ import {
   commentCache,
   commentsCache,
   commentsForTicketCache,
-  sessionCache,
   ticketCache,
   ticketsCache,
 } from "./cache-tags";
@@ -48,11 +47,6 @@ const invalidateCommentAndTicketComments = (
   updateTag(commentCache(commentId));
 };
 
-// Session invalidation
-const invalidateSession = (): void => {
-  updateTag(sessionCache());
-};
-
 // Combined invalidation
 const invalidateTicketWithComments = (slug: string, ticketId: string): void => {
   updateTag(ticketsCache());
@@ -69,6 +63,5 @@ export {
   invalidateCommentsForTicket,
   invalidateComment,
   invalidateCommentAndTicketComments,
-  invalidateSession,
   invalidateTicketWithComments,
 };

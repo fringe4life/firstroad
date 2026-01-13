@@ -14,7 +14,6 @@ import {
 } from "valibot";
 import { auth } from "@/lib/auth";
 import { ticketsPath } from "@/path";
-import { invalidateSession } from "@/utils/invalidate-cache";
 import {
   type ActionState,
   fromErrorToActionState,
@@ -48,7 +47,6 @@ const signin = async (_state: ActionState | undefined, formData: FormData) => {
   if (error) {
     return fromErrorToActionState(error, formData);
   }
-  invalidateSession();
   throw redirect(ticketsPath(), RedirectType.replace);
 };
 

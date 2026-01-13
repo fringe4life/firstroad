@@ -457,7 +457,7 @@ The application uses Better Auth with multiple authentication methods:
 ## 🔄 Dynamic Rendering & Session Management
 
 - **Dynamic Rendering**: Use of `connection()` from `next/server` opts routes/components into dynamic rendering
-- **User Management**: Centralized `getUser()` in `src/features/auth/queries/get-user.ts` with cached user data
+- **User Management**: Centralized `getUser()` in `src/features/auth/queries/get-user.ts` with defensive session expiration checking
 - **HasAuthSuspense Pattern**: Suspense-wrapped session injection for auth-dependent components
 - **Background Jobs**: Inngest handles async operations like password reset emails
 
@@ -749,9 +749,9 @@ Centralized type-safe route definitions in `src/path.ts`:
 Centralized cache tag system for consistent cache invalidation:
 
 - **`src/utils/cache-tags.ts`**: Centralized cache tag functions (similar to `path.ts`)
-  - `ticketsCache()`, `ticketCache(slug)`, `commentsCache()`, `commentsForTicketCache(ticketId)`, `commentCache(commentId)`, `sessionCache()`
+  - `ticketsCache()`, `ticketCache(slug)`, `commentsCache()`, `commentsForTicketCache(ticketId)`, `commentCache(commentId)`
 - **`src/utils/invalidate-cache.ts`**: High-level invalidation functions
-  - `invalidateTicketAndList(slug)`, `invalidateCommentAndTicketComments(...)`, `invalidateSession()`, etc.
+  - `invalidateTicketAndList(slug)`, `invalidateCommentAndTicketComments(...)`, etc.
 - Ensures consistency between `cacheTag()` and `updateTag()` calls
 - All ticket-related cache operations use slugs (not IDs) for consistency
 - Single source of truth for cache tag strings
