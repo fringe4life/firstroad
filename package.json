@@ -57,7 +57,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
-    "elysia": "^1.4.21",
+    "elysia": "^1.4.22",
     "fastest-levenshtein": "^1.0.16",
     "inngest": "^3.49.1",
     "inngest-cli": "^1.16.0",

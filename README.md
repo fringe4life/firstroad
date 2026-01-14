@@ -6,16 +6,16 @@
 [![React](https://img.shields.io/badge/React-19.2.3-61DAFB?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Prisma](https://img.shields.io/badge/Prisma-7.2.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
-[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.4.10-000000)](https://better-auth.com/)
+[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.4.12-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.18-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Biome](https://img.shields.io/badge/Biome-2.3.11-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-7.0.10-000000)](https://ultracite.dev/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-7.0.11-000000)](https://ultracite.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.8.6-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.2.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
-[![Elysia](https://img.shields.io/badge/Elysia-1.4.21-000000)](https://elysiajs.com/)
-[![Inngest](https://img.shields.io/badge/Inngest-3.49.0-000000)](https://www.inngest.com/)
+[![Elysia](https://img.shields.io/badge/Elysia-1.4.22-000000)](https://elysiajs.com/)
+[![Inngest](https://img.shields.io/badge/Inngest-3.49.1-000000)](https://www.inngest.com/)
 [![Resend](https://img.shields.io/badge/Resend-6.7.0-000000)](https://resend.com/)
-[![React Email](https://img.shields.io/badge/React%20Email-5.2.1-000000)](https://react.email/)
+[![React Email](https://img.shields.io/badge/React%20Email-5.2.3-000000)](https://react.email/)
 
 </div>
 
@@ -50,18 +50,18 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **Framework**: Next.js 16.1.1 (App Router) with Turbopack
 - **Language**: TypeScript 5.9.3 with strict type checking
 - **Database**: PostgreSQL with Prisma Client 7.2.0 (relationJoins preview, Neon adapter)
-- **Authentication**: Better Auth 1.4.10 with email/password provider and session cookie caching
+- **Authentication**: Better Auth 1.4.12 with email/password provider and session cookie caching
 - **Styling**: Tailwind CSS v4.1.18 with shadcn/ui components
 - **Icons**: Lucide React
 - **Forms**: React Hook Form with Valibot validation
 - **Notifications**: Sonner toast notifications
 - **Theme**: next-themes for dark/light mode
 - **URL Search Params**: nuqs 2.8.6 for type-safe URL parameters
-- **Email**: React Email 5.2.1 with Resend 6.6.0 for transactional emails
-- **API Framework**: Elysia 1.4.21 with @elysiajs/cors 1.4.1 for unified API routes
-- **Background Jobs**: Inngest 3.48.1 for background tasks and event handling
+- **Email**: React Email 5.2.3 with Resend 6.7.0 for transactional emails
+- **API Framework**: Elysia 1.4.22 with @elysiajs/cors 1.4.1 for unified API routes
+- **Background Jobs**: Inngest 3.49.1 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
-- **Linting**: Biome 2.3.11 for fast formatting and linting with Ultracite 7.0.10 rules
+- **Linting**: Biome 2.3.11 for fast formatting and linting with Ultracite 7.0.11 rules
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 
@@ -635,7 +635,7 @@ Inngest provides background job processing for:
 
 ### Email Templates (Resend)
 
-The application uses Resend 6.6.0 for transactional emails with published templates. All email sending functions use Resend's template API instead of inline React Email components.
+The application uses Resend 6.7.0 for transactional emails with published templates. All email sending functions use Resend's template API instead of inline React Email components.
 
 **Template IDs:**
 - `email-otp-verification` - OTP codes for sign-in, email verification, and password reset
@@ -684,7 +684,7 @@ Resend templates require an API key with `full_access` permissions (not just `se
 
 ### API Routes (Elysia)
 
-The application uses Elysia 1.4.21 as a unified API framework for handling all API routes through a single catch-all handler (`src/app/api/[[...slugs]]/route.ts`).
+The application uses Elysia 1.4.22 as a unified API framework for handling all API routes through a single catch-all handler (`src/app/api/[[...slugs]]/route.ts`).
 
 **Architecture:**
 - **Centralized App Instance**: Elysia app created in `src/lib/app.ts` with `/api` prefix
