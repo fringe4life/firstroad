@@ -81,7 +81,6 @@ This project leverages cutting-edge Next.js 16 features for optimal performance 
   - `browserDebugInfoInTerminal`: Enhanced debugging information
   - `viewTransition`: Smooth page transitions
   - `mcpServer`: Model Context Protocol server support
-  - `authInterrupts`: Authentication-aware route handling
   - `typedEnv`: Type-safe environment variables
   
 ### Cache Components & PPR

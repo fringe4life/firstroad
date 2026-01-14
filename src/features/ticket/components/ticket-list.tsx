@@ -15,21 +15,23 @@ const TicketList = async ({ searchParams, userId }: TicketListProps) => {
   return (
     <div className="max-content-widest mx-auto grid justify-items-center gap-y-4">
       <Suspense fallback={<TicketControlsFallback />}>
-        {/* Desktop: Stacked layout */}
-        <div className="max-content-narrow hidden gap-y-2 sm:grid">
-          <div className="grid grid-flow-col grid-cols-2 gap-x-2">
-            <TicketSearchInput placeholder="Search tickets ..." />
-            <TicketSortSelect options={TICKET_SORT_OPTIONS} />
+        <ViewTransition>
+          {/* Desktop: Stacked layout */}
+          <div className="max-content-narrow hidden gap-y-2 sm:grid">
+            <div className="grid grid-flow-col grid-cols-2 gap-x-2">
+              <TicketSearchInput placeholder="Search tickets ..." />
+              <TicketSortSelect options={TICKET_SORT_OPTIONS} />
+            </div>
           </div>
-        </div>
 
-        {/* Mobile: Two-column layout with dropdown */}
-        <div className="max-content-narrow grid gap-y-2 sm:hidden">
-          <div className="grid grid-flow-col grid-cols-2 gap-x-2">
-            <TicketSearchInput placeholder="Search tickets ..." />
-            <TicketFilterDropdown />
+          {/* Mobile: Two-column layout with dropdown */}
+          <div className="max-content-narrow grid gap-y-2 sm:hidden">
+            <div className="grid grid-flow-col grid-cols-2 gap-x-2">
+              <TicketSearchInput placeholder="Search tickets ..." />
+              <TicketFilterDropdown />
+            </div>
           </div>
-        </div>
+        </ViewTransition>
       </Suspense>
       <GenericComponent
         Component={TicketItem}
@@ -41,11 +43,11 @@ const TicketList = async ({ searchParams, userId }: TicketListProps) => {
       />
 
       <div className="max-content-narrow">
-        <ViewTransition>
-          <Suspense>
+        <Suspense>
+          <ViewTransition>
             <Pagination metadata={metadata} />
-          </Suspense>
-        </ViewTransition>
+          </ViewTransition>
+        </Suspense>
       </div>
     </div>
   );

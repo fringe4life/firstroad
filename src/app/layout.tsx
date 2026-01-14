@@ -46,7 +46,7 @@ const RootLayout = ({ children, auth }: LayoutProps<"/">) => (
         <ThemeProvider>
           <MobileSidebarProvider>
             <Header />
-            <div className="layout-grid-cols grid grid-flow-col">
+            <div className="layout-grid-cols grid grid-flow-col has-[.sidebar:hover]:[--side-width:var(--expanded-sidebar-width)]">
               <Sidebar />
               <main className="main-inline-padding col-span-2 min-h-screen overflow-x-clip py-24 md:col-start-2">
                 {children}

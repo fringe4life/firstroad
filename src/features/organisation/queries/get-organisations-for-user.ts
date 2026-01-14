@@ -27,6 +27,7 @@ const getOrganisationByUser = async (): Promise<Maybe<BaseOrganisation[]>> => {
         },
         _count: { select: { members: true } },
       },
+      orderBy: { createdAt: "desc" },
     }),
   );
   return organisations?.map(({ members, ...org }) => ({

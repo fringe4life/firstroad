@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
+import { Suspense, ViewTransition } from "react";
 import { CardCompact } from "@/components/card-compact";
 import { Heading } from "@/components/heading";
 import { RequireAuthSuspense } from "@/features/auth/components/require-auth";
@@ -29,7 +29,9 @@ const TicketsPage = ({ searchParams }: PageProps<"/tickets">) => {
         className="max-content-narrow justify-self-center"
         content={
           <Suspense fallback={<TicketFormSkeleton />}>
-            <TicketUpsertForm upsertTicketAction={upsertTicket} />
+            <ViewTransition>
+              <TicketUpsertForm upsertTicketAction={upsertTicket} />
+            </ViewTransition>
           </Suspense>
         }
         description="A new ticket will be created"
@@ -40,7 +42,9 @@ const TicketsPage = ({ searchParams }: PageProps<"/tickets">) => {
         redirectPath={signInPath()}
       >
         {async (user) => (
-          <TicketList searchParams={searchParams} userId={user.id} />
+          <ViewTransition>
+            <TicketList searchParams={searchParams} userId={user.id} />
+          </ViewTransition>
         )}
       </RequireAuthSuspense>
     </div>

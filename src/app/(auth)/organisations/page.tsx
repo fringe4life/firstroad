@@ -1,6 +1,6 @@
 import { LucidePlus } from "lucide-react";
 import Link from "next/link";
-import { Suspense } from "react";
+import { Suspense, ViewTransition } from "react";
 import { Heading } from "@/components/heading";
 import { Spinner } from "@/components/spinner";
 import { buttonVariants } from "@/components/ui/button";
@@ -21,7 +21,9 @@ const OrganisationsPage = () => {
         title="Organisations"
       />
       <Suspense fallback={<Spinner />}>
-        <Organisations />
+        <ViewTransition>
+          <Organisations />
+        </ViewTransition>
       </Suspense>
     </div>
   );

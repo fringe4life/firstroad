@@ -36,7 +36,7 @@ const OrganisationList = ({
   }
 
   return (
-    <TableBody>
+    <TableBody className="items-start">
       {organisations.map((organisation) => (
         <OrganisationItem
           activeOrganizationId={activeOrganizationId}

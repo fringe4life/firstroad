@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
+import { Suspense, ViewTransition } from "react";
 import { Heading } from "@/components/heading";
 import { TicketListSkeleton } from "@/features/ticket/components/skeletons/ticket-list-skeleton";
 import { TicketList } from "@/features/ticket/components/ticket-list";
@@ -22,7 +22,9 @@ const HomePage = ({ searchParams }: PageProps<"/">) => (
       title="All Tickets"
     />
     <Suspense fallback={<TicketListSkeleton />}>
-      <TicketList searchParams={searchParams} />
+      <ViewTransition>
+        <TicketList searchParams={searchParams} />
+      </ViewTransition>
     </Suspense>
   </div>
 );
