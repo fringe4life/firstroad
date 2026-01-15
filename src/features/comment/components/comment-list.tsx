@@ -12,7 +12,6 @@ import {
 import { CardCompact } from "@/components/card-compact";
 import { GenericComponent } from "@/components/generic-component";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import type { deleteComment } from "@/features/comment/actions/delete-comment";
 
 import type { upsertComment } from "@/features/comment/actions/upsert-comment";
@@ -32,6 +31,7 @@ import { type ActionState, EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 import { INITIAL_EDITING_STATE } from "../constants";
 import type { getCommentsByTicketSlug } from "../dal/get-comments";
 import { CommentItem } from "./comment-item";
+import { CommentListSkeleton } from "./skeletons/comment-list-skeleton";
 
 type CommentsProps = {
   ticketSlug: string;
@@ -246,9 +246,7 @@ const CommentList = ({
           })}
         />
         <Activity mode={isPending ? "visible" : "hidden"}>
-          <Skeleton className="h-30" />
-          <Skeleton className="h-30" />
-          <Skeleton className="h-30" />
+          <CommentListSkeleton />
         </Activity>
         <Activity
           mode={commentsState.metadata.hasNextPage ? "visible" : "hidden"}

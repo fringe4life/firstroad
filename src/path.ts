@@ -28,9 +28,12 @@ const signOutPath = (): Route => "/sign-out";
 const organisationsPath = (): Route => "/organisations";
 
 const onboardingPath = (): Route => "/onboarding";
+const selectActiveOrganisationPath = (): Route =>
+  `${onboardingPath()}/select-active-organisation` as Route;
 
 export {
   onboardingPath,
+  selectActiveOrganisationPath,
   homePath,
   ticketsPath,
   forgotPasswordPath,

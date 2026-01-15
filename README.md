@@ -310,6 +310,7 @@ src/
 │   │   │   │   ├── send/  # Send verification OTP
 │   │   │   │   └── verify/ # Verify email OTP
 │   │   ├── onboarding/    # User onboarding page
+│   │   │   ├── select-active-organisation/ # Select active organization
 │   │   └── layout.tsx     # Password layout
 │   ├── @auth/             # Parallel route slot for auth modals
 │   │   ├── (.)sign-in/    # Intercepted sign-in modal
@@ -335,6 +336,7 @@ src/
 │   ├── date-picker.tsx   # Date picker component
 │   ├── heading.tsx       # Heading component
 │   ├── placeholder.tsx   # Placeholder component
+│   ├── skeletons/         # Shared skeletons
 │   ├── search-input.tsx  # Search input component
 │   ├── sort-select.tsx   # Sort select component
 │   └── ...               # Other shared components
@@ -369,7 +371,7 @@ src/
 │   │   └── types.ts      # Ticket types
 │   ├── comment/          # Comment system
 │   │   ├── actions/      # Comment actions (upsert-comment, delete-comment)
-│   │   ├── components/   # Comment components (comment-create-form, comment-delete-button, comment-edit-button, comment-item, comment-list, comment-owner-buttons, time-ago, time-ago-skeleton)
+│   │   ├── components/   # Comment components (comment-create-form, comment-delete-button, comment-edit-button, comment-item, comment-list, comment-owner-buttons, skeletons, time-ago, time-ago-client)
 │   │   ├── constants.ts  # Comment constants (INITIAL_EDITING_STATE)
 │   │   ├── dal/         # Data access layer (get-comments)
 │   │   ├── hooks/        # Comment hooks (use-comment-optimistic)

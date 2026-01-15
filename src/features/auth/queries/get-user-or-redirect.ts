@@ -7,6 +7,7 @@ import { onboardingPath, signInPath, verifyEmailOTPSendPath } from "@/path";
 export interface GetUserRedirectOptions {
   checkEmailVerified?: boolean;
   checkOrganistation?: boolean;
+  checkActiveOrganisation?: boolean;
 }
 
 export const getUserOrRedirect = async (
@@ -18,8 +19,11 @@ export const getUserOrRedirect = async (
   if (!hasUser) {
     throw redirect(signInPath());
   }
-  const { checkEmailVerified = true, checkOrganistation = true } =
-    options ?? {};
+  const {
+    checkEmailVerified = true,
+    checkOrganistation = true,
+    checkActiveOrganisation = true,
+  } = options ?? {};
 
   const userNeedsEmailVerification = checkEmailVerified && !user.emailVerified;
 
@@ -33,6 +37,10 @@ export const getUserOrRedirect = async (
     if (!organisations || organisations.length === 0) {
       throw redirect(onboardingPath());
     }
+  }
+
+  if (checkActiveOrganisation && !user.activeOrganizationId) {
+    // TODO
   }
 
   return user;

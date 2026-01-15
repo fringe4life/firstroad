@@ -6,10 +6,21 @@ import { CheckIcon, ChevronRightIcon, CircleIcon } from "lucide-react";
 import type * as React from "react";
 import { cn } from "@/lib/utils";
 
+/**
+ * Radix DropdownMenu defaults to modal behavior, which traps focus and locks
+ * document scrolling by adding `data-scroll-locked` to the body. We set
+ * `modal=false` by default to avoid scroll-lock side effects (e.g., scrollbar
+ * popping when the menu opens). Pass `modal` explicitly to opt back in.
+ */
 const DropdownMenu = ({
+  modal = false,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Root>) => (
-  <DropdownMenuPrimitive.Root data-slot="dropdown-menu" {...props} />
+  <DropdownMenuPrimitive.Root
+    data-slot="dropdown-menu"
+    modal={modal}
+    {...props}
+  />
 );
 
 const DropdownMenuPortal = ({

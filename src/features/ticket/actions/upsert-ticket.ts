@@ -75,7 +75,7 @@ const upsertTicket = async (
     };
     const ticket = await prisma.ticket.upsert({
       where: {
-        id,
+        id: id ?? "",
       },
       update: dbData,
       create: dbData,

@@ -5,6 +5,8 @@ import { HasAuthSuspense } from "@/features/auth/components/has-auth";
 import { deleteComment } from "@/features/comment/actions/delete-comment";
 import { upsertComment } from "@/features/comment/actions/upsert-comment";
 import { CommentList } from "@/features/comment/components/comment-list";
+import { CommentFormSkeleton } from "@/features/comment/components/skeletons/comment-form-skeleton";
+import { CommentListSkeleton } from "@/features/comment/components/skeletons/comment-list-skeleton";
 import { getCommentsByTicketSlug } from "@/features/comment/dal/get-comments";
 import { TICKET_NOT_FOUND } from "@/features/constants";
 import { TicketItem } from "@/features/ticket/components/ticket-item";
@@ -57,7 +59,14 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
       />
       <TicketItem
         comments={
-          <HasAuthSuspense fallback={<div>Loading Comments...</div>}>
+          <HasAuthSuspense
+            fallback={
+              <>
+                <CommentFormSkeleton />
+                <CommentListSkeleton />
+              </>
+            }
+          >
             {(user) => (
               <CommentList
                 deleteCommentAction={deleteComment}

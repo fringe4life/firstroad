@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense, ViewTransition } from "react";
 import { Heading } from "@/components/heading";
+import { TicketControlsFallback } from "@/features/ticket/components/skeletons/ticket-controls-skeleton";
 import { TicketListSkeleton } from "@/features/ticket/components/skeletons/ticket-list-skeleton";
 import { TicketList } from "@/features/ticket/components/ticket-list";
 
@@ -21,7 +22,14 @@ const HomePage = ({ searchParams }: PageProps<"/">) => (
       description="Tickets by everyone at one place"
       title="All Tickets"
     />
-    <Suspense fallback={<TicketListSkeleton />}>
+    <Suspense
+      fallback={
+        <>
+          <TicketControlsFallback />
+          <TicketListSkeleton />
+        </>
+      }
+    >
       <ViewTransition>
         <TicketList searchParams={searchParams} />
       </ViewTransition>

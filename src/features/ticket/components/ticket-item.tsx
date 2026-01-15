@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { TICKET_ICONS } from "@/features/constants";
-import TicketOwnerOptions from "@/features/ticket/components/ticket-owner-options";
+import { TicketOwnerOptions } from "@/features/ticket/components/ticket-owner-options";
 import type { TicketItemProps } from "@/features/ticket/types";
 import { ticketPath } from "@/path";
 import { toCurrencyFromCent } from "@/utils/currency";
@@ -37,7 +37,7 @@ const TicketItem = ({
       name={`ticket-${ticket.id}`}
     >
       <div
-        className="max-content-narrow detail:max-content-widest grid gap-y-4 justify-self-center"
+        className="max-content-narrow detail:max-content-widest grid gap-y-4 self-start justify-self-center"
         data-detail={isDetail}
       >
         <div className="grid grid-flow-col grid-cols-[1fr_36px] gap-x-2">

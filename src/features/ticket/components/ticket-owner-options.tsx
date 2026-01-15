@@ -1,4 +1,4 @@
-import { LucidePencil } from "lucide-react";
+import { LucideMoreVertical, LucidePencil } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { HasAuthSuspense } from "@/features/auth/components/has-auth";
@@ -15,11 +15,11 @@ const TicketOwnerOptions = ({
     fallback={
       <div className="grid gap-y-1">
         <Button disabled size="icon" variant="outline">
-          <LucidePencil className="size-4" />
+          <LucidePencil className="aspect-square w-4 animate-pulse" />
         </Button>
-        {Boolean(isDetail) && (
+        {isDetail && (
           <Button disabled size="icon" variant="outline">
-            <div className="size-4" />
+            <LucideMoreVertical className="aspect-square w-4 animate-pulse" />
           </Button>
         )}
       </div>
@@ -43,7 +43,7 @@ const TicketOwnerOptions = ({
           ticket={ticket}
           trigger={
             <Button size="icon" variant="outline">
-              <div className="size-4" />
+              <LucideMoreVertical className="aspect-square w-4" />
             </Button>
           }
         />
@@ -59,4 +59,4 @@ const TicketOwnerOptions = ({
   </HasAuthSuspense>
 );
 
-export default TicketOwnerOptions;
+export { TicketOwnerOptions };
