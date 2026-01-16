@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { CardCompact } from "@/components/card-compact";
+import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
-import { isOwner } from "@/features/auth/utils/owner";
 import { upsertTicket } from "@/features/ticket/actions/upsert-ticket";
 import { TicketUpsertForm } from "@/features/ticket/components/ticket-upsert-form";
 import { getTicketBySlug } from "@/features/ticket/queries/get-ticket";
@@ -13,17 +13,13 @@ const EditTicketPage = async ({
 }: PageProps<"/tickets/[slug]/edit">) => {
   const user = await getUserOrRedirect();
   const { slug } = await params;
-  const ticket = await getTicketBySlug(slug);
-  if (!ticket) {
+  const ticket = await itemWithOwnership(() => getTicketBySlug(slug), user);
+  if (!ticket?.isOwner) {
     throw notFound();
   }
-  const ticketIsOwner = isOwner(user, ticket);
-  // TODO consider using authInterrupts and the unauthorised route file.
-  if (!ticketIsOwner) {
-    throw notFound();
-  }
+
   return (
-    <>
+    <div className="grid h-full grid-rows-[min-content_1fr] gap-y-4">
       <Breadcrumbs
         breadcrumbs={[
           { title: "Tickets", href: ticketsPath() },
@@ -32,14 +28,14 @@ const EditTicketPage = async ({
         ]}
       />
       <CardCompact
-        className="max-content-widest self-center"
+        className="max-content-widest place-self-center"
         content={
           <TicketUpsertForm ticket={ticket} upsertTicketAction={upsertTicket} />
         }
         description="A new ticket will be created"
         title="Edit Ticket"
       />
-    </>
+    </div>
   );
 };
 

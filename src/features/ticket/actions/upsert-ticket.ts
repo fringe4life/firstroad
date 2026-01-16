@@ -63,7 +63,7 @@ const upsertTicket = async (
     }
 
     const {
-      output: { deadline, bounty, title },
+      output: { deadline, bounty, title, description },
     } = result;
 
     const dbData = {
@@ -72,6 +72,7 @@ const upsertTicket = async (
       deadline: new Date(deadline),
       bounty: toCent(bounty),
       userId: user.id,
+      description,
     };
     const ticket = await prisma.ticket.upsert({
       where: {

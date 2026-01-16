@@ -4,10 +4,11 @@ import { CardCompact } from "@/components/card-compact";
 import { Heading } from "@/components/heading";
 import { RequireAuthSuspense } from "@/features/auth/components/require-auth";
 import { upsertTicket } from "@/features/ticket/actions/upsert-ticket";
+import { TicketControlsFallback } from "@/features/ticket/components/skeletons/ticket-controls-skeleton";
 import { TicketFormSkeleton } from "@/features/ticket/components/skeletons/ticket-form-skeleton";
 import { TicketListSkeleton } from "@/features/ticket/components/skeletons/ticket-list-skeleton";
-import { TicketList } from "@/features/ticket/components/ticket-list";
 import { TicketUpsertForm } from "@/features/ticket/components/ticket-upsert-form";
+import { Tickets } from "@/features/ticket/components/tickets";
 import { signInPath } from "@/path";
 
 export const metadata: Metadata = {
@@ -38,12 +39,18 @@ const TicketsPage = ({ searchParams }: PageProps<"/tickets">) => {
         title="Create Ticket"
       />
       <RequireAuthSuspense
-        fallback={<TicketListSkeleton />}
+        fallback={
+          <>
+            <TicketControlsFallback />
+            <TicketFormSkeleton />
+            <TicketListSkeleton />
+          </>
+        }
         redirectPath={signInPath()}
       >
-        {async (user) => (
+        {(user) => (
           <ViewTransition>
-            <TicketList searchParams={searchParams} userId={user.id} />
+            <Tickets searchParams={searchParams} userId={user.id} />
           </ViewTransition>
         )}
       </RequireAuthSuspense>

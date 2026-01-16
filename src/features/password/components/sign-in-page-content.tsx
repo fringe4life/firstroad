@@ -10,7 +10,7 @@ const SignInPageContent = () => (
     content={<SignInForm signinAction={signin} />}
     description="Sign in to your account"
     footer={
-      <div className="flex w-full justify-between">
+      <div className="grid w-full grid-cols-2 items-center justify-between gap-4">
         <Link className="text-muted-foreground text-sm" href={signUpPath()}>
           No account yet?
         </Link>

@@ -1,5 +1,6 @@
 import { LucideMoreVertical, LucidePencil } from "lucide-react";
 import Link from "next/link";
+import { IconButtonSkeleton } from "@/components/skeletons/icon-button-skeleton";
 import { Button } from "@/components/ui/button";
 import { HasAuthSuspense } from "@/features/auth/components/has-auth";
 import { isOwner } from "@/features/auth/utils/owner";
@@ -14,14 +15,8 @@ const TicketOwnerOptions = ({
   <HasAuthSuspense
     fallback={
       <div className="grid gap-y-1">
-        <Button disabled size="icon" variant="outline">
-          <LucidePencil className="aspect-square w-4 animate-pulse" />
-        </Button>
-        {isDetail && (
-          <Button disabled size="icon" variant="outline">
-            <LucideMoreVertical className="aspect-square w-4 animate-pulse" />
-          </Button>
-        )}
+        <IconButtonSkeleton />
+        {isDetail && <IconButtonSkeleton />}
       </div>
     }
   >

@@ -3,7 +3,7 @@ import { Suspense, ViewTransition } from "react";
 import { Heading } from "@/components/heading";
 import { TicketControlsFallback } from "@/features/ticket/components/skeletons/ticket-controls-skeleton";
 import { TicketListSkeleton } from "@/features/ticket/components/skeletons/ticket-list-skeleton";
-import { TicketList } from "@/features/ticket/components/ticket-list";
+import { Tickets } from "@/features/ticket/components/tickets";
 
 export const metadata: Metadata = {
   title: "All Tickets",
@@ -31,7 +31,7 @@ const HomePage = ({ searchParams }: PageProps<"/">) => (
       }
     >
       <ViewTransition>
-        <TicketList searchParams={searchParams} />
+        <Tickets searchParams={searchParams} />
       </ViewTransition>
     </Suspense>
   </div>

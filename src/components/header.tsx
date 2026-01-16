@@ -8,11 +8,12 @@ import { AuthNavSkeleton } from "@/features/auth/components/auth-nav-skeleton";
 import { HasAuthSuspense } from "@/features/auth/components/has-auth";
 import { MobileMenuButton } from "@/features/navigation/components/mobile-menu-button";
 import { homePath, signInPath, signUpPath } from "@/path";
+import { Skeleton } from "./ui/skeleton";
 
 const Header = () => (
   <nav className="fixed top-0 right-0 left-0 z-20 grid grid-flow-col items-center justify-between border-b bg-background/65 px-5 py-2.5 backdrop-blur supports-backdrop-blur:bg-background/60">
     <div className="flex items-center gap-x-2">
-      <Suspense fallback={<div className="size-10" />}>
+      <Suspense fallback={<Skeleton className="aspect-square w-10" />}>
         <ViewTransition>
           <MobileMenuButton />
         </ViewTransition>
@@ -26,7 +27,7 @@ const Header = () => (
       </Link>
     </div>
     <div className="hidden items-center gap-x-1 md:flex">
-      <Suspense fallback={<div className="size-9" />}>
+      <Suspense fallback={<Skeleton className="aspect-square w-9" />}>
         <ViewTransition>
           <ThemeSwitcher />
         </ViewTransition>
@@ -35,11 +36,15 @@ const Header = () => (
       <HasAuthSuspense fallback={<AuthNavSkeleton />}>
         {(user) => {
           if (user) {
-            return <AccountDropdown user={user} />;
+            return (
+              <ViewTransition>
+                <AccountDropdown user={user} />
+              </ViewTransition>
+            );
           }
 
           return (
-            <>
+            <ViewTransition>
               <Link
                 className={buttonVariants({ variant: "outline" })}
                 href={signUpPath()}
@@ -52,14 +57,16 @@ const Header = () => (
               >
                 Sign In
               </Link>
-            </>
+            </ViewTransition>
           );
         }}
       </HasAuthSuspense>
     </div>
     <div className="flex items-center gap-x-1 md:hidden">
-      <Suspense fallback={<div className="size-9" />}>
-        <ThemeSwitcher />
+      <Suspense fallback={<Skeleton className="aspect-square w-9" />}>
+        <ViewTransition>
+          <ThemeSwitcher />
+        </ViewTransition>
       </Suspense>
     </div>
   </nav>

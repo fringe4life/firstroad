@@ -14,11 +14,13 @@ import { TicketOwnerOptions } from "@/features/ticket/components/ticket-owner-op
 import type { TicketItemProps } from "@/features/ticket/types";
 import { ticketPath } from "@/path";
 import { toCurrencyFromCent } from "@/utils/currency";
+import { TicketDeadline } from "./ticket-deadline";
 
 const TicketItem = ({
   ticket,
   isDetail = false,
   comments,
+  currentUserId,
 }: TicketItemProps) => {
   const detailButton = (
     <Link
@@ -55,7 +57,8 @@ const TicketItem = ({
             </CardContent>
             <CardFooter className="flex justify-between">
               <p className="text-muted-foreground text-sm">
-                {ticket.deadline.toLocaleDateString()} by {ticket.user.name}
+                <TicketDeadline deadline={ticket.deadline} /> by{" "}
+                {ticket.user.name}
               </p>
               <p className="text-muted-foreground text-sm">
                 {toCurrencyFromCent(ticket.bounty)}
@@ -65,11 +68,18 @@ const TicketItem = ({
 
           <div className="space-y-1 self-start">
             {isDetail ? (
-              <TicketOwnerOptions isDetail={true} ticket={ticket} />
+              <TicketOwnerOptions
+                currentUserId={currentUserId}
+                isDetail={true}
+                ticket={ticket}
+              />
             ) : (
               <>
                 {detailButton}
-                <TicketOwnerOptions ticket={ticket} />
+                <TicketOwnerOptions
+                  currentUserId={currentUserId}
+                  ticket={ticket}
+                />
               </>
             )}
           </div>
