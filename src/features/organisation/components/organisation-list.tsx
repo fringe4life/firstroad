@@ -1,22 +1,15 @@
 import { Bug, CircleSlash2 } from "lucide-react";
 import { Placeholder } from "@/components/placeholder";
 import { TableBody, TableCell, TableRow } from "@/components/ui/table";
-import type { ActiveOrganizationId } from "@/features/auth/types";
-import type { List, UnsuccessfulState } from "@/types";
-import type { BaseOrganisation } from "../types";
+import type { OrganisationListProps } from "../types";
 import { OrganisationItem } from "./organisation-item";
-
-interface OrganisationListProps
-  extends UnsuccessfulState,
-    ActiveOrganizationId {
-  organisations: List<BaseOrganisation>;
-}
 
 const OrganisationList = ({
   organisations,
   activeOrganizationId,
   emptyStateMessage,
   errorStateMessage = "Failed to fetch organisations",
+  limitedAccess,
 }: OrganisationListProps) => {
   const isError = !organisations;
   const isEmpty = !isError && organisations.length === 0;
@@ -41,6 +34,7 @@ const OrganisationList = ({
         <OrganisationItem
           activeOrganizationId={activeOrganizationId}
           key={organisation.id}
+          limitedAccess={limitedAccess}
           organisation={organisation}
         />
       ))}

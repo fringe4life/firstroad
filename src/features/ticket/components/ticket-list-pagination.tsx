@@ -1,7 +1,9 @@
-import { Suspense, ViewTransition } from "react";
+import { ViewTransition } from "react";
 import { Pagination } from "@/features/pagination/components/nuqs-pagination";
+import { PaginatedTransitions } from "@/features/pagination/components/paginated-transitions";
 import { getTickets } from "../dal/get-tickets";
 import type { TicketsProps } from "../types";
+import { TicketListSkeleton } from "./skeletons/ticket-list-skeleton";
 import { TicketList } from "./ticket-list";
 
 const TicketListPagination = async ({ searchParams, userId }: TicketsProps) => {
@@ -9,13 +11,18 @@ const TicketListPagination = async ({ searchParams, userId }: TicketsProps) => {
 
   return (
     <>
-      <TicketList tickets={tickets} />
+      <PaginatedTransitions
+        fallback={<TicketListSkeleton />}
+        metadata={{
+          page: metadata.page,
+        }}
+      >
+        <TicketList tickets={tickets} />
+      </PaginatedTransitions>
       <div className="max-content-narrow">
-        <Suspense>
-          <ViewTransition>
-            <Pagination metadata={metadata} />
-          </ViewTransition>
-        </Suspense>
+        <ViewTransition>
+          <Pagination metadata={metadata} />
+        </ViewTransition>
       </div>
     </>
   );

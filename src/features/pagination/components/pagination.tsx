@@ -1,7 +1,7 @@
 "use client";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import type { MouseEventHandler } from "react";
-import { startTransition } from "react";
+import { addTransitionType, startTransition } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -27,6 +27,7 @@ const OffsetPagination = ({
 
   const handleNextPage: MouseEventHandler<HTMLButtonElement> = () => {
     startTransition(async () => {
+      addTransitionType("forwards");
       await setPagination({
         ...pagination,
         page: page + 1,
@@ -36,6 +37,7 @@ const OffsetPagination = ({
 
   const handlePreviousPage: MouseEventHandler<HTMLButtonElement> = () => {
     startTransition(async () => {
+      addTransitionType("backwards");
       await setPagination({
         ...pagination,
         page: page - 1,

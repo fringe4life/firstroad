@@ -14,7 +14,6 @@ import { TicketOwnerOptions } from "@/features/ticket/components/ticket-owner-op
 import type { TicketItemProps } from "@/features/ticket/types";
 import { ticketPath } from "@/path";
 import { toCurrencyFromCent } from "@/utils/currency";
-import { TicketDeadline } from "./ticket-deadline";
 
 const TicketItem = ({
   ticket,
@@ -57,8 +56,7 @@ const TicketItem = ({
             </CardContent>
             <CardFooter className="flex justify-between">
               <p className="text-muted-foreground text-sm">
-                <TicketDeadline deadline={ticket.deadline} /> by{" "}
-                {ticket.user.name}
+                {ticket.deadline.toLocaleString()} by {ticket.user.name}
               </p>
               <p className="text-muted-foreground text-sm">
                 {toCurrencyFromCent(ticket.bounty)}

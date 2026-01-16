@@ -1,4 +1,4 @@
-import { Suspense, ViewTransition } from "react";
+import { Suspend } from "@/components/suspend";
 import { getUser } from "@/features/auth/queries/get-user";
 import type { User } from "@/features/auth/types";
 import type { Maybe } from "@/types";
@@ -21,10 +21,8 @@ const HasAuthSuspense = ({
   children: (user: Maybe<User>) => React.ReactNode;
   fallback: React.ReactNode;
 }) => (
-  <Suspense fallback={fallback}>
-    <ViewTransition>
-      <HasAuth>{children}</HasAuth>
-    </ViewTransition>
-  </Suspense>
+  <Suspend fallback={fallback}>
+    <HasAuth>{children}</HasAuth>
+  </Suspend>
 );
 export { HasAuthSuspense };

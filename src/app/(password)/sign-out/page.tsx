@@ -1,6 +1,7 @@
 "use client";
 
-import { Suspense, useEffect, ViewTransition } from "react";
+import { useEffect } from "react";
+import { Suspend } from "@/components/suspend";
 import { signOut } from "@/features/auth/actions/signout";
 
 // Dynamic sign-out logic - calls server action to handle cookie deletion and redirect
@@ -24,11 +25,9 @@ const SignOutFallback = () => (
 );
 
 const SignOutPage = () => (
-  <Suspense fallback={<SignOutFallback />}>
-    <ViewTransition>
-      <SignOutLogic />
-    </ViewTransition>
-  </Suspense>
+  <Suspend fallback={<SignOutFallback />}>
+    <SignOutLogic />
+  </Suspend>
 );
 
 export default SignOutPage;

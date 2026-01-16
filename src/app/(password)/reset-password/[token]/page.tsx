@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { connection } from "next/server";
-import { Suspense, ViewTransition } from "react";
 import { CardCompact } from "@/components/card-compact";
 import { Spinner } from "@/components/spinner";
+import { Suspend } from "@/components/suspend";
 import { ResetPasswordForm } from "@/features/password/components/reset-password-form";
 import { signInPath } from "@/path";
 
@@ -30,11 +30,9 @@ const ResetPasswordPage = ({
 }: PageProps<"/reset-password/[token]">) => (
   <CardCompact
     content={
-      <Suspense fallback={<Spinner />}>
-        <ViewTransition>
-          <SuspendResetPasswordForm tokenPromise={params} />
-        </ViewTransition>
-      </Suspense>
+      <Suspend fallback={<Spinner />}>
+        <SuspendResetPasswordForm tokenPromise={params} />
+      </Suspend>
     }
     description="Enter your new password below"
     footer={

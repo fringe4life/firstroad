@@ -2,9 +2,9 @@ import { LucidePlus } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
-import { Suspense, ViewTransition } from "react";
 import { Heading } from "@/components/heading";
 import { Spinner } from "@/components/spinner";
+import { Suspend } from "@/components/suspend";
 import { buttonVariants } from "@/components/ui/button";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { Organisations } from "@/features/organisation/components/organisations";
@@ -29,11 +29,9 @@ const SelectActiveOrganisationPage = async () => {
         description="Select your active organisation"
         title="Select Active Organisation"
       />
-      <Suspense fallback={<Spinner />}>
-        <ViewTransition>
-          <Organisations />
-        </ViewTransition>
-      </Suspense>
+      <Suspend fallback={<Spinner />}>
+        <Organisations limitedAccess />
+      </Suspend>
     </div>
   );
 };

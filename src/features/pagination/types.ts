@@ -8,6 +8,7 @@ export interface PaginationMetadata {
   count: number;
   hasNextPage: boolean;
   nextCursor: Maybe<string>;
+  page: number;
 }
 interface PaginationMetadataObject {
   metadata: PaginationMetadata;

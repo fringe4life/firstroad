@@ -1,0 +1,35 @@
+import { prisma } from "@/lib/prisma";
+import type { List } from "@/types";
+import { tryCatch } from "@/utils/try-catch";
+import type { OrganisationMemberRow } from "../types";
+
+const getOrganisationById = async (
+  id: string,
+): Promise<List<OrganisationMemberRow>> => {
+  const { data: members } = await tryCatch(async () => {
+    const rows = await prisma.member.findMany({
+      where: { organizationId: id },
+      select: {
+        createdAt: true,
+        user: {
+          select: {
+            name: true,
+            email: true,
+            emailVerified: true,
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    return rows.map((member) => ({
+      email: member.user.email,
+      emailVerified: member.user.emailVerified,
+      joinedAt: member.createdAt,
+      name: member.user.name,
+    }));
+  });
+
+  return members;
+};
+export { getOrganisationById };

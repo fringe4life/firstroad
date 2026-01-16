@@ -1,15 +1,13 @@
 import { format } from "date-fns";
 import { TableCell, TableRow } from "@/components/ui/table";
-import type { ActiveOrganizationId } from "@/features/auth/types";
-import type { BaseOrganisation } from "../types";
+import type { OrganisationItemProps } from "../types";
 import { OrganisationActionButtons } from "./organisation-action-buttons";
 
 const OrganisationItem = ({
   organisation,
   activeOrganizationId,
-}: {
-  organisation: BaseOrganisation;
-} & ActiveOrganizationId) => {
+  limitedAccess,
+}: OrganisationItemProps) => {
   const isActive = organisation.id === activeOrganizationId;
 
   return (
@@ -25,6 +23,7 @@ const OrganisationItem = ({
       <TableCell>
         <OrganisationActionButtons
           isActive={isActive}
+          limitedAccess={limitedAccess}
           organizationId={organisation.id}
         />
       </TableCell>

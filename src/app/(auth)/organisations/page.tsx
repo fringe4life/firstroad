@@ -1,8 +1,8 @@
 import { LucidePlus } from "lucide-react";
 import Link from "next/link";
-import { Suspense, ViewTransition } from "react";
 import { Heading } from "@/components/heading";
 import { Spinner } from "@/components/spinner";
+import { Suspend } from "@/components/suspend";
 import { buttonVariants } from "@/components/ui/button";
 import { Organisations } from "@/features/organisation/components/organisations";
 import { onboardingPath } from "@/path";
@@ -20,11 +20,9 @@ const OrganisationsPage = () => {
         description="All your Organisations"
         title="Organisations"
       />
-      <Suspense fallback={<Spinner />}>
-        <ViewTransition>
-          <Organisations />
-        </ViewTransition>
-      </Suspense>
+      <Suspend fallback={<Spinner />}>
+        <Organisations />
+      </Suspend>
     </div>
   );
 };

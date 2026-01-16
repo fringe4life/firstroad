@@ -5,11 +5,13 @@ import { usePathname } from "next/navigation";
 import { cloneElement } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { navItems } from "@/features/navigation/components/constants";
 import { cn } from "@/lib/utils";
-import { navItems } from "./constants";
+import { useMobileSidebar } from "../context/context";
 
 const NavItems = () => {
   const pathname = usePathname();
+  const { close } = useMobileSidebar();
 
   return (
     <>
@@ -30,6 +32,7 @@ const NavItems = () => {
                   "bg-muted font-bold hover:bg-muted-foreground",
               )}
               href={item.href}
+              onNavigate={close}
             >
               {cloneElement(item.icon, {
                 className: "w-5 aspect-square",

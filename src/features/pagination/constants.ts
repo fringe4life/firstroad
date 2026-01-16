@@ -10,6 +10,7 @@ const NO_PAGINATION = {
     count: 0,
     hasNextPage: false,
     nextCursor: null,
+    page: 0,
   },
 };
 

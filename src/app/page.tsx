@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
-import { Suspense, ViewTransition } from "react";
 import { Heading } from "@/components/heading";
-import { TicketControlsFallback } from "@/features/ticket/components/skeletons/ticket-controls-skeleton";
-import { TicketListSkeleton } from "@/features/ticket/components/skeletons/ticket-list-skeleton";
 import { Tickets } from "@/features/ticket/components/tickets";
 
 export const metadata: Metadata = {
@@ -22,18 +19,8 @@ const HomePage = ({ searchParams }: PageProps<"/">) => (
       description="Tickets by everyone at one place"
       title="All Tickets"
     />
-    <Suspense
-      fallback={
-        <>
-          <TicketControlsFallback />
-          <TicketListSkeleton />
-        </>
-      }
-    >
-      <ViewTransition>
-        <Tickets searchParams={searchParams} />
-      </ViewTransition>
-    </Suspense>
+
+    <Tickets searchParams={searchParams} />
   </div>
 );
 export default HomePage;

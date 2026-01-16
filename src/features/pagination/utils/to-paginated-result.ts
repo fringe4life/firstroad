@@ -28,6 +28,7 @@ const transformToPaginatedResult = <T extends Id>(
         count: totalCount,
         hasNextPage,
         nextCursor,
+        page: pagination.page,
       },
     };
   }
@@ -44,6 +45,7 @@ const transformToPaginatedResult = <T extends Id>(
         count: totalCount,
         hasNextPage,
         nextCursor,
+        page: 0,
       },
     };
   }

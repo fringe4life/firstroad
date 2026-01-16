@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { connection } from "next/server";
-import { Suspense, ViewTransition } from "react";
 import { CardCompact } from "@/components/card-compact";
 import { Spinner } from "@/components/spinner";
+import { Suspend } from "@/components/suspend";
 import { verifySignInOTP } from "@/features/auth/actions/verify-otp-action";
 import { OTPVerifyForm } from "@/features/auth/components/otp-verify-form";
 import { signInPath } from "@/path";
@@ -27,11 +27,9 @@ const SignInOTPVerifyForm = async ({
 const SignInOTPVerifyPage = ({ searchParams }: SignInOTPVerifyPageProps) => (
   <CardCompact
     content={
-      <Suspense fallback={<Spinner />}>
-        <ViewTransition>
-          <SignInOTPVerifyForm searchParams={searchParams} />
-        </ViewTransition>
-      </Suspense>
+      <Suspend fallback={<Spinner />}>
+        <SignInOTPVerifyForm searchParams={searchParams} />
+      </Suspend>
     }
     description="Enter the sign-in code sent to your email"
     footer={

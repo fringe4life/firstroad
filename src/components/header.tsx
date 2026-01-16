@@ -1,6 +1,6 @@
 import { Kanban } from "lucide-react";
 import Link from "next/link";
-import { Suspense, ViewTransition } from "react";
+import { ViewTransition } from "react";
 import { ThemeSwitcher } from "@/components/theme/theme-switcher";
 import { buttonVariants } from "@/components/ui/button";
 import { AccountDropdown } from "@/features/auth/components/account-dropwdown";
@@ -8,16 +8,15 @@ import { AuthNavSkeleton } from "@/features/auth/components/auth-nav-skeleton";
 import { HasAuthSuspense } from "@/features/auth/components/has-auth";
 import { MobileMenuButton } from "@/features/navigation/components/mobile-menu-button";
 import { homePath, signInPath, signUpPath } from "@/path";
+import { Suspend } from "./suspend";
 import { Skeleton } from "./ui/skeleton";
 
 const Header = () => (
   <nav className="fixed top-0 right-0 left-0 z-20 grid grid-flow-col items-center justify-between border-b bg-background/65 px-5 py-2.5 backdrop-blur supports-backdrop-blur:bg-background/60">
     <div className="flex items-center gap-x-2">
-      <Suspense fallback={<Skeleton className="aspect-square w-10" />}>
-        <ViewTransition>
-          <MobileMenuButton />
-        </ViewTransition>
-      </Suspense>
+      <Suspend fallback={<Skeleton className="aspect-square w-10" />}>
+        <MobileMenuButton />
+      </Suspend>
       <Link
         className={buttonVariants({ variant: "ghost", size: "lg" })}
         href={homePath()}
@@ -27,11 +26,9 @@ const Header = () => (
       </Link>
     </div>
     <div className="hidden items-center gap-x-1 md:flex">
-      <Suspense fallback={<Skeleton className="aspect-square w-9" />}>
-        <ViewTransition>
-          <ThemeSwitcher />
-        </ViewTransition>
-      </Suspense>
+      <Suspend fallback={<Skeleton className="aspect-square w-9" />}>
+        <ThemeSwitcher />
+      </Suspend>
 
       <HasAuthSuspense fallback={<AuthNavSkeleton />}>
         {(user) => {
@@ -63,11 +60,9 @@ const Header = () => (
       </HasAuthSuspense>
     </div>
     <div className="flex items-center gap-x-1 md:hidden">
-      <Suspense fallback={<Skeleton className="aspect-square w-9" />}>
-        <ViewTransition>
-          <ThemeSwitcher />
-        </ViewTransition>
-      </Suspense>
+      <Suspend fallback={<Skeleton className="aspect-square w-9" />}>
+        <ThemeSwitcher />
+      </Suspend>
     </div>
   </nav>
 );
