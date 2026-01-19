@@ -11,7 +11,7 @@ import { type MouseEventHandler, useTransition } from "react";
 import { toast } from "sonner";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
-import { organisationPath } from "@/path";
+import { membershipsPath } from "@/path";
 import type { OrganisationActionButtonProps } from "../types";
 
 const OrganisationActionButtons = ({
@@ -61,7 +61,7 @@ const OrganisationActionButtons = ({
     openButton = (
       <Link
         className={buttonVariants({ variant: "outline", size: "icon" })}
-        href={organisationPath(organizationId)}
+        href={membershipsPath(organizationId)}
       >
         <LucideArrowUpRightFromSquare className="aspect-square w-4" />
       </Link>

@@ -27,8 +27,8 @@ const signOutPath = (): Route => "/sign-out";
 
 const organisationsPath = (): Route => "/organisations";
 
-const organisationPath = (id: string): Route =>
-  `${organisationsPath()}/${id}` as Route;
+const membershipsPath = (id: string): Route =>
+  `${organisationsPath()}/${id}/memberships` as Route;
 
 const onboardingPath = (): Route => "/onboarding";
 const selectActiveOrganisationPath = (): Route =>
@@ -53,5 +53,5 @@ export {
   accountProfilePath,
   accountPasswordPath,
   organisationsPath,
-  organisationPath,
+  membershipsPath,
 };

@@ -44,6 +44,14 @@ export interface OrganisationMemberRow {
   joinedAt: Date;
 }
 
+export interface MembershipListProps extends UnsuccessfulState {
+  members: List<OrganisationMemberRow>;
+}
+
+export interface MembershipItemProps {
+  member: OrganisationMemberRow;
+}
+
 export interface OrganisationByIdProps {
   members: List<OrganisationMemberRow>;
 }
