@@ -3,12 +3,18 @@
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import type { MouseEventHandler } from "react";
+import { addTransitionType, startTransition } from "react";
 import { Button } from "../ui/button";
 
 const ThemeSwitcher = () => {
   const { theme, setTheme } = useTheme();
   const handleClick: MouseEventHandler<HTMLButtonElement> = () => {
-    setTheme(theme === "light" ? "dark" : "light");
+    const nextTheme = theme === "light" ? "dark" : "light";
+    const transitionType = `${theme}-to-${nextTheme}`;
+    startTransition(() => {
+      addTransitionType(transitionType);
+      setTheme(nextTheme);
+    });
   };
   return (
     <Button
@@ -18,7 +24,6 @@ const ThemeSwitcher = () => {
       variant="outline"
     >
       <Moon className="absolute aspect-square w-4 rotate-90 scale-0 transition-transform duration-150 dark:rotate-0 dark:scale-110" />
-
       <Sun className="aspect-square w-4 rotate-0 scale-110 transition-all duration-150 dark:rotate-90 dark:scale-0" />
     </Button>
   );

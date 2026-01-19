@@ -5,6 +5,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "sonner";
 import { Header } from "@/components/header";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import { ThemeTransition } from "@/components/theme/theme-transition";
 import { Sidebar } from "@/features/navigation/components/sidebar";
 import { MobileSidebarProvider } from "@/features/navigation/context/context";
 
@@ -42,21 +43,23 @@ const RootLayout = ({ children, auth }: LayoutProps<"/">) => (
     suppressHydrationWarning
   >
     <body className={`${inter.className} antialiased`}>
-      <NuqsAdapter>
-        <ThemeProvider>
-          <MobileSidebarProvider>
-            <Header />
-            <div className="layout-grid-cols grid grid-flow-col has-[.sidebar:hover]:[--side-width:var(--expanded-sidebar-width)]">
-              <Sidebar />
-              <main className="main-inline-padding col-span-2 min-h-screen overflow-x-clip py-24 md:col-start-2">
-                {children}
-              </main>
-            </div>
-            {auth}
-            <Toaster expand />
-          </MobileSidebarProvider>
-        </ThemeProvider>
-      </NuqsAdapter>
+      <ThemeProvider>
+        <ThemeTransition>
+          <NuqsAdapter>
+            <MobileSidebarProvider>
+              <Header />
+              <div className="layout-grid-cols grid grid-flow-col has-[.sidebar:hover]:[--side-width:var(--expanded-sidebar-width)]">
+                <Sidebar />
+                <main className="main-inline-padding col-span-2 min-h-screen overflow-x-clip py-24 md:col-start-2">
+                  {children}
+                </main>
+              </div>
+              {auth}
+              <Toaster expand />
+            </MobileSidebarProvider>
+          </NuqsAdapter>
+        </ThemeTransition>
+      </ThemeProvider>
     </body>
   </html>
 );

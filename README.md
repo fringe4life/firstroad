@@ -278,7 +278,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ```
 src/
 ├── app/                      # Next.js App Router pages
-│   ├── (auth)/               # Protected routes (account, organisations, tickets)
+│   ├── (auth)/               # Protected routes (account, organisations, memberships, tickets)
 │   ├── (password)/           # Public auth routes (sign-in, sign-up, reset, OTP)
 │   ├── @auth/                # Parallel auth modals (interception routes)
 │   ├── api/[[...slugs]]/      # Elysia catch-all API route handler
