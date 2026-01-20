@@ -8,8 +8,8 @@ const ThemeTransition = ({ children }: { children: React.ReactNode }) => {
   return (
     <ViewTransition
       enter={{
-        "light-to-dark": "circle-in-top-right",
-        "dark-to-light": "circle-in-top-left",
+        "light-to-dark": "circle-in-top-center",
+        "dark-to-light": "circle-in-bottom-center",
         default: "auto",
       }}
       key={theme}

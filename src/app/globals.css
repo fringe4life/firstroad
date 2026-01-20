@@ -268,30 +268,30 @@
 }
 
 /* Theme Switcher Animations */
-@keyframes --circle-in-top-right {
+@keyframes --circle-in-top-center {
   from {
-    clip-path: circle(0% at 50% 50%);
+    clip-path: circle(0% at top center);
   }
   to {
-    clip-path: circle(150% at 50% 50%);
+    clip-path: circle(150% at top center);
   }
 }
 
-@keyframes --circle-in-top-left {
+@keyframes --circle-in-bottom-center {
   from {
-    clip-path: circle(0% at 0% 0%);
+    clip-path: circle(0% at bottom center);
   }
   to {
-    clip-path: circle(150% at 0% 0%);
+    clip-path: circle(150% at bottom center);
   }
 }
 
-::view-transition-new(.circle-in-top-right) {
-  animation: --circle-in-top-right 0.5s;
+::view-transition-new(.circle-in-top-center) {
+  animation: --circle-in-top-center 0.5s;
 }
 
-::view-transition-new(.circle-in-top-left) {
-  animation: --circle-in-top-left 0.5s;
+::view-transition-new(.circle-in-bottom-center) {
+  animation: --circle-in-bottom-center 0.5s;
 }
 
 /* View Transition Animations */

@@ -2,19 +2,19 @@
 
 <div align="center">
 
-[![Next.js](https://img.shields.io/badge/Next.js-16.1.2-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.1.4-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.2.3-61DAFB?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Prisma](https://img.shields.io/badge/Prisma-7.2.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
-[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.4.13-000000)](https://better-auth.com/)
+[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.4.16-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.18-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Biome](https://img.shields.io/badge/Biome-2.3.11-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
 [![Ultracite](https://img.shields.io/badge/Ultracite-7.0.11-000000)](https://ultracite.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.8.6-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.2.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Elysia](https://img.shields.io/badge/Elysia-1.4.21-000000)](https://elysiajs.com/)
-[![Inngest](https://img.shields.io/badge/Inngest-3.49.2-000000)](https://www.inngest.com/)
-[![Resend](https://img.shields.io/badge/Resend-6.7.0-000000)](https://resend.com/)
+[![Inngest](https://img.shields.io/badge/Inngest-3.49.3-000000)](https://www.inngest.com/)
+[![Resend](https://img.shields.io/badge/Resend-6.8.0-000000)](https://resend.com/)
 [![React Email](https://img.shields.io/badge/React%20Email-5.2.5-000000)](https://react.email/)
 
 </div>
@@ -47,19 +47,19 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 16.1.2 (App Router) with Turbopack
+- **Framework**: Next.js 16.1.4 (App Router) with Turbopack
 - **Language**: TypeScript 5.9.3 with strict type checking
 - **Database**: PostgreSQL with Prisma Client 7.2.0 (relationJoins preview, Neon adapter)
-- **Authentication**: Better Auth 1.4.13 with email/password provider and session cookie caching
+- **Authentication**: Better Auth 1.4.16 with email/password provider and session cookie caching
 - **Styling**: Tailwind CSS v4.1.18 with shadcn/ui components
 - **Icons**: Lucide React
 - **Forms**: React Hook Form with Valibot validation
 - **Notifications**: Sonner toast notifications
 - **Theme**: next-themes for dark/light mode
 - **URL Search Params**: nuqs 2.8.6 for type-safe URL parameters
-- **Email**: React Email 5.2.5 with Resend 6.7.0 for transactional emails
+- **Email**: React Email 5.2.5 with Resend 6.8.0 for transactional emails
 - **API Framework**: Elysia 1.4.21 with @elysiajs/cors 1.4.1 for unified API routes
-- **Background Jobs**: Inngest 3.49.2 for background tasks and event handling
+- **Background Jobs**: Inngest 3.49.3 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
 - **Linting**: Biome 2.3.11 for fast formatting and linting with Ultracite 7.0.11 rules
 - **Type Checking**: TypeScript native preview for fast checking
@@ -535,7 +535,7 @@ Inngest provides background job processing for:
 
 ### Email Templates (Resend)
 
-The application uses Resend 6.7.0 for transactional emails with published templates. All email sending functions use Resend's template API instead of inline React Email components.
+The application uses Resend 6.8.0 for transactional emails with published templates. All email sending functions use Resend's template API instead of inline React Email components.
 
 **Template IDs:**
 - `email-otp-verification` - OTP codes for sign-in, email verification, and password reset
