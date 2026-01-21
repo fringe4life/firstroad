@@ -3,7 +3,7 @@ import type { List } from "@/types";
 import { tryCatch } from "@/utils/try-catch";
 import type { OrganisationMemberRow } from "../types";
 
-const getOrganisationById = async (
+const getMembershipsById = async (
   id: string,
 ): Promise<List<OrganisationMemberRow>> => {
   const { data: members } = await tryCatch(async () => {
@@ -32,4 +32,4 @@ const getOrganisationById = async (
 
   return members;
 };
-export { getOrganisationById };
+export { getMembershipsById };

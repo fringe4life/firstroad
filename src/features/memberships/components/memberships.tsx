@@ -1,9 +1,9 @@
 import { Table, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { getOrganisationById } from "@/features/organisation/queries/get-organisation-by-id";
-import { MembershipList } from "./membership-list";
+import { MembershipList } from "@/features/memberships/components/membership-list";
+import { getMembershipsById } from "@/features/memberships/queries/get-memberships-by-id";
 
 const Memberships = async ({ organisationId }: { organisationId: string }) => {
-  const members = await getOrganisationById(organisationId);
+  const members = await getMembershipsById(organisationId);
 
   return (
     <Table className="h-full">
@@ -13,6 +13,7 @@ const Memberships = async ({ organisationId }: { organisationId: string }) => {
           <TableHead>Email</TableHead>
           <TableHead>Joined At</TableHead>
           <TableHead>Verified</TableHead>
+          <TableHead />
         </TableRow>
       </TableHeader>
       <MembershipList

@@ -5,11 +5,11 @@
 [![Next.js](https://img.shields.io/badge/Next.js-16.1.4-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.2.3-61DAFB?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Prisma](https://img.shields.io/badge/Prisma-7.2.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
-[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.4.16-000000)](https://better-auth.com/)
+[![Prisma](https://img.shields.io/badge/Prisma-7.3.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
+[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.4.17-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.18-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Biome](https://img.shields.io/badge/Biome-2.3.11-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-7.0.11-000000)](https://ultracite.dev/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-7.0.12-000000)](https://ultracite.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.8.6-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.2.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Elysia](https://img.shields.io/badge/Elysia-1.4.21-000000)](https://elysiajs.com/)
@@ -49,8 +49,8 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 
 - **Framework**: Next.js 16.1.4 (App Router) with Turbopack
 - **Language**: TypeScript 5.9.3 with strict type checking
-- **Database**: PostgreSQL with Prisma Client 7.2.0 (relationJoins preview, Neon adapter)
-- **Authentication**: Better Auth 1.4.16 with email/password provider and session cookie caching
+- **Database**: PostgreSQL with Prisma Client 7.3.0 (relationJoins preview, Neon adapter)
+- **Authentication**: Better Auth 1.4.17 with email/password provider and session cookie caching
 - **Styling**: Tailwind CSS v4.1.18 with shadcn/ui components
 - **Icons**: Lucide React
 - **Forms**: React Hook Form with Valibot validation
@@ -240,9 +240,9 @@ NEXT_PUBLIC_APP_URL="http://localhost:3000"
 # Docs: https://resend.com/
 RESEND_API_KEY="your-resend-api-key"
 # Resend Email Configuration
-# NEXT_PUBLIC_RESEND_FROM should be an email address, not an HTTP URL
+# RESEND_FROM should be an email address, not an HTTP URL
 # Format: "Your App Name <your-email@domain.com>" or just "your-email@domain.com"
-NEXT_PUBLIC_RESEND_FROM="Your App <onboarding@resend.dev>"
+RESEND_FROM="Your App <onboarding@resend.dev>"
 
 # Social Authentication (GitHub)
 # Docs: https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app
@@ -293,6 +293,7 @@ src/
 ├── features/                 # Feature modules
 │   ├── auth/                 # Auth actions, components, events, queries, types
 │   ├── comment/              # Comment actions, optimistic hooks, components
+│   ├── memberships/          # Membership actions, components, queries
 │   ├── navigation/           # Sidebar/nav components + context
 │   ├── organisation/         # Organization actions and components
 │   ├── pagination/           # Pagination components + nuqs parsers
@@ -494,7 +495,7 @@ The project uses Tailwind CSS v4 with custom configuration for dark mode, theme 
 
 ### Database
 
-PostgreSQL with Prisma Client 7.2.0 using:
+PostgreSQL with Prisma Client 7.3.0 using:
 
 - **relationJoins** preview feature for optimized queries
 - **Client-side engine** for edge compatibility
