@@ -36,22 +36,3 @@ export interface OrganisationActionButtonProps extends LimitedAccess {
   organizationId: string;
   isActive: boolean;
 }
-
-export interface OrganisationMemberRow {
-  name: string;
-  email: string;
-  emailVerified: boolean;
-  joinedAt: Date;
-}
-
-export interface MembershipListProps extends UnsuccessfulState {
-  members: List<OrganisationMemberRow>;
-}
-
-export interface MembershipItemProps {
-  member: OrganisationMemberRow;
-}
-
-export interface OrganisationByIdProps {
-  members: List<OrganisationMemberRow>;
-}

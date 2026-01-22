@@ -262,6 +262,11 @@
       var(--expanded-sidebar-width)
     );
   }
+
+  body[data-scroll-locked="1"] {
+    margin-right: 0 !important; /* For LTR layouts */
+    overflow: visible !important;
+  }
   body {
     @apply bg-background text-foreground;
   }

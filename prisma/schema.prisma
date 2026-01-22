@@ -4,6 +4,7 @@ generator client {
   engineType      = "client"
   output          = "../src/generated/prisma"
   runtime         = "bun"
+  compilerBuild   = "fast"
 }
 
 generator prismabox {

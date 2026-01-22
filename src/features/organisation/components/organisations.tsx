@@ -10,7 +10,7 @@ const Organisations = async ({ limitedAccess }: OrganisationProps) => {
   const activeOrganizationId = user.activeOrganizationId;
 
   return (
-    <Table className="h-full">
+    <Table>
       <TableHeader>
         <TableRow>
           <TableHead>ID</TableHead>

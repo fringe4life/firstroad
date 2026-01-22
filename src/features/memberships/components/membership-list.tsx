@@ -5,9 +5,11 @@ import type { MembershipListProps } from "../types";
 import { MembershipItem } from "./membership-item";
 
 const MembershipList = ({
+  currentUserEmail,
   members,
   emptyStateMessage,
   errorStateMessage = "Failed to fetch members",
+  organisationId,
 }: MembershipListProps) => {
   const isError = !members;
   const isEmpty = !isError && members.length === 0;
@@ -29,7 +31,12 @@ const MembershipList = ({
   return (
     <TableBody className="items-start">
       {members.map((member) => (
-        <MembershipItem key={member.email} member={member} />
+        <MembershipItem
+          currentUserEmail={currentUserEmail}
+          key={member.email}
+          member={member}
+          organisationId={organisationId}
+        />
       ))}
     </TableBody>
   );

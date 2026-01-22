@@ -55,7 +55,24 @@ export const auth = betterAuth({
       allowedAttempts: 5,
       overrideDefaultEmailVerification: true, // Use OTP instead of verification links
     }),
-    organization(),
+    organization({
+      organizationHooks: {
+        beforeRemoveMember: async ({ organization }) => {
+          // Prevent removing the last member from an organization
+          const memberCount = await prisma.member.count({
+            where: {
+              organizationId: organization.id,
+            },
+          });
+
+          if (memberCount <= 1) {
+            throw new Error(
+              "Cannot remove the last member from an organization",
+            );
+          }
+        },
+      },
+    }),
     nextCookies(), // nextCookies should be the last plugin
   ],
 

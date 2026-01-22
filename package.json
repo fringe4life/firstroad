@@ -61,7 +61,7 @@
     "false": "^0.0.4",
     "fastest-levenshtein": "^1.0.16",
     "inngest": "^3.49.3",
-    "inngest-cli": "^1.16.0",
+    "inngest-cli": "^1.16.1",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.562.0",
     "next": "^16.1.4",
@@ -88,11 +88,11 @@
     "@react-email/preview-server": "^5.2.5",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/big.js": "^6.2.2",
-    "@types/node": "^25.0.9",
+    "@types/node": "^25.0.10",
     "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
     "@types/ws": "^8.18.1",
-    "@typescript/native-preview": "^7.0.0-dev.20260120.1",
+    "@typescript/native-preview": "^7.0.0-dev.20260122.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "prisma": "^7.3.0",
@@ -127,6 +127,8 @@
     "qs": ">=6.14.1",
     "undici": ">=7.18.2",
     "hono": "^4.11.4",
-    "diff": ">=8.0.3"
+    "diff": ">=8.0.3",
+    "tar": ">7.5.2",
+    "lodash": ">4.17.22"
   }
 }

@@ -240,9 +240,9 @@ NEXT_PUBLIC_APP_URL="http://localhost:3000"
 # Docs: https://resend.com/
 RESEND_API_KEY="your-resend-api-key"
 # Resend Email Configuration
-# RESEND_FROM should be an email address, not an HTTP URL
+# NEXT_PUBLIC_RESEND_FROM should be an email address, not an HTTP URL
 # Format: "Your App Name <your-email@domain.com>" or just "your-email@domain.com"
-RESEND_FROM="Your App <onboarding@resend.dev>"
+NEXT_PUBLIC_RESEND_FROM="Your App <onboarding@resend.dev>"
 
 # Social Authentication (GitHub)
 # Docs: https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app

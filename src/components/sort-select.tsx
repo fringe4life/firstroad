@@ -1,5 +1,6 @@
 "use client";
 
+import { startTransition } from "react";
 import {
   Select,
   SelectContent,
@@ -8,7 +9,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
 export interface SortOption {
   label: string;
   sortKey: string;
@@ -28,7 +28,9 @@ const createKey = (option: SortOption | SortObject) =>
 const SortSelect = ({ options, value, onValueChange }: SortSelectProps) => {
   const handleSortChange = (compositeKey: string) => {
     const [sortKey, sortValue] = compositeKey.split("_");
-    onValueChange({ sortKey, sortValue });
+    startTransition(() => {
+      onValueChange({ sortKey, sortValue });
+    });
   };
 
   return (

@@ -8,11 +8,15 @@ export interface OrganisationMemberRow {
 }
 
 export interface MembershipListProps extends UnsuccessfulState {
+  currentUserEmail?: string | null;
   members: List<OrganisationMemberRow>;
+  organisationId: string;
 }
 
 export interface MembershipItemProps {
+  currentUserEmail?: string | null;
   member: OrganisationMemberRow;
+  organisationId: string;
 }
 
 export interface OrganisationByIdProps {
