@@ -1,5 +1,5 @@
 "use client";
-import { LucidePen, LucideTrash } from "lucide-react";
+import { LucideLogOut, LucidePen } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { type MouseEventHandler, startTransition } from "react";
 import { toast } from "sonner";
@@ -7,15 +7,22 @@ import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 
 const MembershipActionButtons = ({
+  currentUserEmail,
+  memberEmail,
   organisationId,
   userId,
 }: {
+  currentUserEmail?: string | null;
+  memberEmail: string;
   organisationId: string;
   userId: string;
 }) => {
   const router = useRouter();
+  const isCurrentUser = memberEmail === currentUserEmail;
+  // Since this page is only accessible by admin/owner, we can show remove button
+  const canRemoveMember = !isCurrentUser;
 
-  const handleDelete: MouseEventHandler<HTMLButtonElement> = () => {
+  const handleRemoveMember: MouseEventHandler<HTMLButtonElement> = () => {
     startTransition(async () => {
       const { error } = await authClient.organization.removeMember({
         organizationId: organisationId,
@@ -27,11 +34,11 @@ const MembershipActionButtons = ({
           error.message?.includes("last member") ||
           error.message?.includes("Cannot remove")
             ? "Cannot remove the last member from an organization"
-            : "Failed to delete membership";
+            : "Failed to remove member";
         toast.error(errorMessage);
         return;
       }
-      toast.success("Membership deleted");
+      toast.success("Member removed successfully");
       router.refresh();
     });
   };
@@ -40,15 +47,16 @@ const MembershipActionButtons = ({
     console.log("edit");
   };
 
-  // Show edit/delete buttons for members
   return (
     <div className="flex justify-end gap-x-2">
       <Button onClick={handleEdit} size="icon" variant="outline">
         <LucidePen className="aspect-square w-4" />
       </Button>
-      <Button onClick={handleDelete} size="icon" variant="destructive">
-        <LucideTrash className="aspect-square w-4" />
-      </Button>
+      {canRemoveMember && (
+        <Button onClick={handleRemoveMember} size="icon" variant="destructive">
+          <LucideLogOut className="aspect-square w-4" />
+        </Button>
+      )}
     </div>
   );
 };

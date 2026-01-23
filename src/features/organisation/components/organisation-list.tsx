@@ -1,6 +1,6 @@
 import { Bug, CircleSlash2 } from "lucide-react";
-import { Placeholder } from "@/components/placeholder";
-import { TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { TableBody } from "@/components/ui/table";
+import { UnsuccessfulTable } from "@/components/unsuccessful-table";
 import type { OrganisationListProps } from "../types";
 import { OrganisationItem } from "./organisation-item";
 
@@ -17,15 +17,7 @@ const OrganisationList = ({
   const icon = isError ? <Bug /> : <CircleSlash2 />;
 
   if (isError || isEmpty) {
-    return (
-      <TableBody className="h-full">
-        <TableRow>
-          <TableCell colSpan={5}>
-            <Placeholder icon={icon} label={message} />
-          </TableCell>
-        </TableRow>
-      </TableBody>
-    );
+    return <UnsuccessfulTable colSpan={5} icon={icon} label={message} />;
   }
 
   return (

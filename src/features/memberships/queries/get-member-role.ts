@@ -7,9 +7,7 @@ import { tryCatch } from "@/utils/try-catch";
 const getMemberRole = async (
   organizationId: string,
 ): Promise<Maybe<Prisma.MemberModel["role"]>> => {
-  const { id: userId } = await getUserOrRedirect({
-    checkOrganistation: false,
-  });
+  const { id: userId } = await getUserOrRedirect();
 
   const { data: member } = await tryCatch(() =>
     prisma.member.findFirst({
@@ -23,7 +21,7 @@ const getMemberRole = async (
     }),
   );
 
-  return member?.role ?? null;
+  return member?.role;
 };
 
 export { getMemberRole };
