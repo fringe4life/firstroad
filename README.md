@@ -24,7 +24,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 ## 🚀 Features
 
 - **🔐 Authentication**: Secure user authentication with Better Auth (email/password + OTP + GitHub OAuth) with email enumeration protection
-- **🏢 Organization Management**: Create and manage organizations with member and invitation systems
+- **🏢 Organization Management**: Create and manage organizations with member and invitation systems, role-based access control (owner, admin, member)
 - **🎫 Ticket Management**: Create, edit, and manage tickets with status tracking
 - **💬 Comments System**: Add, edit, and delete comments on tickets with infinite pagination
 - **🌙 Dark Mode**: Beautiful light/dark theme with smooth transitions
@@ -293,7 +293,7 @@ src/
 ├── features/                 # Feature modules
 │   ├── auth/                 # Auth actions, components, events, queries, types
 │   ├── comment/              # Comment actions, optimistic hooks, components
-│   ├── memberships/          # Membership actions, components, queries
+│   ├── memberships/          # Membership actions, components, queries (role-based access)
 │   ├── navigation/           # Sidebar/nav components + context
 │   ├── organisation/         # Organization actions and components
 │   ├── pagination/           # Pagination components + nuqs parsers
@@ -509,8 +509,8 @@ PostgreSQL with Prisma Client 7.3.0 using:
 - **Session**: Better Auth session model
 - **Verification**: Better Auth verification tokens
 - **Organization**: Organization management
-- **Member**: Organization membership
-- **Invitation**: Organization invitations
+- **Member**: Organization membership with role-based permissions (owner, admin, member)
+- **Invitation**: Organization invitations with role assignment
 - **Ticket**: Ticket management with unique slug field (direct relation to User)
 - **Comment**: Comment system (direct relation to User)
 

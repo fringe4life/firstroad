@@ -27,7 +27,7 @@ const SignInForm = ({ signinAction }: SignInFormProps) => {
         name="email"
         placeholder="email"
       />
-      <FieldError actionState={state || EMPTY_ACTION_STATE} name="email" />
+      <FieldError actionState={state} name="email" />
       <Label htmlFor={passwordId}>Password</Label>
       <Input
         defaultValue={state?.payload?.get("password")?.toString() || ""}
@@ -36,7 +36,7 @@ const SignInForm = ({ signinAction }: SignInFormProps) => {
         placeholder="password"
         type="password"
       />
-      <FieldError actionState={state || EMPTY_ACTION_STATE} name="password" />
+      <FieldError actionState={state} name="password" />
 
       <SubmitButton label="Sign in" />
     </Form>

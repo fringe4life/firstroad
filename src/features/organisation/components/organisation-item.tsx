@@ -20,6 +20,9 @@ const OrganisationItem = ({
           : "N/A"}
       </TableCell>
       <TableCell>{organisation._count.members}</TableCell>
+      <TableCell className="uppercase">
+        {organisation.memberShipByUser?.role ?? "N/A"}
+      </TableCell>
       <TableCell>
         <OrganisationActionButtons
           isActive={isActive}

@@ -1,10 +1,16 @@
+enum MemberRole {
+  owner
+  admin
+  member
+}
+
 model Member {
   id             String       @id
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   userId         String
   user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  role           String       @default("member")
+  role           MemberRole   @default(member)
   createdAt      DateTime
 
   @@index([organizationId])

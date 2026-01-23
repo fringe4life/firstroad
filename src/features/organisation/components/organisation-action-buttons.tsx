@@ -2,6 +2,7 @@
 import {
   LucideArrowLeftRight,
   LucideArrowUpRightFromSquare,
+  LucideLogOut,
   LucidePen,
   LucideTrash,
 } from "lucide-react";
@@ -11,7 +12,7 @@ import { type MouseEventHandler, useTransition } from "react";
 import { toast } from "sonner";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
-import { membershipsPath } from "@/path";
+import { membershipsPath, organisationsPath } from "@/path";
 import type { OrganisationActionButtonProps } from "../types";
 
 const OrganisationActionButtons = ({
@@ -38,6 +39,27 @@ const OrganisationActionButtons = ({
     });
   };
 
+  const handleLeave: MouseEventHandler<HTMLButtonElement> = () => {
+    startTransition(async () => {
+      const { error } = await authClient.organization.leave({
+        organizationId,
+      });
+      if (error) {
+        // Check if it's the "last member" error
+        const errorMessage =
+          error.message?.includes("last member") ||
+          error.message?.includes("Cannot remove")
+            ? "Cannot leave as the last member of an organization"
+            : "Failed to leave organization";
+        toast.error(errorMessage);
+        return;
+      }
+      toast.success("Left organization successfully");
+      // Redirect to organizations list - if user has no orgs, they'll be redirected to onboarding by auth checks
+      router.push(organisationsPath());
+    });
+  };
+
   const handleDelete: MouseEventHandler<HTMLButtonElement> = () => {
     startTransition(async () => {
       const { error } = await authClient.organization.delete({
@@ -54,6 +76,7 @@ const OrganisationActionButtons = ({
   };
 
   let handleDeleteButton: React.ReactNode = null;
+  let leaveButton: React.ReactNode = null;
   let openButton: React.ReactNode = null;
   let editButton: React.ReactNode = null;
 
@@ -74,6 +97,12 @@ const OrganisationActionButtons = ({
         variant="outline"
       >
         <LucidePen className="aspect-square w-4" />
+      </Button>
+    );
+
+    leaveButton = (
+      <Button onClick={handleLeave} size="icon" variant="destructive">
+        <LucideLogOut className="aspect-square w-4" />
       </Button>
     );
 
@@ -101,6 +130,7 @@ const OrganisationActionButtons = ({
       </Button>
       {openButton}
       {editButton}
+      {leaveButton}
       {handleDeleteButton}
     </div>
   );

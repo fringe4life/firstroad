@@ -10,18 +10,21 @@ const SignInPageContent = () => (
     content={<SignInForm signinAction={signin} />}
     description="Sign in to your account"
     footer={
-      <div className="grid w-full grid-cols-2 items-center justify-between gap-4">
-        <Link className="text-muted-foreground text-sm" href={signUpPath()}>
+      <div className="grid w-full items-center justify-center gap-4 sm:grid-cols-2 sm:justify-between">
+        <Link
+          className="text-center text-muted-foreground text-sm"
+          href={signUpPath()}
+        >
           No account yet?
         </Link>
         <Link
-          className="text-muted-foreground text-sm"
+          className="text-center text-muted-foreground text-sm"
           href={forgotPasswordPath()}
         >
           Forgot Password?
         </Link>
         <Link
-          className="text-muted-foreground text-sm"
+          className="text-center text-muted-foreground text-sm"
           href={signInOTPSendPath()}
         >
           Sign in with OTP
