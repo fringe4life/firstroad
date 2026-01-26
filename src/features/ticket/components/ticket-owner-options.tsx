@@ -35,7 +35,7 @@ const TicketOwnerOptions = ({
 
       const moreMenu = isDetail ? (
         <TicketMoreMenu
-          ticket={ticket}
+          ticket={{ id: ticket.id, status: ticket.status }}
           trigger={
             <Button size="icon" variant="outline">
               <LucideMoreVertical className="aspect-square w-4" />

@@ -1,5 +1,6 @@
 import type { CommentGetPayload } from "@/generated/prisma/models/Comment";
 import type { Maybe } from "@/types";
+import type { ActionState } from "@/utils/to-action-state";
 import type { PaginatedResult } from "../pagination/types";
 
 type CommentModelWithUserInfo = CommentGetPayload<{
@@ -27,4 +28,15 @@ export interface EditingState {
 export interface CommentState {
   list: NonNullable<PaginatedResult<CommentWithUserInfo>["list"]>;
   metadata: PaginatedResult<CommentWithUserInfo>["metadata"];
+}
+
+export interface CommentOwnerButtonsProps {
+  comment: Pick<Comment, "id" | "content">;
+  onEdit: (commentId: string, content: string) => void;
+  onDeleteComment: (commentId: string) => Promise<ActionState<string>>;
+}
+
+export interface CommentEditButtonProps {
+  comment: Pick<Comment, "id" | "content">;
+  onEdit: (commentId: string, content: string) => void;
 }

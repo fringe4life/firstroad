@@ -289,7 +289,8 @@ src/
 │   ├── form/                 # Form helpers (field-error, submit-button, action feedback)
 │   ├── skeletons/            # Shared skeletons (icon button)
 │   ├── theme/                # Theme provider and switcher
-│   └── ui/                   # shadcn/ui components
+│   ├── ui/                   # shadcn/ui components
+│   └── unsuccessful-table.tsx # Reusable empty/error state table component
 ├── features/                 # Feature modules
 │   ├── auth/                 # Auth actions, components, events, queries, types
 │   ├── comment/              # Comment actions, optimistic hooks, components

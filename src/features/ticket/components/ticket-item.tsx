@@ -31,6 +31,13 @@ const TicketItem = ({
     </Link>
   );
 
+  const ticketStub = {
+    userId: ticket.userId,
+    slug: ticket.slug,
+    id: ticket.id,
+    status: ticket.status,
+  };
+
   return (
     <ViewTransition
       enter="ticket-card-enter"
@@ -69,14 +76,14 @@ const TicketItem = ({
               <TicketOwnerOptions
                 currentUserId={currentUserId}
                 isDetail={true}
-                ticket={ticket}
+                ticket={ticketStub}
               />
             ) : (
               <>
                 {detailButton}
                 <TicketOwnerOptions
                   currentUserId={currentUserId}
-                  ticket={ticket}
+                  ticket={ticketStub}
                 />
               </>
             )}

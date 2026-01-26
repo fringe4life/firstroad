@@ -236,7 +236,7 @@ const CommentList = ({
             buttons:
               userId === item.userId ? (
                 <CommentOwnerButtons
-                  comment={item}
+                  comment={{ id: item.id, content: item.content }}
                   onDeleteComment={handleDelete}
                   onEdit={(commentId, content) =>
                     handleEdit(commentId, content)

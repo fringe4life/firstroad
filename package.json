@@ -92,7 +92,7 @@
     "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
     "@types/ws": "^8.18.1",
-    "@typescript/native-preview": "^7.0.0-dev.20260122.4",
+    "@typescript/native-preview": "^7.0.0-dev.20260126.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "prisma": "^7.3.0",

@@ -2,12 +2,7 @@
 
 import { LucidePencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { Comment } from "@/features/comment/types";
-
-interface CommentEditButtonProps {
-  comment: Comment;
-  onEdit: (commentId: string, content: string) => void;
-}
+import type { CommentEditButtonProps } from "@/features/comment/types";
 
 const CommentEditButton = ({ comment, onEdit }: CommentEditButtonProps) => {
   const handleEdit = () => {

@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
     viewTransition: true,
     mcpServer: true,
     typedEnv: true,
+    // lucide-react is already optimized by default, but explicit is fine
+    // valibot has confirmed barrel file issues (GitHub #425)
+    optimizePackageImports: ["valibot"],
   },
 };
 

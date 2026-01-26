@@ -13,11 +13,22 @@ export interface TicketListProps {
   tickets: List<BaseTicket>;
 }
 
-export interface TicketItemProps {
-  ticket: BaseTicket;
+interface IsDetail {
   isDetail?: boolean;
+}
+
+export interface TicketItemProps extends IsDetail {
+  ticket: BaseTicket;
   comments?: React.ReactNode;
   currentUserId?: Exclude<Maybe<string>, null>;
 }
 
-export interface TicketOwnerOptionsProps extends TicketItemProps {}
+export interface TicketOwnerOptionsProps extends IsDetail {
+  ticket: Pick<BaseTicket, "userId" | "slug" | "id" | "status">;
+  currentUserId?: Exclude<Maybe<string>, null>;
+}
+
+export interface TicketMoreMenuProps {
+  ticket: Pick<BaseTicket, "id" | "status">;
+  trigger: React.ReactNode;
+}
