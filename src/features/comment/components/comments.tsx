@@ -3,12 +3,8 @@
 import { CommentFormCard } from "@/features/comment/components/comment-form-card";
 import { CommentList } from "@/features/comment/components/comment-list";
 import { CommentPagination } from "@/features/comment/components/comment-pagination";
-import {
-  CommentsProvider,
-  type CommentsProviderProps,
-} from "@/features/comment/components/comments-store";
-
-type CommentsProps = Omit<CommentsProviderProps, "children">;
+import { CommentsProvider } from "@/features/comment/components/comments-store";
+import type { CommentsProps } from "@/features/comment/types";
 
 const Comments = (props: CommentsProps) => (
   <CommentsProvider {...props}>

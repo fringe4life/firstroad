@@ -4,10 +4,16 @@ import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { prisma } from "@/lib/prisma";
 import { invalidateCommentAndTicketComments } from "@/utils/invalidate-cache";
-import { fromErrorToActionState, toActionState } from "@/utils/to-action-state";
+import {
+  type ActionState,
+  fromErrorToActionState,
+  toActionState,
+} from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
 
-export const deleteComment = async (commentId: string) => {
+export const deleteComment = async (
+  commentId: string,
+): Promise<ActionState<string>> => {
   const user = await getUserOrRedirect();
 
   // verify comment exists
@@ -29,10 +35,10 @@ export const deleteComment = async (commentId: string) => {
       ),
   );
   if (commentError) {
-    return fromErrorToActionState(commentError);
+    return fromErrorToActionState<string>(commentError);
   }
   if (!commentWithOwnership?.isOwner) {
-    return toActionState("Comment not found", "ERROR");
+    return toActionState<string>("Comment not found", "ERROR");
   }
 
   const { error: deleteError } = await tryCatch(() =>
@@ -41,7 +47,7 @@ export const deleteComment = async (commentId: string) => {
     }),
   );
   if (deleteError) {
-    return fromErrorToActionState(deleteError);
+    return fromErrorToActionState<string>(deleteError);
   }
 
   invalidateCommentAndTicketComments(
@@ -50,5 +56,5 @@ export const deleteComment = async (commentId: string) => {
     commentWithOwnership.ticket.slug,
   );
 
-  return toActionState("Comment deleted successfully", "SUCCESS");
+  return toActionState<string>("Comment deleted successfully", "SUCCESS");
 };

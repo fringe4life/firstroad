@@ -1,12 +1,7 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import type { Comment } from "@/features/comment/types";
+import type { CommentItemProps } from "@/features/comment/types";
 import { TimeAgo } from "./time-ago";
-
-interface CommentItemProps {
-  comment: Comment;
-  buttons?: React.ReactNode;
-}
 
 const CommentItem = ({ comment, buttons }: CommentItemProps) => {
   const { updatedAt, createdAt, content, user } = comment;

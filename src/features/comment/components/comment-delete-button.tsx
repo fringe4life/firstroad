@@ -3,12 +3,7 @@
 import { ConfirmDeleteIcon } from "@/components/confirm-delete-icon";
 import { useConfirmDialog } from "@/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
-import type { ActionState } from "@/utils/to-action-state";
-
-interface CommentDeleteButtonProps {
-  id: string;
-  onDeleteComment: (commentId: string) => Promise<ActionState<string>>;
-}
+import type { CommentDeleteButtonProps } from "@/features/comment/types";
 
 const CommentDeleteButton = ({
   id,

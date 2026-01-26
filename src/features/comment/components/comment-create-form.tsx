@@ -6,18 +6,8 @@ import { Form } from "@/components/form/form";
 import { SubmitButton } from "@/components/form/submit-button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import type { Maybe } from "@/types";
 import type { ActionState } from "@/utils/to-action-state";
-import type { CommentWithUserInfo } from "../types";
-
-interface CommentCreateFormProps {
-  action: (formData: FormData) => void;
-  state: ActionState<CommentWithUserInfo>;
-  commentId?: string;
-  initialContent?: Exclude<Maybe<string>, null>;
-  onCancel?: () => void;
-  onSuccessState?: (state: ActionState<CommentWithUserInfo>) => void;
-}
+import type { CommentCreateFormProps, CommentWithUserInfo } from "../types";
 
 const CommentCreateForm = ({
   action,

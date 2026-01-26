@@ -9,48 +9,18 @@ import {
   useState,
   useTransition,
 } from "react";
-import type { deleteComment } from "@/features/comment/actions/delete-comment";
-import type { upsertComment } from "@/features/comment/actions/upsert-comment";
 import { commentReducer } from "@/features/comment/hooks/use-comment-optimistic";
 import type {
-  Comment,
   CommentState,
+  CommentsContextValue,
+  CommentsProviderProps,
   CommentWithUserInfo,
   EditingState,
 } from "@/features/comment/types";
 import { NO_PAGINATION } from "@/features/pagination/constants";
-import type { PaginatedResult } from "@/features/pagination/types";
 import type { ActionState } from "@/utils/to-action-state";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 import { INITIAL_EDITING_STATE } from "../constants";
-import type { getCommentsByTicketSlug } from "../dal/get-comments";
-
-type CommentsProviderProps = {
-  ticketSlug: string;
-  loadMoreAction: typeof getCommentsByTicketSlug;
-  upsertCommentAction: typeof upsertComment;
-  deleteCommentAction: typeof deleteComment;
-  userId?: string;
-  userName?: string;
-  ticketId: string;
-  children: React.ReactNode;
-} & PaginatedResult<Comment>;
-
-interface CommentsContextValue {
-  formRef: React.RefObject<HTMLDivElement | null>;
-  optimisticComments: CommentWithUserInfo[];
-  editingState: EditingState;
-  upsertState: ActionState<CommentWithUserInfo>;
-  upsertAction: (formData: FormData) => void;
-  userId?: string;
-  isPending: boolean;
-  hasNextPage: boolean;
-  handleUpsertSuccess: (state: ActionState<CommentWithUserInfo>) => void;
-  handleEdit: (commentId: string, content: string) => void;
-  handleCancelEdit: () => void;
-  handleLoadMore: () => void;
-  handleDelete: (commentId: string) => Promise<ActionState<string>>;
-}
 
 const CommentsContext = createContext<CommentsContextValue | null>(null);
 
@@ -223,5 +193,4 @@ const useComments = () => {
   return context;
 };
 
-export type { CommentsProviderProps };
 export { CommentsProvider, useComments };
