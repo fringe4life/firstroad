@@ -3,6 +3,7 @@ import { LucideGithub } from "lucide-react";
 import { type MouseEventHandler, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
+import { ticketsPath } from "@/path";
 
 const GithubLoginButton = () => {
   const [isPending, startTransition] = useTransition();
@@ -12,6 +13,7 @@ const GithubLoginButton = () => {
         //  @ts-expect-error promise
         await authClient.signIn.social({
           provider: "github",
+          callbackURL: ticketsPath(),
         }),
     );
   };

@@ -3,6 +3,7 @@ import { createAuthMiddleware } from "better-auth/api";
 import { betterAuth } from "better-auth/minimal";
 import { nextCookies } from "better-auth/next-js";
 import { emailOTP, organization } from "better-auth/plugins";
+import { isAdminOrOwner } from "@/features/organisation/utils/admin";
 import { inngest } from "@/lib/inngest";
 import { prisma } from "@/lib/prisma";
 import { tryCatch } from "@/utils/try-catch";
@@ -57,7 +58,7 @@ export const auth = betterAuth({
     }),
     organization({
       organizationHooks: {
-        beforeRemoveMember: async ({ organization }) => {
+        beforeRemoveMember: async ({ member, organization }) => {
           // Prevent removing the last member from an organization
           const memberCount = await prisma.member.count({
             where: {
@@ -69,6 +70,25 @@ export const auth = betterAuth({
             throw new Error(
               "Cannot remove the last member from an organization",
             );
+          }
+
+          // Prevent removing the last owner/admin
+          // Type assertion needed because Better Auth hooks type role as string
+          if (isAdminOrOwner(member as { role: string })) {
+            const adminOwnerCount = await prisma.member.count({
+              where: {
+                organizationId: organization.id,
+                role: {
+                  in: ["owner", "admin"],
+                },
+              },
+            });
+
+            if (adminOwnerCount <= 1) {
+              throw new Error(
+                "Cannot remove the last owner or admin from an organization",
+              );
+            }
           }
         },
       },

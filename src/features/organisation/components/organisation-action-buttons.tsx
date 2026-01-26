@@ -18,6 +18,7 @@ import type { OrganisationActionButtonProps } from "../types";
 const OrganisationActionButtons = ({
   organizationId,
   isActive,
+  isAdminOrOwner,
   limitedAccess,
 }: OrganisationActionButtonProps) => {
   const router = useRouter();
@@ -80,7 +81,8 @@ const OrganisationActionButtons = ({
   let openButton: React.ReactNode = null;
   let editButton: React.ReactNode = null;
 
-  if (!limitedAccess) {
+  // Show open, edit and delete buttons only if not limited access AND user is admin/owner
+  if (!limitedAccess && isAdminOrOwner) {
     openButton = (
       <Link
         className={buttonVariants({ variant: "outline", size: "icon" })}
@@ -99,16 +101,18 @@ const OrganisationActionButtons = ({
         <LucidePen className="aspect-square w-4" />
       </Button>
     );
-
-    leaveButton = (
-      <Button onClick={handleLeave} size="icon" variant="destructive">
-        <LucideLogOut className="aspect-square w-4" />
-      </Button>
-    );
-
     handleDeleteButton = (
       <Button onClick={handleDelete} size="icon" variant="destructive">
         <LucideTrash className="aspect-square w-4" />
+      </Button>
+    );
+  }
+
+  // Leave button remain visible to all members (when !limitedAccess)
+  if (!limitedAccess) {
+    leaveButton = (
+      <Button onClick={handleLeave} size="icon" variant="destructive">
+        <LucideLogOut className="aspect-square w-4" />
       </Button>
     );
   }

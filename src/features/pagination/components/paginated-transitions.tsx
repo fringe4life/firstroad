@@ -1,6 +1,7 @@
 import { Suspend } from "@/components/suspend";
+import type { Page } from "../types";
 
-const PaginatedTransitions = <T extends { page: number }>({
+const PaginatedTransitions = <T extends Page>({
   children,
   metadata,
   fallback,

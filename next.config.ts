@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
     typedEnv: true,
     // lucide-react is already optimized by default, but explicit is fine
     // valibot has confirmed barrel file issues (GitHub #425)
-    optimizePackageImports: ["valibot"],
+    // optimizePackageImports: ["valibot"],
   },
 };
 

@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { OrganisationItemProps } from "../types";
+import { isAdminOrOwner } from "../utils/admin";
 import { OrganisationActionButtons } from "./organisation-action-buttons";
 
 const OrganisationItem = ({
@@ -9,6 +10,9 @@ const OrganisationItem = ({
   limitedAccess,
 }: OrganisationItemProps) => {
   const isActive = organisation.id === activeOrganizationId;
+  const isAdminOrOwnerValue = isAdminOrOwner(
+    organisation.memberShipByUser ?? { role: null },
+  );
 
   return (
     <TableRow className={isActive ? "bg-muted" : ""} data-active={isActive}>
@@ -26,6 +30,7 @@ const OrganisationItem = ({
       <TableCell>
         <OrganisationActionButtons
           isActive={isActive}
+          isAdminOrOwner={isAdminOrOwnerValue}
           limitedAccess={limitedAccess}
           organizationId={organisation.id}
         />

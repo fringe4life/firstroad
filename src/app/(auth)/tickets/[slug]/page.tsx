@@ -4,7 +4,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { HasAuthSuspense } from "@/features/auth/components/has-auth";
 import { deleteComment } from "@/features/comment/actions/delete-comment";
 import { upsertComment } from "@/features/comment/actions/upsert-comment";
-import { CommentList } from "@/features/comment/components/comment-list";
+import { Comments } from "@/features/comment/components/comments";
 import { CommentFormSkeleton } from "@/features/comment/components/skeletons/comment-form-skeleton";
 import { CommentListSkeleton } from "@/features/comment/components/skeletons/comment-list-skeleton";
 import { getCommentsByTicketSlug } from "@/features/comment/dal/get-comments";
@@ -68,7 +68,7 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
             }
           >
             {(user) => (
-              <CommentList
+              <Comments
                 deleteCommentAction={deleteComment}
                 list={list}
                 loadMoreAction={getCommentsByTicketSlug}

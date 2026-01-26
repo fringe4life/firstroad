@@ -4,11 +4,14 @@ import type { LIMITS } from "./constants";
 /**
  * PAGINATION METADATA types
  */
-export interface PaginationMetadata {
+
+export interface Page {
+  page: number;
+}
+export interface PaginationMetadata extends Page {
   count: number;
   hasNextPage: boolean;
   nextCursor: Maybe<string>;
-  page: number;
 }
 interface PaginationMetadataObject {
   metadata: PaginationMetadata;
@@ -37,8 +40,7 @@ export interface PaginatedResult<T> extends PaginationMetadataObject {
 
 export type PaginationType = OffsetPaginationType | CursorPaginationType;
 
-export interface OffsetPaginationType {
-  page: number;
+export interface OffsetPaginationType extends Page {
   limit: LimitItem;
   type: "offset";
 }

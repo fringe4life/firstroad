@@ -47,16 +47,21 @@ const MembershipActionButtons = ({
     console.log("edit");
   };
 
+  let canRemoveMemberButton: React.ReactNode = null;
+  if (canRemoveMember) {
+    canRemoveMemberButton = (
+      <Button onClick={handleRemoveMember} size="icon" variant="destructive">
+        <LucideLogOut className="aspect-square w-4" />
+      </Button>
+    );
+  }
+
   return (
     <div className="flex justify-end gap-x-2">
       <Button onClick={handleEdit} size="icon" variant="outline">
         <LucidePen className="aspect-square w-4" />
       </Button>
-      {canRemoveMember && (
-        <Button onClick={handleRemoveMember} size="icon" variant="destructive">
-          <LucideLogOut className="aspect-square w-4" />
-        </Button>
-      )}
+      {canRemoveMemberButton}
     </div>
   );
 };

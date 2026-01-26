@@ -61,7 +61,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **API Framework**: Elysia 1.4.21 with @elysiajs/cors 1.4.1 for unified API routes
 - **Background Jobs**: Inngest 3.49.3 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
-- **Linting**: Biome 2.3.11 for fast formatting and linting with Ultracite 7.0.11 rules
+- **Linting**: Biome 2.3.11 for fast formatting and linting with Ultracite 7.0.12 rules
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 
@@ -115,7 +115,7 @@ Pre-renders hidden content at lower priority for instant transitions:
 
 // Comments component stays mounted when hidden, preserving state
 <Activity mode={isDetail ? "visible" : "hidden"}>
-  <Comments ticketId={ticketId} />
+  <Comments {...commentProps} />
 </Activity>
 ```
 
@@ -293,7 +293,7 @@ src/
 │   └── unsuccessful-table.tsx # Reusable empty/error state table component
 ├── features/                 # Feature modules
 │   ├── auth/                 # Auth actions, components, events, queries, types
-│   ├── comment/              # Comment actions, optimistic hooks, components
+│   ├── comment/              # Comment actions, optimistic hooks, components, store
 │   ├── memberships/          # Membership actions, components, queries (role-based access)
 │   ├── navigation/           # Sidebar/nav components + context
 │   ├── organisation/         # Organization actions and components
@@ -368,7 +368,7 @@ Components use the `HasAuthSuspense` pattern for session-dependent rendering:
   comments={
     <HasAuthSuspense fallback={<div>Loading Comments...</div>}>
       {(user) => (
-        <CommentList
+        <Comments
           deleteCommentAction={deleteComment}
           list={list}
           loadMoreAction={getCommentsByTicketSlug}
@@ -424,7 +424,7 @@ The database is seeded with sample tickets and comments for existing users:
 - **Delete Comments**: Comment owners can delete their comments with optimistic UI updates
 - **Infinite Pagination**: Efficient cursor-based pagination for large comment lists
 - **Optimistic Updates**: Instant UI feedback using React 19's `useOptimistic` hook
-- **State Management**: Object-based state for comments and pagination metadata
+- **State Management**: Context store for comments and pagination metadata
 - **Real-time Updates**: Comments update immediately after actions with server reconciliation
 
 ## 🎨 UI Components
@@ -591,7 +591,7 @@ The application uses Elysia 1.4.21 as a unified API framework for handling all A
 **Architecture:**
 - **Centralized App Instance**: Elysia app created in `src/lib/app.ts` with `/api` prefix
 - **Plugin Pattern**: Inngest handler implemented as Elysia plugin in `inngest-plugin.ts`
-- **OpenAPI Support**: Automatic API documentation with `@elysiajs/openapi` 1.4.13 (currently disabled due to specPath maximum call stack size exceeded error)
+- **OpenAPI Support**: Automatic API documentation with `@elysiajs/openapi` 1.4.14 (currently disabled due to specPath maximum call stack size exceeded error)
 
 **Features:**
 - **Unified API Handler**: Single Elysia instance handles all API routes
