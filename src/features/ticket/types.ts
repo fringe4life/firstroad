@@ -13,7 +13,7 @@ export interface TicketListProps {
   tickets: List<BaseTicket>;
 }
 
-interface IsDetail {
+export interface IsDetail {
   isDetail?: boolean;
 }
 

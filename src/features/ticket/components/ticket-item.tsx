@@ -12,6 +12,7 @@ import {
 import { TICKET_ICONS } from "@/features/constants";
 import { TicketOwnerOptions } from "@/features/ticket/components/ticket-owner-options";
 import type { TicketItemProps } from "@/features/ticket/types";
+import { selectDetailElement } from "@/features/ticket/utils/detail-element";
 import { ticketPath } from "@/path";
 import { toCurrencyFromCent } from "@/utils/currency";
 
@@ -21,22 +22,33 @@ const TicketItem = ({
   comments,
   currentUserId,
 }: TicketItemProps) => {
-  const detailButton = (
-    <Link
-      className={buttonVariants({ variant: "outline", size: "icon" })}
-      href={ticketPath(ticket.slug)}
-      prefetch
-    >
-      <SquareArrowOutUpRight className="aspect-square w-10" />
-    </Link>
-  );
+  const { userId, slug, id, status } = ticket;
 
   const ticketStub = {
-    userId: ticket.userId,
-    slug: ticket.slug,
-    id: ticket.id,
-    status: ticket.status,
+    userId,
+    slug,
+    id,
+    status,
   };
+
+  const options = selectDetailElement({
+    isDetail,
+    element: (
+      <>
+        <Link
+          className={buttonVariants({ variant: "outline", size: "icon" })}
+          href={ticketPath(ticket.slug)}
+          prefetch
+        >
+          <SquareArrowOutUpRight className="aspect-square w-10" />
+        </Link>
+        <TicketOwnerOptions currentUserId={currentUserId} ticket={ticketStub} />
+      </>
+    ),
+    elementIfIsDetail: (
+      <TicketOwnerOptions currentUserId={currentUserId} ticket={ticketStub} />
+    ),
+  });
 
   return (
     <ViewTransition
@@ -71,23 +83,7 @@ const TicketItem = ({
             </CardFooter>
           </Card>
 
-          <div className="space-y-1 self-start">
-            {isDetail ? (
-              <TicketOwnerOptions
-                currentUserId={currentUserId}
-                isDetail={true}
-                ticket={ticketStub}
-              />
-            ) : (
-              <>
-                {detailButton}
-                <TicketOwnerOptions
-                  currentUserId={currentUserId}
-                  ticket={ticketStub}
-                />
-              </>
-            )}
-          </div>
+          <div className="space-y-1 self-start">{options}</div>
         </div>
         {comments}
       </div>

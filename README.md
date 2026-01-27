@@ -2,19 +2,19 @@
 
 <div align="center">
 
-[![Next.js](https://img.shields.io/badge/Next.js-16.1.4-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
-[![React](https://img.shields.io/badge/React-19.2.3-61DAFB?logo=react&logoColor=white)](https://react.dev/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.1.5-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.2.4-61DAFB?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Prisma](https://img.shields.io/badge/Prisma-7.3.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
-[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.4.17-000000)](https://better-auth.com/)
+[![Better Auth](https://img.shields.io/badge/Better%20Auth-beta-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.18-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![Biome](https://img.shields.io/badge/Biome-2.3.11-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-7.0.12-000000)](https://ultracite.dev/)
+[![Biome](https://img.shields.io/badge/Biome-2.3.12-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-7.1.1-000000)](https://ultracite.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.8.6-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.2.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Elysia](https://img.shields.io/badge/Elysia-1.4.21-000000)](https://elysiajs.com/)
 [![Inngest](https://img.shields.io/badge/Inngest-3.49.3-000000)](https://www.inngest.com/)
-[![Resend](https://img.shields.io/badge/Resend-6.8.0-000000)](https://resend.com/)
+[![Resend](https://img.shields.io/badge/Resend-6.9.1-000000)](https://resend.com/)
 [![React Email](https://img.shields.io/badge/React%20Email-5.2.5-000000)](https://react.email/)
 
 </div>
@@ -526,6 +526,7 @@ Better Auth configured with:
 - Prisma Client with Neon driver adapter
 - Session cookie caching (5-minute cache duration)
 - Session expiration (7 days) and update age (1 day)
+- Temporary Bun build shim: `@better-auth/kysely-adapter` is aliased to a local shim to avoid `node:sqlite` imports during Next.js builds. This should be removable once Better Auth v1.5 (stable) excludes Kysely from `better-auth/minimal` as documented in v1.4's bundle-size optimization note.
 
 Inngest provides background job processing for:
 

@@ -6,7 +6,7 @@ const TicketList = ({ tickets }: TicketListProps) => {
   return (
     <GenericComponent
       Component={TicketItem}
-      className="grid h-full justify-items-center gap-y-4 self-start justify-self-stretch"
+      className="grid h-full content-start justify-items-center gap-y-4 self-start justify-self-stretch"
       emptyStateMessage="No tickets found"
       errorStateMessage="Failed to fetch tickets"
       items={tickets}

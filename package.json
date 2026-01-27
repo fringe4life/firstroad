@@ -4,17 +4,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "dev:inspect": "next dev --inspect",
+    "dev": "bun --bun run next dev --webpack",
+    "dev:inspect": "bun --bun run next dev --inspect --webpack",
     "next:upgrade": "next upgrade",
     "next:analyze": "next analyze",
-    "build": "next build",
-    "build:debug": "next build --debug-prerender",
+    "build": "bun --bun run next build --webpack",
+    "build:debug": "bun --bun run next build --debug --webpack",
+    "build:debug:prerender": "bun --bun run next build --debug-prerender --webpack",
     "start": "next start",
-    "lint": "biome check src",
-    "lint:fix": "biome check --write src",
-    "format": "biome format --write src",
-    "check": "biome check --write src && biome format --write src",
     "type": "tsgo --noEmit",
     "postinstall": "prisma generate",
     "typegen": "next typegen",
@@ -30,7 +27,9 @@
     "ultracite:fix": "bun x ultracite fix",
     "ultracite:doctor": "bun x ultracite doctor",
     "ultracite:check": "bun x ultracite check",
-    "ultracite:upgrade": "bun x ultracite@latest init --pm bun --linter biome --agents cursor-cli --editors vscode --hooks cursor --frameworks next --quiet"
+    "ultracite:upgrade": "bun x ultracite@latest init --pm bun --linter biome --agents cursor-cli --editors vscode --hooks cursor --frameworks next --quiet",
+    "check": "ultracite check",
+    "fix": "ultracite fix"
   },
   "dependencies": {
     "@elysiajs/cors": "^1.4.1",
@@ -52,7 +51,7 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@react-email/components": "^1.0.6",
     "babel-plugin-react-compiler": "^1.0.0",
-    "better-auth": "^1.4.17",
+    "better-auth": "beta",
     "big.js": "^7.0.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -64,15 +63,15 @@
     "inngest-cli": "^1.16.1",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.563.0",
-    "next": "^16.1.4",
+    "next": "^16.1.5",
     "next-devtools-mcp": "^0.3.10",
     "next-themes": "^0.4.6",
     "nuqs": "^2.8.6",
     "prismabox": "^1.1.26",
-    "react": "^19.2.3",
+    "react": "^19.2.4",
     "react-day-picker": "^9.13.0",
-    "react-dom": "^19.2.3",
-    "resend": "^6.8.0",
+    "react-dom": "^19.2.4",
+    "resend": "^6.9.1",
     "server-only": "^0.0.1",
     "slugify": "^1.6.6",
     "sonner": "^2.0.7",
@@ -84,15 +83,15 @@
     "ws": "^8.19.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.3.11",
+    "@biomejs/biome": "2.3.12",
     "@react-email/preview-server": "^5.2.5",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/big.js": "^6.2.2",
     "@types/node": "^25.0.10",
-    "@types/react": "^19.2.9",
+    "@types/react": "^19.2.10",
     "@types/react-dom": "^19.2.3",
     "@types/ws": "^8.18.1",
-    "@typescript/native-preview": "^7.0.0-dev.20260126.1",
+    "@typescript/native-preview": "^7.0.0-dev.20260127.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "prisma": "^7.3.0",
@@ -101,7 +100,7 @@
     "tailwindcss": "^4.1.18",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "ultracite": "7.0.12"
+    "ultracite": "7.1.1"
   },
   "trustedDependencies": [
     "@prisma/client",
@@ -126,9 +125,10 @@
     "@trpc/server": ">=11.8.0",
     "qs": ">=6.14.1",
     "undici": ">=7.18.2",
-    "hono": "^4.11.4",
+    "hono": ">=4.11.7",
     "diff": ">=8.0.3",
     "tar": ">7.5.2",
-    "lodash": ">4.17.22"
+    "lodash": ">4.17.22",
+    "next": ">=16.1.5"
   }
 }
