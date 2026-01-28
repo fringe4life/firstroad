@@ -127,6 +127,7 @@ refactor:
 3. Run `git diff --stat` to see change summary
 4. Analyze the changes and categorize them
 5. Count files changed and lines modified
+6. Include newly added files in the commit message summary
 6. Generate a commit message:
    - Start with commit type and colon (e.g., `feat:`, `refactor:`, `docs:`)
    - Add a newline
