@@ -1,11 +1,14 @@
 import { neonConfig } from "@neondatabase/serverless";
 import { PrismaNeon } from "@prisma/adapter-neon";
-import ws from "ws";
 import { PrismaClient } from "@/generated/prisma/client";
 import type { Maybe } from "@/types";
 import { env } from "./env";
 
-neonConfig.webSocketConstructor = ws;
+const bunWebSocket = globalThis.WebSocket;
+if (!bunWebSocket) {
+  throw new Error("WebSocket is unavailable. This build expects Bun runtime.");
+}
+neonConfig.webSocketConstructor = bunWebSocket;
 // To work in edge environments (Cloudflare Workers, Vercel Edge, etc.), enable querying over fetch
 neonConfig.poolQueryViaFetch = true;
 // Type definitions

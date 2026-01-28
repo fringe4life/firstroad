@@ -24,7 +24,7 @@ Provide ONLY this file in future sessions to have the AI re-scan and update `REA
   - Tech stack and configuration notes (Next.js, Turbopack, React Compiler, Neon, Resend)
   - **Project Structure section** - completely regenerate based on current folder structure
 - Keep wording concise, match existing style, do not over-explain.
-- **Badge versions**: Extract versions from `package.json` and update all badge URLs accordingly.
+- **Badge versions**: Use full major.minor.patch from `package.json` for the badge area. Elsewhere in the README, use major.minor only.
 - **Project Structure**: Must reflect current organization (features/, components/, navigation moved to features/navigation, etc.)
 
 ## Rules

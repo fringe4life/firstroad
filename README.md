@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![Next.js](https://img.shields.io/badge/Next.js-16.1.5-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.1.6-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.2.4-61DAFB?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Prisma](https://img.shields.io/badge/Prisma-7.3.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
@@ -47,21 +47,21 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 16.1.4 (App Router) with Turbopack
-- **Language**: TypeScript 5.9.3 with strict type checking
-- **Database**: PostgreSQL with Prisma Client 7.3.0 (relationJoins preview, Neon adapter)
-- **Authentication**: Better Auth 1.4.17 with email/password provider and session cookie caching
+- **Framework**: Next.js 16.1 (App Router) with Turbopack
+- **Language**: TypeScript 5.9 with strict type checking
+- **Database**: PostgreSQL with Prisma Client 7.3 (relationJoins preview, Neon adapter)
+- **Authentication**: Better Auth 1.5 (beta) with email/password provider and session cookie caching
 - **Styling**: Tailwind CSS v4.1.18 with shadcn/ui components
 - **Icons**: Lucide React
 - **Forms**: React Hook Form with Valibot validation
 - **Notifications**: Sonner toast notifications
 - **Theme**: next-themes for dark/light mode
-- **URL Search Params**: nuqs 2.8.6 for type-safe URL parameters
-- **Email**: React Email 5.2.5 with Resend 6.8.0 for transactional emails
-- **API Framework**: Elysia 1.4.21 with @elysiajs/cors 1.4.1 for unified API routes
-- **Background Jobs**: Inngest 3.49.3 for background tasks and event handling
+- **URL Search Params**: nuqs 2.8 for type-safe URL parameters
+- **Email**: React Email 5.2 with Resend 6.9 for transactional emails
+- **API Framework**: Elysia 1.4 with @elysiajs/cors 1.4 for unified API routes
+- **Background Jobs**: Inngest 3.49 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
-- **Linting**: Biome 2.3.11 for fast formatting and linting with Ultracite 7.0.12 rules
+- **Linting**: Biome 2.3 for fast formatting and linting with Ultracite 7.1 rules
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 
@@ -496,7 +496,7 @@ The project uses Tailwind CSS v4 with custom configuration for dark mode, theme 
 
 ### Database
 
-PostgreSQL with Prisma Client 7.3.0 using:
+PostgreSQL with Prisma Client 7.3 using:
 
 - **relationJoins** preview feature for optimized queries
 - **Client-side engine** for edge compatibility
@@ -538,7 +538,7 @@ Inngest provides background job processing for:
 
 ### Email Templates (Resend)
 
-The application uses Resend 6.8.0 for transactional emails with published templates. All email sending functions use Resend's template API instead of inline React Email components.
+The application uses Resend 6.9 for transactional emails with published templates. All email sending functions use Resend's template API instead of inline React Email components.
 
 **Template IDs:**
 - `email-otp-verification` - OTP codes for sign-in, email verification, and password reset
@@ -587,16 +587,16 @@ Resend templates require an API key with `full_access` permissions (not just `se
 
 ### API Routes (Elysia)
 
-The application uses Elysia 1.4.21 as a unified API framework for handling all API routes through a single catch-all handler (`src/app/api/[[...slugs]]/route.ts`).
+The application uses Elysia 1.4 as a unified API framework for handling all API routes through a single catch-all handler (`src/app/api/[[...slugs]]/route.ts`).
 
 **Architecture:**
 - **Centralized App Instance**: Elysia app created in `src/lib/app.ts` with `/api` prefix
 - **Plugin Pattern**: Inngest handler implemented as Elysia plugin in `inngest-plugin.ts`
-- **OpenAPI Support**: Automatic API documentation with `@elysiajs/openapi` 1.4.14 (currently disabled due to specPath maximum call stack size exceeded error)
+- **OpenAPI Support**: Automatic API documentation with `@elysiajs/openapi` 1.4 (currently disabled due to specPath maximum call stack size exceeded error)
 
 **Features:**
 - **Unified API Handler**: Single Elysia instance handles all API routes
-- **CORS Support**: Configured with `@elysiajs/cors` 1.4.1 for cross-origin requests (applied before auth routes)
+- **CORS Support**: Configured with `@elysiajs/cors` 1.4 for cross-origin requests (applied before auth routes)
 - **Better Auth Integration**: Auth routes mounted at `/auth` via `auth.handler` (CORS-enabled)
 - **Inngest Webhooks**: Background job webhooks handled at `/api/inngest` via Elysia plugin
 - **Next.js Route Handlers**: Exports GET, POST, PUT, DELETE, OPTIONS handlers for Next.js App Router
@@ -622,13 +622,13 @@ The application uses Elysia 1.4.21 as a unified API framework for handling all A
 
 **Known Issues:**
 - OpenAPI plugin causes "Maximum call stack size exceeded" error at specPath, likely due to circular references when introspecting mounted routes (Better Auth handler). OpenAPI generation is currently disabled until this issue is resolved.
-- Elysia 1.4.22 regressions impacted social/organisation APIs, so the API layer is pinned to 1.4.21.
+- Elysia 1.4 regressions impacted social/organisation APIs, so the API layer is pinned to 1.4.
 
 ### Type Safety
 
 - Full TypeScript support with strict configuration
 - Typed routes with Next.js 16 (`typedRoutes: true`)
-- Type-safe URL search parameters with nuqs 2.8.6
+- Type-safe URL search parameters with nuqs 2.8
 - Centralized auth types in `src/features/auth/types.ts`:
   - `ServerSession`: Full session with user object
   - `Maybe<User>`: Session or null for DAL functions

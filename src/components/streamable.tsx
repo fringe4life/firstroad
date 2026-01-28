@@ -1,5 +1,4 @@
 import { Suspense, use } from "react";
-import { v4 as uuid } from "uuid";
 
 export type Streamable<T> = T | Promise<T>;
 
@@ -13,7 +12,7 @@ const stableKeys = (() => {
       return key;
     }
 
-    const keyValue = uuid();
+    const keyValue = crypto.randomUUID();
 
     cache.set(obj, keyValue);
 
