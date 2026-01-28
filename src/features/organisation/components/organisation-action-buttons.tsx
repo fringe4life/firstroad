@@ -8,21 +8,33 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type MouseEventHandler, useTransition } from "react";
+import { type MouseEventHandler, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { authClient } from "@/lib/auth-client";
 import { membershipsPath, organisationsPath } from "@/path";
+import { updateOrganisation } from "../actions/update-organisation";
 import type { OrganisationActionButtonProps } from "../types";
+import { UpdateOrganisationForm } from "./update-organisation-form";
 
 const OrganisationActionButtons = ({
   organizationId,
+  organizationName,
   isActive,
   isAdminOrOwner,
   limitedAccess,
 }: OrganisationActionButtonProps) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [isEditOpen, setIsEditOpen] = useState(false);
 
   const handleSetActive: MouseEventHandler<HTMLButtonElement> = () => {
     startTransition(async () => {
@@ -93,13 +105,31 @@ const OrganisationActionButtons = ({
     );
 
     editButton = (
-      <Button
-        onClick={() => console.log("click")}
-        size="icon"
-        variant="outline"
-      >
-        <LucidePen className="aspect-square w-4" />
-      </Button>
+      <Dialog onOpenChange={setIsEditOpen} open={isEditOpen}>
+        <DialogTrigger asChild>
+          <Button size="icon" variant="outline">
+            <LucidePen className="aspect-square w-4" />
+          </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Rename organisation</DialogTitle>
+            <DialogDescription>
+              Update the organisation name for your team.
+            </DialogDescription>
+          </DialogHeader>
+          <UpdateOrganisationForm
+            key={`${organizationId}-${organizationName}`}
+            onSuccess={() => {
+              setIsEditOpen(false);
+              router.refresh();
+            }}
+            organizationId={organizationId}
+            organizationName={organizationName}
+            updateOrganisationAction={updateOrganisation}
+          />
+        </DialogContent>
+      </Dialog>
     );
     handleDeleteButton = (
       <Button onClick={handleDelete} size="icon" variant="destructive">

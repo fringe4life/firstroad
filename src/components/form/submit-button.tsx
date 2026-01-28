@@ -10,12 +10,24 @@ interface SubmitButtonProps {
   icon?: React.ReactElement<SVGAElement>;
   variant?: React.ComponentProps<typeof Button>["variant"];
   size?: React.ComponentProps<typeof Button>["size"];
+  disabled?: boolean;
 }
 
-const SubmitButton = ({ label, icon, variant, size }: SubmitButtonProps) => {
+const SubmitButton = ({
+  label,
+  icon,
+  variant,
+  size,
+  disabled = false,
+}: SubmitButtonProps) => {
   const { pending } = useFormStatus();
   return (
-    <Button disabled={pending} size={size} type="submit" variant={variant}>
+    <Button
+      disabled={pending || disabled}
+      size={size}
+      type="submit"
+      variant={variant}
+    >
       {pending && (
         <LucideLoaderCircle className="aspect-square w-4 animate-spin" />
       )}

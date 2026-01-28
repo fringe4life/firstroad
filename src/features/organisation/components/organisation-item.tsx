@@ -33,6 +33,7 @@ const OrganisationItem = ({
           isAdminOrOwner={isAdminOrOwnerValue}
           limitedAccess={limitedAccess}
           organizationId={organisation.id}
+          organizationName={organisation.name}
         />
       </TableCell>
     </TableRow>
