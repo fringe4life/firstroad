@@ -9,7 +9,7 @@ const AccountTabs = () => {
   const pathname = usePathname();
 
   return (
-    <Tabs value={pathname.split("/").at(-1)}>
+    <Tabs className="justify-self-start" value={pathname.split("/").at(-1)}>
       <TabsList>
         <TabsTrigger asChild value="profile">
           <Link href={accountProfilePath()}>Profile</Link>

@@ -443,17 +443,16 @@ Built with shadcn/ui and Tailwind CSS:
 
 ```bash
 # Development
-bun run dev              # Start development server with Turbopack
-bun run dev:inspect      # Start dev server with Node inspector
+bun run dev              # Start dev server (Bun + Webpack)
+bun run dev:inspect      # Start dev server with inspector (Bun + Webpack)
 bun run next:upgrade     # Upgrade Next.js
 bun run next:analyze     # Analyze Next.js bundle
-bun run build            # Build for production with Turbopack
-bun run build:debug      # Build with debug prerender info
-bun run start            # Start production server
-bun run lint             # Run Biome linting on src/
-bun run lint:fix         # Fix linting issues automatically
-bun run format           # Format code with Biome
-bun run check            # Run linting and formatting together
+bun run build            # Build for production (Bun + Webpack)
+bun run build:debug      # Build with debug output
+bun run build:debug:prerender # Build with debug prerender info
+bun run start            # Start production server (Bun)
+bun run check            # Run Ultracite checks
+bun run fix              # Fix with Ultracite
 bun run type             # Run TypeScript type checking (tsgo)
 bun run typegen          # Generate Next.js type definitions
 bun run postinstall      # Generate Prisma client (runs automatically after install)
@@ -465,9 +464,9 @@ bun run build:email      # Build email templates (./emails directory)
 bun run export:email     # Export email templates to HTML (./emails directory)
 
 # Database
-bunx prisma generate     # Generate Prisma client
-bunx prisma db push      # Push schema to database
-bunx prisma db seed      # Seed database with sample data
+bunx --bun prisma generate # Generate Prisma client
+bunx --bun prisma db push  # Push schema to database
+bunx --bun prisma db seed  # Seed database with sample data
 bun run reset:tickets    # Reset only ticket and comment data (preserves users)
 
 # Background Jobs (Inngest)

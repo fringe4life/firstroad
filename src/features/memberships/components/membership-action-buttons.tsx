@@ -1,21 +1,25 @@
 "use client";
-import { LucideLogOut, LucidePen } from "lucide-react";
+import { LucideLogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { type MouseEventHandler, startTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import type { MemberRole } from "@/generated/prisma/enums";
 import { authClient } from "@/lib/auth-client";
+import { MembershipsMoreMenu } from "./memberships-more-menu";
 
 const MembershipActionButtons = ({
   currentUserEmail,
   memberEmail,
   organisationId,
-  userId,
+  memberId,
+  role,
 }: {
   currentUserEmail?: string | null;
   memberEmail: string;
   organisationId: string;
-  userId: string;
+  memberId: string;
+  role: MemberRole;
 }) => {
   const router = useRouter();
   const isCurrentUser = memberEmail === currentUserEmail;
@@ -26,7 +30,7 @@ const MembershipActionButtons = ({
     startTransition(async () => {
       const { error } = await authClient.organization.removeMember({
         organizationId: organisationId,
-        memberIdOrEmail: userId,
+        memberIdOrEmail: memberId,
       });
       if (error) {
         // Check if it's the "last member" error
@@ -43,10 +47,6 @@ const MembershipActionButtons = ({
     });
   };
 
-  const handleEdit: MouseEventHandler<HTMLButtonElement> = () => {
-    console.log("edit");
-  };
-
   let canRemoveMemberButton: React.ReactNode = null;
   if (canRemoveMember) {
     canRemoveMemberButton = (
@@ -58,9 +58,11 @@ const MembershipActionButtons = ({
 
   return (
     <div className="flex justify-end gap-x-2">
-      <Button onClick={handleEdit} size="icon" variant="outline">
-        <LucidePen className="aspect-square w-4" />
-      </Button>
+      <MembershipsMoreMenu
+        memberId={memberId}
+        organisationId={organisationId}
+        role={role}
+      />
       {canRemoveMemberButton}
     </div>
   );

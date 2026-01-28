@@ -8,7 +8,7 @@ import { type NextRequest, NextResponse } from "next/server";
 //   "/verify-email",
 // ];
 
-// const protectedRoutes = ["/account"];
+// const protectedRoutes = ["/account", "/tickets", "/organisations"];
 
 export const proxy = async (request: NextRequest) => {
   const sessionCookie = await getCookieCache(request);

@@ -10,7 +10,9 @@ const getMembershipsById = async (
     const rows = await prisma.member.findMany({
       where: { organizationId: id },
       select: {
+        id: true,
         createdAt: true,
+        role: true,
         user: {
           select: {
             name: true,
@@ -23,10 +25,12 @@ const getMembershipsById = async (
     });
 
     return rows.map((member) => ({
+      id: member.id,
       email: member.user.email,
       emailVerified: member.user.emailVerified,
       joinedAt: member.createdAt,
       name: member.user.name,
+      role: member.role,
     }));
   });
 

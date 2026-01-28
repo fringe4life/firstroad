@@ -26,8 +26,9 @@ const MembershipItem = ({
         <MembershipActionButtons
           currentUserEmail={currentUserEmail}
           memberEmail={member.email}
+          memberId={member.id}
           organisationId={organisationId}
-          userId={member.email}
+          role={member.role}
         />
       </TableCell>
     </TableRow>

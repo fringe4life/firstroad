@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 const PasswordPage = () => (
-  <div className="grid h-full w-full grid-rows-[min-content_min-content_1fr] justify-center gap-y-8">
+  <div className="grid h-full w-full grid-rows-[min-content_min-content_min-content_1fr] place-items-center gap-y-8">
     <Heading
       description="All your password information"
       tabs={<AccountTabs />}

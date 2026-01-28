@@ -25,7 +25,7 @@ const MembershipList = ({
       {members.map((member) => (
         <MembershipItem
           currentUserEmail={currentUserEmail}
-          key={member.email}
+          key={member.id}
           member={member}
           organisationId={organisationId}
         />
