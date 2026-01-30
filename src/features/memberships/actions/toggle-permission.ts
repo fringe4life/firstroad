@@ -16,6 +16,7 @@ import {
   toActionState,
 } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
+import { getAdminOwnerOrRedirect } from "../queries/get-admin-owner-or-redirect";
 import type { PermissionKey } from "../types";
 
 const togglePermissionSchema = object({
@@ -32,12 +33,7 @@ const togglePermission = async (
   permissionValue: boolean,
   _prevState: ActionState<boolean>,
 ): Promise<ActionState<boolean>> => {
-  console.log("[togglePermission] called with:", {
-    memberId,
-    organizationId,
-    permissionKey,
-    permissionValue,
-  });
+  await getAdminOwnerOrRedirect(organizationId);
 
   const result = safeParse(togglePermissionSchema, {
     memberId,
@@ -47,11 +43,8 @@ const togglePermission = async (
   });
 
   if (!result.success) {
-    console.log("[togglePermission] validation failed:", result.issues);
     return fromErrorToActionState(result.issues);
   }
-
-  console.log("[togglePermission] validation passed, updating member...");
 
   const { error } = await tryCatch(async () => {
     await prisma.member.update({
@@ -63,14 +56,8 @@ const togglePermission = async (
   });
 
   if (error) {
-    console.log("[togglePermission] prisma error:", error);
     return fromErrorToActionState(error);
   }
-
-  console.log(
-    "[togglePermission] success, permission updated to:",
-    permissionValue,
-  );
 
   return toActionState(
     "Permission updated",

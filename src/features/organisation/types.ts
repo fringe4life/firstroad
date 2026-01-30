@@ -54,3 +54,7 @@ export interface OrganisationActionButtonProps
   isActive: boolean;
   isAdminOrOwner: boolean;
 }
+
+export interface SwitchOrgButtonProps extends OrganisationId {
+  isActive: boolean;
+}

@@ -1,6 +1,5 @@
 "use client";
 import {
-  LucideArrowLeftRight,
   LucideArrowUpRightFromSquare,
   LucideLogOut,
   LucidePen,
@@ -8,7 +7,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type MouseEventHandler, useState, useTransition } from "react";
+import { type MouseEventHandler, useTransition } from "react";
 import { toast } from "sonner";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -19,10 +18,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useToggle } from "@/hooks/use-toggle";
 import { authClient } from "@/lib/auth-client";
 import { membershipsPath, organisationsPath } from "@/path";
 import { updateOrganisation } from "../actions/update-organisation";
 import type { OrganisationActionButtonProps } from "../types";
+import { SwitchOrgButton } from "./switch-org-button";
 import { UpdateOrganisationForm } from "./update-organisation-form";
 
 const OrganisationActionButtons = ({
@@ -33,24 +34,8 @@ const OrganisationActionButtons = ({
   limitedAccess,
 }: OrganisationActionButtonProps) => {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-  const [isEditOpen, setIsEditOpen] = useState(false);
-
-  const handleSetActive: MouseEventHandler<HTMLButtonElement> = () => {
-    startTransition(async () => {
-      const { error } = await authClient.organization.setActive({
-        organizationId,
-      });
-
-      if (error) {
-        toast.error("Failed to switch organization");
-        return;
-      }
-
-      toast.success("Organization switched");
-      router.refresh(); // Refresh server components to get updated session
-    });
-  };
+  const [, startTransition] = useTransition();
+  const { isOpen, close, open } = useToggle(false);
 
   const handleLeave: MouseEventHandler<HTMLButtonElement> = () => {
     startTransition(async () => {
@@ -105,7 +90,7 @@ const OrganisationActionButtons = ({
     );
 
     editButton = (
-      <Dialog onOpenChange={setIsEditOpen} open={isEditOpen}>
+      <Dialog onOpenChange={open} open={isOpen}>
         <DialogTrigger asChild>
           <Button size="icon" variant="outline">
             <LucidePen className="aspect-square w-4" />
@@ -121,7 +106,7 @@ const OrganisationActionButtons = ({
           <UpdateOrganisationForm
             key={`${organizationId}-${organizationName}`}
             onSuccess={() => {
-              setIsEditOpen(false);
+              close();
               router.refresh();
             }}
             organizationId={organizationId}
@@ -149,19 +134,7 @@ const OrganisationActionButtons = ({
 
   return (
     <div className="flex justify-end gap-x-2">
-      <Button
-        disabled={isActive || isPending}
-        onClick={handleSetActive}
-        size="icon"
-        title={
-          isActive
-            ? "Current active organization"
-            : "Switch to this organization"
-        }
-        variant="outline"
-      >
-        <LucideArrowLeftRight className="aspect-square w-4" />
-      </Button>
+      <SwitchOrgButton isActive={isActive} organizationId={organizationId} />
       {openButton}
       {editButton}
       {leaveButton}
