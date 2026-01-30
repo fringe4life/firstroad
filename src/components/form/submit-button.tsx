@@ -11,6 +11,7 @@ interface SubmitButtonProps {
   variant?: React.ComponentProps<typeof Button>["variant"];
   size?: React.ComponentProps<typeof Button>["size"];
   disabled?: boolean;
+  showLoader?: boolean;
 }
 
 const SubmitButton = ({
@@ -19,8 +20,13 @@ const SubmitButton = ({
   variant,
   size,
   disabled = false,
+  showLoader = true,
 }: SubmitButtonProps) => {
   const { pending } = useFormStatus();
+
+  const shouldShowLoader = showLoader && pending;
+  const shouldShowIcon = !shouldShowLoader && icon;
+
   return (
     <Button
       disabled={pending || disabled}
@@ -28,11 +34,10 @@ const SubmitButton = ({
       type="submit"
       variant={variant}
     >
-      {pending && (
+      {shouldShowLoader && (
         <LucideLoaderCircle className="aspect-square w-4 animate-spin" />
       )}
-      {!pending &&
-        icon &&
+      {shouldShowIcon &&
         cloneElement(icon, {
           className: "w-4 aspect-square",
         })}

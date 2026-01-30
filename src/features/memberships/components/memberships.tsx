@@ -16,6 +16,7 @@ const Memberships = async ({ organisationId }: { organisationId: string }) => {
           <TableHead>Email</TableHead>
           <TableHead>Joined At</TableHead>
           <TableHead>Verified</TableHead>
+          <TableHead>Can Delete Ticket</TableHead>
           <TableHead />
         </TableRow>
       </TableHeader>
@@ -24,7 +25,7 @@ const Memberships = async ({ organisationId }: { organisationId: string }) => {
         emptyStateMessage="No members found"
         errorStateMessage="Failed to fetch members"
         members={members}
-        organisationId={organisationId}
+        organizationId={organisationId}
       />
     </Table>
   );

@@ -1,9 +1,11 @@
 import path from "node:path";
 import type { NextConfig } from "next";
 
+const isDev = process.env.NODE_ENV === "development";
+
 const nextConfig: NextConfig = {
   typedRoutes: true,
-  reactCompiler: true,
+  reactCompiler: !isDev,
   cacheComponents: true,
   webpack: (config) => {
     config.resolve ??= {};

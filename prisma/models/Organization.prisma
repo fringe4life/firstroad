@@ -7,6 +7,7 @@ model Organization {
   metadata    String?
   members     Member[]
   invitations Invitation[]
+  tickets     Ticket[]
 
   @@unique([slug])
   @@map("organization")

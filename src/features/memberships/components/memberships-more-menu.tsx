@@ -16,7 +16,7 @@ import { authClient } from "@/lib/auth-client";
 import type { MembershipsMoreMenuProps } from "../types";
 
 const MembershipsMoreMenu = ({
-  organisationId,
+  organizationId,
   memberId,
   role,
 }: MembershipsMoreMenuProps) => {
@@ -28,7 +28,7 @@ const MembershipsMoreMenu = ({
     }
     startTransition(async () => {
       const { error } = await authClient.organization.updateMemberRole({
-        organizationId: organisationId,
+        organizationId,
         memberId,
         role: nextRole,
       });

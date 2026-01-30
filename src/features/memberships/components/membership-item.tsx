@@ -3,11 +3,12 @@ import { LucideBan, LucideCheck } from "lucide-react";
 import { TableCell, TableRow } from "@/components/ui/table";
 import type { MembershipItemProps } from "../types";
 import { MembershipActionButtons } from "./membership-action-buttons";
+import { PermissionToggle } from "./permission-toggle";
 
 const MembershipItem = ({
   currentUserEmail,
   member,
-  organisationId,
+  organizationId,
 }: MembershipItemProps) => {
   const isCurrentUser = member.email === currentUserEmail;
 
@@ -23,11 +24,19 @@ const MembershipItem = ({
         {member.emailVerified ? <LucideCheck /> : <LucideBan />}
       </TableCell>
       <TableCell>
+        <PermissionToggle
+          memberId={member.id}
+          organizationId={organizationId}
+          permissionKey="canDeleteTicket"
+          permissionValue={member.canDeleteTicket}
+        />
+      </TableCell>
+      <TableCell>
         <MembershipActionButtons
           currentUserEmail={currentUserEmail}
           memberEmail={member.email}
           memberId={member.id}
-          organisationId={organisationId}
+          organizationId={organizationId}
           role={member.role}
         />
       </TableCell>

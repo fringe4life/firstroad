@@ -18,7 +18,7 @@ const getTicketList = async ({
   takeAmount: number;
   skip: number;
 }) => {
-  "use cache";
+  "use cache: remote";
   cacheTag(ticketsCache());
   return prisma.ticket.findMany({
     where,

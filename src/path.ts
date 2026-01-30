@@ -6,6 +6,8 @@ const ticketsPath = (): Route => "/tickets";
 
 const ticketPath = (slug: string): Route => `${ticketsPath()}/${slug}` as Route;
 
+const ticketsByOrganisationPath = (): Route => "/tickets/organisation";
+
 const ticketEditPath = (slug: string): Route =>
   `${ticketPath(slug)}/edit` as Route;
 
@@ -39,6 +41,7 @@ export {
   selectActiveOrganisationPath,
   homePath,
   ticketsPath,
+  ticketsByOrganisationPath,
   forgotPasswordPath,
   resetPasswordPath,
   verifyEmailOTPSendPath,

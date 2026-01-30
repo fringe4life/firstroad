@@ -25,6 +25,7 @@ import { createSlug } from "@/utils/slug";
 import {
   type ActionState,
   fromErrorToActionState,
+  toActionState,
 } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
 import { findTicket } from "../queries/find-ticket";
@@ -46,6 +47,12 @@ const upsertTicket = async (
   formData: FormData,
 ): Promise<ActionState> => {
   const user = await getUserOrRedirect();
+
+  const organisationId = user.activeOrganizationId;
+
+  if (!organisationId) {
+    return toActionState("User is not a member of an organisation", "ERROR");
+  }
 
   const formDataObject = Object.fromEntries(formData.entries());
   const result = safeParse(upsertSchema, formDataObject);
@@ -79,7 +86,7 @@ const upsertTicket = async (
         id: id ?? "",
       },
       update: dbData,
-      create: dbData,
+      create: { ...dbData, organisationId },
     });
 
     if (ticket.slug) {

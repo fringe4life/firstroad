@@ -5,7 +5,11 @@ export type BaseTicket = TicketGetPayload<{
   include: { user: { select: { name: true } } };
 }>;
 
-export interface TicketsProps extends SearchParamsProps {
+export interface ByOrganisation {
+  byOrganisation?: boolean;
+}
+
+export interface TicketsProps extends SearchParamsProps, ByOrganisation {
   userId?: Exclude<Maybe<string>, null>;
 }
 

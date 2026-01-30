@@ -10,7 +10,7 @@ import { TicketControlsFallback } from "./skeletons/ticket-controls-skeleton";
 import { TicketListSkeleton } from "./skeletons/ticket-list-skeleton";
 import { TicketListPagination } from "./ticket-list-pagination";
 
-const Tickets = ({ searchParams, userId }: TicketsProps) => (
+const Tickets = ({ searchParams, userId, byOrganisation }: TicketsProps) => (
   <div className="max-content-widest mx-auto grid grid-rows-[min-content_1fr_36px] justify-items-center gap-y-4">
     <Suspend fallback={<TicketControlsFallback />}>
       {/* Desktop: Stacked layout */}
@@ -37,7 +37,11 @@ const Tickets = ({ searchParams, userId }: TicketsProps) => (
         </>
       }
     >
-      <TicketListPagination searchParams={searchParams} userId={userId} />
+      <TicketListPagination
+        byOrganisation={byOrganisation}
+        searchParams={searchParams}
+        userId={userId}
+      />
     </Suspense>
   </div>
 );

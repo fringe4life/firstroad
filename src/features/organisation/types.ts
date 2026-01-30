@@ -12,6 +12,8 @@ type MemberRole =
   | Prisma.MemberModel["role"]
   | (typeof auth.$Infer.Member)["role"];
 
+export interface OrganisationId extends Pick<Member, "organizationId"> {}
+
 // Interface for objects that have a role property (admin/owner checkable)
 // Accepts string to work with Better Auth hooks that type role as string
 // The utility function will handle runtime string comparison
@@ -45,8 +47,9 @@ export interface OrganisationItemProps
   organisation: BaseOrganisation;
 }
 
-export interface OrganisationActionButtonProps extends LimitedAccess {
-  organizationId: string;
+export interface OrganisationActionButtonProps
+  extends LimitedAccess,
+    OrganisationId {
   organizationName: string;
   isActive: boolean;
   isAdminOrOwner: boolean;

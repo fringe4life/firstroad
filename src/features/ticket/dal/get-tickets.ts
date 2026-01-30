@@ -1,6 +1,9 @@
 "use server";
 
+import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import type { SearchParams } from "nuqs/server";
+import { getUser } from "@/features/auth/queries/get-user";
 import { paginateItems } from "@/features/pagination/dal/paginate-items";
 import { searchParamsCache } from "@/features/pagination/pagination-search-params";
 import type { PaginatedResult } from "@/features/pagination/types";
@@ -12,12 +15,28 @@ import type {
   TicketOrderByWithRelationInput,
   TicketWhereInput,
 } from "@/generated/prisma/models/Ticket";
+import { onboardingPath, signInPath } from "@/path";
 import type { Maybe } from "@/types";
 
 export const getTickets = async (
   searchParams: Promise<SearchParams>,
   filterUserId?: Exclude<Maybe<string>, null>,
+  byOrganisation = false,
 ): Promise<PaginatedResult<BaseTicket>> => {
+  await connection();
+  const { user } = await getUser();
+
+  const organisationId = byOrganisation
+    ? user?.activeOrganizationId
+    : undefined;
+
+  if (byOrganisation && !user) {
+    throw redirect(signInPath());
+  }
+
+  if (byOrganisation && !organisationId) {
+    throw redirect(onboardingPath());
+  }
   // Parse search params (not cached - fast and user-specific)
   const resolvedSearchParams = await searchParams;
   const { search, sortKey, sortValue, page, limit } =
@@ -37,7 +56,9 @@ export const getTickets = async (
       contains: search,
       mode: "insensitive",
     },
-    userId: filterUserId,
+    userId: byOrganisation ? undefined : filterUserId,
+    // biome-ignore lint/style/noNonNullAssertion: have checked
+    organisationId: byOrganisation ? organisationId! : undefined,
   };
 
   const skip = page * limit;

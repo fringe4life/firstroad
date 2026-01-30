@@ -15,11 +15,27 @@ const main = async () => {
   await prisma.ticket.deleteMany();
 
   const existingUsers = await prisma.user.findMany({
-    select: { id: true },
+    select: {
+      id: true,
+      members: {
+        select: {
+          organizationId: true,
+        },
+      },
+    },
     orderBy: { createdAt: "asc" },
   });
+  const usersWithOrganisations = existingUsers
+    .map((user) => ({
+      userId: user.id,
+      organisationIds: user.members.map((member) => member.organizationId),
+    }))
+    .filter((user) => user.organisationIds.length > 0);
   const createdTickets = await prisma.$transaction(async (tx) => {
-    const tickets = createTickets(existingUsers.map((user) => user.id));
+    const tickets = createTickets(usersWithOrganisations);
+    if (tickets.length === 0) {
+      return [];
+    }
 
     await tx.ticket.createMany({
       data: tickets,
@@ -32,14 +48,16 @@ const main = async () => {
   });
 
   // Create comments in a transaction
-  const comments = createComments(
-    createdTickets.map((ticket) => ticket.id),
-    existingUsers.map((user) => user.id),
-  );
+  if (createdTickets.length > 0) {
+    const comments = createComments(
+      createdTickets.map((ticket) => ticket.id),
+      existingUsers.map((user) => user.id),
+    );
 
-  await prisma.comment.createMany({
-    data: comments,
-  });
+    await prisma.comment.createMany({
+      data: comments,
+    });
+  }
 };
 
 main()

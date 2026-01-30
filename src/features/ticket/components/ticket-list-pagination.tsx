@@ -6,8 +6,16 @@ import type { TicketsProps } from "../types";
 import { TicketListSkeleton } from "./skeletons/ticket-list-skeleton";
 import { TicketList } from "./ticket-list";
 
-const TicketListPagination = async ({ searchParams, userId }: TicketsProps) => {
-  const { list: tickets, metadata } = await getTickets(searchParams, userId);
+const TicketListPagination = async ({
+  searchParams,
+  userId,
+  byOrganisation,
+}: TicketsProps) => {
+  const { list: tickets, metadata } = await getTickets(
+    searchParams,
+    userId,
+    byOrganisation,
+  );
 
   return (
     <>

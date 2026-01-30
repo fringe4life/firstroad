@@ -13,6 +13,7 @@ const getMembershipsById = async (
         id: true,
         createdAt: true,
         role: true,
+        canDeleteTicket: true,
         user: {
           select: {
             name: true,
@@ -26,6 +27,7 @@ const getMembershipsById = async (
 
     return rows.map((member) => ({
       id: member.id,
+      canDeleteTicket: member.canDeleteTicket,
       email: member.user.email,
       emailVerified: member.user.emailVerified,
       joinedAt: member.createdAt,

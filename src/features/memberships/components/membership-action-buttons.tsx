@@ -11,13 +11,13 @@ import { MembershipsMoreMenu } from "./memberships-more-menu";
 const MembershipActionButtons = ({
   currentUserEmail,
   memberEmail,
-  organisationId,
+  organizationId,
   memberId,
   role,
 }: {
   currentUserEmail?: string | null;
   memberEmail: string;
-  organisationId: string;
+  organizationId: string;
   memberId: string;
   role: MemberRole;
 }) => {
@@ -29,7 +29,7 @@ const MembershipActionButtons = ({
   const handleRemoveMember: MouseEventHandler<HTMLButtonElement> = () => {
     startTransition(async () => {
       const { error } = await authClient.organization.removeMember({
-        organizationId: organisationId,
+        organizationId,
         memberIdOrEmail: memberId,
       });
       if (error) {
@@ -60,7 +60,7 @@ const MembershipActionButtons = ({
     <div className="flex justify-end gap-x-2">
       <MembershipsMoreMenu
         memberId={memberId}
-        organisationId={organisationId}
+        organizationId={organizationId}
         role={role}
       />
       {canRemoveMemberButton}

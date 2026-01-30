@@ -9,7 +9,7 @@ const MembershipList = ({
   members,
   emptyStateMessage,
   errorStateMessage = "Failed to fetch members",
-  organisationId,
+  organizationId,
 }: MembershipListProps) => {
   const isError = !members;
   const isEmpty = !isError && members.length === 0;
@@ -27,7 +27,7 @@ const MembershipList = ({
           currentUserEmail={currentUserEmail}
           key={member.id}
           member={member}
-          organisationId={organisationId}
+          organizationId={organizationId}
         />
       ))}
     </TableBody>
