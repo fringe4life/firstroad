@@ -20,17 +20,16 @@ export const deleteComment = async (
   const { data: commentWithOwnership, error: commentError } = await tryCatch(
     () =>
       itemWithOwnership(
-        () =>
-          prisma.comment.findUnique({
-            where: { id: commentId },
-            include: {
-              ticket: {
-                select: {
-                  slug: true,
-                },
+        prisma.comment.findUnique({
+          where: { id: commentId },
+          include: {
+            ticket: {
+              select: {
+                slug: true,
               },
             },
-          }),
+          },
+        }),
         user,
       ),
   );

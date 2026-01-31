@@ -13,7 +13,7 @@ const EditTicketPage = async ({
 }: PageProps<"/tickets/[slug]/edit">) => {
   const user = await getUserOrRedirect();
   const { slug } = await params;
-  const ticket = await itemWithOwnership(() => getTicketBySlug(slug), user);
+  const ticket = await itemWithOwnership(getTicketBySlug(slug), user);
   if (!ticket?.isOwner) {
     throw notFound();
   }

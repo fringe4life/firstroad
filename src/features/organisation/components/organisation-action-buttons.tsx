@@ -73,10 +73,12 @@ const OrganisationActionButtons = ({
     });
   };
 
-  let handleDeleteButton: React.ReactNode = null;
-  let leaveButton: React.ReactNode = null;
-  let openButton: React.ReactNode = null;
-  let editButton: React.ReactNode = null;
+  let handleDeleteButton: React.ReactNode = (
+    <Button size="icon" variant="ghost" />
+  );
+  let leaveButton: React.ReactNode = <Button size="icon" variant="ghost" />;
+  let openButton: React.ReactNode = <Button size="icon" variant="ghost" />;
+  let editButton: React.ReactNode = <Button size="icon" variant="ghost" />;
 
   // Show open, edit and delete buttons only if not limited access AND user is admin/owner
   if (!limitedAccess && isAdminOrOwner) {

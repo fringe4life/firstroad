@@ -8,9 +8,10 @@ import { paginateItems } from "@/features/pagination/dal/paginate-items";
 import { searchParamsCache } from "@/features/pagination/pagination-search-params";
 import type { PaginatedResult } from "@/features/pagination/types";
 import { transformToPaginatedResult } from "@/features/pagination/utils/to-paginated-result";
+import { addTicketsAccess } from "@/features/ticket/dal/add-tickets-access";
 import { getTicketList } from "@/features/ticket/queries/get-ticket-list";
 import { getTicketsCount } from "@/features/ticket/queries/get-tickets-count";
-import type { BaseTicket } from "@/features/ticket/types";
+import type { TicketWithAccess } from "@/features/ticket/types";
 import type {
   TicketOrderByWithRelationInput,
   TicketWhereInput,
@@ -22,7 +23,7 @@ export const getTickets = async (
   searchParams: Promise<SearchParams>,
   filterUserId?: Exclude<Maybe<string>, null>,
   byOrganisation = false,
-): Promise<PaginatedResult<BaseTicket>> => {
+): Promise<PaginatedResult<TicketWithAccess>> => {
   await connection();
   const { user } = await getUser();
 
@@ -64,12 +65,18 @@ export const getTickets = async (
   const skip = page * limit;
   const takeAmount = limit;
 
-  // data access layer
+  // data access layer - fetch tickets and count
   const result = await paginateItems({
     getItems: () => getTicketList({ where, orderBy, takeAmount, skip }),
     getItemsCount: () => getTicketsCount({ where, orderBy }),
   });
 
+  // add ownership and permission access (batch query)
+  const ticketsWithAccess = await addTicketsAccess(result.items, user);
+
   // data transfer object
-  return transformToPaginatedResult(result, { page, limit, type: "offset" });
+  return transformToPaginatedResult(
+    { items: ticketsWithAccess, itemsCount: result.itemsCount },
+    { page, limit, type: "offset" },
+  );
 };

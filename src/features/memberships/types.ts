@@ -2,6 +2,7 @@ import type { MemberRole } from "@/generated/prisma/enums";
 import type { MemberModel, UserModel } from "@/generated/prisma/models";
 import type { List, UnsuccessfulState } from "@/types";
 import type { OrganisationId } from "../organisation/types";
+import type { CanDeleteTicket } from "../ticket/types";
 
 export interface OrganisationMemberRow
   extends Omit<MemberModel, "createdAt" | "organizationId" | "userId">,
@@ -37,3 +38,5 @@ export interface PermissionToggleProps extends OrganisationId {
 }
 
 export interface MemberShipProps extends OrganisationId {}
+
+export interface MemberPermission extends CanDeleteTicket {}

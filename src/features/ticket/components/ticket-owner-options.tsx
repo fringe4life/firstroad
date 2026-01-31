@@ -8,23 +8,25 @@ import type { User } from "@/features/auth/types";
 import { isOwner } from "@/features/auth/utils/owner";
 import { getMemberPermission } from "@/features/memberships/queries/get-member-permission";
 import { TicketMoreMenu } from "@/features/ticket/components/ticket-more-menu";
-import type { TicketOwnerOptionsProps } from "@/features/ticket/types";
+import type {
+  TicketOwnerOptionsFetchProps,
+  TicketOwnerOptionsWithAccessProps,
+} from "@/features/ticket/types";
 import { selectDetailElement } from "@/features/ticket/utils/detail-element";
 import { ticketEditPath } from "@/path";
 
-// Inner async component that handles permission fetching
-const TicketOwnerOptionsInner = async ({
+/**
+ * Pure presentational component - used when access is pre-computed (list pages)
+ */
+const TicketOwnerOptionsContent = ({
   ticket,
   isDetail = false,
-  user,
-}: TicketOwnerOptionsProps & { user: User }) => {
-  if (!isOwner(user, ticket)) {
+  isOwner: ticketIsOwner,
+  canDeleteTicket,
+}: TicketOwnerOptionsWithAccessProps) => {
+  if (!ticketIsOwner) {
     return null;
   }
-
-  // Fetch the user's permission for this ticket's organization
-  const permission = await getMemberPermission(user.id, ticket.organizationId);
-  const canDeleteTicket = permission?.canDeleteTicket ?? false;
 
   const editButton = (
     <Link
@@ -60,11 +62,39 @@ const TicketOwnerOptionsInner = async ({
   );
 };
 
-// Async wrapper that fetches user and delegates to inner component
-const TicketOwnerOptionsAsync = async ({
+/**
+ * Async component that fetches access - used for detail pages
+ */
+const TicketOwnerOptionsFetchInner = async ({
   ticket,
   isDetail = false,
-}: TicketOwnerOptionsProps) => {
+  user,
+}: TicketOwnerOptionsFetchProps & { user: User }) => {
+  if (!isOwner(user, ticket)) {
+    return null;
+  }
+
+  // Fetch the user's permission for this ticket's organization
+  const permission = await getMemberPermission(user.id, ticket.organizationId);
+  const canDeleteTicket = permission?.canDeleteTicket ?? false;
+
+  return (
+    <TicketOwnerOptionsContent
+      canDeleteTicket={canDeleteTicket}
+      isDetail={isDetail}
+      isOwner={true}
+      ticket={ticket}
+    />
+  );
+};
+
+/**
+ * Async wrapper that fetches user and delegates to inner component
+ */
+const TicketOwnerOptionsFetchAsync = async ({
+  ticket,
+  isDetail = false,
+}: TicketOwnerOptionsFetchProps) => {
   const { user } = await getUser();
 
   if (!user) {
@@ -72,14 +102,21 @@ const TicketOwnerOptionsAsync = async ({
   }
 
   return (
-    <TicketOwnerOptionsInner isDetail={isDetail} ticket={ticket} user={user} />
+    <TicketOwnerOptionsFetchInner
+      isDetail={isDetail}
+      ticket={ticket}
+      user={user}
+    />
   );
 };
 
-const TicketOwnerOptions = ({
+/**
+ * Suspense wrapper for fetching access (detail pages)
+ */
+const TicketOwnerOptionsFetch = ({
   ticket,
   isDetail = false,
-}: TicketOwnerOptionsProps) => (
+}: TicketOwnerOptionsFetchProps) => (
   <Suspend
     fallback={
       <div className="grid gap-y-1">
@@ -92,8 +129,8 @@ const TicketOwnerOptions = ({
       </div>
     }
   >
-    <TicketOwnerOptionsAsync isDetail={isDetail} ticket={ticket} />
+    <TicketOwnerOptionsFetchAsync isDetail={isDetail} ticket={ticket} />
   </Suspend>
 );
 
-export { TicketOwnerOptions };
+export { TicketOwnerOptionsContent, TicketOwnerOptionsFetch };

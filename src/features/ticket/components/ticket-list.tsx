@@ -11,8 +11,10 @@ const TicketList = ({ tickets }: TicketListProps) => {
       errorStateMessage="Failed to fetch tickets"
       items={tickets}
       renderProps={(ticket) => ({
-        isDetail: false,
+        isDetail: false as const,
         ticket,
+        isOwner: ticket.isOwner,
+        canDeleteTicket: ticket.canDeleteTicket,
       })}
     />
   );

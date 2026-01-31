@@ -50,7 +50,7 @@ export const upsertComment = async (
   if (commentId) {
     // If updating, verify comment exists and user owns it
     const { data: commentWithOwnership, error: commentError } = await tryCatch(
-      () => itemWithOwnership(() => findComment(commentId), user),
+      () => itemWithOwnership(findComment(commentId), user),
     );
     if (commentError) {
       return fromErrorToActionState(commentError);

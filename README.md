@@ -294,12 +294,12 @@ src/
 ├── features/                 # Feature modules
 │   ├── auth/                 # Auth actions, components, events, queries, types
 │   ├── comment/              # Comment actions, optimistic hooks, components, store
-│   ├── memberships/          # Membership actions, components, queries (role + permission checks)
+│   ├── memberships/          # Membership actions, components, queries (role + batch permission checks)
 │   ├── navigation/           # Sidebar/nav components + context
 │   ├── organisation/         # Organization actions and components
 │   ├── pagination/           # Pagination components + nuqs parsers
 │   ├── password/             # Password flows, emails, events
-│   └── ticket/               # Ticket actions, DAL, queries, components, skeletons
+│   └── ticket/               # Ticket actions, DAL (batch access), queries, components, skeletons
 ├── hooks/                    # Shared client hooks
 ├── lib/                      # Shared service configuration (auth, prisma, env, inngest)
 ├── utils/                    # Shared utilities (cache tags, slug, cookies, actions)
@@ -407,6 +407,7 @@ This pattern enables:
 - **Slug-based URLs**: Human-readable URLs using ticket slugs (e.g., `/this-ticket-title`)
 - **Unified Ticket Pages**: Ticket creation form and list displayed on the same page
 - **Responsive Controls**: Desktop button groups and mobile dropdowns for filtering
+- **Batch Access Queries**: Ownership and permissions fetched in 1 batch query for list pages (vs N individual queries)
 
 ### Sample Data
 
@@ -468,6 +469,7 @@ bunx --bun prisma generate # Generate Prisma client
 bunx --bun prisma db push  # Push schema to database
 bunx --bun prisma db seed  # Seed database with sample data
 bun run reset:tickets    # Reset only ticket and comment data (preserves users)
+bun run seed:members     # Add users to all organizations they are not members of
 
 # Background Jobs (Inngest)
 bun run inngest          # Start Inngest dev server for local testing
@@ -632,6 +634,7 @@ The application uses Elysia 1.4 as a unified API framework for handling all API 
   - `ServerSession`: Full session with user object
   - `Maybe<User>`: Session or null for DAL functions
   - `ClientSession`: Client-side session type
+- Discriminated union types for compile-time prop validation (e.g., `TicketItemProps`)
 - HasAuthSuspense pattern with session injection for auth-dependent components
 - Shared utilities in `src/utils/` for better organization
 - Type-safe link generation with `createTypedLink` for search parameters

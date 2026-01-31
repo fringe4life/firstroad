@@ -77,7 +77,7 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
                 ticketSlug={ticket.slug}
                 upsertCommentAction={upsertComment}
                 userId={user?.id}
-                userName={user?.name}
+                userName={user?.name ?? ""}
               />
             )}
           </HasAuthSuspense>

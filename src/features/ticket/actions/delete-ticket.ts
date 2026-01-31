@@ -18,7 +18,7 @@ export const deleteTicket = async (id: string) => {
     const user = await getUserOrRedirect();
 
     // verify ticket exists and user is owner
-    const ticket = await itemWithOwnership(() => findTicket(id), user);
+    const ticket = await itemWithOwnership(findTicket(id), user);
 
     // check if user is owner
     if (!ticket?.isOwner) {

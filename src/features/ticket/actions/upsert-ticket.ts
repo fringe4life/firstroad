@@ -63,7 +63,7 @@ const upsertTicket = async (
 
   const { error } = await tryCatch(async () => {
     if (id) {
-      const ticket = await itemWithOwnership(() => findTicket(id));
+      const ticket = await itemWithOwnership(findTicket(id));
       if (!ticket?.isOwner) {
         throw new Error("Ticket Not Found");
       }

@@ -10,46 +10,52 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { TICKET_ICONS } from "@/features/constants";
-import { TicketOwnerOptions } from "@/features/ticket/components/ticket-owner-options";
+import {
+  TicketOwnerOptionsContent,
+  TicketOwnerOptionsFetch,
+} from "@/features/ticket/components/ticket-owner-options";
 import type { TicketItemProps } from "@/features/ticket/types";
-import { selectDetailElement } from "@/features/ticket/utils/detail-element";
 import { ticketPath } from "@/path";
 import { toCurrencyFromCent } from "@/utils/currency";
 
-const TicketItem = ({
-  ticket,
-  isDetail = false,
-  comments,
-  currentUserId,
-}: TicketItemProps) => {
+const TicketItem = (props: TicketItemProps) => {
+  const { ticket } = props;
   const { userId, slug, id, status, organizationId } = ticket;
 
-  const ticketStub = {
-    userId,
-    slug,
-    id,
-    status,
-    organizationId,
-  };
+  // Type narrowing based on isDetail discriminant
+  const isDetail = props.isDetail === true;
 
-  const options = selectDetailElement({
-    isDetail,
-    element: (
-      <>
-        <Link
-          className={buttonVariants({ variant: "outline", size: "icon" })}
-          href={ticketPath(ticket.slug)}
-          prefetch
-        >
-          <SquareArrowOutUpRight className="aspect-square w-10" />
-        </Link>
-        <TicketOwnerOptions currentUserId={currentUserId} ticket={ticketStub} />
-      </>
-    ),
-    elementIfIsDetail: (
-      <TicketOwnerOptions currentUserId={currentUserId} ticket={ticketStub} />
-    ),
-  });
+  // Render owner options and comments based on discriminated union variant
+  const ownerOptions = isDetail ? (
+    <TicketOwnerOptionsFetch
+      isDetail={true}
+      ticket={{ userId, slug, id, status, organizationId }}
+    />
+  ) : (
+    <TicketOwnerOptionsContent
+      canDeleteTicket={props.canDeleteTicket}
+      isDetail={false}
+      isOwner={props.isOwner}
+      ticket={{ slug, id, status }}
+    />
+  );
+
+  const comments = isDetail ? props.comments : null;
+
+  const options = isDetail ? (
+    ownerOptions
+  ) : (
+    <>
+      <Link
+        className={buttonVariants({ variant: "outline", size: "icon" })}
+        href={ticketPath(ticket.slug)}
+        prefetch
+      >
+        <SquareArrowOutUpRight className="aspect-square w-10" />
+      </Link>
+      {ownerOptions}
+    </>
+  );
 
   return (
     <ViewTransition

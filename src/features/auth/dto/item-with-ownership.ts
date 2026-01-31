@@ -5,20 +5,20 @@ import { isOwner } from "../utils/owner";
 
 /**
  * @abstract DAL helper for adding ownership information to a single item
- * @param itemPromise a function that returns a promise of an item
+ * @param item an item or a promise of an item
  * @param user the user to check ownership against
  * @returns the item with the isOwner property
  */
 const itemWithOwnership = async <T extends UserVerifiable>(
-  itemPromise: () => Promise<Maybe<T>>,
+  item: Maybe<T> | Promise<Maybe<T>>,
   user?: Maybe<User>,
 ): Promise<Maybe<T & IsOwner>> => {
   const currentUser = user ?? (await getUser()).user;
-  const item = await itemPromise();
-  if (!item) {
+  const resolvedItem = await item;
+  if (!resolvedItem) {
     return null;
   }
-  return { ...item, isOwner: isOwner(currentUser, item) };
+  return { ...resolvedItem, isOwner: isOwner(currentUser, resolvedItem) };
 };
 
 export { itemWithOwnership };

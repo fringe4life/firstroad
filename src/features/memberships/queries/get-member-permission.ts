@@ -1,10 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import type { Maybe } from "@/types";
 import { tryCatch } from "@/utils/try-catch";
-
-interface MemberPermission {
-  canDeleteTicket: boolean;
-}
+import type { MemberPermission } from "../types";
 
 const getMemberPermission = async (
   userId: string,

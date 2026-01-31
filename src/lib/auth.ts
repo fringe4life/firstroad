@@ -109,7 +109,7 @@ export const auth = betterAuth({
             name: "user.welcome",
             data: {
               email: user.email,
-              userName: user.name,
+              userName: user.name ?? "",
             },
           }),
         );
@@ -172,7 +172,7 @@ export const auth = betterAuth({
           data: {
             email: user.email,
             resetUrl,
-            userName: user.name,
+            userName: user.name ?? "",
           },
         }),
       );
@@ -184,7 +184,7 @@ export const auth = betterAuth({
           name: "password.changed",
           data: {
             email: user.email,
-            userName: user.name,
+            userName: user.name ?? "",
           },
         }),
       );
@@ -224,7 +224,7 @@ export const auth = betterAuth({
           data: {
             email: user.email,
             verificationUrl,
-            userName: user.name,
+            userName: user.name ?? "",
           },
         }),
       );

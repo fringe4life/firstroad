@@ -23,7 +23,7 @@ const nextConfig: NextConfig = {
     return config;
   },
   experimental: {
-    // browserDebugInfoInTerminal: true,
+    browserDebugInfoInTerminal: true,
     viewTransition: true,
     mcpServer: true,
     typedEnv: true,
