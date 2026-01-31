@@ -35,3 +35,5 @@ export interface PermissionToggleProps extends OrganisationId {
   permissionKey: PermissionKey;
   permissionValue: boolean;
 }
+
+export interface MemberShipProps extends OrganisationId {}

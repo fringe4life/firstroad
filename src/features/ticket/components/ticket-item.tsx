@@ -22,13 +22,14 @@ const TicketItem = ({
   comments,
   currentUserId,
 }: TicketItemProps) => {
-  const { userId, slug, id, status } = ticket;
+  const { userId, slug, id, status, organizationId } = ticket;
 
   const ticketStub = {
     userId,
     slug,
     id,
     status,
+    organizationId,
   };
 
   const options = selectDetailElement({

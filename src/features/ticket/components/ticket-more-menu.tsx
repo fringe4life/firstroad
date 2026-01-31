@@ -16,7 +16,11 @@ import { updateStatus } from "@/features/ticket/actions/update-status";
 import type { TicketMoreMenuProps } from "@/features/ticket/types";
 import type { TicketStatus } from "@/generated/prisma/enums";
 
-const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
+const TicketMoreMenu = ({
+  ticket,
+  trigger,
+  canDeleteTicket = true,
+}: TicketMoreMenuProps) => {
   const [getDeleteButton, deleteDialog, isPending] = useConfirmDialog({
     action: deleteTicket.bind(null, ticket.id),
     trigger: ({ isPending: isPendingArg, onClick }) => (
@@ -62,13 +66,13 @@ const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
 
   return (
     <>
-      {deleteDialog}
+      {canDeleteTicket && deleteDialog}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" side="left">
           {radioOptions}
 
-          {getDeleteButton(isPending)}
+          {canDeleteTicket && getDeleteButton(isPending)}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

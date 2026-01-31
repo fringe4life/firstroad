@@ -26,7 +26,7 @@ export const getTickets = async (
   await connection();
   const { user } = await getUser();
 
-  const organisationId = byOrganisation
+  const organizationId = byOrganisation
     ? user?.activeOrganizationId
     : undefined;
 
@@ -34,7 +34,7 @@ export const getTickets = async (
     throw redirect(signInPath());
   }
 
-  if (byOrganisation && !organisationId) {
+  if (byOrganisation && !organizationId) {
     throw redirect(onboardingPath());
   }
   // Parse search params (not cached - fast and user-specific)
@@ -58,7 +58,7 @@ export const getTickets = async (
     },
     userId: byOrganisation ? undefined : filterUserId,
     // biome-ignore lint/style/noNonNullAssertion: have checked
-    organisationId: byOrganisation ? organisationId! : undefined,
+    organizationId: byOrganisation ? organizationId! : undefined,
   };
 
   const skip = page * limit;

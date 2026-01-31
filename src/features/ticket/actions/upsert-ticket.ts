@@ -48,9 +48,9 @@ const upsertTicket = async (
 ): Promise<ActionState> => {
   const user = await getUserOrRedirect();
 
-  const organisationId = user.activeOrganizationId;
+  const organizationId = user.activeOrganizationId;
 
-  if (!organisationId) {
+  if (!organizationId) {
     return toActionState("User is not a member of an organisation", "ERROR");
   }
 
@@ -86,7 +86,7 @@ const upsertTicket = async (
         id: id ?? "",
       },
       update: dbData,
-      create: { ...dbData, organisationId },
+      create: { ...dbData, organizationId },
     });
 
     if (ticket.slug) {

@@ -28,9 +28,9 @@ const main = async () => {
   const usersWithOrganisations = existingUsers
     .map((user) => ({
       userId: user.id,
-      organisationIds: user.members.map((member) => member.organizationId),
+      organizationIds: user.members.map((member) => member.organizationId),
     }))
-    .filter((user) => user.organisationIds.length > 0);
+    .filter((user) => user.organizationIds.length > 0);
   const createdTickets = await prisma.$transaction(async (tx) => {
     const tickets = createTickets(usersWithOrganisations);
     if (tickets.length === 0) {

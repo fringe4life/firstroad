@@ -10,10 +10,10 @@
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.18-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Biome](https://img.shields.io/badge/Biome-2.3.12-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
 [![Ultracite](https://img.shields.io/badge/Ultracite-7.1.1-000000)](https://ultracite.dev/)
-[![nuqs](https://img.shields.io/badge/nuqs-2.8.6-000000)](https://nuqs.47ng.com/)
+[![nuqs](https://img.shields.io/badge/nuqs-2.8.7-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.2.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Elysia](https://img.shields.io/badge/Elysia-1.4.21-000000)](https://elysiajs.com/)
-[![Inngest](https://img.shields.io/badge/Inngest-3.49.3-000000)](https://www.inngest.com/)
+[![Inngest](https://img.shields.io/badge/Inngest-3.50.0-000000)](https://www.inngest.com/)
 [![Resend](https://img.shields.io/badge/Resend-6.9.1-000000)](https://resend.com/)
 [![React Email](https://img.shields.io/badge/React%20Email-5.2.5-000000)](https://react.email/)
 
@@ -24,7 +24,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 ## 🚀 Features
 
 - **🔐 Authentication**: Secure user authentication with Better Auth (email/password + OTP + GitHub OAuth) with email enumeration protection
-- **🏢 Organization Management**: Create and manage organizations with member and invitation systems, role-based access control (owner, admin, member)
+- **🏢 Organization Management**: Create and manage organizations with member and invitation systems, role-based access control (owner, admin, member) and granular permissions (canDeleteTicket)
 - **🎫 Ticket Management**: Create, edit, and manage tickets with status tracking
 - **💬 Comments System**: Add, edit, and delete comments on tickets with infinite pagination
 - **🌙 Dark Mode**: Beautiful light/dark theme with smooth transitions
@@ -294,7 +294,7 @@ src/
 ├── features/                 # Feature modules
 │   ├── auth/                 # Auth actions, components, events, queries, types
 │   ├── comment/              # Comment actions, optimistic hooks, components, store
-│   ├── memberships/          # Membership actions, components, queries (role-based access)
+│   ├── memberships/          # Membership actions, components, queries (role + permission checks)
 │   ├── navigation/           # Sidebar/nav components + context
 │   ├── organisation/         # Organization actions and components
 │   ├── pagination/           # Pagination components + nuqs parsers
@@ -509,7 +509,7 @@ PostgreSQL with Prisma Client 7.3 using:
 - **Session**: Better Auth session model
 - **Verification**: Better Auth verification tokens
 - **Organization**: Organization management
-- **Member**: Organization membership with role-based permissions (owner, admin, member)
+- **Member**: Organization membership with role-based permissions (owner, admin, member) and granular permissions (canDeleteTicket)
 - **Invitation**: Organization invitations with role assignment
 - **Ticket**: Ticket management with unique slug field (direct relation to User)
 - **Comment**: Comment system (direct relation to User)

@@ -17,7 +17,7 @@ const OrganisationDetailPage = async ({
         description="Manage memberships in your organisation"
         title="Memberships"
       />
-      <Memberships organisationId={id} />
+      <Memberships organizationId={id} />
     </div>
   );
 };

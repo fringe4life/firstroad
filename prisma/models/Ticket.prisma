@@ -16,8 +16,8 @@ model Ticket {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  organisationId String
-  organisation   Organization @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   // Timestamps
   createdAt DateTime @default(now())

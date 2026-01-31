@@ -1,5 +1,10 @@
-import type { TicketGetPayload } from "@/generated/prisma/models/Ticket";
-import type { List, Maybe, SearchParamsProps } from "@/types";
+import type {
+  TicketGetPayload,
+  TicketModel,
+} from "@/generated/prisma/models/Ticket";
+import type { Id, List, Maybe, SearchParamsProps } from "@/types";
+import type { UserVerifiable } from "../auth/types";
+import type { OrganisationId } from "../organisation/types";
 // Base ticket with user for display
 export type BaseTicket = TicketGetPayload<{
   include: { user: { select: { name: true } } };
@@ -28,11 +33,21 @@ export interface TicketItemProps extends IsDetail {
 }
 
 export interface TicketOwnerOptionsProps extends IsDetail {
-  ticket: Pick<BaseTicket, "userId" | "slug" | "id" | "status">;
+  ticket: Pick<
+    BaseTicket,
+    "userId" | "slug" | "id" | "status" | "organizationId"
+  >;
   currentUserId?: Exclude<Maybe<string>, null>;
 }
 
 export interface TicketMoreMenuProps {
   ticket: Pick<BaseTicket, "id" | "status">;
   trigger: React.ReactNode;
+  canDeleteTicket?: boolean;
 }
+
+export interface VerifyTicket
+  extends UserVerifiable,
+    Id,
+    OrganisationId,
+    Pick<TicketModel, "slug"> {}

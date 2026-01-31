@@ -10,12 +10,12 @@ const getRandomOrganisationId = (ids: string[]) =>
 interface TicketWithoutUserId
   extends Omit<
     Ticket,
-    "userId" | "id" | "createdAt" | "updatedAt" | "slug" | "organisationId"
+    "userId" | "id" | "createdAt" | "updatedAt" | "slug" | "organizationId"
   > {}
 
 interface SeedUser {
   userId: string;
-  organisationIds: string[];
+  organizationIds: string[];
 }
 
 // Base tickets list without userId assignment
@@ -236,7 +236,7 @@ export const createTickets = (
     const user = getRandomUser(users);
     return {
       ...ticket,
-      organisationId: getRandomOrganisationId(user.organisationIds),
+      organizationId: getRandomOrganisationId(user.organizationIds),
       userId: user.userId,
       slug: createSlug(ticket.title),
     };
