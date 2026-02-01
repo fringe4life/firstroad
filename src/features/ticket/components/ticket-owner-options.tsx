@@ -23,12 +23,13 @@ const TicketOwnerOptionsContent = ({
   isDetail = false,
   isOwner: ticketIsOwner,
   canDeleteTicket,
+  canUpdateTicket,
 }: TicketOwnerOptionsWithAccessProps) => {
   if (!ticketIsOwner) {
     return null;
   }
 
-  const editButton = (
+  const editButton = canUpdateTicket ? (
     <Link
       className={buttonVariants({ variant: "outline", size: "icon" })}
       href={ticketEditPath(ticket.slug)}
@@ -36,7 +37,7 @@ const TicketOwnerOptionsContent = ({
     >
       <LucidePencil className="aspect-square w-4" />
     </Link>
-  );
+  ) : null;
 
   const moreMenu = selectDetailElement({
     isDetail,
@@ -44,6 +45,7 @@ const TicketOwnerOptionsContent = ({
     elementIfIsDetail: (
       <TicketMoreMenu
         canDeleteTicket={canDeleteTicket}
+        canUpdateTicket={canUpdateTicket}
         ticket={{ id: ticket.id, status: ticket.status }}
         trigger={
           <Button size="icon" variant="outline">
@@ -77,10 +79,12 @@ const TicketOwnerOptionsFetchInner = async ({
   // Fetch the user's permission for this ticket's organization
   const permission = await getMemberPermission(user.id, ticket.organizationId);
   const canDeleteTicket = permission?.canDeleteTicket ?? false;
+  const canUpdateTicket = permission?.canUpdateTicket ?? false;
 
   return (
     <TicketOwnerOptionsContent
       canDeleteTicket={canDeleteTicket}
+      canUpdateTicket={canUpdateTicket}
       isDetail={isDetail}
       isOwner={true}
       ticket={ticket}

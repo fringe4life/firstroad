@@ -15,6 +15,7 @@ const getMemberPermission = async (
       },
       select: {
         canDeleteTicket: true,
+        canUpdateTicket: true,
       },
     }),
   );

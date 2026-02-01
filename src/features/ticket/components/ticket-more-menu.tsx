@@ -20,6 +20,7 @@ const TicketMoreMenu = ({
   ticket,
   trigger,
   canDeleteTicket = true,
+  canUpdateTicket = true,
 }: TicketMoreMenuProps) => {
   const [getDeleteButton, deleteDialog, isPending] = useConfirmDialog({
     action: deleteTicket.bind(null, ticket.id),
@@ -70,7 +71,7 @@ const TicketMoreMenu = ({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" side="left">
-          {radioOptions}
+          {canUpdateTicket && radioOptions}
 
           {canDeleteTicket && getDeleteButton(isPending)}
         </DropdownMenuContent>

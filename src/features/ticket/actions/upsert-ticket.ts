@@ -15,6 +15,7 @@ import {
 } from "valibot";
 import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
+import { getMemberPermission } from "@/features/memberships/queries/get-member-permission";
 import { prisma } from "@/lib/prisma";
 import { ticketPath, ticketsPath } from "@/path";
 import type { Maybe } from "@/types";
@@ -66,6 +67,16 @@ const upsertTicket = async (
       const ticket = await itemWithOwnership(findTicket(id));
       if (!ticket?.isOwner) {
         throw new Error("Ticket Not Found");
+      }
+
+      // Check if user has permission to update tickets in this organization
+      const permission = await getMemberPermission(
+        user.id,
+        ticket.organizationId,
+      );
+
+      if (!permission?.canUpdateTicket) {
+        throw new Error("You do not have permission to update this ticket");
       }
     }
 

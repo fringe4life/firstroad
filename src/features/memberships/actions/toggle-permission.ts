@@ -22,7 +22,7 @@ import type { PermissionKey } from "../types";
 const togglePermissionSchema = object({
   memberId: pipe(string(), minLength(1)),
   organizationId: pipe(string(), minLength(1)),
-  permissionKey: picklist(["canDeleteTicket"]),
+  permissionKey: picklist(["canDeleteTicket", "canUpdateTicket"]),
   permissionValue: boolean(),
 });
 

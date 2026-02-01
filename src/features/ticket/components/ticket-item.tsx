@@ -34,6 +34,7 @@ const TicketItem = (props: TicketItemProps) => {
   ) : (
     <TicketOwnerOptionsContent
       canDeleteTicket={props.canDeleteTicket}
+      canUpdateTicket={props.canUpdateTicket}
       isDetail={false}
       isOwner={props.isOwner}
       ticket={{ slug, id, status }}

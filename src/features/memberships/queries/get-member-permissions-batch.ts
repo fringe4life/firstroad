@@ -27,6 +27,7 @@ const getMemberPermissionsBatch = async (
       select: {
         organizationId: true,
         canDeleteTicket: true,
+        canUpdateTicket: true,
       },
     }),
   );
@@ -36,9 +37,11 @@ const getMemberPermissionsBatch = async (
   }
 
   return new Map(
-    members.map((m) => [
-      m.organizationId,
-      { canDeleteTicket: m.canDeleteTicket },
+    members.map(({ organizationId, ...rest }) => [
+      organizationId,
+      {
+        ...rest,
+      },
     ]),
   );
 };

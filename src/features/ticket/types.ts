@@ -29,7 +29,14 @@ export interface CanDeleteTicket {
   canDeleteTicket: boolean;
 }
 
-export interface TicketAccess extends IsOwner, CanDeleteTicket {}
+export interface CanUpdateTicket {
+  canUpdateTicket: boolean;
+}
+
+export interface TicketAccess
+  extends IsOwner,
+    CanDeleteTicket,
+    CanUpdateTicket {}
 
 /**
  * Ticket with ownership and permission information
@@ -93,10 +100,10 @@ export type TicketOwnerOptionsProps =
   | TicketOwnerOptionsWithAccessProps
   | TicketOwnerOptionsFetchProps;
 
-export interface TicketMoreMenuProps {
+export interface TicketMoreMenuProps
+  extends Partial<CanDeleteTicket & CanUpdateTicket> {
   ticket: Pick<BaseTicket, "id" | "status">;
   trigger: React.ReactNode;
-  canDeleteTicket?: boolean;
 }
 
 export interface VerifyTicket

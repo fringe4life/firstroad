@@ -12,6 +12,7 @@ model Member {
   user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   role           MemberRole   @default(member)
   canDeleteTicket Boolean     @default(true)
+  canUpdateTicket Boolean     @default(true)
   createdAt      DateTime
 
   @@index([organizationId])

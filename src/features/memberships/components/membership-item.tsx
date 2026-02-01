@@ -32,6 +32,14 @@ const MembershipItem = ({
         />
       </TableCell>
       <TableCell>
+        <PermissionToggle
+          memberId={member.id}
+          organizationId={organizationId}
+          permissionKey="canUpdateTicket"
+          permissionValue={member.canUpdateTicket}
+        />
+      </TableCell>
+      <TableCell>
         <MembershipActionButtons
           currentUserEmail={currentUserEmail}
           memberEmail={member.email}

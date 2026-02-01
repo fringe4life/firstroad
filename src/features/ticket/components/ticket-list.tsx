@@ -15,6 +15,7 @@ const TicketList = ({ tickets }: TicketListProps) => {
         ticket,
         isOwner: ticket.isOwner,
         canDeleteTicket: ticket.canDeleteTicket,
+        canUpdateTicket: ticket.canUpdateTicket,
       })}
     />
   );

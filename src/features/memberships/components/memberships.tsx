@@ -18,6 +18,7 @@ const Memberships = async ({ organizationId }: MemberShipProps) => {
           <TableHead>Joined At</TableHead>
           <TableHead>Verified</TableHead>
           <TableHead>Can Delete Ticket?</TableHead>
+          <TableHead>Can Update Ticket?</TableHead>
           <TableHead />
         </TableRow>
       </TableHeader>
