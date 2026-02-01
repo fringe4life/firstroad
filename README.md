@@ -8,14 +8,15 @@
 [![Prisma](https://img.shields.io/badge/Prisma-7.3.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
 [![Better Auth](https://img.shields.io/badge/Better%20Auth-beta-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.18-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![Biome](https://img.shields.io/badge/Biome-2.3.12-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-7.1.2-000000)](https://ultracite.dev/)
+[![Biome](https://img.shields.io/badge/Biome-2.3.13-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-7.1.3-000000)](https://ultracite.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.8.7-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.2.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Elysia](https://img.shields.io/badge/Elysia-1.4.21-000000)](https://elysiajs.com/)
 [![Inngest](https://img.shields.io/badge/Inngest-3.50.0-000000)](https://www.inngest.com/)
 [![Resend](https://img.shields.io/badge/Resend-6.9.1-000000)](https://resend.com/)
 [![React Email](https://img.shields.io/badge/React%20Email-5.2.5-000000)](https://react.email/)
+[![Bun](https://img.shields.io/badge/Bun-1.3.8-FBF0DF?logo=bun&logoColor=000000)](https://bun.sh/)
 
 </div>
 
@@ -61,7 +62,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **API Framework**: Elysia 1.4 with @elysiajs/cors 1.4 for unified API routes
 - **Background Jobs**: Inngest 3.49 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
-- **Linting**: Biome 2.3 for fast formatting and linting with Ultracite 7.1 rules
+- **Linting**: Biome 2.3.13 for fast formatting and linting with Ultracite 7.1.3 rules
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 
@@ -294,7 +295,7 @@ src/
 ├── features/                 # Feature modules
 │   ├── auth/                 # Auth actions, components, events, queries, types
 │   ├── comment/              # Comment actions, optimistic hooks, components, store
-│   ├── invitations/          # Invitation components, queries, types (org invitations)
+│   ├── invitations/          # Invitation actions (create, cancel), components, queries, types
 │   ├── memberships/          # Membership actions, components, queries, skeletons (role + batch permission checks)
 │   ├── navigation/           # Sidebar/nav components + context
 │   ├── organisation/         # Organization actions, components, skeletons
@@ -403,7 +404,6 @@ This pattern enables:
 - **Status Management**: Track ticket status (Open, In Progress, Done)
 - **Ownership**: Users can only edit their own tickets
 - **Search & Filter**: Find tickets by title, description, or status
-- **Scope Filtering**: Toggle between "All Tickets" and "My Tickets" with type-safe URL parameters
 - **Deadline Tracking**: Set and manage ticket deadlines
 - **Slug-based URLs**: Human-readable URLs using ticket slugs (e.g., `/this-ticket-title`)
 - **Unified Ticket Pages**: Ticket creation form and list displayed on the same page
@@ -445,16 +445,14 @@ Built with shadcn/ui and Tailwind CSS:
 
 ```bash
 # Development
-bun run dev              # Start dev server (Bun + Webpack)
-bun run dev:inspect      # Start dev server with inspector (Bun + Webpack)
+bun run dev              # Start dev server (Turbopack)
+bun run dev:inspect      # Start dev server with inspector (Turbopack)
 bun run next:upgrade     # Upgrade Next.js
 bun run next:analyze     # Analyze Next.js bundle
 bun run build            # Build for production (Bun + Webpack)
 bun run build:debug      # Build with debug output
 bun run build:debug:prerender # Build with debug prerender info
 bun run start            # Start production server (Bun)
-bun run check            # Run Ultracite checks
-bun run fix              # Fix with Ultracite
 bun run type             # Run TypeScript type checking (tsgo)
 bun run typegen          # Generate Next.js type definitions
 bun run postinstall      # Generate Prisma client (runs automatically after install)
@@ -476,10 +474,9 @@ bun run seed:members     # Add users to all organizations they are not members o
 bun run inngest          # Start Inngest dev server for local testing
 
 # Ultracite (Code Quality)
-bun run ultracite        # Run Ultracite checks
-bun run ultracite:fix    # Fix Ultracite issues automatically
-bun run ultracite:doctor # Diagnose code quality issues
-bun run ultracite:check  # Check code quality
+bun run check            # Run Ultracite checks
+bun run fix              # Fix with Ultracite
+bun run doctor           # Run Ultracite doctor
 bun run ultracite:upgrade # Re-initialize Ultracite config
 
 # Deployment
@@ -624,7 +621,7 @@ The application uses Elysia 1.4 as a unified API framework for handling all API 
 
 **Known Issues:**
 - OpenAPI plugin causes "Maximum call stack size exceeded" error at specPath, likely due to circular references when introspecting mounted routes (Better Auth handler). OpenAPI generation is currently disabled until this issue is resolved.
-- Elysia 1.4 regressions impacted social/organisation APIs, so the API layer is pinned to 1.4.
+- Elysia 1.4.22 regressions impacted social/organisation APIs, so the API layer is pinned to 1.4.21.
 
 ### Type Safety
 

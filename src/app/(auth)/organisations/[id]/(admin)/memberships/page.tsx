@@ -1,5 +1,6 @@
 import { connection } from "next/server";
 import { Heading } from "@/components/heading";
+import { InviteMemberButton } from "@/features/invitations/components/invite-member-button";
 import { Memberships } from "@/features/memberships/components/memberships";
 import { getAdminOwnerOrRedirect } from "@/features/memberships/queries/get-admin-owner-or-redirect";
 import { AdminTabs } from "../_components/admin-tabs";
@@ -15,6 +16,7 @@ const OrganisationDetailPage = async ({
   return (
     <div className="grid h-full grid-rows-[min-content_min-content_1fr] gap-y-8">
       <Heading
+        actions={<InviteMemberButton organizationId={id} />}
         description="Manage memberships in your organisation"
         tabs={<AdminTabs organizationId={id} />}
         title="Memberships"

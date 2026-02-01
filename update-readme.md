@@ -5,6 +5,7 @@ Provide ONLY this file in future sessions to have the AI re-scan and update `REA
 ## What the AI will do
 
 - Re-scan these sources: `package.json`, `env.example`, `next.config.ts`, `prisma/schema.prisma`, `prisma/seed.ts`, `prisma.config.ts`, `src/lib/env.ts`, `src/lib/prisma.ts`, `src/app/**/layout.tsx`, `src/app/**/page.tsx`.
+- **Check Bun version**: Run `bun -v` to get current Bun version for the badge.
 - **Scan current folder structure** using these commands:
   - `list_dir` on `src/` to get top-level structure
   - `list_dir` on `src/app/` to get app router structure
@@ -34,6 +35,7 @@ Provide ONLY this file in future sessions to have the AI re-scan and update `REA
 - Mention `nuqs` for type-safe search params via Context7.
 - Mention centralized auth types in `src/features/auth/types.ts`.
 - Keep tech stack badges in sync with `package.json` versions (extract from dependencies).
+- Keep Bun badge in sync with `bun -v` output.
 - Preserve existing README headings and tone, only patch relevant sections.
 - Do not change license wording.
 

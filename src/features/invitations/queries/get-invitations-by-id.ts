@@ -12,10 +12,7 @@ const getInvitationsById = async (
       select: {
         id: true,
         email: true,
-        role: true,
-        status: true,
         createdAt: true,
-        expiresAt: true,
         user: {
           select: {
             name: true,
@@ -25,14 +22,10 @@ const getInvitationsById = async (
       orderBy: { createdAt: "desc" },
     });
 
-    return rows.map((invitation) => ({
-      id: invitation.id,
-      email: invitation.email,
-      role: invitation.role,
-      status: invitation.status,
-      invitedAt: invitation.createdAt,
-      expiresAt: invitation.expiresAt,
-      inviterName: invitation.user.name,
+    return rows.map(({ user, createdAt, ...invitation }) => ({
+      ...invitation,
+      invitedAt: createdAt,
+      inviterName: user.name,
     }));
   });
 

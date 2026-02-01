@@ -6,6 +6,7 @@ import { InvitationItem } from "./invitation-item";
 
 const InvitationList = ({
   invitations,
+  organizationId,
   emptyStateMessage,
   errorStateMessage = "Failed to fetch invitations",
 }: InvitationListProps) => {
@@ -15,13 +16,17 @@ const InvitationList = ({
   const icon = isError ? <Bug /> : <CircleSlash2 />;
 
   if (isError || isEmpty) {
-    return <UnsuccessfulTable colSpan={3} icon={icon} label={message} />;
+    return <UnsuccessfulTable colSpan={4} icon={icon} label={message} />;
   }
 
   return (
     <TableBody className="items-start">
       {invitations.map((invitation) => (
-        <InvitationItem invitation={invitation} key={invitation.id} />
+        <InvitationItem
+          invitation={invitation}
+          key={invitation.id}
+          organizationId={organizationId}
+        />
       ))}
     </TableBody>
   );

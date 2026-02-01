@@ -7,7 +7,15 @@ const nextConfig: NextConfig = {
   typedRoutes: true,
   reactCompiler: !isDev,
   cacheComponents: true,
-  webpack: (config) => {
+  webpack: (config, { dev }) => {
+    // Only apply custom webpack config for production builds
+    // This allows Turbopack to be used in development
+    if (dev) {
+      return config;
+    }
+
+    // Shim kysely adapter to prevent node:sqlite import errors during build
+    // Required because better-auth bundles kysely as a hard dependency even when using /minimal
     config.resolve ??= {};
     config.resolve.alias ??= {};
     const kyselyShimPath = path.resolve(
@@ -30,7 +38,7 @@ const nextConfig: NextConfig = {
     // lucide-react is already optimized by default, but explicit is fine
     // valibot has confirmed barrel file issues (GitHub #425)
     // this has basically slowed the dev server to a halt
-    // optimizePackageImports: ["valibot"],
+    optimizePackageImports: isDev ? undefined : ["valibot"],
   },
 };
 

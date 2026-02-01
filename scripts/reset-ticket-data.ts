@@ -1,5 +1,3 @@
-#!/usr/bin/env tsx
-
 /**
  * Script to reset only Ticket and Comment data while preserving user data
  * This is safer than a full database reset when you want to keep user accounts
@@ -7,15 +5,10 @@
 
 import { neonConfig } from "@neondatabase/serverless";
 import { PrismaNeon } from "@prisma/adapter-neon";
-// Load environment variables
-import { config } from "dotenv";
-import ws from "ws";
 import { PrismaClient } from "../src/generated/prisma/client";
 
-config();
-
 // Configure Neon adapter (same as in src/lib/prisma.ts)
-neonConfig.webSocketConstructor = ws;
+neonConfig.webSocketConstructor = globalThis.WebSocket;
 neonConfig.poolQueryViaFetch = true;
 
 const connectionString = process.env.DATABASE_URL;

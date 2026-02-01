@@ -7,6 +7,7 @@ const InvitationsTableHeader = () => {
         <TableHead>Email</TableHead>
         <TableHead>Invited At</TableHead>
         <TableHead>Invited By</TableHead>
+        <TableHead>Actions</TableHead>
       </TableRow>
     </TableHeader>
   );

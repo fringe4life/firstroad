@@ -63,18 +63,8 @@ const useConfirmDialog = ({
     onIsPending?.(pending);
   });
 
-  const handleClose = useEffectEvent(() => {
-    close();
-  });
-
   // Track isPending changes and call onIsPending callback
-
   useEffect(() => {
-    // Close dialog when action starts (isPending becomes true) if closeOnSubmit is true
-    if (isPending && closeOnSubmit) {
-      handleClose();
-    }
-
     handleIsPending(isPending);
 
     // Cleanup function to handle component unmount (e.g., redirects)
@@ -86,7 +76,7 @@ const useConfirmDialog = ({
         handleIsPending(false);
       }
     };
-  }, [isPending, closeOnSubmit]);
+  }, [isPending]);
 
   const dialog = (
     <Dialog onOpenChange={close} open={isOpen}>
@@ -102,6 +92,7 @@ const useConfirmDialog = ({
           <Form
             action={formAction}
             onErrorState={handleError}
+            onSubmit={closeOnSubmit ? close : undefined}
             onSuccessState={handleSuccess}
             state={actionState}
           >
