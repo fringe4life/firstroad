@@ -47,7 +47,9 @@ const MembershipActionButtons = ({
     });
   };
 
-  let canRemoveMemberButton: React.ReactNode = null;
+  let canRemoveMemberButton: React.ReactNode = (
+    <Button disabled size="icon" variant="ghost" />
+  );
   if (canRemoveMember) {
     canRemoveMemberButton = (
       <Button onClick={handleRemoveMember} size="icon" variant="destructive">

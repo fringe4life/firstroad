@@ -1,12 +1,12 @@
 import { connection } from "next/server";
 import { Heading } from "@/components/heading";
-import { Memberships } from "@/features/memberships/components/memberships";
+import { Invitations } from "@/features/invitations/components/invitations";
 import { getAdminOwnerOrRedirect } from "@/features/memberships/queries/get-admin-owner-or-redirect";
 import { AdminTabs } from "../_components/admin-tabs";
 
-const OrganisationDetailPage = async ({
+const InvitationsPage = async ({
   params,
-}: PageProps<"/organisations/[id]/memberships">) => {
+}: PageProps<"/organisations/[id]/invitations">) => {
   await connection();
   const { id } = await params;
 
@@ -15,13 +15,13 @@ const OrganisationDetailPage = async ({
   return (
     <div className="grid h-full grid-rows-[min-content_min-content_1fr] gap-y-8">
       <Heading
-        description="Manage memberships in your organisation"
+        description="Manage invitations to your organisation"
         tabs={<AdminTabs organizationId={id} />}
-        title="Memberships"
+        title="Invitations"
       />
-      <Memberships organizationId={id} />
+      <Invitations organizationId={id} />
     </div>
   );
 };
 
-export default OrganisationDetailPage;
+export default InvitationsPage;

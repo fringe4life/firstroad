@@ -32,6 +32,9 @@ const organisationsPath = (): Route => "/organisations";
 const membershipsPath = (id: string): Route =>
   `${organisationsPath()}/${id}/memberships` as Route;
 
+const invitationsPath = (id: string): Route =>
+  `${organisationsPath()}/${id}/invitations` as Route;
+
 const onboardingPath = (): Route => "/onboarding";
 const selectActiveOrganisationPath = (): Route =>
   `${onboardingPath()}/select-active-organisation` as Route;
@@ -57,4 +60,5 @@ export {
   accountPasswordPath,
   organisationsPath,
   membershipsPath,
+  invitationsPath,
 };

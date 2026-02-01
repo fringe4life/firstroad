@@ -1,8 +1,9 @@
-import { Table, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table } from "@/components/ui/table";
 import { getUser } from "@/features/auth/queries/get-user";
 import { MembershipList } from "@/features/memberships/components/membership-list";
 import { getMembershipsById } from "@/features/memberships/queries/get-memberships-by-id";
 import type { MemberShipProps } from "../types";
+import { MembershipsTableHeader } from "./memberships-table-header";
 
 const Memberships = async ({ organizationId }: MemberShipProps) => {
   const members = await getMembershipsById(organizationId);
@@ -11,17 +12,7 @@ const Memberships = async ({ organizationId }: MemberShipProps) => {
 
   return (
     <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Username</TableHead>
-          <TableHead>Email</TableHead>
-          <TableHead>Joined At</TableHead>
-          <TableHead>Verified</TableHead>
-          <TableHead>Can Delete Ticket?</TableHead>
-          <TableHead>Can Update Ticket?</TableHead>
-          <TableHead />
-        </TableRow>
-      </TableHeader>
+      <MembershipsTableHeader />
       <MembershipList
         currentUserEmail={currentUserEmail}
         emptyStateMessage="No members found"

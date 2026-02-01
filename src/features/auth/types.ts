@@ -17,8 +17,6 @@ export interface ActiveOrganizationId
 // Extended user type with activeOrganizationId appended
 export type User = BaseUser & ActiveOrganizationId;
 
-export type UserProp = NoUser | HasUser;
-
 interface NoUser {
   user: null | undefined;
   hasUser: false;
@@ -28,9 +26,7 @@ interface HasUser {
   user: User;
   hasUser: true;
 }
-
-// Session type (extracted from session)
-export type Session = ServerSession["session"];
+export type UserProp = NoUser | HasUser;
 
 export interface UserVerifiable extends Pick<TicketModel, "userId"> {}
 

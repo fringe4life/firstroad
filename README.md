@@ -9,7 +9,7 @@
 [![Better Auth](https://img.shields.io/badge/Better%20Auth-beta-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.18-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Biome](https://img.shields.io/badge/Biome-2.3.12-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-7.1.1-000000)](https://ultracite.dev/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-7.1.2-000000)](https://ultracite.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.8.7-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.2.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Elysia](https://img.shields.io/badge/Elysia-1.4.21-000000)](https://elysiajs.com/)
@@ -24,7 +24,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 ## 🚀 Features
 
 - **🔐 Authentication**: Secure user authentication with Better Auth (email/password + OTP + GitHub OAuth) with email enumeration protection
-- **🏢 Organization Management**: Create and manage organizations with member and invitation systems, role-based access control (owner, admin, member) and granular permissions (canDeleteTicket)
+- **🏢 Organization Management**: Create and manage organizations with membership and invitation systems, role-based access control (owner, admin, member), granular permissions (canDeleteTicket), and admin tabs for managing members and invitations
 - **🎫 Ticket Management**: Create, edit, and manage tickets with status tracking
 - **💬 Comments System**: Add, edit, and delete comments on tickets with infinite pagination
 - **🌙 Dark Mode**: Beautiful light/dark theme with smooth transitions
@@ -278,7 +278,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ```
 src/
 ├── app/                      # Next.js App Router pages
-│   ├── (auth)/               # Protected routes (account, organisations, memberships, tickets)
+│   ├── (auth)/               # Protected routes (account, organisations, memberships, invitations, tickets)
 │   ├── (password)/           # Public auth routes (sign-in, sign-up, reset, OTP)
 │   ├── @auth/                # Parallel auth modals (interception routes)
 │   ├── api/[[...slugs]]/      # Elysia catch-all API route handler
@@ -294,9 +294,10 @@ src/
 ├── features/                 # Feature modules
 │   ├── auth/                 # Auth actions, components, events, queries, types
 │   ├── comment/              # Comment actions, optimistic hooks, components, store
-│   ├── memberships/          # Membership actions, components, queries (role + batch permission checks)
+│   ├── invitations/          # Invitation components, queries, types (org invitations)
+│   ├── memberships/          # Membership actions, components, queries, skeletons (role + batch permission checks)
 │   ├── navigation/           # Sidebar/nav components + context
-│   ├── organisation/         # Organization actions and components
+│   ├── organisation/         # Organization actions, components, skeletons
 │   ├── pagination/           # Pagination components + nuqs parsers
 │   ├── password/             # Password flows, emails, events
 │   └── ticket/               # Ticket actions, DAL (batch access), queries, components, skeletons
