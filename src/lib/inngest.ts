@@ -2,6 +2,7 @@ import { EventSchemas, Inngest } from "inngest";
 import type { EmailOTPEventData } from "@/features/auth/events/event-email-otp";
 import type { EmailVerificationEventData } from "@/features/auth/events/event-email-verification";
 import type { WelcomeEmailEventData } from "@/features/auth/events/event-welcome-email";
+import type { OrganizationInvitationEventData } from "@/features/invitations/events/event-organization-invitation";
 import type { PasswordChangedEventData } from "@/features/password/events/event-password-changed";
 import type { PasswordResetEventData } from "@/features/password/events/event-password-reset";
 
@@ -22,6 +23,9 @@ type Events = {
   };
   "password.changed": {
     data: PasswordChangedEventData;
+  };
+  "organization.invitation": {
+    data: OrganizationInvitationEventData;
   };
 };
 

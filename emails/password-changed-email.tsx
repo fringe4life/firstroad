@@ -5,19 +5,20 @@ import {
   Head,
   Heading,
   Html,
+  Preview,
   Section,
   Tailwind,
   Text,
 } from "@react-email/components";
 
 interface PasswordChangedEmailProps {
-  toName: string;
-  appUrl: string;
+  TO_NAME: string;
+  APP_URL: string;
 }
 
 const PasswordChangedEmail = ({
-  toName,
-  appUrl,
+  TO_NAME,
+  APP_URL,
 }: PasswordChangedEmailProps) => (
   <Html>
     <Tailwind>
@@ -28,13 +29,14 @@ const PasswordChangedEmail = ({
           }
         `}</style>
       </Head>
+      <Preview>Password Changed Successfully</Preview>
       <Body className="m-8 text-center font-sans">
         <Container>
           <Heading className="font-bold text-3xl text-gray-900">
             Password Changed Successfully
           </Heading>
           <Section className="mt-6">
-            <Text className="text-lg">Hello {toName}</Text>
+            <Text className="text-lg">Hello {TO_NAME}</Text>
           </Section>
           <Section className="mt-4">
             <Text className="text-gray-700">
@@ -49,7 +51,7 @@ const PasswordChangedEmail = ({
           <Section className="mt-8">
             <Button
               className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-lg text-white hover:bg-blue-700"
-              href={`${appUrl}/account/profile`}
+              href={`${APP_URL}/account/profile`}
             >
               View Account
             </Button>
@@ -72,8 +74,8 @@ const PasswordChangedEmail = ({
 );
 
 PasswordChangedEmail.PreviewProps = {
-  toName: "John Doe",
-  appUrl: "http://localhost:3000",
+  TO_NAME: "John Doe",
+  APP_URL: "http://localhost:3000",
 } as PasswordChangedEmailProps;
 
 export default PasswordChangedEmail;

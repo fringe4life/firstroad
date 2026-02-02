@@ -29,36 +29,44 @@ const signOutPath = (): Route => "/sign-out";
 
 const organisationsPath = (): Route => "/organisations";
 
+const organisationPath = (id: string): Route =>
+  `${organisationsPath()}/${id}` as Route;
+
 const membershipsPath = (id: string): Route =>
-  `${organisationsPath()}/${id}/memberships` as Route;
+  `${organisationPath(id)}/memberships` as Route;
 
 const invitationsPath = (id: string): Route =>
   `${organisationsPath()}/${id}/invitations` as Route;
+
+const acceptInvitationPath = (invitationId: string): Route =>
+  `/accept-invitation/${invitationId}` as Route;
 
 const onboardingPath = (): Route => "/onboarding";
 const selectActiveOrganisationPath = (): Route =>
   `${onboardingPath()}/select-active-organisation` as Route;
 
 export {
-  onboardingPath,
-  selectActiveOrganisationPath,
-  homePath,
-  ticketsPath,
-  ticketsByOrganisationPath,
+  acceptInvitationPath,
+  accountPasswordPath,
+  accountProfilePath,
   forgotPasswordPath,
+  homePath,
+  invitationsPath,
+  membershipsPath,
+  onboardingPath,
+  organisationPath,
+  organisationsPath,
   resetPasswordPath,
-  verifyEmailOTPSendPath,
-  verifyEmailOTPVerifyPath,
-  signInPath,
+  selectActiveOrganisationPath,
   signInOTPSendPath,
   signInOTPVerifyPath,
+  signInPath,
   signOutPath,
   signUpPath,
   ticketEditPath,
   ticketPath,
-  accountProfilePath,
-  accountPasswordPath,
-  organisationsPath,
-  membershipsPath,
-  invitationsPath,
+  ticketsByOrganisationPath,
+  ticketsPath,
+  verifyEmailOTPSendPath,
+  verifyEmailOTPVerifyPath,
 };

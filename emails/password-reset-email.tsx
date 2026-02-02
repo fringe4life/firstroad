@@ -5,29 +5,27 @@ import {
   Head,
   Heading,
   Html,
+  Preview,
   Section,
   Tailwind,
   Text,
 } from "@react-email/components";
 
 interface EmailPasswordResetProps {
-  toName: string;
-  url: string;
+  TO_NAME: string;
+  URL: string;
 }
 
-// const _baseUrl = process.env.VERCEL_URL
-//   ? `https://${process.env.VERCEL_URL}`
-//   : "";
-
-const EmailPasswordReset = ({ toName, url }: EmailPasswordResetProps) => (
+const EmailPasswordReset = ({ TO_NAME, URL }: EmailPasswordResetProps) => (
   <Html>
     <Head />
+    <Preview>Reset your password</Preview>
     <Tailwind>
       <Body className="m-8 text-center font-sans">
         <Container>
           <Heading>Password Reset</Heading>
           <Section>
-            <Text>Hello {toName}</Text>
+            <Text>Hello {TO_NAME}</Text>
           </Section>
           <Section>
             <Text>
@@ -37,7 +35,7 @@ const EmailPasswordReset = ({ toName, url }: EmailPasswordResetProps) => (
             <Text>Please click the button below to reset your password:</Text>
             <Button
               className="m-2 cursor-pointer rounded bg-black p-2 text-white"
-              href={url}
+              href={URL}
             >
               Reset Password
             </Button>
@@ -49,8 +47,8 @@ const EmailPasswordReset = ({ toName, url }: EmailPasswordResetProps) => (
 );
 
 EmailPasswordReset.PreviewProps = {
-  toName: "John Doe",
-  url: "https://example.com/reset-password",
+  TO_NAME: "John Doe",
+  URL: "https://example.com/reset-password",
 } as EmailPasswordResetProps;
 
 export default EmailPasswordReset;

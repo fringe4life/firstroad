@@ -5,25 +5,27 @@ import {
   Head,
   Heading,
   Html,
+  Preview,
   Section,
   Tailwind,
   Text,
 } from "@react-email/components";
 
 interface EmailVerificationProps {
-  toName: string;
-  url: string;
+  TO_NAME: string;
+  URL: string;
 }
 
-const EmailVerification = ({ toName, url }: EmailVerificationProps) => (
+const EmailVerification = ({ TO_NAME, URL }: EmailVerificationProps) => (
   <Html>
     <Head />
+    <Preview>Verify your email address</Preview>
     <Tailwind>
       <Body className="m-8 text-center font-sans">
         <Container>
           <Heading>Verify Your Email Address</Heading>
           <Section>
-            <Text>Hello {toName}</Text>
+            <Text>Hello {TO_NAME}</Text>
           </Section>
           <Section>
             <Text>
@@ -33,7 +35,7 @@ const EmailVerification = ({ toName, url }: EmailVerificationProps) => (
             <Text>Click the button below to verify your email:</Text>
             <Button
               className="m-2 cursor-pointer rounded bg-black p-2 text-white"
-              href={url}
+              href={URL}
             >
               Verify Email
             </Button>
@@ -50,8 +52,8 @@ const EmailVerification = ({ toName, url }: EmailVerificationProps) => (
 );
 
 EmailVerification.PreviewProps = {
-  toName: "John Doe",
-  url: "https://example.com/verify-email?token=abc123",
+  TO_NAME: "John Doe",
+  URL: "https://example.com/verify-email?token=abc123",
 } as EmailVerificationProps;
 
 export default EmailVerification;

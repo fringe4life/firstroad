@@ -4,8 +4,10 @@ import { betterAuth } from "better-auth/minimal";
 import { nextCookies } from "better-auth/next-js";
 import { emailOTP, organization } from "better-auth/plugins";
 import { isAdminOrOwner } from "@/features/organisation/utils/admin";
+import type { MemberRole } from "@/generated/prisma/enums";
 import { inngest } from "@/lib/inngest";
 import { prisma } from "@/lib/prisma";
+import { acceptInvitationPath } from "@/path";
 import { tryCatch } from "@/utils/try-catch";
 import { env } from "./env";
 
@@ -57,6 +59,25 @@ export const auth = betterAuth({
       overrideDefaultEmailVerification: true, // Use OTP instead of verification links
     }),
     organization({
+      async sendInvitationEmail(data) {
+        const baseUrl =
+          process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+        const inviteUrl = `${baseUrl}${acceptInvitationPath(data.id)}`;
+
+        // Trigger Inngest event to handle invitation email asynchronously
+        await tryCatch(() =>
+          inngest.send({
+            name: "organization.invitation",
+            data: {
+              email: data.email,
+              organizationName: data.organization.name,
+              inviterName: data.inviter.user.name ?? "A team member",
+              role: (data.role as Exclude<MemberRole, "owner">) ?? "member",
+              inviteUrl,
+            },
+          }),
+        );
+      },
       organizationHooks: {
         beforeRemoveMember: async ({ member, organization }) => {
           // Prevent removing the last member from an organization

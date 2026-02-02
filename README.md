@@ -295,7 +295,7 @@ src/
 ├── features/                 # Feature modules
 │   ├── auth/                 # Auth actions, components, events, queries, types
 │   ├── comment/              # Comment actions, optimistic hooks, components, store
-│   ├── invitations/          # Invitation actions (create, cancel), components, queries, types
+│   ├── invitations/          # Invitation actions (create, cancel, accept, reject), components, email events, queries
 │   ├── memberships/          # Membership actions, components, queries, skeletons (role + batch permission checks)
 │   ├── navigation/           # Sidebar/nav components + context
 │   ├── organisation/         # Organization actions, components, skeletons
@@ -462,6 +462,8 @@ bun run prepare          # Install Git hooks via Husky
 bun run dev:email        # Start React Email preview server (./emails directory)
 bun run build:email      # Build email templates (./emails directory)
 bun run export:email     # Export email templates to HTML (./emails directory)
+bun run resend:list      # List Resend templates (requires RESEND_FULL_ACCESS)
+bun run resend:download  # Download Resend templates to emails/downloaded/
 
 # Database
 bunx --bun prisma generate # Generate Prisma client
@@ -522,6 +524,7 @@ Better Auth configured with:
 - Password reset functionality with Resend templates via Inngest events
 - Email verification
 - Rate limiting for production security
+  - **Note**: Rate limiting currently uses in-memory storage, which does not persist across serverless function invocations on Vercel. For a portfolio project, this is acceptable. A proper fix would involve switching to `storage: "database"` or `storage: "secondary-storage"` (Redis/Upstash). See [GitHub issue #5452](https://github.com/better-auth/better-auth/issues/5452) for the secondary storage TTL bug that affects custom `window` values. Tracked in project issues for future resolution with either Redis or Neon database storage.
 - Prisma Client with Neon driver adapter
 - Session cookie caching (5-minute cache duration)
 - Session expiration (7 days) and update age (1 day)
@@ -545,6 +548,7 @@ The application uses Resend 6.9 for transactional emails with published template
 - `password-reset-email` - Password reset links
 - `password-changed-email` - Password change confirmation
 - `welcome-email` - Welcome message for new users
+- `organization-invitation` - Organization membership invitations
 
 **Template Variables:**
 
@@ -570,6 +574,13 @@ All templates use UPPERCASE_SNAKE_CASE variable names (Resend requirement). Vari
 - **`welcome-email`**:
   - `TO_NAME` - Recipient name or email address
   - `APP_URL` - Application base URL
+
+- **`organization-invitation`**:
+  - `TO_NAME` - Recipient name or email address
+  - `ORGANIZATION_NAME` - Name of the organization
+  - `INVITER_NAME` - Name of the person who sent the invitation
+  - `ROLE` - Assigned role (member or admin)
+  - `INVITE_URL` - Invitation acceptance link
 
 **Usage in Templates:**
 

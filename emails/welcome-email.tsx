@@ -5,17 +5,18 @@ import {
   Head,
   Heading,
   Html,
+  Preview,
   Section,
   Tailwind,
   Text,
 } from "@react-email/components";
 
 interface WelcomeEmailProps {
-  toName: string;
-  appUrl: string;
+  TO_NAME: string;
+  APP_URL: string;
 }
 
-const WelcomeEmail = ({ toName, appUrl }: WelcomeEmailProps) => (
+const WelcomeEmail = ({ TO_NAME, APP_URL }: WelcomeEmailProps) => (
   <Html>
     <Tailwind>
       <Head>
@@ -28,13 +29,14 @@ const WelcomeEmail = ({ toName, appUrl }: WelcomeEmailProps) => (
           }
         `}</style>
       </Head>
+      <Preview>Welcome to TicketBounty</Preview>
       <Body className="m-8 text-center font-sans">
         <Container>
           <Heading className="font-bold text-3xl text-gray-900">
             Welcome to TicketBounty! 🎉
           </Heading>
           <Section className="mt-6">
-            <Text className="text-lg">Hello {toName}</Text>
+            <Text className="text-lg">Hello {TO_NAME}</Text>
           </Section>
           <Section className="mt-4">
             <Text className="text-gray-700">
@@ -45,16 +47,16 @@ const WelcomeEmail = ({ toName, appUrl }: WelcomeEmailProps) => (
               Your account has been successfully created and you can now:
             </Text>
             <ul className="mt-4 space-y-2 text-left text-gray-600">
-              <li> Create and manage support tickets</li>
-              <li> Track ticket status and updates</li>
-              <li> Collaborate with your team</li>
-              <li> Access all our features</li>
+              <li>Create and manage support tickets</li>
+              <li>Track ticket status and updates</li>
+              <li>Collaborate with your team</li>
+              <li>Access all our features</li>
             </ul>
           </Section>
           <Section className="mt-8">
             <Button
               className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-lg text-white hover:bg-blue-700"
-              href={`${appUrl}/tickets`}
+              href={`${APP_URL}/tickets`}
             >
               Get Started
             </Button>
@@ -77,8 +79,8 @@ const WelcomeEmail = ({ toName, appUrl }: WelcomeEmailProps) => (
 );
 
 WelcomeEmail.PreviewProps = {
-  toName: "John Doe",
-  appUrl: "http://localhost:3000",
+  TO_NAME: "John Doe",
+  APP_URL: "http://localhost:3000",
 } as WelcomeEmailProps;
 
 export default WelcomeEmail;
