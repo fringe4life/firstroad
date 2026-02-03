@@ -41,6 +41,7 @@ const TicketItem = (props: TicketItemProps) => {
     />
   );
 
+  const attachments = isDetail ? props.attachments : null;
   const comments = isDetail ? props.comments : null;
 
   const options = isDetail ? (
@@ -93,6 +94,7 @@ const TicketItem = (props: TicketItemProps) => {
 
           <div className="space-y-1 self-start">{options}</div>
         </div>
+        {attachments}
         {comments}
       </div>
     </ViewTransition>

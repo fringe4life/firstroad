@@ -19,10 +19,22 @@ const commentsForTicketCache = (ticketId: string): string => {
 const commentCache = (commentId: string): string => {
   return `comment-${commentId}`;
 };
+
+// Attachment cache tags
+const attachmentCache = (): string => {
+  return "attachments";
+};
+
+const attachmentsForTicketCache = (ticketId: string): string => {
+  return `attachments-${ticketId}`;
+};
+
 export {
-  ticketsCache,
-  ticketCache,
+  attachmentCache,
+  attachmentsForTicketCache,
+  commentCache,
   commentsCache,
   commentsForTicketCache,
-  commentCache,
+  ticketCache,
+  ticketsCache,
 };

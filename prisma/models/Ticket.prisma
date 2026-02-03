@@ -25,4 +25,6 @@ model Ticket {
   deadline  DateTime
 
   comments Comment[]
+
+  attachments Attachment[]
 }

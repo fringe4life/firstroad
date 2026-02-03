@@ -1,5 +1,7 @@
 import { updateTag } from "next/cache";
 import {
+  attachmentCache,
+  attachmentsForTicketCache,
   commentCache,
   commentsCache,
   commentsForTicketCache,
@@ -47,6 +49,12 @@ const invalidateCommentAndTicketComments = (
   updateTag(commentCache(commentId));
 };
 
+// Attachment invalidation
+const invalidateAttachmentsForTicket = (ticketId: string): void => {
+  updateTag(attachmentCache());
+  updateTag(attachmentsForTicketCache(ticketId));
+};
+
 // Combined invalidation
 const invalidateTicketWithComments = (slug: string, ticketId: string): void => {
   updateTag(ticketsCache());
@@ -55,13 +63,25 @@ const invalidateTicketWithComments = (slug: string, ticketId: string): void => {
   updateTag(commentsForTicketCache(ticketId));
 };
 
+const invalidateTicketAndAttachments = (
+  slug: string,
+  ticketId: string,
+): void => {
+  updateTag(ticketsCache());
+  updateTag(ticketCache(slug));
+  updateTag(attachmentCache());
+  updateTag(attachmentsForTicketCache(ticketId));
+};
+
 export {
-  invalidateTickets,
-  invalidateTicket,
-  invalidateTicketAndList,
-  invalidateComments,
-  invalidateCommentsForTicket,
+  invalidateAttachmentsForTicket,
   invalidateComment,
   invalidateCommentAndTicketComments,
+  invalidateComments,
+  invalidateCommentsForTicket,
+  invalidateTicket,
+  invalidateTicketAndAttachments,
+  invalidateTicketAndList,
   invalidateTicketWithComments,
+  invalidateTickets,
 };

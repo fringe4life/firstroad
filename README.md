@@ -27,6 +27,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **🔐 Authentication**: Secure user authentication with Better Auth (email/password + OTP + GitHub OAuth) with email enumeration protection
 - **🏢 Organization Management**: Create and manage organizations with membership and invitation systems, role-based access control (owner, admin, member), granular permissions (canDeleteTicket), and admin tabs for managing members and invitations
 - **🎫 Ticket Management**: Create, edit, and manage tickets with status tracking
+- **📎 Ticket Attachments**: Owner-only file uploads with Bun S3; presigned download URLs for all viewers (Bun runtime + Webpack; on Vercel use `bunVersion: "1.x"` in vercel.json so Server Actions run on Bun and `Bun.s3` works)
 - **💬 Comments System**: Add, edit, and delete comments on tickets with infinite pagination
 - **🌙 Dark Mode**: Beautiful light/dark theme with smooth transitions
 - **📱 Responsive Design**: Optimized for desktop and mobile devices with PPR navigation and cached components
@@ -249,6 +250,16 @@ NEXT_PUBLIC_RESEND_FROM="Your App <onboarding@resend.dev>"
 # Docs: https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app
 GITHUB_CLIENT_ID="your-github-client-id"
 GITHUB_CLIENT_SECRET="your-github-client-secret"
+
+# S3 (used for ticket attachments via Bun.s3)
+# Docs: https://bun.sh/docs/runtime/s3
+# Bun.s3 works in Server Actions with Bun runtime (bun run dev/start). On Vercel, set "bunVersion": "1.x" in vercel.json so the app runs on Bun and Bun.s3 is available.
+S3_ACCESS_KEY_ID="your-s3-access-key-id"
+S3_SECRET_ACCESS_KEY="your-s3-secret-access-key"
+S3_REGION="us-east-1"
+S3_BUCKET="your-bucket-name"
+# Optional: for non-AWS S3-compatible services (e.g. MinIO, R2)
+# S3_ENDPOINT="https://s3.us-east-1.amazonaws.com"
 ```
 
 **Note**: `DIRECT_URL` is optional and only needed for connection pooling scenarios. The application works with just `DATABASE_URL` configured. `DIRECT_URL` is not validated in the environment schema.
@@ -293,6 +304,7 @@ src/
 │   ├── ui/                   # shadcn/ui components
 │   └── unsuccessful-table.tsx # Reusable empty/error state table component
 ├── features/                 # Feature modules
+│   ├── attachments/          # Ticket attachments (Bun S3): actions, components, queries, presign utils, skeletons
 │   ├── auth/                 # Auth actions, components, events, queries, types
 │   ├── comment/              # Comment actions, optimistic hooks, components, store
 │   ├── invitations/          # Invitation actions (create, cancel, accept, reject), components, email events, queries
@@ -401,6 +413,7 @@ This pattern enables:
 ### Features
 
 - **Create Tickets**: Users can create tickets with title, description, and deadline
+- **Attachments**: Ticket owners can upload files (Bun S3); presigned download URLs for all viewers; owner-gated upload form with HasAuthSuspense
 - **Status Management**: Track ticket status (Open, In Progress, Done)
 - **Ownership**: Users can only edit their own tickets
 - **Search & Filter**: Find tickets by title, description, or status
@@ -514,6 +527,7 @@ PostgreSQL with Prisma Client 7.3 using:
 - **Member**: Organization membership with role-based permissions (owner, admin, member) and granular permissions (canDeleteTicket)
 - **Invitation**: Organization invitations with role assignment
 - **Ticket**: Ticket management with unique slug field (direct relation to User)
+- **Attachment**: Ticket attachments (name, ticketId); S3 key convention `attachments/{ticketId}/{attachmentId}/{fileName}`
 - **Comment**: Comment system (direct relation to User)
 
 ### Authentication & Background Jobs
@@ -663,9 +677,9 @@ Centralized type-safe route definitions in `src/path.ts`:
 Centralized cache tag system for consistent cache invalidation:
 
 - **`src/utils/cache-tags.ts`**: Centralized cache tag functions (similar to `path.ts`)
-  - `ticketsCache()`, `ticketCache(slug)`, `commentsCache()`, `commentsForTicketCache(ticketId)`, `commentCache(commentId)`
+  - `ticketsCache()`, `ticketCache(slug)`, `commentsCache()`, `commentsForTicketCache(ticketId)`, `commentCache(commentId)`, `attachmentCache()`, `attachmentsForTicketCache(ticketId)`
 - **`src/utils/invalidate-cache.ts`**: High-level invalidation functions
-  - `invalidateTicketAndList(slug)`, `invalidateCommentAndTicketComments(...)`, etc.
+  - `invalidateTicketAndList(slug)`, `invalidateCommentAndTicketComments(...)`, `invalidateAttachmentsForTicket(ticketId)`, `invalidateTicketAndAttachments(slug, ticketId)`, etc.
 - Ensures consistency between `cacheTag()` and `updateTag()` calls
 - All ticket-related cache operations use slugs (not IDs) for consistency
 - Single source of truth for cache tag strings

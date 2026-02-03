@@ -63,6 +63,7 @@ interface TicketItemListProps extends TicketItemBaseProps, TicketAccess {
 interface TicketItemDetailProps extends TicketItemBaseProps {
   isDetail: true;
   comments: React.ReactNode;
+  attachments: React.ReactNode;
 }
 
 /**

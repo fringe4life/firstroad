@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { createAttachment } from "@/features/attachments/actions/create-attachment";
+import { Attachments } from "@/features/attachments/components/attachments";
+import { AttachmentFormSkeleton } from "@/features/attachments/components/skeletons/attachment-form-skeleton";
+import { AttachmentListSkeleton } from "@/features/attachments/components/skeletons/attachment-list-skeleton";
+import { getAttachmentsByTicket } from "@/features/attachments/queries/get-attachments-by-ticket";
+import { presignAttachments } from "@/features/attachments/utils/presign-attachments";
 import { HasAuthSuspense } from "@/features/auth/components/has-auth";
 import { deleteComment } from "@/features/comment/actions/delete-comment";
 import { upsertComment } from "@/features/comment/actions/upsert-comment";
@@ -49,6 +55,9 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
     notFound();
   }
 
+  const attachments = await getAttachmentsByTicket(ticket.id);
+  const attachmentsWithUrls = presignAttachments(ticket.id, attachments);
+
   return (
     <div className="grid h-full w-full grid-rows-[min-content_1fr] gap-y-8">
       <Breadcrumbs
@@ -58,6 +67,25 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
         ]}
       />
       <TicketItem
+        attachments={
+          <HasAuthSuspense
+            fallback={
+              <>
+                <AttachmentFormSkeleton />
+                <AttachmentListSkeleton />
+              </>
+            }
+          >
+            {(user) => (
+              <Attachments
+                attachments={attachmentsWithUrls}
+                createAttachmentAction={createAttachment}
+                isOwner={user?.id === ticket.userId}
+                ticketId={ticket.id}
+              />
+            )}
+          </HasAuthSuspense>
+        }
         comments={
           <HasAuthSuspense
             fallback={

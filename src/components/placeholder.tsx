@@ -14,7 +14,7 @@ const Placeholder = ({
   button = <div />,
 }: PlaceholderProps) => (
   <div
-    className="grid h-full items-center justify-center gap-y-2 place-self-center"
+    className="grid h-full place-content-center gap-y-2"
     data-button={Boolean(button)}
   >
     {cloneElement(icon, {

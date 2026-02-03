@@ -27,9 +27,14 @@ const TICKET_SORT_OPTIONS: readonly SortOption[] = [
   },
 ];
 
-export { TICKET_ICONS, TICKET_STATUS_LABELS, TICKET_SORT_OPTIONS };
-
-export const TICKET_NOT_FOUND: Metadata = {
+const TICKET_NOT_FOUND: Metadata = {
   title: "Ticket Not Found",
   description: "The requested ticket could not be found.",
+};
+
+export {
+  TICKET_ICONS,
+  TICKET_STATUS_LABELS,
+  TICKET_SORT_OPTIONS,
+  TICKET_NOT_FOUND,
 };
