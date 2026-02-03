@@ -1,10 +1,12 @@
 "use server";
 import { headers } from "next/headers";
+import { cache } from "react";
 import type { UserProp } from "@/features/auth/types";
 import { auth } from "@/lib/auth";
 import { tryCatch } from "@/utils/try-catch";
+import { DEFAULT_NO_USER } from "../constants";
 
-const getUser = async (): Promise<UserProp> => {
+const getUser = cache(async (): Promise<UserProp> => {
   const { data: authSession } = await tryCatch(
     async () =>
       await auth.api.getSession({
@@ -19,7 +21,7 @@ const getUser = async (): Promise<UserProp> => {
     // If session is expired, return no user (Better Auth handles cleanup automatically)
     if (expiresAt < now) {
       // If session is expired, return no user (Better Auth handles cleanup automatically)
-      return { user: null, hasUser: false };
+      return DEFAULT_NO_USER;
     }
     // Extract activeOrganizationId from session.session and append to user
     const activeOrganizationId =
@@ -32,7 +34,7 @@ const getUser = async (): Promise<UserProp> => {
       hasUser: true,
     };
   }
-  return { user: null, hasUser: false };
-};
+  return DEFAULT_NO_USER;
+});
 
 export { getUser };

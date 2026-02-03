@@ -1,5 +1,11 @@
-import { Spinner } from "@/components/spinner";
+import { HeadingSkeleton } from "@/components/heading-skeleton";
+import { MembershipsSkeleton } from "@/features/memberships/components/memberships-skeleton";
 
-const MembershipsLoading = () => <Spinner />;
+const MembershipsLoading = () => (
+  <>
+    <HeadingSkeleton showActions showTabs />
+    <MembershipsSkeleton />
+  </>
+);
 
 export default MembershipsLoading;

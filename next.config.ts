@@ -38,7 +38,10 @@ const nextConfig: NextConfig = {
     // lucide-react is already optimized by default, but explicit is fine
     // valibot has confirmed barrel file issues (GitHub #425)
     // this has basically slowed the dev server to a halt
-    optimizePackageImports: isDev ? undefined : ["valibot"],
+    optimizePackageImports: isDev ? undefined : ["valibot", "lucide-react"],
+    serverActions: {
+      bodySizeLimit: "4mb",
+    },
   },
 };
 

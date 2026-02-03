@@ -21,3 +21,7 @@ export interface UnsuccessfulState {
   emptyStateMessage: string;
   errorStateMessage?: string;
 }
+
+export interface Rows {
+  rows?: number;
+}

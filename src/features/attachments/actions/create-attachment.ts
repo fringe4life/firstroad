@@ -1,14 +1,17 @@
 "use server";
-
+import { s3 } from "bun";
 import { revalidatePath } from "next/cache";
 import {
   array,
+  custom,
+  file,
   maxLength,
+  maxSize,
+  mimeType,
   minLength,
-  object,
+  minSize,
   pipe,
   safeParse,
-  string,
   ValiError,
 } from "valibot";
 import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
@@ -23,24 +26,30 @@ import {
   toActionState,
 } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
-import { FILE_NAME_MAX } from "../constants";
+import {
+  ACCEPTED_FILE_TYPES,
+  FILE_NAME_MAX,
+  MAX_SIZE_BYTES,
+  MAX_SIZE_MB,
+} from "../constants";
 import { attachmentS3Key } from "../utils/presign-attachments";
 
-const fileNameSchema = pipe(
-  string(),
-  minLength(1, "File name is required"),
-  maxLength(
-    FILE_NAME_MAX,
-    `File name must be at most ${FILE_NAME_MAX} characters`,
-  ),
+const fileSchema = pipe(
+  file("Please select a file."),
+  mimeType(ACCEPTED_FILE_TYPES, "File type is not supported"),
+  minSize(0, "File must not be empty"),
+  maxSize(MAX_SIZE_BYTES, `The maximum file size is ${MAX_SIZE_MB}MB`),
+  custom<File>((f) => {
+    const file = f as File;
+    return file.name.length >= 1 && file.name.length <= FILE_NAME_MAX;
+  }, `File name must be between 1 and ${FILE_NAME_MAX} characters`),
 );
 
-const filesSchema = object({
-  files: pipe(
-    array(fileNameSchema, "Select at least one file to upload"),
-    minLength(1, "Select at least one file to upload"),
-  ),
-});
+const filesSchema = pipe(
+  array(fileSchema),
+  minLength(1, "File is required"),
+  maxLength(5, "You can only upload up to 5 files at a time"),
+);
 
 const createAttachment = async (
   ticketId: string,
@@ -55,7 +64,7 @@ const createAttachment = async (
     );
   }
 
-  const ticket = await itemWithOwnership(findTicket(ticketId));
+  const ticket = await itemWithOwnership(findTicket(ticketId), user);
   if (!ticket) {
     return toActionState("Ticket not found", "ERROR");
   }
@@ -63,6 +72,7 @@ const createAttachment = async (
     return toActionState("Only the ticket owner can add attachments", "ERROR");
   }
 
+  // TODO: if this works on vercel delete this check
   if (typeof globalThis.Bun === "undefined" || !("s3" in globalThis.Bun)) {
     return toActionState(
       "Attachments require Bun runtime (S3 is not available)",
@@ -70,32 +80,28 @@ const createAttachment = async (
     );
   }
 
-  // Use globalThis.Bun.s3 (no top-level import from "bun") so this module loads in Node; Bun docs also support import { s3 } from "bun" when runtime is always Bun.
-  const s3 = globalThis.Bun.s3;
+  const files = Array.from(formData.getAll("files"));
 
-  const files = formData.getAll("files") as File[];
-  const validFiles = files.filter((f) => f instanceof File && f.size > 0);
-  const fileNames = validFiles.map((f) => f.name);
-
-  const parseResult = safeParse(filesSchema, { files: fileNames });
+  const parseResult = safeParse(filesSchema, files);
   if (!parseResult.success) {
     return fromErrorToActionState(new ValiError(parseResult.issues));
   }
 
-  const { error } = await tryCatch(async () => {
-    const validatedNames = parseResult.output.files;
+  const validatedFiles = parseResult.output;
 
+  const { error } = await tryCatch(async () => {
     // Create all attachment rows in parallel (one round-trip wave to DB)
     const attachments = await Promise.all(
-      validatedNames.map((name) =>
-        prisma.attachment.create({ data: { name, ticketId } }),
+      validatedFiles.map((file) =>
+        prisma.attachment.create({
+          data: { name: file.name, ticketId },
+        }),
       ),
     );
-
     // Upload all files to S3 in parallel (one wave of concurrent writes)
     await Promise.all(
       attachments.map(async (attachment, i) => {
-        const file = validFiles[i];
+        const file = validatedFiles[i];
         const key = attachmentS3Key(ticketId, attachment.id, attachment.name);
         const data = await file.arrayBuffer();
         await s3.file(key).write(data);

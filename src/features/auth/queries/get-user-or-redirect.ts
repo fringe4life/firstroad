@@ -2,7 +2,12 @@ import { redirect } from "next/navigation";
 import { getUser } from "@/features/auth/queries/get-user";
 import type { User } from "@/features/auth/types";
 import { getOrganisationByUser } from "@/features/organisation/queries/get-organisations-for-user";
-import { onboardingPath, signInPath, verifyEmailOTPSendPath } from "@/path";
+import {
+  onboardingPath,
+  selectActiveOrganisationPath,
+  signInPath,
+  verifyEmailOTPSendPath,
+} from "@/path";
 
 export interface GetUserRedirectOptions {
   checkEmailVerified?: boolean;
@@ -39,9 +44,11 @@ export const getUserOrRedirect = async (
     }
   }
 
-  if (checkActiveOrganisation && !user.activeOrganizationId) {
-    // TODO
-  }
+  const userNeedsActiveOrganisation =
+    checkActiveOrganisation && !user.activeOrganizationId;
 
+  if (userNeedsActiveOrganisation) {
+    throw redirect(selectActiveOrganisationPath());
+  }
   return user;
 };

@@ -10,7 +10,7 @@
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.18-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Biome](https://img.shields.io/badge/Biome-2.3.13-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
 [![Ultracite](https://img.shields.io/badge/Ultracite-7.1.3-000000)](https://ultracite.dev/)
-[![nuqs](https://img.shields.io/badge/nuqs-2.8.7-000000)](https://nuqs.47ng.com/)
+[![nuqs](https://img.shields.io/badge/nuqs-2.8.8-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.2.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Elysia](https://img.shields.io/badge/Elysia-1.4.21-000000)](https://elysiajs.com/)
 [![Inngest](https://img.shields.io/badge/Inngest-3.50.0-000000)](https://www.inngest.com/)
@@ -61,7 +61,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **URL Search Params**: nuqs 2.8 for type-safe URL parameters
 - **Email**: React Email 5.2 with Resend 6.9 for transactional emails
 - **API Framework**: Elysia 1.4 with @elysiajs/cors 1.4 for unified API routes
-- **Background Jobs**: Inngest 3.49 for background tasks and event handling
+- **Background Jobs**: Inngest 3.50 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
 - **Linting**: Biome 2.3.13 for fast formatting and linting with Ultracite 7.1.3 rules
 - **Type Checking**: TypeScript native preview for fast checking
@@ -458,6 +458,7 @@ Built with shadcn/ui and Tailwind CSS:
 
 ```bash
 # Development
+bun run dev:bun           # Start dev server with Bun + Webpack
 bun run dev              # Start dev server (Turbopack)
 bun run dev:inspect      # Start dev server with inspector (Turbopack)
 bun run next:upgrade     # Upgrade Next.js
@@ -483,6 +484,7 @@ bunx --bun prisma generate # Generate Prisma client
 bunx --bun prisma db push  # Push schema to database
 bunx --bun prisma db seed  # Seed database with sample data
 bun run reset:tickets    # Reset only ticket and comment data (preserves users)
+bun run clear:non-auth   # Clear all non-auth tables from the database
 bun run seed:members     # Add users to all organizations they are not members of
 
 # Background Jobs (Inngest)
