@@ -6,19 +6,23 @@ import { Heading } from "@/components/heading";
 import { Spinner } from "@/components/spinner";
 import { Suspend } from "@/components/suspend";
 import { buttonVariants } from "@/components/ui/button";
-import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
+import { getUser } from "@/features/auth/queries/get-user";
 import { Organisations } from "@/features/organisation/components/organisations";
-import { onboardingPath, organisationsPath } from "@/path";
+import { onboardingPath, organisationsPath, signInPath } from "@/path";
 
 const SelectActiveOrganisationPage = async () => {
   await connection();
-  const user = await getUserOrRedirect();
+  const { user, hasUser } = await getUser();
+
+  if (!hasUser) {
+    throw redirect(signInPath());
+  }
 
   if (user.activeOrganizationId) {
     throw redirect(organisationsPath());
   }
   return (
-    <div className="grid h-full grid-rows-[min-content_min-content_1fr] gap-y-8">
+    <>
       <Heading
         actions={
           <Link className={buttonVariants()} href={onboardingPath()}>
@@ -32,7 +36,7 @@ const SelectActiveOrganisationPage = async () => {
       <Suspend fallback={<Spinner />}>
         <Organisations limitedAccess />
       </Suspend>
-    </div>
+    </>
   );
 };
 

@@ -29,6 +29,26 @@ interface UseConfirmDialogProps {
   onIsPending?: (isPending: boolean) => void;
 }
 
+/**
+ * @deprecated Use the compound component pattern instead:
+ *
+ * @example
+ * ```tsx
+ * <ConfirmDialog action={myAction} title="Confirm">
+ *   {({ isPending }) => (
+ *     <ConfirmDialog.Trigger>
+ *       <Button>Delete</Button>
+ *     </ConfirmDialog.Trigger>
+ *   )}
+ * </ConfirmDialog>
+ * ```
+ *
+ * The compound component pattern provides:
+ * - Better composability
+ * - Optimistic dialog closing (better UX)
+ * - No useEffect for isPending tracking (fewer rerenders)
+ * - Cleaner API
+ */
 const useConfirmDialog = ({
   action,
   trigger,
