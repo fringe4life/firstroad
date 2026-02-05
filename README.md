@@ -27,7 +27,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **🔐 Authentication**: Secure user authentication with Better Auth (email/password + OTP + GitHub OAuth) with email enumeration protection
 - **🏢 Organization Management**: Create and manage organizations with membership and invitation systems, role-based access control (owner, admin, member), granular permissions (canDeleteTicket), and admin tabs for managing members and invitations
 - **🎫 Ticket Management**: Create, edit, and manage tickets with status tracking
-- **📎 Ticket Attachments**: Owner-only file uploads with Bun S3; presigned download URLs for all viewers (Bun runtime + Webpack; on Vercel use `bunVersion: "1.x"` in vercel.json so Server Actions run on Bun and `Bun.s3` works)
+- **📎 Ticket Attachments**: Owner-only file uploads with Bun S3, image previews before upload, and owner-only delete actions; presigned download URLs for all viewers (Bun runtime + Webpack; on Vercel use `bunVersion: "1.x"` in vercel.json so Server Actions run on Bun and `Bun.s3` works)
 - **💬 Comments System**: Add, edit, and delete comments on tickets with infinite pagination
 - **🌙 Dark Mode**: Beautiful light/dark theme with smooth transitions
 - **📱 Responsive Design**: Optimized for desktop and mobile devices with PPR navigation and cached components

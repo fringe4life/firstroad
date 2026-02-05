@@ -12,7 +12,11 @@ const Attachments = ({
   <CardCompact
     content={
       <div className="grid grid-rows-[1fr_min-content] gap-y-4">
-        <AttachmentList attachments={attachments} />
+        <AttachmentList
+          attachments={attachments}
+          isOwner={isOwner}
+          ticketId={ticketId}
+        />
         {isOwner && (
           <AttachmentCreateForm
             createAttachmentAction={createAttachmentAction}

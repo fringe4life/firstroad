@@ -23,9 +23,6 @@ const presignAttachments = (
   if (!attachments) {
     return undefined;
   }
-  if (typeof globalThis.Bun === "undefined" || !("s3" in globalThis.Bun)) {
-    return attachments.map((a) => ({ ...a, downloadUrl: "" }));
-  }
 
   return attachments.map((a) => {
     const key = attachmentS3Key(organizationId, ticketId, a.id, a.name);

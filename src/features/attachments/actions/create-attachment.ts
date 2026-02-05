@@ -78,14 +78,6 @@ const createAttachment = async (
     return toActionState("Only the ticket owner can add attachments", "ERROR");
   }
 
-  // TODO: if this works on vercel delete this check
-  if (typeof globalThis.Bun === "undefined" || !("s3" in globalThis.Bun)) {
-    return toActionState(
-      "Attachments require Bun runtime (S3 is not available)",
-      "ERROR",
-    );
-  }
-
   const validatedFiles = parseResult.output;
 
   const { error } = await tryCatch(async () => {

@@ -56,7 +56,7 @@ const CommentCreateForm = ({
       onSuccessState={handleSuccess}
       state={state as ActionState<unknown>}
     >
-      <div>
+      <div className="grid gap-y-4">
         <Label htmlFor={contentId}>
           {commentId ? "Edit comment" : "Add a comment"}
         </Label>

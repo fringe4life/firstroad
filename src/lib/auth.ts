@@ -130,7 +130,7 @@ export const auth = betterAuth({
             name: "user.welcome",
             data: {
               email: user.email,
-              userName: user.name ?? "",
+              userName: user.name ?? "User",
             },
           }),
         );
@@ -193,7 +193,7 @@ export const auth = betterAuth({
           data: {
             email: user.email,
             resetUrl,
-            userName: user.name ?? "",
+            userName: user.name ?? "User",
           },
         }),
       );
@@ -205,7 +205,7 @@ export const auth = betterAuth({
           name: "password.changed",
           data: {
             email: user.email,
-            userName: user.name ?? "",
+            userName: user.name ?? "User",
           },
         }),
       );
@@ -245,7 +245,7 @@ export const auth = betterAuth({
           data: {
             email: user.email,
             verificationUrl,
-            userName: user.name ?? "",
+            userName: user.name ?? "User",
           },
         }),
       );
@@ -258,7 +258,8 @@ export const auth = betterAuth({
     github: {
       clientId: env.GITHUB_CLIENT_ID,
       clientSecret: env.GITHUB_CLIENT_SECRET,
-      redirectURI: "http://localhost:3000/api/auth/callback/github",
+      // redirectURI: "http://localhost:3000/api/auth/callback/github",
+      redirectURI: "https://www.first-ticket.fyi/api/auth/callback/github",
     },
   },
 });

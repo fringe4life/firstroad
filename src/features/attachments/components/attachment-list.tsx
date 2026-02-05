@@ -7,9 +7,15 @@ import type { AttachmentWithUrl } from "../types";
 
 interface AttachmentListProps {
   attachments: List<AttachmentWithUrl>;
+  isOwner: boolean;
+  ticketId: string;
 }
 
-const AttachmentList = ({ attachments }: AttachmentListProps) => (
+const AttachmentList = ({
+  attachments,
+  isOwner,
+  ticketId,
+}: AttachmentListProps) => (
   <GenericComponent
     as="ul"
     Component={AttachmentItem}
@@ -17,7 +23,7 @@ const AttachmentList = ({ attachments }: AttachmentListProps) => (
     emptyStateMessage="No attachments yet."
     errorStateMessage="Failed to load attachments"
     items={attachments}
-    renderProps={(item) => ({ attachment: item })}
+    renderProps={(item) => ({ attachment: item, isOwner, ticketId })}
   />
 );
 
