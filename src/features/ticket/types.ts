@@ -10,6 +10,12 @@ export type BaseTicket = TicketGetPayload<{
   include: { user: { select: { name: true } } };
 }>;
 
+export interface TicketCardProps {
+  ticket: BaseTicket;
+  actions?: React.ReactNode;
+  variant?: "list" | "detail";
+}
+
 export interface ByOrganisation {
   byOrganisation?: boolean;
 }
@@ -42,34 +48,6 @@ export interface TicketAccess
  * Ticket with ownership and permission information
  */
 export type TicketWithAccess = BaseTicket & TicketAccess;
-
-/**
- * Base props shared by both TicketItem variants
- */
-interface TicketItemBaseProps {
-  ticket: BaseTicket;
-}
-
-/**
- * List page variant - no comments, access props required
- */
-interface TicketItemListProps extends TicketItemBaseProps, TicketAccess {
-  isDetail?: false;
-}
-
-/**
- * Detail page variant - comments required, access fetched via Suspense
- */
-interface TicketItemDetailProps extends TicketItemBaseProps {
-  isDetail: true;
-  comments: React.ReactNode;
-  attachments: React.ReactNode;
-}
-
-/**
- * Discriminated union - TypeScript enforces correct props based on isDetail
- */
-export type TicketItemProps = TicketItemListProps | TicketItemDetailProps;
 
 export interface IsDetail {
   isDetail?: boolean;

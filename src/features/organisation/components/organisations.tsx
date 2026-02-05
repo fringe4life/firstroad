@@ -5,9 +5,19 @@ import { getOrganisationByUser } from "@/features/organisation/queries/get-organ
 import type { OrganisationProps } from "../types";
 import { OrganisationsTableHeader } from "./organisations-table-header";
 
-const Organisations = async ({ limitedAccess }: OrganisationProps) => {
-  const user = await getUserOrRedirect({ checkOrganistation: false });
-  const organisations = await getOrganisationByUser();
+const Organisations = async ({
+  limitedAccess,
+  organisations: prefetchedOrganisations,
+  user: prefetchedUser,
+}: OrganisationProps) => {
+  const user =
+    prefetchedUser ??
+    (await getUserOrRedirect({
+      checkActiveOrganisation: !limitedAccess,
+      checkOrganistation: false,
+    }));
+  const organisations =
+    prefetchedOrganisations ?? (await getOrganisationByUser(user.id));
   const activeOrganizationId = user.activeOrganizationId;
 
   return (

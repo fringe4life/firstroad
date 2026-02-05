@@ -1,23 +1,31 @@
-import { GenericComponent } from "@/components/generic-component";
+import { Bug, CircleSlash2 } from "lucide-react";
+import { Placeholder } from "@/components/placeholder";
 import type { TicketListProps } from "@/features/ticket/types";
-import { TicketItem } from "./ticket-item";
+import { TicketListItem } from "./ticket-list-item";
 
 const TicketList = ({ tickets }: TicketListProps) => {
+  // Handle error state
+  if (!tickets) {
+    return <Placeholder icon={<Bug />} label="Failed to fetch tickets" />;
+  }
+
+  // Handle empty state
+  if (tickets.length === 0) {
+    return <Placeholder icon={<CircleSlash2 />} label="No tickets found" />;
+  }
+
   return (
-    <GenericComponent
-      Component={TicketItem}
-      className="grid h-full content-start justify-items-center gap-y-4 self-start justify-self-stretch"
-      emptyStateMessage="No tickets found"
-      errorStateMessage="Failed to fetch tickets"
-      items={tickets}
-      renderProps={(ticket) => ({
-        isDetail: false as const,
-        ticket,
-        isOwner: ticket.isOwner,
-        canDeleteTicket: ticket.canDeleteTicket,
-        canUpdateTicket: ticket.canUpdateTicket,
-      })}
-    />
+    <div className="grid h-full content-start justify-items-center gap-y-4 self-start justify-self-stretch">
+      {tickets.map((ticket) => (
+        <TicketListItem
+          canDeleteTicket={ticket.canDeleteTicket}
+          canUpdateTicket={ticket.canUpdateTicket}
+          isOwner={ticket.isOwner}
+          key={ticket.id}
+          ticket={ticket}
+        />
+      ))}
+    </div>
   );
 };
 

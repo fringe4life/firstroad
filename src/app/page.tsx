@@ -19,7 +19,6 @@ const HomePage = ({ searchParams }: PageProps<"/">) => (
       description="Tickets by everyone at one place"
       title="All Tickets"
     />
-
     <Tickets searchParams={searchParams} />
   </div>
 );

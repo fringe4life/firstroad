@@ -3,11 +3,11 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { Heading } from "@/components/heading";
-import { Spinner } from "@/components/spinner";
 import { Suspend } from "@/components/suspend";
 import { buttonVariants } from "@/components/ui/button";
 import { getUser } from "@/features/auth/queries/get-user";
 import { Organisations } from "@/features/organisation/components/organisations";
+import { OrganisationsSkeleton } from "@/features/organisation/components/organisations-skeleton";
 import { onboardingPath, organisationsPath, signInPath } from "@/path";
 
 const SelectActiveOrganisationPage = async () => {
@@ -33,8 +33,8 @@ const SelectActiveOrganisationPage = async () => {
         description="Select your active organisation"
         title="Select Active Organisation"
       />
-      <Suspend fallback={<Spinner />}>
-        <Organisations limitedAccess />
+      <Suspend fallback={<OrganisationsSkeleton />}>
+        <Organisations limitedAccess user={user} />
       </Suspend>
     </>
   );

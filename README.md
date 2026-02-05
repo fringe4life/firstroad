@@ -9,7 +9,7 @@
 [![Better Auth](https://img.shields.io/badge/Better%20Auth-beta-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.18-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Biome](https://img.shields.io/badge/Biome-2.3.13-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-7.1.3-000000)](https://ultracite.dev/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-7.1.4-000000)](https://ultracite.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.8.8-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.2.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Elysia](https://img.shields.io/badge/Elysia-1.4.21-000000)](https://elysiajs.com/)
@@ -305,7 +305,7 @@ src/
 │   └── unsuccessful-table.tsx # Reusable empty/error state table component
 ├── features/                 # Feature modules
 │   ├── attachments/          # Ticket attachments (Bun S3): actions, components, queries, presign utils, skeletons
-│   ├── auth/                 # Auth actions, components, events, queries, types
+│   ├── auth/                 # Auth actions, components (OTP verify with connection, skeletons), events, queries, types
 │   ├── comment/              # Comment actions, optimistic hooks, components, store
 │   ├── invitations/          # Invitation actions (create, cancel, accept, reject), components, email events, queries
 │   ├── memberships/          # Membership actions, components, queries, skeletons (role + batch permission checks)
@@ -354,7 +354,8 @@ The application uses Better Auth with multiple authentication methods:
 - **Sign-in OTP**: `/sign-in/otp/send` → `/sign-in/otp/verify`
 - **Email Verification OTP**: `/verify-email/otp/send` → `/verify-email/otp/verify`
 - **Dedicated Server Actions**: Purpose-specific actions for each OTP flow
-- **Reusable Components**: `OTPSendForm` and `OTPVerifyForm` for consistent UX
+- **Reusable Components**: `OTPSendForm`, `OTPVerifyForm`, and `OtpVerifyFormWithConnection` (shared server form with redirect) for consistent UX
+- **Skeleton Fallback**: `OtpVerifyFormSkeleton` replaces spinner on verify pages
 - **InputOTP Component**: Enhanced OTP input with shadcn/ui
 - **Suspense Patterns**: Proper suspension with `CardCompact` for optimal caching
 - **Toast Notifications**: Success feedback for OTP sent

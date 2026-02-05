@@ -4,7 +4,7 @@ import { SignUpPageContent } from "@/features/password/components/sign-up-page-c
 const SignUpModal = () => (
   <Dialog defaultOpen>
     <DialogTitle className="sr-only">Create an account</DialogTitle>
-    <DialogContent className="sm:max-content-widest">
+    <DialogContent size="wide" variant="ghost">
       <SignUpPageContent />
     </DialogContent>
   </Dialog>

@@ -32,6 +32,8 @@ const organisationsPath = (): Route => "/organisations";
 const organisationPath = (id: string): Route =>
   `${organisationsPath()}/${id}` as Route;
 
+const organisationsCreatePath = (): Route => "/organisations/create";
+
 const membershipsPath = (id: string): Route =>
   `${organisationPath(id)}/memberships` as Route;
 
@@ -60,6 +62,7 @@ export {
   selectActiveOrganisationPath,
   signInOTPSendPath,
   signInOTPVerifyPath,
+  organisationsCreatePath,
   signInPath,
   signOutPath,
   signUpPath,

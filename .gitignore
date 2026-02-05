@@ -27,6 +27,10 @@
 
 # cursor
 .cursor/mcp.json
+.cursor/skills/
+
+# agents / skills (generated, local-only)
+.agents/skills/
 
 # debug
 npm-debug.log*

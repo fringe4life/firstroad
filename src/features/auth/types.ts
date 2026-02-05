@@ -33,3 +33,7 @@ export interface UserVerifiable extends Pick<TicketModel, "userId"> {}
 export interface IsOwner {
   isOwner: boolean;
 }
+
+export interface EmailSearchParams {
+  searchParams: Promise<{ email?: string }>;
+}

@@ -12,7 +12,6 @@ import type {
   TicketOwnerOptionsFetchProps,
   TicketOwnerOptionsWithAccessProps,
 } from "@/features/ticket/types";
-import { selectDetailElement } from "@/features/ticket/utils/detail-element";
 import { ticketEditPath } from "@/path";
 
 /**
@@ -39,22 +38,18 @@ const TicketOwnerOptionsContent = ({
     </Link>
   ) : null;
 
-  const moreMenu = selectDetailElement({
-    isDetail,
-    element: null,
-    elementIfIsDetail: (
-      <TicketMoreMenu
-        canDeleteTicket={canDeleteTicket}
-        canUpdateTicket={canUpdateTicket}
-        ticket={{ id: ticket.id, status: ticket.status }}
-        trigger={
-          <Button size="icon" variant="outline">
-            <LucideMoreVertical className="aspect-square w-4" />
-          </Button>
-        }
-      />
-    ),
-  });
+  const moreMenu = isDetail ? (
+    <TicketMoreMenu
+      canDeleteTicket={canDeleteTicket}
+      canUpdateTicket={canUpdateTicket}
+      ticket={{ id: ticket.id, status: ticket.status }}
+      trigger={
+        <Button size="icon" variant="outline">
+          <LucideMoreVertical className="aspect-square w-4" />
+        </Button>
+      }
+    />
+  ) : null;
 
   return (
     <div className="flex flex-col gap-y-1">
@@ -125,11 +120,7 @@ const TicketOwnerOptionsFetch = ({
     fallback={
       <div className="grid gap-y-1">
         <IconButtonSkeleton />
-        {selectDetailElement({
-          isDetail,
-          element: null,
-          elementIfIsDetail: <IconButtonSkeleton />,
-        })}
+        {isDetail && <IconButtonSkeleton />}
       </div>
     }
   >

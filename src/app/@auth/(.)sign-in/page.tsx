@@ -8,7 +8,7 @@ const SignInModal = () => {
   const router = useRouter();
   return (
     <Dialog defaultOpen onOpenChange={() => router.back()}>
-      <DialogContent className="sm:max-content-widest">
+      <DialogContent size="wide" variant="ghost">
         <DialogTitle className="sr-only">Sign in to your account</DialogTitle>
         <SignInPageContent />
       </DialogContent>

@@ -21,8 +21,8 @@ const Attachments = ({
         )}
       </div>
     }
-    description="Upload files for this ticket"
-    title="Add attachment"
+    description="Attached Images or PDFs"
+    title="Attachments"
   />
 );
 

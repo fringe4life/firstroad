@@ -57,6 +57,12 @@ const createAttachment = async (
   formData: FormData,
 ): Promise<ActionState> => {
   const { user } = await getUser();
+  const files = Array.from(formData.getAll("files"));
+
+  const parseResult = safeParse(filesSchema, files);
+  if (!parseResult.success) {
+    return fromErrorToActionState(new ValiError(parseResult.issues));
+  }
   if (!user?.id) {
     return toActionState(
       "You must be signed in to upload attachments",
@@ -80,13 +86,6 @@ const createAttachment = async (
     );
   }
 
-  const files = Array.from(formData.getAll("files"));
-
-  const parseResult = safeParse(filesSchema, files);
-  if (!parseResult.success) {
-    return fromErrorToActionState(new ValiError(parseResult.issues));
-  }
-
   const validatedFiles = parseResult.output;
 
   const { error } = await tryCatch(async () => {
@@ -102,7 +101,12 @@ const createAttachment = async (
     await Promise.all(
       attachments.map(async (attachment, i) => {
         const file = validatedFiles[i];
-        const key = attachmentS3Key(ticketId, attachment.id, attachment.name);
+        const key = attachmentS3Key(
+          ticket.organizationId,
+          ticket.id,
+          attachment.id,
+          attachment.name,
+        );
         const data = await file.arrayBuffer();
         await s3.file(key).write(data);
       }),

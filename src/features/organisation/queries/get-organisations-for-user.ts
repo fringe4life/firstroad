@@ -4,25 +4,31 @@ import type { Maybe } from "@/types";
 import { tryCatch } from "@/utils/try-catch";
 import type { BaseOrganisation, Member } from "../types";
 
-const getOrganisationByUser = async (): Promise<Maybe<BaseOrganisation[]>> => {
+const getOrganisationByUser = async (
+  userId?: string,
+): Promise<Maybe<BaseOrganisation[]>> => {
   "use cache: private";
-  const { id: userId } = await getUserOrRedirect({
-    checkOrganistation: false,
-  });
+  const id =
+    userId ??
+    (
+      await getUserOrRedirect({
+        checkOrganistation: false,
+      })
+    ).id;
 
   const { data: organisations } = await tryCatch(() =>
     prisma.organization.findMany({
       where: {
         members: {
           some: {
-            userId,
+            userId: id,
           },
         },
       },
       include: {
         members: {
           where: {
-            userId,
+            userId: id,
           },
         },
         _count: { select: { members: true } },

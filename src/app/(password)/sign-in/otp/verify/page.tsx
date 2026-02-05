@@ -1,34 +1,22 @@
 import Link from "next/link";
-import { connection } from "next/server";
 import { CardCompact } from "@/components/card-compact";
-import { Spinner } from "@/components/spinner";
 import { Suspend } from "@/components/suspend";
 import { verifySignInOTP } from "@/features/auth/actions/verify-otp-action";
-import { OTPVerifyForm } from "@/features/auth/components/otp-verify-form";
+import { OtpVerifyFormSkeleton } from "@/features/auth/components/otp-verify-form-skeleton";
+import { OtpVerifyFormWithConnection } from "@/features/auth/components/otp-verify-form-with-connection";
+import type { EmailSearchParams } from "@/features/auth/types";
 import { signInPath } from "@/path";
 
-interface SignInOTPVerifyPageProps {
-  searchParams: Promise<{ email?: string }>;
-}
-
-const SignInOTPVerifyForm = async ({
-  searchParams,
-}: SignInOTPVerifyPageProps) => {
-  await connection();
-  const { email } = await searchParams;
-  return (
-    <OTPVerifyForm
-      email={email}
-      submitLabel="Sign In"
-      verifyOTPAction={verifySignInOTP}
-    />
-  );
-};
-const SignInOTPVerifyPage = ({ searchParams }: SignInOTPVerifyPageProps) => (
+const SignInOTPVerifyPage = ({ searchParams }: EmailSearchParams) => (
   <CardCompact
     content={
-      <Suspend fallback={<Spinner />}>
-        <SignInOTPVerifyForm searchParams={searchParams} />
+      <Suspend fallback={<OtpVerifyFormSkeleton />}>
+        <OtpVerifyFormWithConnection
+          redirectPathWhenNoEmail={signInPath()}
+          searchParams={searchParams}
+          submitLabel="Sign In"
+          verifyOTPAction={verifySignInOTP}
+        />
       </Suspend>
     }
     description="Enter the sign-in code sent to your email"

@@ -1,7 +1,7 @@
+import type { ActiveOrganizationId, User } from "@/features/auth/types";
 import type { Prisma } from "@/generated/prisma/client";
 import type { auth } from "@/lib/auth";
 import type { List, UnsuccessfulState } from "@/types";
-import type { ActiveOrganizationId } from "../auth/types";
 
 export type Organisation = typeof auth.$Infer.Organization;
 
@@ -32,7 +32,10 @@ interface LimitedAccess {
   limitedAccess?: boolean;
 }
 
-export interface OrganisationProps extends LimitedAccess {}
+export interface OrganisationProps extends LimitedAccess {
+  organisations?: List<BaseOrganisation>;
+  user?: User;
+}
 
 export interface OrganisationListProps
   extends UnsuccessfulState,

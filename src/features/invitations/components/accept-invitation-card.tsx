@@ -4,10 +4,8 @@ import { useActionState } from "react";
 import { FieldError } from "@/components/form/field-error";
 import { Form } from "@/components/form/form";
 import { SubmitButton } from "@/components/form/submit-button";
-import { Button } from "@/components/ui/button";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
-import { acceptInvitation } from "../actions/accept-invitation";
-import { rejectInvitation } from "../actions/reject-invitation";
+import { invitationDecisionAction } from "../actions/invitation-decision";
 import type { InvitationDetails } from "../queries/get-invitation";
 
 interface AcceptInvitationCardProps {
@@ -15,13 +13,8 @@ interface AcceptInvitationCardProps {
 }
 
 const AcceptInvitationCard = ({ invitation }: AcceptInvitationCardProps) => {
-  const [acceptState, acceptAction] = useActionState(
-    acceptInvitation.bind(null, invitation.id),
-    EMPTY_ACTION_STATE,
-  );
-
-  const [rejectState, rejectAction] = useActionState(
-    rejectInvitation.bind(null, invitation.id),
+  const [state, action] = useActionState(
+    invitationDecisionAction.bind(null, invitation.id),
     EMPTY_ACTION_STATE,
   );
 
@@ -70,16 +63,19 @@ const AcceptInvitationCard = ({ invitation }: AcceptInvitationCardProps) => {
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-        <Form action={acceptAction} state={acceptState}>
-          <SubmitButton label="Accept Invitation" />
-          <FieldError actionState={acceptState} name="root" />
-        </Form>
-
-        <Form action={rejectAction} state={rejectState}>
-          <Button type="submit" variant="outline">
-            Decline
-          </Button>
-          <FieldError actionState={rejectState} name="root" />
+        <Form action={action} state={state}>
+          <SubmitButton
+            label="Accept Invitation"
+            name="decision"
+            value="accept"
+          />
+          <SubmitButton
+            label="Decline"
+            name="decision"
+            value="reject"
+            variant="destructive"
+          />
+          <FieldError actionState={state} name="root" />
         </Form>
       </div>
     </div>

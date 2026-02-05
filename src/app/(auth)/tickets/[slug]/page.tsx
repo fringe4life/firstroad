@@ -3,8 +3,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { createAttachment } from "@/features/attachments/actions/create-attachment";
 import { Attachments } from "@/features/attachments/components/attachments";
-import { AttachmentFormSkeleton } from "@/features/attachments/components/skeletons/attachment-form-skeleton";
-import { AttachmentListSkeleton } from "@/features/attachments/components/skeletons/attachment-list-skeleton";
+import { AttachmentsSkeleton } from "@/features/attachments/components/skeletons/attachments-skeleton";
 import { getAttachmentsByTicket } from "@/features/attachments/queries/get-attachments-by-ticket";
 import { presignAttachments } from "@/features/attachments/utils/presign-attachments";
 import { HasAuthSuspense } from "@/features/auth/components/has-auth";
@@ -15,7 +14,7 @@ import { CommentFormSkeleton } from "@/features/comment/components/skeletons/com
 import { CommentListSkeleton } from "@/features/comment/components/skeletons/comment-list-skeleton";
 import { getCommentsByTicketSlug } from "@/features/comment/dal/get-comments";
 import { TICKET_NOT_FOUND } from "@/features/constants";
-import { TicketItem } from "@/features/ticket/components/ticket-item";
+import { TicketDetailView } from "@/features/ticket/components/ticket-detail-view";
 import { getAllTicketSlugs } from "@/features/ticket/queries/get-all-ticket-slugs";
 import { getTicketBySlug } from "@/features/ticket/queries/get-ticket";
 import { ticketsPath } from "@/path";
@@ -56,7 +55,11 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
   }
 
   const attachments = await getAttachmentsByTicket(ticket.id);
-  const attachmentsWithUrls = presignAttachments(ticket.id, attachments);
+  const attachmentsWithUrls = presignAttachments(
+    ticket.organizationId,
+    ticket.id,
+    attachments,
+  );
 
   return (
     <div className="grid h-full w-full grid-rows-[min-content_1fr] gap-y-8">
@@ -66,16 +69,9 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
           { title: ticket.title },
         ]}
       />
-      <TicketItem
-        attachments={
-          <HasAuthSuspense
-            fallback={
-              <>
-                <AttachmentFormSkeleton />
-                <AttachmentListSkeleton />
-              </>
-            }
-          >
+      <TicketDetailView
+        attachmentsSlot={
+          <HasAuthSuspense fallback={<AttachmentsSkeleton />}>
             {(user) => (
               <Attachments
                 attachments={attachmentsWithUrls}
@@ -86,7 +82,7 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
             )}
           </HasAuthSuspense>
         }
-        comments={
+        commentsSlot={
           <HasAuthSuspense
             fallback={
               <>
@@ -110,7 +106,6 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
             )}
           </HasAuthSuspense>
         }
-        isDetail={true}
         ticket={ticket}
       />
     </div>

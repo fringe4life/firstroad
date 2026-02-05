@@ -14,6 +14,7 @@ const EditTicketPage = async ({
   const user = await getUserOrRedirect();
   const { slug } = await params;
   const ticket = await itemWithOwnership(getTicketBySlug(slug), user);
+  // TODO: add ticket fine grained permissions check
   if (!ticket?.isOwner) {
     throw notFound();
   }

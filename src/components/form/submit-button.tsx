@@ -11,7 +11,9 @@ interface SubmitButtonProps {
   variant?: React.ComponentProps<typeof Button>["variant"];
   size?: React.ComponentProps<typeof Button>["size"];
   disabled?: boolean;
+  name?: string;
   showLoader?: boolean;
+  value?: string;
 }
 
 const SubmitButton = ({
@@ -20,7 +22,9 @@ const SubmitButton = ({
   variant,
   size,
   disabled = false,
+  name,
   showLoader = true,
+  value,
 }: SubmitButtonProps) => {
   const { pending } = useFormStatus();
 
@@ -30,8 +34,10 @@ const SubmitButton = ({
   return (
     <Button
       disabled={pending || disabled}
+      name={name}
       size={size}
       type="submit"
+      value={value}
       variant={variant}
     >
       {shouldShowLoader && (

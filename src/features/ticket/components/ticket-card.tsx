@@ -7,14 +7,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { TICKET_ICONS } from "@/features/constants";
-import type { BaseTicket } from "@/features/ticket/types";
+import type { TicketCardProps } from "@/features/ticket/types";
 import { toCurrencyFromCent } from "@/utils/currency";
-
-interface TicketCardProps {
-  ticket: BaseTicket;
-  actions?: React.ReactNode;
-  variant?: "list" | "detail";
-}
 
 /**
  * Base ticket card component - SSG-compatible (no user context dependencies)

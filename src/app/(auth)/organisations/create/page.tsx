@@ -5,6 +5,7 @@ import { CreateOrganisationForm } from "@/features/organisation/components/creat
 const CreateOrganisationsPage = () => (
   <div className="grid h-full w-full place-content-center">
     <CardCompact
+      className="max-content-narrow"
       content={
         <CreateOrganisationForm createOrganisationAction={createOrganisation} />
       }

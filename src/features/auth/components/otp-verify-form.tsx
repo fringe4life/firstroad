@@ -13,10 +13,10 @@ import { Label } from "@/components/ui/label";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 import type { verifyEmailVerificationOTP } from "../actions/verify-otp-action";
 
-interface OTPVerifyFormProps {
+export interface OTPVerifyFormProps {
   verifyOTPAction: typeof verifyEmailVerificationOTP;
   submitLabel: string;
-  email?: string;
+  email: string;
 }
 
 const OTPVerifyForm = ({
@@ -30,11 +30,9 @@ const OTPVerifyForm = ({
   return (
     <Form action={action} state={state || EMPTY_ACTION_STATE}>
       <div className="space-y-4">
-        {Boolean(email) && (
-          <p className="text-muted-foreground text-sm">
-            Code sent to: <span className="font-medium">{email}</span>
-          </p>
-        )}
+        <p className="text-muted-foreground text-sm">
+          Code sent to: <span className="font-medium">{email}</span>
+        </p>
 
         <div className="space-y-2">
           <Label htmlFor={otpId}>Verification Code</Label>
@@ -52,9 +50,7 @@ const OTPVerifyForm = ({
           </InputOTP>
           <FieldError actionState={state || EMPTY_ACTION_STATE} name="otp" />
         </div>
-
-        {/* Hidden email field for form submission */}
-        {Boolean(email) && <input name="email" type="hidden" value={email} />}
+        <input name="email" type="hidden" value={email} />
 
         <SubmitButton label={submitLabel} />
       </div>

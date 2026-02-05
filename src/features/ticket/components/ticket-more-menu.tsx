@@ -1,7 +1,7 @@
 "use client";
 import { toast } from "sonner";
 import { ConfirmDeleteIcon } from "@/components/confirm-delete-icon";
-import { useConfirmDialog } from "@/components/confirm-dialog";
+import { ConfirmDialog } from "@/components/confirm-dialog/index";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,20 +22,6 @@ const TicketMoreMenu = ({
   canDeleteTicket = true,
   canUpdateTicket = true,
 }: TicketMoreMenuProps) => {
-  const [getDeleteButton, deleteDialog, isPending] = useConfirmDialog({
-    action: deleteTicket.bind(null, ticket.id),
-    trigger: ({ isPending: isPendingArg, onClick }) => (
-      <DropdownMenuItem
-        className="flex justify-between px-4"
-        disabled={isPendingArg}
-        onClick={onClick}
-      >
-        <ConfirmDeleteIcon isPending={isPendingArg} />
-        <span>Delete</span>
-      </DropdownMenuItem>
-    ),
-  });
-
   const handleValueChange = async (value: string) => {
     const promise = updateStatus(value as TicketStatus, ticket.id);
 
@@ -66,17 +52,25 @@ const TicketMoreMenu = ({
   );
 
   return (
-    <>
-      {canDeleteTicket && deleteDialog}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56" side="left">
-          {canUpdateTicket && radioOptions}
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56" side="left">
+        {canUpdateTicket && radioOptions}
 
-          {canDeleteTicket && getDeleteButton(isPending)}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </>
+        {canDeleteTicket && (
+          <ConfirmDialog action={deleteTicket.bind(null, ticket.id)}>
+            {({ isPending }) => (
+              <ConfirmDialog.Trigger>
+                <DropdownMenuItem className="flex justify-between px-4">
+                  <ConfirmDeleteIcon isPending={isPending} />
+                  <span>Delete</span>
+                </DropdownMenuItem>
+              </ConfirmDialog.Trigger>
+            )}
+          </ConfirmDialog>
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
