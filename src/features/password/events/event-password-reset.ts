@@ -4,7 +4,6 @@ import {
   type InferOutput,
   minLength,
   object,
-  optional,
   parse,
   pipe,
   string,
@@ -21,7 +20,7 @@ const passwordResetSchema = object({
     examples(["bob@gmail.com", "alice@yahoo.com", "john@protonmail.com"]),
   ),
   resetUrl: pipe(string(), url()),
-  userName: optional(string()),
+  userName: pipe(string(), minLength(1, "User name is required")),
 });
 
 export type PasswordResetEventData = InferOutput<typeof passwordResetSchema>;

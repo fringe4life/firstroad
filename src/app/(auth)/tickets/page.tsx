@@ -38,11 +38,10 @@ const TicketsPage = ({ searchParams }: PageProps<"/tickets">) => {
       />
       <RequireAuthSuspense
         fallback={
-          <>
+          <div className="grid grid-rows-[min-content_1fr] gap-y-4">
             <TicketControlsFallback />
-            <TicketFormSkeleton />
             <TicketListSkeleton />
-          </>
+          </div>
         }
         redirectPath={ticketsPath()}
       >

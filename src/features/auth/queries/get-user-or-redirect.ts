@@ -37,7 +37,7 @@ export const getUserOrRedirect = async (
   }
 
   if (checkOrganistation) {
-    const organisations = await getOrganisationByUser(user.id);
+    const organisations = await getOrganisationByUser();
 
     if (!organisations || organisations.length === 0) {
       throw redirect(onboardingPath());

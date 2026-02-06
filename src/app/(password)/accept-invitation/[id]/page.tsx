@@ -2,15 +2,15 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { connection } from "next/server";
 import { CardCompact } from "@/components/card-compact";
-import { Spinner } from "@/components/spinner";
 import { Suspend } from "@/components/suspend";
 import { getUser } from "@/features/auth/queries/get-user";
 import { AcceptInvitationCard } from "@/features/invitations/components/accept-invitation-card";
+import { AcceptInvitationCardSkeleton } from "@/features/invitations/components/accept-invitation-card-skeleton";
 import { getInvitation } from "@/features/invitations/queries/get-invitation";
 import { acceptInvitationPath, signInPath } from "@/path";
 
 interface AcceptInvitationPageProps {
-  params: Promise<{ id: string }>;
+  params: PageProps<"/accept-invitation/[id]">["params"];
 }
 
 const AcceptInvitationContent = async ({
@@ -55,7 +55,7 @@ const AcceptInvitationPage = ({
 }: PageProps<"/accept-invitation/[id]">) => (
   <CardCompact
     content={
-      <Suspend fallback={<Spinner />}>
+      <Suspend fallback={<AcceptInvitationCardSkeleton />}>
         <AcceptInvitationContent params={params} />
       </Suspend>
     }

@@ -1,4 +1,4 @@
-import { CardHeaderSkeleton } from "@/components/card-header-skeleton";
+import { CardHeaderSkeleton } from "@/components/skeletons/card-header-skeleton";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 

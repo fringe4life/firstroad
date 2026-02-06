@@ -95,7 +95,7 @@ export const auth = betterAuth({
 
           // Prevent removing the last owner/admin
           // Type assertion needed because Better Auth hooks type role as string
-          if (isAdminOrOwner(member as { role: string })) {
+          if (isAdminOrOwner(member)) {
             const adminOwnerCount = await prisma.member.count({
               where: {
                 organizationId: organization.id,
@@ -162,27 +162,11 @@ export const auth = betterAuth({
 
   emailAndPassword: {
     enabled: true,
-    sendResetPassword: async ({ user, url }, _request) => {
-      // Extract the token from the URL and construct a dynamic route URL
+    // Follows Better Auth's guidance: token is provided directly,
+    sendResetPassword: async ({ user, token }) => {
+      // Base app URL used to construct absolute reset links
       const baseUrl =
         process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-
-      // Parse URL with base URL to handle relative paths
-      const urlObj = new URL(url, baseUrl);
-
-      // Try to extract token from query params first, then from pathname
-      let token = urlObj.searchParams.get("token");
-      if (!token) {
-        // Extract token from pathname like /reset-password/TOKEN
-        const pathParts = urlObj.pathname.split("/");
-        token = pathParts.at(-1) || null;
-      }
-
-      // Ensure we have a valid token
-      if (!token) {
-        throw new Error("Password reset token not found in URL");
-      }
-
       // Always construct absolute URL for email
       const resetUrl = `${baseUrl}/reset-password/${token}`;
 

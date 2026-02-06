@@ -17,7 +17,7 @@ const Organisations = async ({
       checkOrganistation: false,
     }));
   const organisations =
-    prefetchedOrganisations ?? (await getOrganisationByUser(user.id));
+    prefetchedOrganisations ?? (await getOrganisationByUser());
   const activeOrganizationId = user.activeOrganizationId;
 
   return (

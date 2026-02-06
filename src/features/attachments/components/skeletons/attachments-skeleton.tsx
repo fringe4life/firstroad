@@ -1,4 +1,4 @@
-import { CardHeaderSkeleton } from "@/components/card-header-skeleton";
+import { CardHeaderSkeleton } from "@/components/skeletons/card-header-skeleton";
 import { Card, CardContent } from "@/components/ui/card";
 import { AttachmentFormSkeleton } from "./attachment-form-skeleton";
 import { AttachmentListSkeleton } from "./attachment-list-skeleton";

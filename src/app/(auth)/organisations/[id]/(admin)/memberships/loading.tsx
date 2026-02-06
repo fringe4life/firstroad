@@ -1,9 +1,16 @@
-import { HeadingSkeleton } from "@/components/heading-skeleton";
+import { Heading } from "@/components/heading";
+import { ActionsSkeleton } from "@/components/skeletons/actions-skeleton";
+import { TabsSkeleton } from "@/components/skeletons/tabs-skeleton";
 import { MembershipsSkeleton } from "@/features/memberships/components/memberships-skeleton";
 
 const MembershipsLoading = () => (
   <>
-    <HeadingSkeleton showActions showTabs />
+    <Heading
+      actions={<ActionsSkeleton />}
+      description="Manage memberships in your organisation"
+      tabs={<TabsSkeleton />}
+      title="Memberships"
+    />
     <MembershipsSkeleton />
   </>
 );

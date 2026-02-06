@@ -63,7 +63,7 @@ const TicketUpsertForm = ({
       <FieldError actionState={actionState} name="description" />
 
       <div className="mb-1 flex gap-x-2">
-        <div className="w-1/2">
+        <div className="w-1/2 space-y-2">
           <Label htmlFor={deadlineId}>Deadline</Label>
           <Suspense fallback={null}>
             <DatePicker
@@ -78,7 +78,7 @@ const TicketUpsertForm = ({
           </Suspense>
           <FieldError actionState={actionState} name="deadline" />
         </div>
-        <div className="w-1/2">
+        <div className="w-1/2 space-y-2">
           <Label htmlFor={bountyId}>Bounty ($)</Label>
           <Input
             defaultValue={

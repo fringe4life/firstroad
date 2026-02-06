@@ -1,4 +1,4 @@
-import { getCookieCache } from "better-auth/cookies";
+import { getSessionCookie } from "better-auth/cookies";
 import { type NextRequest, NextResponse } from "next/server";
 import {
   signInPath,
@@ -19,9 +19,9 @@ const isProtectedPath = (pathname: string): boolean =>
 const isAuthRoute = (pathname: string): boolean =>
   pathname === signInPath() || pathname === signUpPath();
 
-export const proxy = async (request: NextRequest) => {
+export const proxy = (request: NextRequest) => {
   const pathname = request.nextUrl.pathname;
-  const sessionCookie = await getCookieCache(request);
+  const sessionCookie = getSessionCookie(request);
 
   if (isProtectedPath(pathname) && !sessionCookie) {
     const signInUrl = new URL(signInPath(), request.url);

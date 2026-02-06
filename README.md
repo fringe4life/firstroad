@@ -13,9 +13,9 @@
 [![nuqs](https://img.shields.io/badge/nuqs-2.8.8-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.2.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Elysia](https://img.shields.io/badge/Elysia-1.4.21-000000)](https://elysiajs.com/)
-[![Inngest](https://img.shields.io/badge/Inngest-3.50.0-000000)](https://www.inngest.com/)
+[![Inngest](https://img.shields.io/badge/Inngest-3.51.0-000000)](https://www.inngest.com/)
 [![Resend](https://img.shields.io/badge/Resend-6.9.1-000000)](https://resend.com/)
-[![React Email](https://img.shields.io/badge/React%20Email-5.2.5-000000)](https://react.email/)
+[![React Email](https://img.shields.io/badge/React%20Email-5.2.7-000000)](https://react.email/)
 [![Bun](https://img.shields.io/badge/Bun-1.3.8-FBF0DF?logo=bun&logoColor=000000)](https://bun.sh/)
 
 </div>
@@ -63,7 +63,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **API Framework**: Elysia 1.4 with @elysiajs/cors 1.4 for unified API routes
 - **Background Jobs**: Inngest 3.50 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
-- **Linting**: Biome 2.3.13 for fast formatting and linting with Ultracite 7.1.3 rules
+- **Linting**: Biome 2.3.13 for fast formatting and linting with Ultracite 7.1.4 rules
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 
@@ -233,8 +233,8 @@ Update `.env.local` with your configuration:
 DATABASE_URL="postgresql://username:password@localhost:5432/your_database"
 DIRECT_URL="postgresql://username:password@localhost:5432/your_database"
 
-# Auth
-AUTH_SECRET="your-secret-key-here"
+# Auth (Better Auth; validated as BETTER_AUTH_SECRET in src/lib/env.ts)
+BETTER_AUTH_SECRET="your-secret-key-here"
 # Public app URL used for emails and redirects
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
 
@@ -251,7 +251,7 @@ NEXT_PUBLIC_RESEND_FROM="Your App <onboarding@resend.dev>"
 GITHUB_CLIENT_ID="your-github-client-id"
 GITHUB_CLIENT_SECRET="your-github-client-secret"
 
-# S3 (used for ticket attachments via Bun.s3)
+# S3 (Bun runtime only; used for ticket attachments)
 # Docs: https://bun.sh/docs/runtime/s3
 # Bun.s3 works in Server Actions with Bun runtime (bun run dev/start). On Vercel, set "bunVersion": "1.x" in vercel.json so the app runs on Bun and Bun.s3 is available.
 S3_ACCESS_KEY_ID="your-s3-access-key-id"
@@ -290,36 +290,38 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ```
 src/
 ├── app/                      # Next.js App Router pages
-│   ├── (auth)/               # Protected routes (account, organisations, memberships, invitations, tickets)
-│   ├── (password)/           # Public auth routes (sign-in, sign-up, reset, OTP)
+│   ├── (auth)/               # Protected routes (account, organisations, tickets)
+│   ├── (password)/          # Public auth routes (sign-in, sign-up, reset, OTP)
 │   ├── @auth/                # Parallel auth modals (interception routes)
-│   ├── api/[[...slugs]]/      # Elysia catch-all API route handler
+│   ├── api/[[...slugs]]/     # Elysia catch-all API route handler
+│   ├── onboarding/           # Onboarding and select-active-organisation
 │   ├── layout.tsx            # Root layout with auth slot
 │   ├── page.tsx              # Home page
 │   └── globals.css           # Global styles with custom variants
 ├── components/               # Shared UI components and primitives
 │   ├── form/                 # Form helpers (field-error, submit-button, action feedback)
-│   ├── skeletons/            # Shared skeletons (icon button)
+│   ├── skeletons/            # Shared skeletons (icon-button, actions, tabs, card-header, heading)
 │   ├── theme/                # Theme provider and switcher
 │   ├── ui/                   # shadcn/ui components
-│   └── unsuccessful-table.tsx # Reusable empty/error state table component
+│   └── unsuccessful-table.tsx
 ├── features/                 # Feature modules
-│   ├── attachments/          # Ticket attachments (Bun S3): actions, components, queries, presign utils, skeletons
-│   ├── auth/                 # Auth actions, components (OTP verify with connection, skeletons), events, queries, types
+│   ├── attachments/          # Ticket attachments (Bun S3): actions, components, queries, presign, skeletons
+│   ├── auth/                 # Auth components, events, queries, types, utils
 │   ├── comment/              # Comment actions, optimistic hooks, components, store
-│   ├── invitations/          # Invitation actions (create, cancel, accept, reject), components, email events, queries
-│   ├── memberships/          # Membership actions, components, queries, skeletons (role + batch permission checks)
-│   ├── navigation/           # Sidebar/nav components + context
+│   ├── invitations/          # Invitation actions, components, email events, queries
+│   ├── memberships/          # Membership actions, components, queries, skeletons
+│   ├── navigation/           # Sidebar, nav-items, mobile menu, sidebar-sign-in-up-links, context
 │   ├── organisation/         # Organization actions, components, skeletons
 │   ├── pagination/           # Pagination components + nuqs parsers
-│   ├── password/             # Password flows, emails, events
-│   └── ticket/               # Ticket actions, DAL (batch access), queries, components, skeletons
+│   ├── password/             # Password flows, actions, emails, events, utils
+│   └── ticket/               # Ticket actions, DAL, queries, components, skeletons
 ├── hooks/                    # Shared client hooks
-├── lib/                      # Shared service configuration (auth, prisma, env, inngest)
-├── utils/                    # Shared utilities (cache tags, slug, cookies, actions)
-├── generated/                # Generated Prisma client + prismabox types
+├── lib/                      # Auth, prisma, env, inngest, email, app
+├── shims/                    # Kysely adapter shim (unused when serverExternalPackages used)
+├── utils/                    # Cache tags, slug, cookies, invalidate-cache, to-action-state, try-catch
 ├── path.ts                   # Type-safe route helpers
-└── proxy.ts                  # Proxy configuration
+├── proxy.ts                  # Middleware proxy (protected routes, auth redirects)
+└── generated/                # Generated Prisma client + prismabox types (output of prisma generate)
 ```
 
 ## 🔐 Authentication
@@ -503,6 +505,10 @@ bun run deploy:prod      # Build and deploy to Vercel production
 ```
 
 ## 🔧 Configuration
+
+### Build (Next.js + Bun)
+
+Production build supports Turbopack (`bun run next build --turbopack`). To avoid Better Auth Kysely adapter chunk errors with Bun + Next 16, `next.config.ts` uses `serverExternalPackages` for `node:sqlite`, `@better-auth/kysely-adapter`, and related Better Auth adapter paths (see [better-auth#6781](https://github.com/better-auth/better-auth/issues/6781)). The default `bun run build` uses Webpack.
 
 ### Tailwind CSS
 

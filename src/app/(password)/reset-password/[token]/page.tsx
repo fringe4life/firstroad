@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { connection } from "next/server";
 import { CardCompact } from "@/components/card-compact";
-import { Spinner } from "@/components/spinner";
 import { Suspend } from "@/components/suspend";
 import { ResetPasswordForm } from "@/features/password/components/reset-password-form";
+import { ResetPasswordFormSkeleton } from "@/features/password/components/reset-password-form-skeleton";
 import { signInPath } from "@/path";
 
 export const metadata: Metadata = {
@@ -30,7 +30,7 @@ const ResetPasswordPage = ({
 }: PageProps<"/reset-password/[token]">) => (
   <CardCompact
     content={
-      <Suspend fallback={<Spinner />}>
+      <Suspend fallback={<ResetPasswordFormSkeleton />}>
         <SuspendResetPasswordForm tokenPromise={params} />
       </Suspend>
     }

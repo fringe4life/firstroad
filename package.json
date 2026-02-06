@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev:bun": "bun --bun run next dev --webpack",
-    "dev": "next dev --turbopack",
+    "dev": "bun --bun run next dev --turbopack",
     "dev:inspect": "bun --bun run next dev --inspect --turbopack",
     "next:upgrade": "next upgrade",
     "next:analyze": "next analyze",
@@ -86,7 +86,7 @@
     "@types/node": "^25.2.1",
     "@types/react": "^19.2.13",
     "@types/react-dom": "^19.2.3",
-    "@typescript/native-preview": "^7.0.0-dev.20260205.1",
+    "@typescript/native-preview": "^7.0.0-dev.20260206.1",
     "husky": "^9.1.7",
     "inngest-cli": "^1.16.1",
     "lint-staged": "^16.2.7",
