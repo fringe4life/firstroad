@@ -1,7 +1,10 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
 const AuthNavSkeleton = () => (
-  <Skeleton className="h-9 w-(--auth-nav-width) bg-accent/50" />
+  <div className="flex flex-col gap-y-2 md:flex-row md:gap-x-1">
+    <Skeleton className="h-9 w-[86px]" />
+    <Skeleton className="h-9 w-[77px] bg-primary/50" />
+  </div>
 );
 
 export { AuthNavSkeleton };

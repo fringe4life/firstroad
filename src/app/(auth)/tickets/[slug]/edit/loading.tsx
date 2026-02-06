@@ -1,5 +1,5 @@
-import { Spinner } from "@/components/spinner";
+import { TicketFormSkeleton } from "@/features/ticket/components/skeletons/ticket-form-skeleton";
 
-const TicketEditLoading = () => <Spinner />;
+const TicketEditLoading = () => <TicketFormSkeleton />;
 
 export default TicketEditLoading;

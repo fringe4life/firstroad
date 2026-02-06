@@ -7,10 +7,9 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { NavItems } from "@/features/navigation/components/nav-items";
 import { useMobileSidebar } from "@/features/navigation/context/context";
 
-const SidebarClient = () => {
+const SidebarClient = ({ children }: { children: React.ReactNode }) => {
   const { isOpen, close } = useMobileSidebar();
 
   return (
@@ -21,7 +20,7 @@ const SidebarClient = () => {
             <SheetTitle>Navigation</SheetTitle>
           </SheetHeader>
           <nav aria-label="Mobile navigation" className="space-y-2 px-3 py-2">
-            <NavItems />
+            {children}
           </nav>
         </SheetContent>
       </Sheet>

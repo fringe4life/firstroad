@@ -93,7 +93,7 @@
     "next-devtools-mcp": "^0.3.10",
     "prisma": "^7.3.0",
     "react-email": "^5.2.7",
-    "shadcn": "^3.8.3",
+    "shadcn": "^3.8.4",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3",
     "typescript-plugin-directives": "^0.0.3",

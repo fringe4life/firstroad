@@ -9,7 +9,7 @@ import { TicketFormSkeleton } from "@/features/ticket/components/skeletons/ticke
 import { TicketListSkeleton } from "@/features/ticket/components/skeletons/ticket-list-skeleton";
 import { TicketUpsertForm } from "@/features/ticket/components/ticket-upsert-form";
 import { Tickets } from "@/features/ticket/components/tickets";
-import { signInPath } from "@/path";
+import { ticketsPath } from "@/path";
 
 export const metadata: Metadata = {
   title: "My Tickets",
@@ -44,7 +44,7 @@ const TicketsPage = ({ searchParams }: PageProps<"/tickets">) => {
             <TicketListSkeleton />
           </>
         }
-        redirectPath={signInPath()}
+        redirectPath={ticketsPath()}
       >
         {(user) => <Tickets searchParams={searchParams} userId={user.id} />}
       </RequireAuthSuspense>

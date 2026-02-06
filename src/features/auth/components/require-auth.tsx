@@ -4,7 +4,25 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { getUser } from "@/features/auth/queries/get-user";
 import type { User } from "@/features/auth/types";
-import { signInPath } from "@/path";
+import { forgotPasswordPath, signInPath, signUpPath } from "@/path";
+
+const isAuthRoute = (path: string): boolean =>
+  path === signInPath() ||
+  path === signUpPath() ||
+  path === forgotPasswordPath();
+
+/** Normalize to pathname only (strip origin and query) so we can check isAuthRoute. */
+const toPathname = (value: string): string => {
+  const trimmed = value.trim();
+  if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+    try {
+      return new URL(trimmed).pathname;
+    } catch {
+      return trimmed;
+    }
+  }
+  return trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+};
 
 // RequireAuth component that ensures user is authenticated and optionally authorized
 const RequireAuth = async ({
@@ -25,8 +43,12 @@ const RequireAuth = async ({
       headersList.get("x-invoke-path") ||
       headersList.get("referer");
 
-    const redirectUrl = pathname
-      ? (`${signInPath()}?callbackUrl=${encodeURIComponent(pathname)}` as Route)
+    const pathOnly = pathname ? toPathname(pathname) : "";
+    const useAsCallback =
+      pathOnly !== "" && pathOnly !== "/" && !isAuthRoute(pathOnly);
+
+    const redirectUrl = useAsCallback
+      ? (`${signInPath()}?callbackUrl=${encodeURIComponent(pathOnly)}` as Route)
       : signInPath();
 
     redirect(redirectUrl);

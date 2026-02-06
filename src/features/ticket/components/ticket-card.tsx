@@ -27,7 +27,7 @@ const TicketCard = ({ ticket, actions, variant = "list" }: TicketCardProps) => {
           data-detail={variant === "detail" ? "true" : undefined}
         >
           <CardHeader>
-            <CardTitle className="flex items-center gap-x-2">
+            <CardTitle className="flex items-center gap-x-2 truncate">
               <span>{TICKET_ICONS[ticket.status]}</span>
               <span className="truncate">{ticket.title}</span>
             </CardTitle>

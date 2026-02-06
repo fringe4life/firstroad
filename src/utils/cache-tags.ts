@@ -29,9 +29,20 @@ const attachmentsForTicketCache = (ticketId: string): string => {
   return `attachments-${ticketId}`;
 };
 
+// Organisation cache tags
+const organisationCache = (): string => {
+  return "organisations";
+};
+
+const organisationsForUserCache = (userId: string): string => {
+  return `organisations-${userId}`;
+};
+
 export {
   attachmentCache,
   attachmentsForTicketCache,
+  organisationCache,
+  organisationsForUserCache,
   commentCache,
   commentsCache,
   commentsForTicketCache,

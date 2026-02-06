@@ -3,7 +3,7 @@ import { minLength, object, parse, pipe, string, url } from "valibot";
 
 // Environment schema validation
 const envSchema = object({
-  AUTH_SECRET: pipe(string(), minLength(1, "AUTH_SECRET is required")),
+  BETTER_AUTH_SECRET: pipe(string(), minLength(1, "AUTH_SECRET is required")),
   DATABASE_URL: pipe(
     string(),
     url("DATABASE_URL must be a valid URL"),

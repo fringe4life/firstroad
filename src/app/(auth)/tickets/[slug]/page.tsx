@@ -7,6 +7,7 @@ import { AttachmentsSkeleton } from "@/features/attachments/components/skeletons
 import { getAttachmentsByTicket } from "@/features/attachments/queries/get-attachments-by-ticket";
 import { presignAttachments } from "@/features/attachments/utils/presign-attachments";
 import { HasAuthSuspense } from "@/features/auth/components/has-auth";
+import { isOwner } from "@/features/auth/utils/owner";
 import { deleteComment } from "@/features/comment/actions/delete-comment";
 import { upsertComment } from "@/features/comment/actions/upsert-comment";
 import { Comments } from "@/features/comment/components/comments";
@@ -76,7 +77,7 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
               <Attachments
                 attachments={attachmentsWithUrls}
                 createAttachmentAction={createAttachment}
-                isOwner={user?.id === ticket.userId}
+                isOwner={isOwner(user, { userId: ticket.userId })}
                 ticketId={ticket.id}
               />
             )}
