@@ -4,15 +4,15 @@ This project is configured to **disable automatic deployments** on git push. Use
 
 ## Configuration
 
-The `vercel.json` file disables automatic deployments:
+The `vercel.json` file in `apps/web` disables automatic deployments and sets the build command for the Turborepo + Prisma monorepo:
 
-```json
-{
-  "git": {
-    "deploymentEnabled": false
-  }
-}
-```
+- **Root Directory**: In the Vercel project settings, set **Root Directory** to `apps/web` so Vercel runs the build from the web app directory.
+- **Build command** (in `apps/web/vercel.json`): `cd ../.. && bunx turbo run build --filter=@firstroad/web` — runs from repo root so Turbo can run `db:generate` in `packages/database` before building the Next.js app.
+
+Ensure `DATABASE_URL` is set in the Vercel project’s environment variables (Production and Preview as needed).
+
+### Local production builds and env vars
+When you run `vercel build --prod` locally, the build is not on Vercel, so Vercel's project environment variables are not injected (you'll see: "Build not running on Vercel. System environment variables will not be available"). To use production-like values for that local build, add **`.env.production`** in `apps/web/`. Next.js loads it when `NODE_ENV=production` and it overrides `.env` for the same keys. You do not need to rename `.env` to `.env.local`. Keep `.env` for dev defaults and put production-only values (e.g. production `DATABASE_URL`, `NEXT_PUBLIC_APP_URL`, secrets) in `.env.production`; both are gitignored via `.env*`.
 
 ## Setup Vercel CLI
 
@@ -29,8 +29,9 @@ vercel login
 ```
 
 ### Link Project (First Time Only)
+Run from **`apps/web`** so the CLI links this directory as the project root. In the Vercel dashboard, set **Root Directory** to `apps/web` (Settings → General → Root Directory). This is required for `vercel build` and prebuilt deploys to detect Next.js correctly in the monorepo.
 ```bash
-vercel link
+cd apps/web && vercel link
 ```
 
 ## Deployment Commands
@@ -100,14 +101,34 @@ vercel --logs
 vercel --no-wait
 ```
 
-### Prebuilt Deployment (Local Build)
+### Production deploy from CLI
+From repo root:
 ```bash
-# 1. Build locally
+bun run deploy:prod
+```
+
+This runs **`cd apps/web && vercel deploy --prod`**: source is uploaded and **Vercel builds on their side** using Root Directory `apps/web` and the `buildCommand` in `vercel.json`. No local build; Next.js is detected correctly.
+
+Manual: `cd apps/web && vercel deploy --prod`
+
+### Prebuilt deployment (optional)
+Prebuilt uses **`vercel build`** locally then **`vercel deploy --prebuilt`**. In monorepos the CLI can fail to detect Next.js when running `vercel build` locally; the standard deploy above avoids that. If you need prebuilt: from `apps/web`, run `vercel build --prod` then `vercel deploy --prebuilt --archive=tgz --prod`. See [Build Output API](https://vercel.com/docs/build-output-api/v3).
+
+<details>
+<summary>Previous prebuilt details</summary>
+
+- **`vercel build --prod`** runs your `vercel.json` build command (`cd ../.. && bunx turbo run build --filter=@firstroad/web`), then produces `.vercel/output` in `apps/web`.
+- **`vercel deploy --prebuilt --archive=tgz`** uploads that output as a single archive. Using `--prebuilt` avoids the CLI walking `node_modules` (which with Bun’s layout can cause ENOENT errors e.g. for `@opentelemetry/api` when archiving from the app directory).
+
+Manual equivalent from `apps/web`:
+```bash
+# 1. Build (uses buildCommand from vercel.json; creates .vercel/output)
 vercel build --prod
 
-# 2. Deploy the prebuilt output
-vercel deploy --prebuilt --prod
+# 2. Deploy the prebuilt output (optionally with archive to reduce file count)
+vercel deploy --prebuilt --archive=tgz --prod
 ```
+</details>
 
 ## Workflow Recommendations
 

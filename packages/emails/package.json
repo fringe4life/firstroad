@@ -1,0 +1,20 @@
+{
+  "name": "@firstroad/emails",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "email dev --dir . --port 3001",
+    "build": "email build --dir .",
+    "build:email": "email build --dir .",
+    "export": "email export --dir .",
+    "export:email": "email export --dir ."
+  },
+  "dependencies": {
+    "@react-email/components": "^1.0.7"
+  },
+  "devDependencies": {
+    "@react-email/preview-server": "^5.2.8",
+    "react-email": "^5.2.8"
+  }
+}

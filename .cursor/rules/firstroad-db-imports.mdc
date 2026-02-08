@@ -1,0 +1,30 @@
+---
+description: How to import from @firstroad/db — server vs client
+globs: "**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# @firstroad/db import rules
+
+The `@firstroad/db` package is **server-only**: it exports the Prisma client instance and generated types that depend on Node. Importing it in client code causes Turbopack/build errors (e.g. "does not support external modules (request: node:module)").
+
+## Rule
+
+- **Server code** (Server Components, route handlers, server actions, API routes, `lib/`, server-only scripts):  
+  Use the main entry.  
+  `import { prisma } from "@firstroad/db"` and/or `import type { Prisma, … } from "@firstroad/db"` as needed.
+
+- **Client code** (any file with `"use client"` or anything imported only by client components):  
+  **Do not** import from `@firstroad/db`. Use the client-safe entry for types and enums only:  
+  `import type { MemberRole, TicketStatus, SortOrder } from "@firstroad/db/client-types"`  
+  or  
+  `import { MemberRole, TicketStatus } from "@firstroad/db/client-types"` when you need the enum object (e.g. for comparisons).
+
+## Summary
+
+| Where        | Import from                 | Use for                                      |
+|-------------|-----------------------------|----------------------------------------------|
+| Server only | `@firstroad/db`             | `prisma`, `Prisma`, model types, full types  |
+| Client      | `@firstroad/db/client-types`| `MemberRole`, `TicketStatus`, `SortOrder`    |
+
+Do not use `@firstroad/db` in client components or in modules that are only ever imported by client components.

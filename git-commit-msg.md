@@ -4,6 +4,8 @@
 
 Supply this file to the AI to generate a git commit message based on changes since the last commit. Messages use emoji bullet points for clarity and visual appeal.
 
+**Repo context**: This is a **Turborepo monorepo**. Main areas: `apps/web` (Next.js), `apps/inngest`, `packages/database` (Prisma), `packages/emails`. When changes span packages or touch root config (`turbo.json`, root `package.json`), mention the affected scope in the bullets (e.g. "turbo env vars", "web app", "database package").
+
 ## Format
 
 The AI should:
@@ -32,6 +34,8 @@ The AI should:
 - `ci`: CI/CD changes
 - `build`: Build system changes
 
+**Optional scope** (for monorepo): You may prefix the type with a scope in parentheses, e.g. `feat(web):`, `chore(db):`, `build(turbo):`, when the change is limited to one app or package. Omit scope when changes span multiple areas or are repo-wide.
+
 ## Common Emojis
 
 - 🔀 Routing, navigation, parallel/interception routes
@@ -47,6 +51,7 @@ The AI should:
 - ♻️ Refactoring, code quality
 - 🗑️ Removal, deletion
 - ✨ New functionality
+- 🏗️ Turborepo, monorepo config, turbo.json, workspace scripts
 
 ## Examples
 
@@ -120,12 +125,33 @@ refactor:
 📦 Updated project dependencies (bun.lock, package.json)
 ```
 
+### Turborepo / monorepo changes
+
+```
+build(turbo):
+🏗️ Added env vars to turbo.json for Vercel build (DATABASE_URL, RESEND_*, S3_*, etc.)
+🔧 Ensures Turborepo passes through project env to @firstroad/web build
+```
+
+```
+docs:
+📝 Updated README and update-readme.md for Turborepo layout (apps/web, packages/database)
+📁 Documented root scripts, turbo filters, and deploy:prod from apps/web
+```
+
+```
+chore:
+🏗️ Switched deploy:prod to standard Vercel deploy (cd apps/web && vercel deploy --prod)
+🔧 Added framework and buildCommand to apps/web/vercel.json
+📝 Adjusted vercel-deployment.md for Root Directory and link flow
+```
+
 ## Instructions for AI
 
 1. Run `git diff` to see unstaged changes
 2. Run `git diff --cached` to see staged changes
 3. Run `git diff --stat` to see change summary
-4. Analyze the changes and categorize them
+4. Analyze the changes and categorize them (note when changes touch multiple areas: root, apps/web, packages/database, packages/emails)
 5. Count files changed and lines modified
 6. Include newly added files in the commit message summary
 6. Generate a commit message:

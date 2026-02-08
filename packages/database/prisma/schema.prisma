@@ -1,0 +1,20 @@
+generator client {
+  provider        = "prisma-client"
+  previewFeatures = ["relationJoins"]
+  engineType      = "client"
+  output          = "../generated/prisma"
+  runtime         = "bun"
+  compilerBuild   = "fast"
+}
+
+generator prismabox {
+  provider                    = "prismabox"
+  typeboxImportDependencyName = "elysia"
+  typeboxImportVariableName   = "t"
+  inputModel                  = true
+  output                      = "../generated/prismabox"
+}
+
+datasource db {
+  provider = "postgresql"
+}

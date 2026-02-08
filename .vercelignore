@@ -1,0 +1,49 @@
+# .vercelignore – exclude files from Vercel upload (monorepo)
+# See: https://vercel.com/docs/deployments/vercel-ignore#monorepos
+# Build uses: Root Directory = apps/web, buildCommand = cd ../.. && bunx turbo run build --filter=@firstroad/web
+
+# ------------------------------------------------------------------------------
+# Development & tooling (not needed for build)
+# ------------------------------------------------------------------------------
+.cursor
+.husky
+.vscode
+.agents
+docs
+
+# ------------------------------------------------------------------------------
+# Other apps (only @firstroad/web is deployed)
+# ------------------------------------------------------------------------------
+apps/inngest
+
+# ------------------------------------------------------------------------------
+# Packages not used by @firstroad/web build
+# ------------------------------------------------------------------------------
+packages/emails
+
+# ------------------------------------------------------------------------------
+# Dev-only content in @firstroad/db (keep schema, migrations, src for db:generate)
+# ------------------------------------------------------------------------------
+packages/database/prisma/scripts
+packages/database/prisma/seed-data
+packages/database/prisma/seed.ts
+
+# ------------------------------------------------------------------------------
+# Cache & generated (smaller upload; Vercel already ignores .next, node_modules)
+# ------------------------------------------------------------------------------
+.turbo
+
+# ------------------------------------------------------------------------------
+# Test & debug
+# ------------------------------------------------------------------------------
+coverage
+*.tsbuildinfo
+.qodo
+
+# ------------------------------------------------------------------------------
+# Root-level docs and config not required for build
+# ------------------------------------------------------------------------------
+update-readme.md
+git-commit-msg.md
+env.example
+lint-staged.config.ts
