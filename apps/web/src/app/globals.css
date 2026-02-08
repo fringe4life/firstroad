@@ -2,7 +2,10 @@
 
 @custom-variant dark (&:is(.dark *));
 @custom-variant detail (&:where([data-detail="true"] *));
-@custom-variant heading (&:where([data-heading] *));
+
+@theme {
+  --breakpoint-xs: 450px;
+}
 
 :root {
   --background: oklch(1 0 0);
@@ -227,8 +230,6 @@
   --side-width: 0;
   --expanded-sidebar-width: 15rem;
   --auth-nav-width: 10.5rem;
-  --padding-inline-main: 2rem;
-
   --max-content-widest: 30rem;
   --max-content-narrow: 26.25rem;
 }
@@ -237,15 +238,20 @@
   inline-size: min(100%, --value(--max-content-*));
 }
 
-@utility main-inline-padding {
-  padding-inline: max(var(--padding-inline-main), 0.75rem);
-}
-
 @utility main-grid-rows {
   grid-template-rows: repeat(2, min-content) 1fr;
 }
 @utility layout-grid-cols {
   grid-template-columns: var(--side-width) 1fr;
+}
+
+@utility no-scrollbar {
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 @layer base {

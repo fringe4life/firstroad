@@ -16,12 +16,12 @@ const TicketFormSkeleton = () => (
     </div>
 
     {/* Deadline and Bounty fields - side by side */}
-    <div className="mb-1 flex gap-x-2">
-      <div className="w-1/2 space-y-2">
+    <div className="mb-1 grid xs:grid-flow-col xs:grid-cols-2 gap-2">
+      <div className="space-y-2">
         <Skeleton className="h-3.5 w-16" />
         <Skeleton className="h-9 w-full bg-muted-foreground/20" />
       </div>
-      <div className="w-1/2 space-y-2">
+      <div className="space-y-2">
         <Skeleton className="h-3.5 w-20" />
         <Skeleton className="h-9 w-full bg-muted-foreground/20" />
       </div>

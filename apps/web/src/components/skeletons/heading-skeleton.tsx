@@ -17,10 +17,7 @@ const HeadingSkeleton = ({
         <Skeleton className="h-[calc(100%-1px)] w-24 rounded-md" />
       </div>
     )}
-    <div
-      className="flex h-min w-full items-center justify-between self-start px-8"
-      data-heading
-    >
+    <div className="flex h-min w-full items-center justify-between self-start px-4 sm:px-8">
       <div className="w-full space-y-2 justify-self-stretch">
         <Skeleton className="h-9 w-64" />
         <Skeleton className="h-4 w-80" />

@@ -50,7 +50,7 @@ const RootLayout = ({ children, auth }: LayoutProps<"/">) => (
               <Header />
               <div className="layout-grid-cols grid grid-flow-col has-[.sidebar:hover]:[--side-width:var(--expanded-sidebar-width)]">
                 <Sidebar />
-                <main className="main-inline-padding col-span-2 min-h-screen overflow-x-clip py-24 md:col-start-2">
+                <main className="col-span-2 min-h-screen overflow-x-clip px-4 py-24 sm:px-8 md:col-start-2">
                   {children}
                 </main>
               </div>

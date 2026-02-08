@@ -13,7 +13,7 @@ import { Suspend } from "./suspend";
 import { Skeleton } from "./ui/skeleton";
 
 const Header = () => (
-  <nav className="fixed top-0 right-0 left-0 z-20 grid grid-flow-col items-center justify-between border-b bg-background/65 px-5 py-2.5 backdrop-blur supports-backdrop-blur:bg-background/60">
+  <nav className="fixed top-0 right-0 left-0 z-20 grid grid-flow-col items-center justify-between border-b bg-background/65 px-4 py-2.5 backdrop-blur supports-backdrop-blur:bg-background/60">
     <div className="flex items-center gap-x-2">
       <Suspend fallback={<Skeleton className="aspect-square w-10" />}>
         <MobileMenuButton />
