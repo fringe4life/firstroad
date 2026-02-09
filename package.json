@@ -23,6 +23,7 @@
     "typegen": "turbo run typegen",
     "reset:tickets": "turbo run reset:tickets --filter=@firstroad/web",
     "clear:non-auth": "turbo run clear:non-auth --filter=@firstroad/db",
+    "clear:attachments": "turbo run clear:attachments --filter=@firstroad/db",
     "seed:members": "turbo run seed:members --filter=@firstroad/db",
     "build:email": "turbo run build:email",
     "export:email": "turbo run export:email",

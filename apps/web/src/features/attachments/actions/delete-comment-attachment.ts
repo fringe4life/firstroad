@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { minLength, object, pipe, safeParse, string, ValiError } from "valibot";
 import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
 import { getUser } from "@/features/auth/queries/get-user";
+import { findComment } from "@/features/comment/queries/find-comment";
 import { findTicket } from "@/features/ticket/queries/find-ticket";
 import { ticketPath } from "@/path";
 import { invalidateTicketAndAttachments } from "@/utils/invalidate-cache";
@@ -17,22 +18,22 @@ import {
 import { tryCatch } from "@/utils/try-catch";
 import { attachmentS3Key } from "../utils/presign-attachments";
 
-const deleteAttachmentInputSchema = object({
+const deleteCommentAttachmentInputSchema = object({
   attachmentId: pipe(string(), minLength(1, "Attachment id is required")),
   ownerId: pipe(string(), minLength(1, "Owner id is required")),
 });
 
-interface DeleteAttachmentArgs {
+interface DeleteCommentAttachmentArgs {
   attachmentId: string;
   ownerId: string;
 }
 
-const deleteAttachment = async (
-  { attachmentId, ownerId }: DeleteAttachmentArgs,
+const deleteCommentAttachment = async (
+  { attachmentId, ownerId }: DeleteCommentAttachmentArgs,
   _prevState: ActionState,
   _formData: FormData,
 ): Promise<ActionState> => {
-  const parseResult = safeParse(deleteAttachmentInputSchema, {
+  const parseResult = safeParse(deleteCommentAttachmentInputSchema, {
     attachmentId,
     ownerId,
   });
@@ -49,20 +50,32 @@ const deleteAttachment = async (
     );
   }
 
-  const ticket = await itemWithOwnership(findTicket(ownerId), user);
+  const comment = await itemWithOwnership(findComment(ownerId), user);
+
+  if (!comment) {
+    return toActionState("Comment not found", "ERROR");
+  }
+
+  if (!comment.isOwner) {
+    return toActionState(
+      "Only the comment owner can delete attachments",
+      "ERROR",
+    );
+  }
+
+  const { data: ticket, error: ticketError } = await tryCatch(() =>
+    findTicket(comment.ticketId),
+  );
+
+  if (ticketError) {
+    return fromErrorToActionState(ticketError);
+  }
 
   if (!ticket) {
     return toActionState("Ticket not found", "ERROR");
   }
 
-  if (!ticket.isOwner) {
-    return toActionState(
-      "Only the ticket owner can delete attachments",
-      "ERROR",
-    );
-  }
-
-  const attachment = await prisma.ticketAttachment.findUnique({
+  const attachment = await prisma.commentAttachment.findUnique({
     where: { id: attachmentId },
   });
 
@@ -72,8 +85,8 @@ const deleteAttachment = async (
 
   const key = attachmentS3Key(
     ticket.organizationId,
-    "ticket",
-    ticket.id,
+    "comment",
+    comment.id,
     attachment.id,
     attachment.name,
   );
@@ -87,7 +100,7 @@ const deleteAttachment = async (
   }
 
   const { error: dbError } = await tryCatch(() =>
-    prisma.ticketAttachment.delete({
+    prisma.commentAttachment.delete({
       where: { id: attachment.id },
     }),
   );
@@ -104,4 +117,4 @@ const deleteAttachment = async (
   return toActionState("Attachment deleted", "SUCCESS");
 };
 
-export { deleteAttachment };
+export { deleteCommentAttachment };

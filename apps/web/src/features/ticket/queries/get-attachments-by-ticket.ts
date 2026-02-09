@@ -5,7 +5,7 @@ import { cacheTag } from "next/cache";
 import type { List } from "@/types";
 import { attachmentCache, attachmentsForTicketCache } from "@/utils/cache-tags";
 import { tryCatch } from "@/utils/try-catch";
-import type { AttachmentRecord } from "../types";
+import type { AttachmentRecord } from "../../attachments/types";
 
 const getAttachmentsByTicket = async (
   ticketId: string,
@@ -13,10 +13,10 @@ const getAttachmentsByTicket = async (
   cacheTag(attachmentCache());
   cacheTag(attachmentsForTicketCache(ticketId));
   const { data: rows } = await tryCatch(() =>
-    prisma.attachment.findMany({
+    prisma.ticketAttachment.findMany({
       where: { ticketId },
       orderBy: { id: "asc" },
-      select: { id: true, name: true, ticketId: true },
+      select: { id: true, name: true },
     }),
   );
   return rows;

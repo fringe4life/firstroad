@@ -1,15 +1,17 @@
 import { s3 } from "bun";
 import type { List } from "@/types";
-import type { AttachmentRecord, AttachmentWithUrl } from "../types";
+import type { AttachmentRecord, AttachmentWithUrl, OwnerKind } from "../types";
 
 const PRESIGN_EXPIRES_IN_SECONDS = 3600; // 1 hour
 
 const attachmentS3Key = (
   organizationId: string,
-  ticketId: string,
+  ownerKind: OwnerKind,
+  ownerId: string,
   attachmentId: string,
   name: string,
-): string => `${organizationId}/${ticketId}/${name}-${attachmentId}`;
+): string =>
+  `${organizationId}/${ownerKind}/${ownerId}/${name}-${attachmentId}`;
 
 /**
  * Presign download URLs for attachments using Bun.s3.
@@ -17,21 +19,28 @@ const attachmentS3Key = (
  */
 const presignAttachments = (
   organizationId: string,
-  ticketId: string,
+  ownerKind: OwnerKind,
+  ownerId: string,
   attachments: List<AttachmentRecord>,
 ): List<AttachmentWithUrl> => {
   if (!attachments) {
     return undefined;
   }
 
-  return attachments.map((a) => {
-    const key = attachmentS3Key(organizationId, ticketId, a.id, a.name);
+  return attachments.map((attachment) => {
+    const key = attachmentS3Key(
+      organizationId,
+      ownerKind,
+      ownerId,
+      attachment.id,
+      attachment.name,
+    );
     const downloadUrl = s3.file(key).presign({
       expiresIn: PRESIGN_EXPIRES_IN_SECONDS,
       // Force a clean, user‑friendly download filename
-      contentDisposition: `attachment; filename="${a.name}"`,
+      contentDisposition: `attachment; filename="${attachment.name}"`,
     });
-    return { ...a, downloadUrl };
+    return { ...attachment, downloadUrl };
   });
 };
 

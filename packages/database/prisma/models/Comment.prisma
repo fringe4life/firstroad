@@ -10,6 +10,8 @@ model Comment {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  attachments CommentAttachment[]
+
   @@index([userId])
   @@index([ticketId])
   @@index([id(sort: Desc), createdAt(sort: Desc)])

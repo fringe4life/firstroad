@@ -36,6 +36,9 @@
     "db:migrate": { "cache": false, "persistent": true },
     "db:deploy": { "cache": false },
     "clear:non-auth": { "cache": false },
+    "clear:attachments": {
+      "cache": false
+    },
     "seed:members": { "cache": false },
     "type": { "outputs": [] },
     "typegen": { "outputs": [] }

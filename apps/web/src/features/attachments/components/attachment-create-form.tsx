@@ -15,25 +15,25 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AttachmentPreviewCard } from "@/features/attachments/components/attachment-preview";
 import { type ActionState, EMPTY_ACTION_STATE } from "@/utils/to-action-state";
-import type { createAttachment } from "../actions/create-attachment";
 import { ACCEPTED_FILE_TYPES } from "../constants";
+import type { CreateAttachmentAction } from "../types";
 import type { AttachmentPreview } from "../utils/attachment-previews";
 import { createAttachmentPreviews } from "../utils/attachment-previews";
 
 interface AttachmentCreateFormProps {
-  ticketId: string;
-  createAttachmentAction: typeof createAttachment;
+  ownerId: string;
+  createAttachmentAction: CreateAttachmentAction;
 }
 
 const AttachmentCreateForm = ({
-  ticketId,
+  ownerId,
   createAttachmentAction,
 }: AttachmentCreateFormProps) => {
   const fileId = useId();
   const [actionState, action] = useActionState(
     async (prevState: ActionState, formData: FormData) => {
       const nextState = await createAttachmentAction(
-        ticketId,
+        ownerId,
         prevState,
         formData,
       );
@@ -145,7 +145,7 @@ const AttachmentCreateForm = ({
         </div>
       )}
 
-      <SubmitButton label="Upload" />
+      <SubmitButton disabled={!hasPreviews} label="Upload" />
     </Form>
   );
 };

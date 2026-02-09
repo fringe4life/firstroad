@@ -40,7 +40,6 @@ Assessment of this codebase against the rules in `.agents/skills/vercel-react-be
 | Location | Issue | Suggestion |
 |----------|--------|------------|
 | Package-level barrels | [PACKAGE_BARREL_FILE_ANALYSIS.md](PACKAGE_BARREL_FILE_ANALYSIS.md) notes **valibot** and **@radix-ui/*** as packages with barrel file issues. Imports like `from "valibot"` or `from "@radix-ui/react-dialog"` can pull extra code. | Add `optimizePackageImports` in `next.config` for `valibot` and relevant `@radix-ui/*` packages per the analysis doc; or import from subpaths where the package supports it. |
-| [src/features/ticket/components/*](../src/features/ticket/components/) | Several files import from `@/features/constants` (e.g. `TICKET_ICONS`, `TICKET_STATUS_LABELS`, `TICKET_SORT_OPTIONS`). | If `@/features/constants` is a barrel that re-exports many constants, consider importing from feature-specific constant files (e.g. `@/features/ticket/constants`) to improve tree-shaking. |
 
 - No internal `index.ts` barrels under `src/` were found; the main concern is package-level barrels.
 

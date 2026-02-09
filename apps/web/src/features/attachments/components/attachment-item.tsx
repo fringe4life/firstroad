@@ -1,29 +1,35 @@
 "use client";
 
-import { FileDown, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { useActionState } from "react";
 import { Form } from "@/components/form/form";
 import { SubmitButton } from "@/components/form/submit-button";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
-import { deleteAttachment } from "../actions/delete-attachment";
-import type { AttachmentWithUrl } from "../types";
+import { ATTACHMENT_KIND_ICONS } from "../constants";
+import type { DeleteAttachmentAction, UIAttachment } from "../types";
+import { getAttachmentKindFromName } from "../utils/attachment-kind";
 
 interface AttachmentItemProps {
-  attachment: AttachmentWithUrl;
+  attachment: UIAttachment;
   isOwner: boolean;
-  ticketId: string;
+  ownerId: string;
+  deleteAttachmentAction: DeleteAttachmentAction;
 }
 
 const AttachmentItem = ({
   attachment,
   isOwner,
-  ticketId,
+  ownerId,
+  deleteAttachmentAction,
 }: AttachmentItemProps) => {
   const { downloadUrl, id, name } = attachment;
   const [state, action] = useActionState(
-    deleteAttachment.bind(null, { attachmentId: id, ticketId }),
+    deleteAttachmentAction.bind(null, { attachmentId: id, ownerId }),
     EMPTY_ACTION_STATE,
   );
+
+  const kind = getAttachmentKindFromName(name);
+  const KindIcon = ATTACHMENT_KIND_ICONS[kind];
 
   const content = downloadUrl ? (
     <a
@@ -32,12 +38,12 @@ const AttachmentItem = ({
       rel="noopener noreferrer"
       target="_blank"
     >
-      <FileDown className="aspect-square w-4" />
+      {KindIcon}
       <span className="truncate">{name}</span>
     </a>
   ) : (
     <span className="flex items-center gap-x-2 text-muted-foreground text-sm">
-      <FileDown className="aspect-square w-4" />
+      {KindIcon}
       <span className="truncate">{name}</span>
     </span>
   );

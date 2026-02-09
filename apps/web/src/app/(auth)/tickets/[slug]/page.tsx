@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { createAttachment } from "@/features/attachments/actions/create-attachment";
+import { deleteAttachment } from "@/features/attachments/actions/delete-attachment";
 import { Attachments } from "@/features/attachments/components/attachments";
 import { AttachmentsSkeleton } from "@/features/attachments/components/skeletons/attachments-skeleton";
-import { getAttachmentsByTicket } from "@/features/attachments/queries/get-attachments-by-ticket";
 import { presignAttachments } from "@/features/attachments/utils/presign-attachments";
 import { HasAuthSuspense } from "@/features/auth/components/has-auth";
 import { isOwner } from "@/features/auth/utils/owner";
@@ -17,6 +17,7 @@ import { getCommentsByTicketSlug } from "@/features/comment/dal/get-comments";
 import { TICKET_NOT_FOUND } from "@/features/constants";
 import { TicketDetailView } from "@/features/ticket/components/ticket-detail-view";
 import { getAllTicketSlugs } from "@/features/ticket/queries/get-all-ticket-slugs";
+import { getAttachmentsByTicket } from "@/features/ticket/queries/get-attachments-by-ticket";
 import { getTicketBySlug } from "@/features/ticket/queries/get-ticket";
 import { ticketsPath } from "@/path";
 
@@ -58,6 +59,7 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
   const attachments = await getAttachmentsByTicket(ticket.id);
   const attachmentsWithUrls = presignAttachments(
     ticket.organizationId,
+    "ticket",
     ticket.id,
     attachments,
   );
@@ -77,8 +79,9 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
               <Attachments
                 attachments={attachmentsWithUrls}
                 createAttachmentAction={createAttachment}
+                deleteAttachmentAction={deleteAttachment}
                 isOwner={isOwner(user, { userId: ticket.userId })}
-                ticketId={ticket.id}
+                ownerId={ticket.id}
               />
             )}
           </HasAuthSuspense>

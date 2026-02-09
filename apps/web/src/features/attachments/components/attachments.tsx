@@ -4,23 +4,25 @@ import { AttachmentList } from "@/features/attachments/components/attachment-lis
 import type { AttachmentsProps } from "@/features/attachments/types";
 
 const Attachments = ({
-  ticketId,
+  ownerId,
   isOwner,
   attachments,
   createAttachmentAction,
+  deleteAttachmentAction,
 }: AttachmentsProps) => (
   <CardCompact
     content={
       <div className="grid grid-rows-[1fr_min-content] gap-y-4">
         <AttachmentList
           attachments={attachments}
+          deleteAttachmentAction={deleteAttachmentAction}
           isOwner={isOwner}
-          ticketId={ticketId}
+          ownerId={ownerId}
         />
         {isOwner && (
           <AttachmentCreateForm
             createAttachmentAction={createAttachmentAction}
-            ticketId={ticketId}
+            ownerId={ownerId}
           />
         )}
       </div>

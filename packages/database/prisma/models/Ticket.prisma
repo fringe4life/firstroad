@@ -24,7 +24,6 @@ model Ticket {
   updatedAt DateTime @updatedAt
   deadline  DateTime
 
-  comments Comment[]
-
-  attachments Attachment[]
+  comments    Comment[]
+  attachments TicketAttachment[]
 }

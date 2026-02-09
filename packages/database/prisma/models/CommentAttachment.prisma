@@ -1,0 +1,9 @@
+model CommentAttachment {
+  id        String  @id @default(cuid())
+  name      String
+  comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId String
+
+  @@index([commentId])
+}
+

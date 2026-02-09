@@ -3,18 +3,20 @@
 import { GenericComponent } from "@/components/generic-component";
 import { AttachmentItem } from "@/features/attachments/components/attachment-item";
 import type { List } from "@/types";
-import type { AttachmentWithUrl } from "../types";
+import type { DeleteAttachmentAction, UIAttachment } from "../types";
 
 interface AttachmentListProps {
-  attachments: List<AttachmentWithUrl>;
+  attachments: List<UIAttachment>;
   isOwner: boolean;
-  ticketId: string;
+  ownerId: string;
+  deleteAttachmentAction: DeleteAttachmentAction;
 }
 
 const AttachmentList = ({
   attachments,
   isOwner,
-  ticketId,
+  ownerId,
+  deleteAttachmentAction,
 }: AttachmentListProps) => (
   <GenericComponent
     as="ul"
@@ -23,7 +25,12 @@ const AttachmentList = ({
     emptyStateMessage="No attachments yet."
     errorStateMessage="Failed to load attachments"
     items={attachments}
-    renderProps={(item) => ({ attachment: item, isOwner, ticketId })}
+    renderProps={(item) => ({
+      attachment: item,
+      isOwner,
+      ownerId,
+      deleteAttachmentAction,
+    })}
   />
 );
 

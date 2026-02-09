@@ -8,6 +8,7 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev --skip-generate",
     "db:deploy": "prisma migrate deploy",
+    "clear:attachments": "bun --bun --env-file .env prisma/scripts/clear-attachments.ts",
     "clear:non-auth": "bun prisma/scripts/clear-non-auth-tables.ts",
     "seed:members": "bun prisma/scripts/seed-org-members.ts",
     "postinstall": "prisma generate"
