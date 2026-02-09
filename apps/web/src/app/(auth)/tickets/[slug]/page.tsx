@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { createAttachment } from "@/features/attachments/actions/create-attachment";
+import { createCommentAttachment } from "@/features/attachments/actions/create-comment-attachment";
 import { deleteAttachment } from "@/features/attachments/actions/delete-attachment";
 import { Attachments } from "@/features/attachments/components/attachments";
 import { AttachmentsSkeleton } from "@/features/attachments/components/skeletons/attachments-skeleton";
@@ -14,7 +15,12 @@ import { Comments } from "@/features/comment/components/comments";
 import { CommentFormSkeleton } from "@/features/comment/components/skeletons/comment-form-skeleton";
 import { CommentListSkeleton } from "@/features/comment/components/skeletons/comment-list-skeleton";
 import { getCommentsByTicketSlug } from "@/features/comment/dal/get-comments";
+import { getAttachmentsByComment } from "@/features/comment/queries/get-attachments-by-comment";
 import { TICKET_NOT_FOUND } from "@/features/constants";
+import { TicketActionBarSkeleton } from "@/features/ticket/components/skeletons/ticket-action-bar-skeleton";
+import { TicketActionsDesktopSkeleton } from "@/features/ticket/components/skeletons/ticket-actions-desktop-skeleton";
+import { TicketDetailActionsDesktop } from "@/features/ticket/components/ticket-detail-actions-desktop";
+import { TicketDetailActionsMobile } from "@/features/ticket/components/ticket-detail-actions-mobile";
 import { TicketDetailView } from "@/features/ticket/components/ticket-detail-view";
 import { getAllTicketSlugs } from "@/features/ticket/queries/get-all-ticket-slugs";
 import { getAttachmentsByTicket } from "@/features/ticket/queries/get-attachments-by-ticket";
@@ -64,6 +70,26 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
     attachments,
   );
 
+  // Preload attachments for the initial page of comments so CommentItem can render them.
+  const commentAttachmentsEntries = await Promise.all(
+    (list ?? []).map(async (comment) => {
+      const commentAttachments = await getAttachmentsByComment(comment.id);
+      const commentAttachmentsWithUrls = presignAttachments(
+        ticket.organizationId,
+        "comment",
+        comment.id,
+        commentAttachments,
+      );
+      return [comment.id, commentAttachmentsWithUrls] as const;
+    }),
+  );
+  const commentAttachmentsMap = new Map(commentAttachmentsEntries);
+  const listWithAttachments =
+    list?.map((comment) => ({
+      ...comment,
+      attachments: commentAttachmentsMap.get(comment.id) ?? [],
+    })) ?? list;
+
   return (
     <div className="grid h-full grid-rows-[min-content_1fr] gap-y-8">
       <Breadcrumbs
@@ -73,6 +99,13 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
         ]}
       />
       <TicketDetailView
+        actionsSlot={
+          <HasAuthSuspense fallback={<TicketActionsDesktopSkeleton />}>
+            {(user) => (
+              <TicketDetailActionsDesktop ticket={ticket} user={user} />
+            )}
+          </HasAuthSuspense>
+        }
         attachmentsSlot={
           <HasAuthSuspense fallback={<AttachmentsSkeleton />}>
             {(user) => (
@@ -97,8 +130,9 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
           >
             {(user) => (
               <Comments
+                createAttachmentAction={createCommentAttachment}
                 deleteCommentAction={deleteComment}
-                list={list}
+                list={listWithAttachments}
                 loadMoreAction={getCommentsByTicketSlug}
                 metadata={metadata}
                 ticketId={ticket.id}
@@ -107,6 +141,13 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
                 userId={user?.id}
                 userName={user?.name ?? ""}
               />
+            )}
+          </HasAuthSuspense>
+        }
+        mobileActionsSlot={
+          <HasAuthSuspense fallback={<TicketActionBarSkeleton />}>
+            {(user) => (
+              <TicketDetailActionsMobile ticket={ticket} user={user} />
             )}
           </HasAuthSuspense>
         }

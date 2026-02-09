@@ -6,8 +6,13 @@ import { CommentOwnerButtons } from "@/features/comment/components/comment-owner
 import { useComments } from "@/features/comment/components/comments-store";
 
 const CommentList = () => {
-  const { optimisticComments, userId, handleDelete, handleEdit } =
-    useComments();
+  const {
+    optimisticComments,
+    userId,
+    handleDelete,
+    handleEdit,
+    createAttachmentAction,
+  } = useComments();
 
   return (
     <GenericComponent
@@ -22,6 +27,7 @@ const CommentList = () => {
           userId === item.userId ? (
             <CommentOwnerButtons
               comment={{ id: item.id, content: item.content }}
+              createAttachmentAction={createAttachmentAction}
               onDeleteComment={handleDelete}
               onEdit={(commentId, content) => handleEdit(commentId, content)}
             />

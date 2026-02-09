@@ -6,6 +6,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { TicketActionBarSkeleton } from "./ticket-action-bar-skeleton";
 
 const TicketItemSkeleton = () => (
   <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-[1fr_36px]">
@@ -32,12 +33,7 @@ const TicketItemSkeleton = () => (
 
           <Skeleton className="h-5 w-1/5 rounded" />
         </div>
-        {/* Mobile action bar skeleton */}
-        <div className="flex w-full gap-2 md:hidden">
-          <Skeleton className="h-8 xs:w-20 flex-1 xs:flex-none rounded" />
-          <Skeleton className="h-8 xs:w-20 flex-1 xs:flex-none rounded" />
-          <Skeleton className="h-8 xs:w-20 flex-1 xs:flex-none rounded" />
-        </div>
+        <TicketActionBarSkeleton />
       </CardFooter>
     </Card>
 

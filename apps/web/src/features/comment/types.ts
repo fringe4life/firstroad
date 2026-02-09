@@ -1,5 +1,9 @@
 import type { CommentGetPayload } from "@firstroad/db/client-types";
 import type { ReactNode, RefObject } from "react";
+import type {
+  CreateAttachmentAction,
+  UIAttachment,
+} from "@/features/attachments/types";
 import type { Maybe } from "@/types";
 import type { ActionState } from "@/utils/to-action-state";
 import type { PaginatedResult } from "../pagination/types";
@@ -11,6 +15,7 @@ type CommentModelWithUserInfo = CommentGetPayload<{
 // Comment type with additional properties for UI
 export type Comment = CommentModelWithUserInfo & {
   isDeleting?: boolean;
+  attachments?: UIAttachment[];
 };
 
 // Comment type with required user info (for actions)
@@ -64,7 +69,9 @@ export interface CommentDeleteButtonProps extends CommentDeleteHandler {
 export interface CommentOwnerButtonsProps
   extends CommentContentProps,
     CommentEditHandler,
-    CommentDeleteHandler {}
+    CommentDeleteHandler {
+  createAttachmentAction?: CreateAttachmentAction;
+}
 
 export interface CommentEditButtonProps
   extends CommentContentProps,
@@ -83,6 +90,7 @@ export interface CommentActions {
     formData: FormData,
   ) => Promise<ActionState<CommentWithUserInfo>>;
   deleteCommentAction: (commentId: string) => Promise<ActionState<string>>;
+  createAttachmentAction: CreateAttachmentAction;
 }
 
 export interface CommentsProviderProps
@@ -111,4 +119,5 @@ export interface CommentsContextValue {
   handleCancelEdit: () => void;
   handleLoadMore: () => void;
   handleDelete: (commentId: string) => Promise<ActionState<string>>;
+  createAttachmentAction: CreateAttachmentAction;
 }

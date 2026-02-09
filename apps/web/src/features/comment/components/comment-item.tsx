@@ -1,10 +1,16 @@
+"use client";
+
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { deleteCommentAttachment } from "@/features/attachments/actions/delete-comment-attachment";
+import { AttachmentList } from "@/features/attachments/components/attachment-list";
+import { useComments } from "@/features/comment/components/comments-store";
 import type { CommentItemProps } from "@/features/comment/types";
 import { TimeAgo } from "./time-ago";
 
 const CommentItem = ({ comment, buttons }: CommentItemProps) => {
-  const { updatedAt, createdAt, content, user } = comment;
+  const { userId } = useComments();
+  const { updatedAt, createdAt, content, user, attachments } = comment;
 
   const userName = user?.name || "Anonymous";
   const userInitials = userName
@@ -35,6 +41,16 @@ const CommentItem = ({ comment, buttons }: CommentItemProps) => {
         </CardHeader>
         <CardContent className="whitespace-pre-line pt-0">
           {content}
+          {attachments && attachments.length > 0 && (
+            <div className="mt-3">
+              <AttachmentList
+                attachments={attachments}
+                deleteAttachmentAction={deleteCommentAttachment}
+                isOwner={userId === comment.userId}
+                ownerId={comment.id}
+              />
+            </div>
+          )}
         </CardContent>
       </Card>
       <div className="flex flex-col gap-1">{buttons}</div>

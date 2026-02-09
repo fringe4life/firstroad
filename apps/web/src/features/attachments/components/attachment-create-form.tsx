@@ -23,11 +23,13 @@ import { createAttachmentPreviews } from "../utils/attachment-previews";
 interface AttachmentCreateFormProps {
   ownerId: string;
   createAttachmentAction: CreateAttachmentAction;
+  onSuccess?: () => void;
 }
 
 const AttachmentCreateForm = ({
   ownerId,
   createAttachmentAction,
+  onSuccess,
 }: AttachmentCreateFormProps) => {
   const fileId = useId();
   const [actionState, action] = useActionState(
@@ -51,6 +53,8 @@ const AttachmentCreateForm = ({
         if (inputRef.current) {
           inputRef.current.value = "";
         }
+
+        onSuccess?.();
       }
 
       return nextState;

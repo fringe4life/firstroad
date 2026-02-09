@@ -31,6 +31,7 @@ const CommentsProvider = ({
   loadMoreAction,
   upsertCommentAction,
   deleteCommentAction,
+  createAttachmentAction,
   userId,
   userName,
   ticketId,
@@ -176,6 +177,7 @@ const CommentsProvider = ({
     handleCancelEdit,
     handleLoadMore,
     handleDelete,
+    createAttachmentAction,
   };
 
   return (
