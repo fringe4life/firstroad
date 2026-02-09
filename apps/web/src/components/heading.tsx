@@ -9,14 +9,14 @@ interface HeadingProps {
 const Heading = ({ title, description, tabs, actions }: HeadingProps) => (
   <>
     {tabs}
-    <div className="flex h-min w-full items-center justify-between self-start px-4 sm:px-8">
-      <div className="w-full justify-self-stretch">
+    <div className="grid h-min w-full grid-cols-[max-content_0.5fr] items-center justify-between gap-x-4 self-start px-4 sm:px-8">
+      <div>
         <h2 className="font-bold text-2xl tracking-tight sm:text-3xl">
           {title}
         </h2>
         <p className="text-muted-foreground text-sm">{description}</p>
       </div>
-      <div className="flex items-center gap-x-2"> {actions}</div>
+      {actions}
     </div>
     <Separator />
   </>

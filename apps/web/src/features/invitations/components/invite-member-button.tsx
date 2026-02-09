@@ -5,6 +5,7 @@ import { useActionState, useId } from "react";
 import { FieldError } from "@/components/form/field-error";
 import { Form } from "@/components/form/form";
 import { SubmitButton } from "@/components/form/submit-button";
+import { ResponsiveLabel } from "@/components/responsive-label";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -44,10 +45,13 @@ const InviteMemberButton = ({ organizationId }: InviteMemberButtonProps) => {
 
   return (
     <>
-      <Button onClick={open}>
-        <LucidePlus className="aspect-square w-4" />
-        Invite Member
-      </Button>
+      <ResponsiveLabel
+        fullLabel="Invite Member"
+        icon={<LucidePlus className="aspect-square w-4" />}
+        shortLabel="Invite"
+      >
+        <Button onClick={open} />
+      </ResponsiveLabel>
 
       <Dialog onOpenChange={close} open={isOpen}>
         <DialogContent>

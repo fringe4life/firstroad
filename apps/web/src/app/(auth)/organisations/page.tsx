@@ -2,6 +2,7 @@ import { LucidePlus } from "lucide-react";
 import Link from "next/link";
 import { connection } from "next/server";
 import { Heading } from "@/components/heading";
+import { ResponsiveLabel } from "@/components/responsive-label";
 import { Suspend } from "@/components/suspend";
 import { buttonVariants } from "@/components/ui/button";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
@@ -16,10 +17,16 @@ const OrganisationsPage = async () => {
     <div className="grid h-full grid-rows-[min-content_min-content_1fr] gap-y-8">
       <Heading
         actions={
-          <Link className={buttonVariants()} href={organisationsCreatePath()}>
-            <LucidePlus className="aspect-square w-4" />
-            Create Organisation
-          </Link>
+          <ResponsiveLabel
+            fullLabel="Create Organisation"
+            icon={<LucidePlus className="aspect-square w-4" />}
+            shortLabel="Create"
+          >
+            <Link
+              className={buttonVariants()}
+              href={organisationsCreatePath()}
+            />
+          </ResponsiveLabel>
         }
         description="All your Organisations"
         title="Organisations"

@@ -7,6 +7,6 @@
     "dev": "bun x inngest-cli dev -u http://localhost:3000/api/inngest"
   },
   "devDependencies": {
-    "inngest-cli": "^1.16.2"
+    "inngest-cli": "^1.16.3"
   }
 }

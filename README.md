@@ -9,14 +9,14 @@
 [![Better Auth](https://img.shields.io/badge/Better%20Auth-beta-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.18-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Biome](https://img.shields.io/badge/Biome-2.3.13-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-7.1.4-000000)](https://ultracite.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.8.8-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.2.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Elysia](https://img.shields.io/badge/Elysia-1.4.21-000000)](https://elysiajs.com/)
-[![Inngest](https://img.shields.io/badge/Inngest-3.51.0-000000)](https://www.inngest.com/)
+[![Inngest](https://img.shields.io/badge/Inngest-3.52.0-000000)](https://www.inngest.com/)
 [![Resend](https://img.shields.io/badge/Resend-6.9.1-000000)](https://resend.com/)
 [![React Email](https://img.shields.io/badge/React%20Email-5.2.7-000000)](https://react.email/)
-[![Bun](https://img.shields.io/badge/Bun-1.3.8-FBF0DF?logo=bun&logoColor=000000)](https://bun.sh/)
+[![Bun](https://img.shields.io/badge/Bun-1.3.9-FBF0DF?logo=bun&logoColor=FBF0DF)](https://bun.sh/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-7.1.5-000000)](https://ultracite.dev/)
 
 </div>
 
@@ -61,9 +61,9 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **URL Search Params**: nuqs 2.8 for type-safe URL parameters
 - **Email**: React Email 5.2 with Resend 6.9 for transactional emails
 - **API Framework**: Elysia 1.4 with @elysiajs/cors 1.4 for unified API routes
-- **Background Jobs**: Inngest 3.50 for background tasks and event handling
+- **Background Jobs**: Inngest 3.52 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
-- **Linting**: Biome 2.3.13 for fast formatting and linting with Ultracite 7.1.4 rules
+- **Linting**: Biome 2.3.13 for fast formatting and linting with Ultracite 7.1.5 rules
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 
@@ -220,13 +220,13 @@ npm install
 
 ### 3. Set up environment variables
 
-Copy the example environment file and configure your variables:
+Copy the web app example env and configure (from repo root):
 
 ```bash
-cp env.example .env.local
+cp apps/web/env.example apps/web/.env.local
 ```
 
-Update `.env.local` with your configuration:
+Update `apps/web/.env.local` with your configuration:
 
 ```env
 # Database
@@ -266,18 +266,23 @@ S3_BUCKET="your-bucket-name"
 
 ### 4. Set up the database
 
+Prisma lives in `packages/database`. From repo root:
+
 ```bash
-# Generate Prisma client
-bunx prisma generate
+# Generate Prisma client (runs automatically after bun install via postinstall)
+bunx turbo run db:generate --filter=@firstroad/db
 
-# Run database migrations (push schema to dev DB)
-bunx prisma db push
+# Run migrations (from packages/database)
+cd packages/database && bun run db:migrate
+# Or push schema for dev: bunx prisma db push
 
-# Seed the database with sample data
-bunx prisma db seed
+# Seed (from packages/database; seed script in prisma.config.ts)
+cd packages/database && bunx prisma db seed
 ```
 
 ### 5. Start the development server
+
+From repo root (runs Next.js in `apps/web` via Turborepo):
 
 ```bash
 bun run dev
@@ -287,41 +292,34 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## 📁 Project Structure
 
+Turborepo monorepo: root workspace with `apps/*` and `packages/*`.
+
 ```
-src/
-├── app/                      # Next.js App Router pages
-│   ├── (auth)/               # Protected routes (account, organisations, tickets)
-│   ├── (password)/          # Public auth routes (sign-in, sign-up, reset, OTP)
-│   ├── @auth/                # Parallel auth modals (interception routes)
-│   ├── api/[[...slugs]]/     # Elysia catch-all API route handler
-│   ├── onboarding/           # Onboarding and select-active-organisation
-│   ├── layout.tsx            # Root layout with auth slot
-│   ├── page.tsx              # Home page
-│   └── globals.css           # Global styles with custom variants
-├── components/               # Shared UI components and primitives
-│   ├── form/                 # Form helpers (field-error, submit-button, action feedback)
-│   ├── skeletons/            # Shared skeletons (icon-button, actions, tabs, card-header, heading)
-│   ├── theme/                # Theme provider and switcher
-│   ├── ui/                   # shadcn/ui components
-│   └── unsuccessful-table.tsx
-├── features/                 # Feature modules
-│   ├── attachments/          # Ticket attachments (Bun S3): actions, components, queries, presign, skeletons
-│   ├── auth/                 # Auth components, events, queries, types, utils
-│   ├── comment/              # Comment actions, optimistic hooks, components, store
-│   ├── invitations/          # Invitation actions, components, email events, queries
-│   ├── memberships/          # Membership actions, components, queries, skeletons
-│   ├── navigation/           # Sidebar, nav-items, mobile menu, sidebar-sign-in-up-links, context
-│   ├── organisation/         # Organization actions, components, skeletons
-│   ├── pagination/           # Pagination components + nuqs parsers
-│   ├── password/             # Password flows, actions, emails, events, utils
-│   └── ticket/               # Ticket actions, DAL, queries, components, skeletons
-├── hooks/                    # Shared client hooks
-├── lib/                      # Auth, prisma, env, inngest, email, app
-├── shims/                    # Kysely adapter shim (unused when serverExternalPackages used)
-├── utils/                    # Cache tags, slug, cookies, invalidate-cache, to-action-state, try-catch
-├── path.ts                   # Type-safe route helpers
-├── proxy.ts                  # Middleware proxy (protected routes, auth redirects)
-└── generated/                # Generated Prisma client + prismabox types (output of prisma generate)
+firstroad/
+├── apps/
+│   ├── web/                  # Next.js app (main app)
+│   │   ├── src/
+│   │   │   ├── app/          # App Router: (auth), (password), @auth, api, onboarding, layout, page
+│   │   │   ├── components/  # Shared UI, form, skeletons, theme, ui
+│   │   │   ├── features/    # attachments, auth, comment, invitations, memberships, navigation, organisation, pagination, password, ticket
+│   │   │   ├── lib/         # auth, env, inngest, email, app
+│   │   │   ├── hooks/       # Shared client hooks
+│   │   │   ├── utils/       # cache-tags, invalidate-cache, slug, to-action-state, etc.
+│   │   │   ├── path.ts
+│   │   │   └── proxy.ts
+│   │   ├── env.example
+│   │   ├── next.config.ts
+│   │   └── vercel.json
+│   └── inngest/              # Inngest dev tooling
+├── packages/
+│   ├── database/             # Prisma (schema, migrations, models, seed)
+│   │   ├── prisma/
+│   │   ├── prisma.config.ts
+│   │   └── src/              # client, client-types, index
+│   └── emails/               # React Email templates
+├── package.json              # Workspaces, turbo scripts
+├── turbo.json
+└── biome.jsonc
 ```
 
 ## 🔐 Authentication
@@ -459,49 +457,43 @@ Built with shadcn/ui and Tailwind CSS:
 
 ## 🚀 Available Scripts
 
+All commands from **repo root**. Turborepo runs tasks in the right workspace; Next.js app is in `apps/web`.
+
 ```bash
 # Development
-bun run dev:bun           # Start dev server with Bun + Webpack
-bun run dev              # Start dev server (Turbopack)
-bun run dev:inspect      # Start dev server with inspector (Turbopack)
+bun run dev              # Start dev server (Turbopack, apps/web)
+bun run dev:inspect      # Start dev with inspector
+bun run build            # Build (turbo; excludes emails package)
+bun run start            # Start production server
+bun run type             # TypeScript type check (tsgo)
+bun run typegen          # Next.js type definitions (apps/web)
 bun run next:upgrade     # Upgrade Next.js
-bun run next:analyze     # Analyze Next.js bundle
-bun run build            # Build for production (Bun + Webpack)
-bun run build:debug      # Build with debug output
-bun run build:debug:prerender # Build with debug prerender info
-bun run start            # Start production server (Bun)
-bun run type             # Run TypeScript type checking (tsgo)
-bun run typegen          # Generate Next.js type definitions
-bun run postinstall      # Generate Prisma client (runs automatically after install)
-bun run prepare          # Install Git hooks via Husky
+bun run next:analyze     # Bundle analysis
+bun run postinstall      # Generate Prisma client (turbo postinstall)
 
-# Email Development
-bun run dev:email        # Start React Email preview server (./emails directory)
-bun run build:email      # Build email templates (./emails directory)
-bun run export:email     # Export email templates to HTML (./emails directory)
-bun run resend:list      # List Resend templates (requires RESEND_FULL_ACCESS)
-bun run resend:download  # Download Resend templates to emails/downloaded/
+# Email (packages/emails)
+bun run dev:email        # React Email preview
+bun run build:email      # Build email templates
+bun run export:email     # Export to HTML
+bun run resend:list      # List Resend templates (RESEND_FULL_ACCESS)
+bun run resend:download  # Download templates to emails/downloaded/
 
-# Database
-bunx --bun prisma generate # Generate Prisma client
-bunx --bun prisma db push  # Push schema to database
-bunx --bun prisma db seed  # Seed database with sample data
-bun run reset:tickets    # Reset only ticket and comment data (preserves users)
-bun run clear:non-auth   # Clear all non-auth tables from the database
-bun run seed:members     # Add users to all organizations they are not members of
+# Database (packages/database via turbo)
+bunx turbo run db:generate --filter=@firstroad/db   # Generate Prisma client
+bun run reset:tickets    # Reset ticket/comment data (preserves users)
+bun run clear:non-auth   # Clear non-auth tables
+bun run seed:members     # Seed org members
 
-# Background Jobs (Inngest)
-bun run inngest          # Start Inngest dev server for local testing
+# Inngest
+bun run inngest          # Inngest dev server (local)
 
-# Ultracite (Code Quality)
-bun run check            # Run Ultracite checks
-bun run fix              # Fix with Ultracite
-bun run doctor           # Run Ultracite doctor
-bun run ultracite:upgrade # Re-initialize Ultracite config
+# Code quality (Ultracite + Biome)
+bun run check            # Ultracite check
+bun run fix              # Ultracite fix (format + lint)
+bun run doctor           # Ultracite doctor
 
 # Deployment
-bun run deploy           # Deploy to Vercel production
-bun run deploy:prod      # Build and deploy to Vercel production
+bun run deploy:prod      # cd apps/web && vercel deploy --prod
 ```
 
 ## 🔧 Configuration

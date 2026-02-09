@@ -6,6 +6,9 @@
 
 @theme {
   --breakpoint-xs: 450px;
+  --container-icon: 10px;
+  --container-medium: 8ch;
+  --container-large: 18ch;
 }
 
 :root {
