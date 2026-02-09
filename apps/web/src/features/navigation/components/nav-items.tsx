@@ -28,8 +28,7 @@ const NavItems = () => {
               className={cn(
                 buttonVariants({ variant: "ghost" }),
                 "relative flex h-12 w-full justify-start",
-                Boolean(isActive) &&
-                  "bg-muted font-bold hover:bg-muted-foreground",
+                isActive && "bg-primary/50 font-bold",
               )}
               href={item.href}
               onNavigate={close}

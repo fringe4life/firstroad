@@ -1,6 +1,11 @@
 "use client";
 
-import { debounce, useQueryState, useQueryStates } from "nuqs";
+import {
+  debounce,
+  defaultRateLimit,
+  useQueryState,
+  useQueryStates,
+} from "nuqs";
 import { useTransition } from "react";
 import { SearchInput } from "@/components/search-input";
 import {
@@ -26,10 +31,13 @@ const TicketSearchInput = ({
       onChange={(value) => {
         startTransition(async () => {
           await setSearch(value, {
-            limitUrlUpdates: debounce(DEBOUNCE_DELAY_MS),
+            limitUrlUpdates:
+              value === "" ? defaultRateLimit : debounce(DEBOUNCE_DELAY_MS),
           });
           // Reset to first page when search changes
-          await setPagination({ page: 0 });
+          startTransition(async () => {
+            await setPagination({ page: 0 });
+          });
         });
       }}
       placeholder={placeholder}

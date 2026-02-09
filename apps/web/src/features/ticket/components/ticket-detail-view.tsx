@@ -21,7 +21,7 @@ const TicketDetailView = ({
   const { userId, slug, id, status, organizationId } = ticket;
 
   return (
-    <div className="max-content-widest grid gap-y-4 self-start justify-self-center">
+    <div className="max-content-widest grid gap-y-4 self-start">
       <TicketCard
         actions={
           <TicketOwnerOptionsFetch

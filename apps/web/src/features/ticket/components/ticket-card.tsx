@@ -38,7 +38,10 @@ const TicketCard = ({
       exit="ticket-card-exit"
       name={`ticket-${ticket.id}`}
     >
-      <div className="grid grid-cols-1 gap-2 md:grid-flow-col md:grid-cols-[1fr_36px]">
+      <div
+        className="grid detail:grid-cols-[1fr_36px] grid-cols-1 gap-2 md:grid-flow-col md:grid-cols-[1fr_36px]"
+        data-detail={variant === "detail" ? "true" : undefined}
+      >
         <Card
           className="relative w-full overflow-hidden detail:border-primary/20 detail:shadow-lg"
           data-detail={variant === "detail" ? "true" : undefined}

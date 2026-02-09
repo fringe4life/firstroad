@@ -32,19 +32,22 @@ const AttachmentItem = ({
       rel="noopener noreferrer"
       target="_blank"
     >
-      <FileDown className="aspect-square w-4 shrink-0" />
+      <FileDown className="aspect-square w-4" />
       <span className="truncate">{name}</span>
     </a>
   ) : (
     <span className="flex items-center gap-x-2 text-muted-foreground text-sm">
-      <FileDown className="aspect-square w-4 shrink-0" />
+      <FileDown className="aspect-square w-4" />
       <span className="truncate">{name}</span>
     </span>
   );
 
   return (
-    <li className="flex items-center gap-x-2">
-      <div className="flex-1">{content}</div>
+    <li
+      className="grid grid-flow-col grid-cols-1 owner:grid-cols-[1fr_36px] items-center gap-x-2"
+      data-owner={isOwner}
+    >
+      <div className="truncate">{content}</div>
       {isOwner && (
         <Form action={action} state={state}>
           <SubmitButton icon={<Trash2 />} size="icon" variant="destructive" />

@@ -32,15 +32,6 @@ const deleteAttachment = async (
   _prevState: ActionState,
   _formData: FormData,
 ): Promise<ActionState> => {
-  const { user } = await getUser();
-
-  if (!user?.id) {
-    return toActionState(
-      "You must be signed in to delete attachments",
-      "ERROR",
-    );
-  }
-
   const parseResult = safeParse(deleteAttachmentInputSchema, {
     attachmentId,
     ticketId,
@@ -48,6 +39,14 @@ const deleteAttachment = async (
 
   if (!parseResult.success) {
     return fromErrorToActionState(new ValiError(parseResult.issues));
+  }
+  const { user } = await getUser();
+
+  if (!user?.id) {
+    return toActionState(
+      "You must be signed in to delete attachments",
+      "ERROR",
+    );
   }
 
   const ticket = await itemWithOwnership(findTicket(ticketId), user);

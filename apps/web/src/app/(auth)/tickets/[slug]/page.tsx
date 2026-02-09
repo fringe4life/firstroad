@@ -63,7 +63,7 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
   );
 
   return (
-    <div className="grid h-full w-full grid-rows-[min-content_1fr] gap-y-8">
+    <div className="grid h-full grid-rows-[min-content_1fr] gap-y-8">
       <Breadcrumbs
         breadcrumbs={[
           { title: "Tickets", href: ticketsPath() },
