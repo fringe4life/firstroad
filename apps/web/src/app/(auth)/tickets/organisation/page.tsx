@@ -4,7 +4,7 @@ import { Heading } from "@/components/heading";
 import { Suspend } from "@/components/suspend";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { upsertTicket } from "@/features/ticket/actions/upsert-ticket";
-import { TicketControlsFallback } from "@/features/ticket/components/skeletons/ticket-controls-skeleton";
+import { TicketsControlSkeleton } from "@/features/ticket/components/skeletons/ticket-controls-skeleton";
 import { TicketFormSkeleton } from "@/features/ticket/components/skeletons/ticket-form-skeleton";
 import { TicketListSkeleton } from "@/features/ticket/components/skeletons/ticket-list-skeleton";
 import { TicketUpsertForm } from "@/features/ticket/components/ticket-upsert-form";
@@ -44,7 +44,7 @@ const TicketsOrganisationPage = async ({
       <Suspend
         fallback={
           <>
-            <TicketControlsFallback />
+            <TicketsControlSkeleton />
             <TicketListSkeleton />
           </>
         }

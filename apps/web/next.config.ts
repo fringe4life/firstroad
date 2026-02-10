@@ -17,6 +17,18 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: "4mb",
     },
+    turbopackFileSystemCacheForDev: true,
+  },
+  turbopack: {
+    resolveAlias: {
+      // Shim Better Auth's Kysely adapter & related entry points so Turbopack
+      // never touches node:sqlite or the real adapter bundle.
+      "node:sqlite": "./src/shims/kysely-adapter.ts",
+      "@better-auth/kysely-adapter": "./src/shims/kysely-adapter.ts",
+      "better-auth/dist/db/adapter-kysely.mjs": "./src/shims/kysely-adapter.ts",
+      "better-auth/dist/adapters/kysely-adapter/index.mjs":
+        "./src/shims/kysely-adapter.ts",
+    },
   },
 };
 

@@ -1,6 +1,6 @@
 import { CardCompact } from "@/components/card-compact";
 import { Heading } from "@/components/heading";
-import { TicketControlsFallback } from "@/features/ticket/components/skeletons/ticket-controls-skeleton";
+import { TicketsControlSkeleton } from "@/features/ticket/components/skeletons/ticket-controls-skeleton";
 import { TicketFormSkeleton } from "@/features/ticket/components/skeletons/ticket-form-skeleton";
 import { TicketListSkeleton } from "@/features/ticket/components/skeletons/ticket-list-skeleton";
 
@@ -16,7 +16,7 @@ const TicketsOrganisationLoading = () => (
       description="A new ticket will be created"
       title="Create Ticket"
     />
-    <TicketControlsFallback />
+    <TicketsControlSkeleton />
     <TicketListSkeleton />
   </>
 );

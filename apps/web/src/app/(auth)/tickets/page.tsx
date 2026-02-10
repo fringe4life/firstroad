@@ -4,7 +4,7 @@ import { Heading } from "@/components/heading";
 import { Suspend } from "@/components/suspend";
 import { RequireAuthSuspense } from "@/features/auth/components/require-auth";
 import { upsertTicket } from "@/features/ticket/actions/upsert-ticket";
-import { TicketControlsFallback } from "@/features/ticket/components/skeletons/ticket-controls-skeleton";
+import { TicketsControlSkeleton } from "@/features/ticket/components/skeletons/ticket-controls-skeleton";
 import { TicketFormSkeleton } from "@/features/ticket/components/skeletons/ticket-form-skeleton";
 import { TicketListSkeleton } from "@/features/ticket/components/skeletons/ticket-list-skeleton";
 import { TicketUpsertForm } from "@/features/ticket/components/ticket-upsert-form";
@@ -39,7 +39,7 @@ const TicketsPage = ({ searchParams }: PageProps<"/tickets">) => {
       <RequireAuthSuspense
         fallback={
           <div className="grid grid-rows-[min-content_1fr] gap-y-4">
-            <TicketControlsFallback />
+            <TicketsControlSkeleton />
             <TicketListSkeleton />
           </div>
         }

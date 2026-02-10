@@ -1,13 +1,14 @@
 "use client";
 
+import { LucideArrowUpDown } from "lucide-react";
 import { startTransition } from "react";
+import { ResponsiveLabel } from "@/components/responsive-label";
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select";
 export interface SortOption {
   label: string;
@@ -33,11 +34,22 @@ const SortSelect = ({ options, value, onValueChange }: SortSelectProps) => {
     });
   };
 
+  const activeOption =
+    options.find(
+      (option) =>
+        option.sortKey === value.sortKey &&
+        option.sortValue === value.sortValue,
+    ) ?? options[0];
+
   return (
     <Select onValueChange={handleSortChange} value={createKey(value)}>
-      <SelectTrigger className="w-full">
-        <SelectValue />
-      </SelectTrigger>
+      <ResponsiveLabel
+        fullLabel={activeOption?.label ?? ""}
+        icon={<LucideArrowUpDown className="aspect-square w-4" />}
+        shortLabel="Sort"
+      >
+        <SelectTrigger className="w-full" />
+      </ResponsiveLabel>
       <SelectContent>
         <SelectGroup>
           {options.map((option) => (

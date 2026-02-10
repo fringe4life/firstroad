@@ -5,15 +5,15 @@ import { PaginationSkeleton } from "@/features/pagination/components/skeletons/p
 import { TicketSearchInput } from "@/features/ticket/components/ticket-search-input";
 import { TicketSortSelect } from "@/features/ticket/components/ticket-select-sort";
 import type { TicketsProps } from "@/features/ticket/types";
-import { TicketControlsFallback } from "./skeletons/ticket-controls-skeleton";
+import { TicketsControlSkeleton } from "./skeletons/ticket-controls-skeleton";
 import { TicketListSkeleton } from "./skeletons/ticket-list-skeleton";
 import { TicketListPagination } from "./ticket-list-pagination";
 
 const Tickets = ({ searchParams, userId, byOrganisation }: TicketsProps) => (
   <div className="max-content-widest mx-auto grid grid-rows-[min-content_1fr_36px] justify-items-center gap-y-4">
-    <Suspend fallback={<TicketControlsFallback />}>
+    <Suspend fallback={<TicketsControlSkeleton />}>
       {/* Desktop: Stacked layout */}
-      <div className="max-content-narrow grid xs:grid-flow-col xs:grid-cols-2 gap-2">
+      <div className="max-content-narrow grid grid-flow-col grid-cols-[2fr_1fr] xs:grid-cols-[0.55fr_0.45fr] gap-2">
         <TicketSearchInput placeholder="Search tickets ..." />
         <TicketSortSelect options={TICKET_SORT_OPTIONS} />
       </div>

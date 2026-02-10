@@ -2,11 +2,11 @@
 
 import { Skeleton } from "@/components/ui/skeleton";
 
-const TicketControlsFallback = async () => (
-  <div className="max-content-narrow mx-auto grid xs:grid-flow-col xs:grid-cols-2 gap-2 justify-self-center">
+const TicketsControlSkeleton = async () => (
+  <div className="max-content-narrow grid grid-flow-col grid-cols-[2fr_1fr] xs:grid-cols-[0.55fr_0.45fr] gap-2">
     <Skeleton className="h-9 bg-muted-foreground/50" />
     <Skeleton className="h-9 bg-muted-foreground/50" />
   </div>
 );
 
-export { TicketControlsFallback };
+export { TicketsControlSkeleton };

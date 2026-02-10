@@ -25,6 +25,20 @@ const TicketActionsDesktop = ({
   canUpdateTicket,
   canDeleteTicket,
 }: TicketActionsDesktopProps) => {
+  if (!isOwner && variant === "list") {
+    return (
+      <Link
+        className={cn(
+          buttonVariants({ variant: "outline", size: "icon" }),
+          "xs:flex hidden",
+        )}
+        href={ticketPath(ticket.slug)}
+        prefetch
+      >
+        <SquareArrowOutUpRight className="aspect-square w-4" />
+      </Link>
+    );
+  }
   if (!isOwner) {
     return null;
   }

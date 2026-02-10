@@ -28,7 +28,7 @@ const TicketItemSkeleton = () => (
         <div className="flex w-full items-center justify-between">
           <div className="flex flex-1 flex-col gap-y-1">
             <Skeleton className="h-5 w-4/5 rounded" />
-            <Skeleton className="xs:hidden h-5 w-2/5 -translate-x-full xs:translate-x-0 xs:self-start self-end rounded" />
+            <Skeleton className="xs:hidden h-5 w-1/5 -translate-x-full xs:translate-x-0 xs:self-start self-end rounded" />
           </div>
 
           <Skeleton className="h-5 w-1/5 rounded" />
