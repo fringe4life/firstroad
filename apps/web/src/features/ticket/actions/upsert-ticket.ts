@@ -1,7 +1,6 @@
 /** biome-ignore-all lint/style/noMagicNumbers: numbers are called in a max function */
 "use server";
-
-import { prisma } from "@firstroad/db";
+import { createSlug } from "@firstroad/utils";
 import { redirect } from "next/navigation";
 import {
   maxLength,
@@ -22,13 +21,13 @@ import type { Maybe } from "@/types";
 import { setCookieByKey } from "@/utils/cookies";
 import { toCent } from "@/utils/currency";
 import { invalidateTicketAndList } from "@/utils/invalidate-cache";
-import { createSlug } from "@/utils/slug";
 import {
   type ActionState,
   fromErrorToActionState,
   toActionState,
 } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
+import { createTicket, updateTicket } from "../dal/ticket-crud";
 import { findTicket } from "../queries/find-ticket";
 
 const upsertSchema = object({
@@ -92,13 +91,16 @@ const upsertTicket = async (
       userId: user.id,
       description,
     };
-    const ticket = await prisma.ticket.upsert({
-      where: {
-        id: id ?? "",
-      },
-      update: dbData,
-      create: { ...dbData, organizationId },
-    });
+    const ticket = id
+      ? await updateTicket({
+          where: { id },
+          data: dbData,
+          includeUser: false,
+        })
+      : await createTicket({
+          data: { ...dbData, organizationId },
+          includeUser: false,
+        });
 
     if (ticket.slug) {
       invalidateTicketAndList(ticket.slug);

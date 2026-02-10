@@ -1,3 +1,4 @@
+import type { TicketInclude } from "@firstroad/db/client-types";
 import { Check, File, Pencil } from "lucide-react";
 import type { Metadata } from "next";
 import type { SortOption } from "@/components/sort-select";
@@ -32,9 +33,17 @@ const TICKET_NOT_FOUND: Metadata = {
   description: "The requested ticket could not be found.",
 };
 
+const TICKET_WITH_USER_INCLUDE = {
+  user: {
+    select: {
+      name: true,
+    },
+  },
+} satisfies TicketInclude;
 export {
   TICKET_ICONS,
   TICKET_STATUS_LABELS,
   TICKET_SORT_OPTIONS,
   TICKET_NOT_FOUND,
+  TICKET_WITH_USER_INCLUDE,
 };

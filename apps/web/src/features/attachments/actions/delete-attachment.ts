@@ -1,11 +1,10 @@
 "use server";
 
-import { prisma } from "@firstroad/db";
-import { s3 } from "bun";
 import { revalidatePath } from "next/cache";
 import { minLength, object, pipe, safeParse, string, ValiError } from "valibot";
 import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
 import { getUser } from "@/features/auth/queries/get-user";
+import { deleteTicketAttachmentRecord } from "@/features/ticket/dal/delete-ticket-attachment";
 import { findTicket } from "@/features/ticket/queries/find-ticket";
 import { ticketPath } from "@/path";
 import { invalidateTicketAndAttachments } from "@/utils/invalidate-cache";
@@ -15,7 +14,6 @@ import {
   toActionState,
 } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
-import { attachmentS3Key } from "../utils/presign-attachments";
 
 const deleteAttachmentInputSchema = object({
   attachmentId: pipe(string(), minLength(1, "Attachment id is required")),
@@ -62,40 +60,17 @@ const deleteAttachment = async (
     );
   }
 
-  const attachment = await prisma.ticketAttachment.findUnique({
-    where: { id: attachmentId },
-  });
-
-  if (!attachment) {
-    return toActionState("Attachment not found", "ERROR");
-  }
-
-  const key = attachmentS3Key(
-    ticket.organizationId,
-    "ticket",
-    ticket.id,
-    attachment.id,
-    attachment.name,
-  );
-
-  const { error: s3Error } = await tryCatch(() => s3.file(key).delete());
-
-  if (s3Error) {
-    return fromErrorToActionState(
-      new Error("Could not delete attachment from storage"),
-    );
-  }
-
-  const { error: dbError } = await tryCatch(() =>
-    prisma.ticketAttachment.delete({
-      where: { id: attachment.id },
+  const { error } = await tryCatch(() =>
+    deleteTicketAttachmentRecord({
+      organizationId: ticket.organizationId,
+      ticketId: ticket.id,
+      attachmentId,
+      ownerId: ticket.id,
     }),
   );
 
-  if (dbError) {
-    return fromErrorToActionState(
-      new Error("Attachment removed from storage but not from database"),
-    );
+  if (error) {
+    return fromErrorToActionState(error);
   }
 
   invalidateTicketAndAttachments(ticket.slug, ticket.id);

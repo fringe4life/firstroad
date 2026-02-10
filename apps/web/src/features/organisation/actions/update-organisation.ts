@@ -1,10 +1,10 @@
 "use server";
 
+import { createSlug } from "@firstroad/utils";
 import { headers } from "next/headers";
 import { maxLength, minLength, object, pipe, safeParse, string } from "valibot";
 import { auth } from "@/lib/auth";
 import { setCookieByKey } from "@/utils/cookies";
-import { createSlug } from "@/utils/slug";
 import {
   type ActionState,
   fromErrorToActionState,

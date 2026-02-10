@@ -1,7 +1,5 @@
 /** biome-ignore-all lint/style/noMagicNumbers: are well explained zod schema */
 "use server";
-
-import { prisma } from "@firstroad/db";
 import type { CommentWhereUniqueInput } from "@firstroad/db/client-types";
 import { maxLength, minLength, object, pipe, safeParse, string } from "valibot";
 import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
@@ -17,6 +15,7 @@ import {
   toActionState,
 } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
+import { createComment, updateComment } from "../dal/comment-crud";
 import { findComment } from "../queries/find-comment";
 
 const upsertCommentSchema = object({
@@ -76,22 +75,20 @@ export const upsertComment = async (
   };
 
   const { data: comment, error: commentError } = await tryCatch(() =>
-    prisma.comment.upsert({
-      where: whereClause,
-      update: { content },
-      create: {
-        content,
-        ticketId,
-        userId: user.id,
-      },
-      include: {
-        user: {
-          select: {
-            name: true,
+    commentId
+      ? updateComment({
+          where: whereClause,
+          data: { content },
+          includeUser: true,
+        })
+      : createComment({
+          data: {
+            content,
+            ticketId,
+            userId: user.id,
           },
-        },
-      },
-    }),
+          includeUser: true,
+        }),
   );
   if (commentError) {
     return fromErrorToActionState(commentError);

@@ -1,6 +1,4 @@
 "use server";
-
-import { prisma } from "@firstroad/db";
 import type { TicketStatus } from "@firstroad/db/client-types";
 import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
@@ -8,6 +6,7 @@ import { getMemberPermission } from "@/features/memberships/queries/get-member-p
 import { invalidateTicketAndList } from "@/utils/invalidate-cache";
 import { fromErrorToActionState, toActionState } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
+import { updateTicket } from "../dal/ticket-crud";
 import { findTicket } from "../queries/find-ticket";
 
 export const updateStatus = async (newValue: TicketStatus, id: string) => {
@@ -32,11 +31,10 @@ export const updateStatus = async (newValue: TicketStatus, id: string) => {
     }
 
     // is owner and can update ticket, update status
-    await prisma.ticket.update({
+    await updateTicket({
       where: { id },
-      data: {
-        status: newValue,
-      },
+      data: { status: newValue },
+      includeUser: false,
     });
     // return slug to invalidate cache
     return ticket.slug;

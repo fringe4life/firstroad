@@ -5,7 +5,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { TICKET_ICONS, TICKET_STATUS_LABELS } from "@/features/constants";
+import {
+  TICKET_ICONS,
+  TICKET_STATUS_LABELS,
+} from "@/features/ticket/constants";
 import type { TicketStats } from "@/features/ticket/queries/get-user-ticket-stats";
 
 interface TicketStatsCardProps {

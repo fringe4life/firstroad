@@ -1,11 +1,10 @@
 "use server";
 
-import { prisma } from "@firstroad/db";
-import { s3 } from "bun";
 import { revalidatePath } from "next/cache";
 import { minLength, object, pipe, safeParse, string, ValiError } from "valibot";
 import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
 import { getUser } from "@/features/auth/queries/get-user";
+import { deleteCommentAttachmentRecord } from "@/features/comment/dal/delete-comment-attachment";
 import { findComment } from "@/features/comment/queries/find-comment";
 import { findTicket } from "@/features/ticket/queries/find-ticket";
 import { ticketPath } from "@/path";
@@ -16,7 +15,6 @@ import {
   toActionState,
 } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
-import { attachmentS3Key } from "../utils/presign-attachments";
 
 const deleteCommentAttachmentInputSchema = object({
   attachmentId: pipe(string(), minLength(1, "Attachment id is required")),
@@ -75,40 +73,16 @@ const deleteCommentAttachment = async (
     return toActionState("Ticket not found", "ERROR");
   }
 
-  const attachment = await prisma.commentAttachment.findUnique({
-    where: { id: attachmentId },
-  });
-
-  if (!attachment) {
-    return toActionState("Attachment not found", "ERROR");
-  }
-
-  const key = attachmentS3Key(
-    ticket.organizationId,
-    "comment",
-    comment.id,
-    attachment.id,
-    attachment.name,
-  );
-
-  const { error: s3Error } = await tryCatch(() => s3.file(key).delete());
-
-  if (s3Error) {
-    return fromErrorToActionState(
-      new Error("Could not delete attachment from storage"),
-    );
-  }
-
-  const { error: dbError } = await tryCatch(() =>
-    prisma.commentAttachment.delete({
-      where: { id: attachment.id },
+  const { error } = await tryCatch(() =>
+    deleteCommentAttachmentRecord({
+      organizationId: ticket.organizationId,
+      commentId: comment.id,
+      attachmentId,
     }),
   );
 
-  if (dbError) {
-    return fromErrorToActionState(
-      new Error("Attachment removed from storage but not from database"),
-    );
+  if (error) {
+    return fromErrorToActionState(error);
   }
 
   invalidateTicketAndAttachments(ticket.slug, ticket.id);

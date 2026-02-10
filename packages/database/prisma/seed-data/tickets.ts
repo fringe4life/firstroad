@@ -1,5 +1,8 @@
-import type { Prisma, Ticket } from "@/generated/prisma/client";
-import { createSlug } from "@/utils/slug";
+import type {
+  TicketCreateManyInput,
+  TicketModel,
+} from "@firstroad/db/client-types";
+import { createSlug } from "@firstroad/utils";
 
 const getRandomUser = (users: SeedUser[]) =>
   users[Math.floor(Math.random() * users.length)];
@@ -9,7 +12,7 @@ const getRandomOrganisationId = (ids: string[]) =>
 
 interface TicketWithoutUserId
   extends Omit<
-    Ticket,
+    TicketModel,
     "userId" | "id" | "createdAt" | "updatedAt" | "slug" | "organizationId"
   > {}
 
@@ -227,7 +230,7 @@ export const baseTickets: TicketWithoutUserId[] = [
 export const createTickets = (
   users: SeedUser[],
   tickets: TicketWithoutUserId[] = baseTickets,
-): Prisma.TicketCreateManyInput[] => {
+): TicketCreateManyInput[] => {
   if (users.length === 0) {
     return [];
   }

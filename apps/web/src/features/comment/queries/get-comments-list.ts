@@ -2,6 +2,7 @@
 
 import { prisma } from "@firstroad/db";
 import { cacheTag } from "next/cache";
+import { COMMENT_WITH_USER_INCLUDE } from "@/features/comment/constants";
 import { commentsCache } from "@/utils/cache-tags";
 
 // biome-ignore lint/suspicious/useAwait: needs to be for "use cache"
@@ -19,13 +20,7 @@ const getCommentsList = async ({
     where: {
       ticket: { slug: ticketSlug },
     },
-    include: {
-      user: {
-        select: {
-          name: true,
-        },
-      },
-    },
+    include: COMMENT_WITH_USER_INCLUDE,
     orderBy: [{ id: "desc" }, { updatedAt: "desc" }, { createdAt: "desc" }],
     take: take + 1, // Take one extra to check if there are more
     cursor: cursor

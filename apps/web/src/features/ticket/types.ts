@@ -1,8 +1,28 @@
 import type { TicketGetPayload, TicketModel } from "@firstroad/db/client-types";
 import type { Id, List, Maybe, SearchParamsProps } from "@/types";
+import type {
+  CreateAttachmentsForOwnerInput,
+  DeleteAttachmentForOwnerInput,
+} from "../attachments/utils/attachment-dal";
 import type { IsOwner, UserVerifiable } from "../auth/types";
 import type { OrganisationId } from "../organisation/types";
+
 // Base ticket with user for display
+
+export type CreateTicketAttachmentsInput = Omit<
+  CreateAttachmentsForOwnerInput,
+  "ownerKind"
+> & {
+  ticketId: string;
+};
+
+export type DeleteTicketAttachmentInput = Omit<
+  DeleteAttachmentForOwnerInput,
+  "ownerKind"
+> & {
+  ticketId: string;
+};
+
 export type BaseTicket = TicketGetPayload<{
   include: { user: { select: { name: true } } };
 }>;

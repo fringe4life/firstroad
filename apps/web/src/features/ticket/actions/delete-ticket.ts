@@ -1,6 +1,4 @@
 "use server";
-
-import { prisma } from "@firstroad/db";
 import { redirect } from "next/navigation";
 import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
@@ -10,6 +8,7 @@ import { setCookieByKey } from "@/utils/cookies";
 import { invalidateTicketAndList } from "@/utils/invalidate-cache";
 import { fromErrorToActionState } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
+import { deleteTicketRecord } from "../dal/ticket-crud";
 import { findTicket } from "../queries/find-ticket";
 
 export const deleteTicket = async (id: string) => {
@@ -36,7 +35,7 @@ export const deleteTicket = async (id: string) => {
     }
 
     // delete ticket
-    await prisma.ticket.delete({ where: { id } });
+    await deleteTicketRecord({ id });
 
     return ticket.slug;
   });

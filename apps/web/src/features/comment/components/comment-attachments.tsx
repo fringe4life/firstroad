@@ -1,7 +1,7 @@
-import { createCommentAttachment } from "@/features/attachments/actions/create-comment-attachment";
-import { deleteCommentAttachment } from "@/features/attachments/actions/delete-comment-attachment";
 import { Attachments } from "@/features/attachments/components/attachments";
 import { presignAttachments } from "@/features/attachments/utils/presign-attachments";
+import { createCommentAttachment } from "@/features/comment/actions/create-comment-attachment";
+import { deleteCommentAttachment } from "@/features/comment/actions/delete-comment-attachment";
 import { getAttachmentsByComment } from "@/features/comment/queries/get-attachments-by-comment";
 
 interface CommentAttachmentsProps {

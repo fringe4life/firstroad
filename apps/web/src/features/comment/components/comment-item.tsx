@@ -2,8 +2,8 @@
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { deleteCommentAttachment } from "@/features/attachments/actions/delete-comment-attachment";
 import { AttachmentList } from "@/features/attachments/components/attachment-list";
+import { deleteCommentAttachment } from "@/features/comment/actions/delete-comment-attachment";
 import { useComments } from "@/features/comment/components/comments-store";
 import type { CommentItemProps } from "@/features/comment/types";
 import { TimeAgo } from "./time-ago";

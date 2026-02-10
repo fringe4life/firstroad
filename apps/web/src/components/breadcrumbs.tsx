@@ -33,7 +33,10 @@ const Breadcrumbs = <T extends BreadcrumbItemProps>({
         if (breadcrumb.href) {
           breadcrumbItem = (
             <BreadcrumbLink asChild>
-              <Link className="flex items-center gap-1" href={breadcrumb.href}>
+              <Link
+                className="flex items-center gap-1 truncate"
+                href={breadcrumb.href}
+              >
                 {breadcrumb.title}
               </Link>
             </BreadcrumbLink>

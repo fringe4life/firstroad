@@ -1,7 +1,5 @@
 "use server";
 
-import { prisma } from "@firstroad/db";
-import { s3 } from "bun";
 import { revalidatePath } from "next/cache";
 import {
   array,
@@ -16,8 +14,15 @@ import {
   safeParse,
   ValiError,
 } from "valibot";
+import {
+  ACCEPTED_FILE_TYPES,
+  FILE_NAME_MAX,
+  MAX_SIZE_BYTES,
+  MAX_SIZE_MB,
+} from "@/features/attachments/constants";
 import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
 import { getUser } from "@/features/auth/queries/get-user";
+import { createCommentAttachments } from "@/features/comment/dal/create-comment-attachment";
 import { findComment } from "@/features/comment/queries/find-comment";
 import { findTicket } from "@/features/ticket/queries/find-ticket";
 import { ticketPath } from "@/path";
@@ -28,13 +33,6 @@ import {
   toActionState,
 } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
-import {
-  ACCEPTED_FILE_TYPES,
-  FILE_NAME_MAX,
-  MAX_SIZE_BYTES,
-  MAX_SIZE_MB,
-} from "../constants";
-import { attachmentS3Key } from "../utils/presign-attachments";
 
 const fileSchema = pipe(
   file("Please select a file."),
@@ -97,29 +95,11 @@ const createCommentAttachment = async (
   const validatedFiles = parseResult.output;
 
   const { error } = await tryCatch(async () => {
-    // Create all attachment rows in parallel (one round-trip wave to DB)
-    const attachments = await Promise.all(
-      validatedFiles.map((fileValue) =>
-        prisma.commentAttachment.create({
-          data: { name: fileValue.name, commentId },
-        }),
-      ),
-    );
-    // Upload all files to S3 in parallel (one wave of concurrent writes)
-    await Promise.all(
-      attachments.map(async (attachment, i) => {
-        const fileValue = validatedFiles[i];
-        const key = attachmentS3Key(
-          ticket.organizationId,
-          "comment",
-          comment.id,
-          attachment.id,
-          attachment.name,
-        );
-        const data = await fileValue.arrayBuffer();
-        await s3.file(key).write(data);
-      }),
-    );
+    await createCommentAttachments({
+      organizationId: ticket.organizationId,
+      commentId,
+      files: validatedFiles,
+    });
   });
 
   if (error) {

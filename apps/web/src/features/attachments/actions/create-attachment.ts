@@ -1,6 +1,4 @@
 "use server";
-import { prisma } from "@firstroad/db";
-import { s3 } from "bun";
 import { revalidatePath } from "next/cache";
 import {
   array,
@@ -17,6 +15,7 @@ import {
 } from "valibot";
 import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
 import { getUser } from "@/features/auth/queries/get-user";
+import { createTicketAttachments } from "@/features/ticket/dal/create-ticket-attachment";
 import { findTicket } from "@/features/ticket/queries/find-ticket";
 import { ticketPath } from "@/path";
 import { invalidateTicketAndAttachments } from "@/utils/invalidate-cache";
@@ -32,7 +31,6 @@ import {
   MAX_SIZE_BYTES,
   MAX_SIZE_MB,
 } from "../constants";
-import { attachmentS3Key } from "../utils/presign-attachments";
 
 const fileSchema = pipe(
   file("Please select a file."),
@@ -80,31 +78,14 @@ const createAttachment = async (
 
   const validatedFiles = parseResult.output;
 
-  const { error } = await tryCatch(async () => {
-    // Create all attachment rows in parallel (one round-trip wave to DB)
-    const attachments = await Promise.all(
-      validatedFiles.map((file) =>
-        prisma.ticketAttachment.create({
-          data: { name: file.name, ticketId },
-        }),
-      ),
-    );
-    // Upload all files to S3 in parallel (one wave of concurrent writes)
-    await Promise.all(
-      attachments.map(async (attachment, i) => {
-        const file = validatedFiles[i];
-        const key = attachmentS3Key(
-          ticket.organizationId,
-          "ticket",
-          ticket.id,
-          attachment.id,
-          attachment.name,
-        );
-        const data = await file.arrayBuffer();
-        await s3.file(key).write(data);
-      }),
-    );
-  });
+  const { error } = await tryCatch(() =>
+    createTicketAttachments({
+      organizationId: ticket.organizationId,
+      ticketId,
+      files: validatedFiles,
+      ownerId: ticket.id,
+    }),
+  );
 
   if (error) {
     return fromErrorToActionState(error);

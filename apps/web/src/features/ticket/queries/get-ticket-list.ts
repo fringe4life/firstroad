@@ -4,6 +4,7 @@ import type {
   TicketWhereInput,
 } from "@firstroad/db/client-types";
 import { cacheTag } from "next/cache";
+import { TICKET_WITH_USER_INCLUDE } from "@/features/ticket/constants";
 import { ticketsCache } from "@/utils/cache-tags";
 
 // biome-ignore lint/suspicious/useAwait: needed for use cache
@@ -22,13 +23,7 @@ const getTicketList = async ({
   cacheTag(ticketsCache());
   return prisma.ticket.findMany({
     where,
-    include: {
-      user: {
-        select: {
-          name: true,
-        },
-      },
-    },
+    include: TICKET_WITH_USER_INCLUDE,
     orderBy,
     take: takeAmount,
     skip,

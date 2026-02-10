@@ -10,6 +10,7 @@ import {
   toActionState,
 } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
+import { deleteCommentRecord } from "../dal/comment-crud";
 
 export const deleteComment = async (
   commentId: string,
@@ -41,9 +42,7 @@ export const deleteComment = async (
   }
 
   const { error: deleteError } = await tryCatch(() =>
-    prisma.comment.delete({
-      where: { id: commentId },
-    }),
+    deleteCommentRecord({ id: commentId }),
   );
   if (deleteError) {
     return fromErrorToActionState<string>(deleteError);

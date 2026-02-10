@@ -13,9 +13,9 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { TICKET_STATUS_LABELS } from "@/features/constants";
 import { deleteTicket } from "@/features/ticket/actions/delete-ticket";
 import { updateStatus } from "@/features/ticket/actions/update-status";
+import { TICKET_STATUS_LABELS } from "@/features/ticket/constants";
 import type { TicketAccess } from "@/features/ticket/types";
 import { ticketEditPath } from "@/path";
 

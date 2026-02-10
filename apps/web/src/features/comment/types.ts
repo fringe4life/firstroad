@@ -6,7 +6,25 @@ import type {
 } from "@/features/attachments/types";
 import type { Maybe } from "@/types";
 import type { ActionState } from "@/utils/to-action-state";
+import type {
+  CreateAttachmentsForOwnerInput,
+  DeleteAttachmentForOwnerInput,
+} from "../attachments/utils/attachment-dal";
 import type { PaginatedResult } from "../pagination/types";
+
+export type CreateCommentAttachmentsInput = Omit<
+  CreateAttachmentsForOwnerInput,
+  "ownerKind" | "ownerId"
+> & {
+  commentId: string;
+};
+
+export type DeleteCommentAttachmentInput = Omit<
+  DeleteAttachmentForOwnerInput,
+  "ownerKind" | "ownerId"
+> & {
+  commentId: string;
+};
 
 type CommentModelWithUserInfo = CommentGetPayload<{
   include: { user: { select: { name: true } } };
