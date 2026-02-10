@@ -1,7 +1,7 @@
 import { Table } from "@/components/ui/table";
 import type { Rows } from "@/types";
+import { OrganisationsTableHeader } from "../organisations-table-header";
 import { OrganisationsListSkeleton } from "./organisations-list-skeleton";
-import { OrganisationsTableHeader } from "./organisations-table-header";
 
 interface OrganisationsSkeletonProps extends Rows {}
 

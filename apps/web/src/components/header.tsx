@@ -4,11 +4,10 @@ import { ViewTransition } from "react";
 import { ThemeSwitcher } from "@/components/theme/theme-switcher";
 import { buttonVariants } from "@/components/ui/button";
 import { AccountDropdown } from "@/features/auth/components/account-dropwdown";
-import { AuthNavSkeleton } from "@/features/auth/components/auth-nav-skeleton";
 import { HasAuthSuspense } from "@/features/auth/components/has-auth";
+import { AuthNavSkeleton } from "@/features/auth/components/skeletons/auth-nav-skeleton";
 import { MobileMenuButton } from "@/features/navigation/components/mobile-menu-button";
 import { homePath, signInPath, signUpPath } from "@/path";
-import { IconButtonSkeleton } from "./skeletons/icon-button-skeleton";
 import { Suspend } from "./suspend";
 import { Skeleton } from "./ui/skeleton";
 
@@ -38,7 +37,7 @@ const Header = () => (
               <AuthNavSkeleton />
             </span>
             <span className="md:hidden">
-              <IconButtonSkeleton />
+              <Skeleton className="aspect-square w-9 rounded-full" />
             </span>
           </>
         }

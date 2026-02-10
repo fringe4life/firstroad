@@ -2,8 +2,8 @@ import Link from "next/link";
 import { CardCompact } from "@/components/card-compact";
 import { Suspend } from "@/components/suspend";
 import { verifySignInOTP } from "@/features/auth/actions/verify-otp-action";
-import { OtpVerifyFormSkeleton } from "@/features/auth/components/otp-verify-form-skeleton";
 import { OtpVerifyFormWithConnection } from "@/features/auth/components/otp-verify-form-with-connection";
+import { OtpVerifyFormSkeleton } from "@/features/auth/components/skeletons/otp-verify-form-skeleton";
 import type { EmailSearchParams } from "@/features/auth/types";
 import { signInPath } from "@/path";
 

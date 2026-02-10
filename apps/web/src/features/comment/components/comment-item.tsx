@@ -11,6 +11,7 @@ import { TimeAgo } from "./time-ago";
 const CommentItem = ({ comment, buttons }: CommentItemProps) => {
   const { userId } = useComments();
   const { updatedAt, createdAt, content, user, attachments } = comment;
+  const isOwner = userId === comment.userId;
 
   const userName = user?.name || "Anonymous";
   const userInitials = userName
@@ -21,8 +22,8 @@ const CommentItem = ({ comment, buttons }: CommentItemProps) => {
     .slice(0, 2);
 
   return (
-    <div className="flex gap-2">
-      <Card className="max-content-narrow gap-0">
+    <div className="flex gap-2" data-owner={isOwner}>
+      <Card className="max-content-narrow gap-0 owner:border-primary/30 owner:bg-primary/7">
         <CardHeader className="pb-3">
           <div className="flex items-center gap-3">
             <Avatar className="h-8 w-8">

@@ -24,7 +24,7 @@ const TicketSearchInput = ({
   placeholder = "Search tickets ...",
 }: TicketSearchInputProps) => {
   const [search, setSearch] = useQueryState("search", searchParser);
-  const [, setPagination] = useQueryStates(paginationParser, options);
+  const [pagination, setPagination] = useQueryStates(paginationParser, options);
   const [, startTransition] = useTransition();
   return (
     <SearchInput
@@ -34,10 +34,11 @@ const TicketSearchInput = ({
             limitUrlUpdates:
               value === "" ? defaultRateLimit : debounce(DEBOUNCE_DELAY_MS),
           });
+
           // Reset to first page when search changes
-          startTransition(async () => {
+          if (pagination.page !== 0) {
             await setPagination({ page: 0 });
-          });
+          }
         });
       }}
       placeholder={placeholder}

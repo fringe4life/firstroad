@@ -1,6 +1,7 @@
 import { IconButtonSkeleton } from "@/components/skeletons/icon-button-skeleton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AttachmentListSkeleton } from "@/features/attachments/components/skeletons/attachment-list-skeleton";
 
 const CommentItemSkeleton = () => {
   return (
@@ -20,6 +21,7 @@ const CommentItemSkeleton = () => {
             <Skeleton className="h-4 w-full rounded" />
             <Skeleton className="h-4 w-3/4 rounded" />
           </div>
+          <AttachmentListSkeleton />
         </CardContent>
       </Card>
       <div className="flex flex-col gap-1">

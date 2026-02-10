@@ -1,7 +1,7 @@
 import { Heading } from "@/components/heading";
 import { ActionsSkeleton } from "@/components/skeletons/actions-skeleton";
 import { TabsSkeleton } from "@/components/skeletons/tabs-skeleton";
-import { InvitationsSkeleton } from "@/features/invitations/components/invitations-skeleton";
+import { InvitationsSkeleton } from "@/features/invitations/components/skeletons/invitations-skeleton";
 
 const InvitationsLoader = () => (
   <>

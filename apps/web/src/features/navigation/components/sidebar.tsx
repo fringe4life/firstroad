@@ -2,7 +2,7 @@ import { Suspend } from "@/components/suspend";
 import { NavItems } from "@/features/navigation/components/nav-items";
 import { SidebarClient } from "./sidebar-client";
 import { SidebarMobileContent } from "./sidebar-mobile-content";
-import { SidebarSkeleton } from "./sidebar-skeleton";
+import { SidebarSkeleton } from "./skeletons/sidebar-skeleton";
 
 const Sidebar = () => (
   <>

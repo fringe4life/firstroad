@@ -4,7 +4,7 @@ import { connection } from "next/server";
 import { CardCompact } from "@/components/card-compact";
 import { Suspend } from "@/components/suspend";
 import { ResetPasswordForm } from "@/features/password/components/reset-password-form";
-import { ResetPasswordFormSkeleton } from "@/features/password/components/reset-password-form-skeleton";
+import { ResetPasswordFormSkeleton } from "@/features/password/components/skeletons/reset-password-form-skeleton";
 import { signInPath } from "@/path";
 
 export const metadata: Metadata = {

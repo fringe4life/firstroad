@@ -7,7 +7,7 @@ import { Suspend } from "@/components/suspend";
 import { buttonVariants } from "@/components/ui/button";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { Organisations } from "@/features/organisation/components/organisations";
-import { OrganisationsSkeleton } from "@/features/organisation/components/organisations-skeleton";
+import { OrganisationsSkeleton } from "@/features/organisation/components/skeletons/organisations-skeleton";
 import { organisationsCreatePath } from "@/path";
 
 const OrganisationsPage = async () => {

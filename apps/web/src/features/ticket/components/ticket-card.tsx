@@ -43,7 +43,7 @@ const TicketCard = ({
         data-detail={variant === "detail" ? "true" : undefined}
       >
         <Card
-          className="relative w-full overflow-hidden detail:border-primary/20 detail:shadow-lg"
+          className="relative w-full overflow-hidden detail:border-primary/20 owner:border-primary/30 owner:bg-primary/7 detail:shadow-lg"
           data-detail={variant === "detail" ? "true" : undefined}
         >
           <CardHeader>

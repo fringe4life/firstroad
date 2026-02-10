@@ -22,7 +22,10 @@ const TicketListItem = ({
   const { slug, id, status } = ticket;
 
   return (
-    <div className="max-content-narrow self-start justify-self-center">
+    <div
+      className="max-content-narrow self-start justify-self-center"
+      data-owner={isOwner}
+    >
       <TicketCard
         actions={
           <TicketActionsDesktop

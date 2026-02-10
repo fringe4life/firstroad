@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { Suspend } from "@/components/suspend";
 import { TICKET_SORT_OPTIONS } from "@/features/constants";
-import { PaginationSkeleton } from "@/features/pagination/components/pagination-skeleton";
+import { PaginationSkeleton } from "@/features/pagination/components/skeletons/pagination-skeleton";
 import { TicketSearchInput } from "@/features/ticket/components/ticket-search-input";
 import { TicketSortSelect } from "@/features/ticket/components/ticket-select-sort";
 import type { TicketsProps } from "@/features/ticket/types";

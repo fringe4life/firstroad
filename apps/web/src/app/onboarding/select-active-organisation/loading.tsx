@@ -1,6 +1,6 @@
 import { Heading } from "@/components/heading";
 import { ActionsSkeleton } from "@/components/skeletons/actions-skeleton";
-import { OrganisationsSkeleton } from "@/features/organisation/components/organisations-skeleton";
+import { OrganisationsSkeleton } from "@/features/organisation/components/skeletons/organisations-skeleton";
 
 const SelectActiveOrganisationLoading = () => (
   <>

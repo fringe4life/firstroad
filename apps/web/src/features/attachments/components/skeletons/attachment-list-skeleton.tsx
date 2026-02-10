@@ -6,7 +6,7 @@ const AttachmentListSkeleton = () => (
       <li className="flex items-center gap-x-2" key={i}>
         <Skeleton className="h-4 w-4 shrink-0" />
         <Skeleton className="h-4 flex-1" />
-        <Skeleton className="h-8 w-8 shrink-0 rounded-full" />
+        <Skeleton className="h-8 w-8 shrink-0 rounded-sm bg-destructive/50" />
       </li>
     ))}
   </ul>
