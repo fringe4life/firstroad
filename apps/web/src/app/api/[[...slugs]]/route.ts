@@ -20,7 +20,7 @@ app.use(
   }),
 );
 // mount the auth handler with Elysia
-app.mount("/auth", auth.handler, {
+app.mount(auth.handler, {
   detail: {
     tags: ["auth"],
     description: "Authentication endpoints from better auth",

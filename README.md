@@ -38,7 +38,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **🔒 Ownership System**: Users can only edit their own tickets and comments
 - **🎯 Type Safety**: Full TypeScript support with typed routes
 - **📧 Email Features**: Password reset, email verification, OTP authentication, and welcome emails with Resend templates
-- **🔗 Slug Generation**: Human-readable URLs using slugify package for ticket slugs
+- **🔗 Slug Generation**: Human-readable URLs via shared `createSlug` in `@firstroad/utils` (packages/utils)
 - **🔄 Parallel Routes**: Next.js parallel routes (@auth) for authentication modals with interception routes
 - **⚡ React Compiler**: React 19 compiler for automatic performance optimization
 - **📬 Background Jobs**: Inngest for async event handling and email processing
@@ -63,6 +63,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **API Framework**: Elysia 1.4 with @elysiajs/cors 1.4 for unified API routes
 - **Background Jobs**: Inngest 3.52 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
+- **Shared Utilities**: `@firstroad/utils` (packages/utils) for shared helpers (e.g. `createSlug`)
 - **Linting**: Biome 2.3.13 for fast formatting and linting with Ultracite 7.1.5 rules
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
@@ -316,7 +317,9 @@ firstroad/
 │   │   ├── prisma/
 │   │   ├── prisma.config.ts
 │   │   └── src/              # client, client-types, index
-│   └── emails/               # React Email templates
+│   ├── emails/               # React Email templates
+│   └── utils/                # Shared utilities (e.g. createSlug for slugs)
+│       └── src/              # index, slug
 ├── package.json              # Workspaces, turbo scripts
 ├── turbo.json
 └── biome.jsonc
@@ -647,7 +650,6 @@ The application uses Elysia 1.4 as a unified API framework for handling all API 
 
 **Known Issues:**
 - OpenAPI plugin causes "Maximum call stack size exceeded" error at specPath, likely due to circular references when introspecting mounted routes (Better Auth handler). OpenAPI generation is currently disabled until this issue is resolved.
-- Elysia 1.4.22 regressions impacted social/organisation APIs, so the API layer is pinned to 1.4.21.
 
 ### Type Safety
 

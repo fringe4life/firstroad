@@ -4,7 +4,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { createAuthMiddleware } from "better-auth/api";
 import { betterAuth } from "better-auth/minimal";
 import { nextCookies } from "better-auth/next-js";
-import { emailOTP, organization } from "better-auth/plugins";
+import { emailOTP, openAPI, organization } from "better-auth/plugins";
 import { isAdminOrOwner } from "@/features/organisation/utils/admin";
 import { inngest } from "@/lib/inngest";
 import { acceptInvitationPath } from "@/path";
@@ -25,7 +25,7 @@ const SESSION_UPDATE_AGE_SECONDS = DAYS_IN_SECONDS; // 1 day
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "postgresql" }),
-  basePath: "/auth",
+  basePath: "/api/auth",
   baseURL: process.env.NEXT_PUBLIC_APP_URL,
   experimental: { joins: true },
   session: {
@@ -38,6 +38,7 @@ export const auth = betterAuth({
   },
 
   plugins: [
+    openAPI(),
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {
         // Trigger Inngest event to handle OTP email asynchronously
