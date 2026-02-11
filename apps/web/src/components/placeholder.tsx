@@ -11,20 +11,19 @@ export interface PlaceholderProps {
 const Placeholder = ({
   label,
   icon = <MessageSquareWarning />,
-  button = <div />,
+  button,
 }: PlaceholderProps) => (
-  <div
-    className="grid h-full place-content-center gap-y-2"
-    data-button={Boolean(button)}
-  >
+  <div className="grid h-full place-content-center gap-y-2">
     {cloneElement(icon, {
-      className: "size-16 justify-self-center",
+      className: "w-16 aspect-square justify-self-center",
     })}
     <h2 className="text-center text-lg">{label}</h2>
 
-    {cloneElement(button, {
-      className: "h-10",
-    })}
+    {button
+      ? cloneElement(button, {
+          className: "h-10",
+        })
+      : null}
   </div>
 );
 export { Placeholder };

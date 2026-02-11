@@ -3,7 +3,6 @@ import { TableCell } from "@/components/ui/table";
 
 const MembershipsListItemSkeleton = () => (
   <>
-    {" "}
     <TableCell>
       <Skeleton className="h-4 w-32" />
     </TableCell>

@@ -3,6 +3,7 @@
 @custom-variant dark (&:is(.dark *));
 @custom-variant detail (&:where([data-detail="true"] *));
 @custom-variant owner (&:where([data-owner="true"] *));
+@custom-variant item (&:where([data-item="true"] *));
 
 @theme {
   --breakpoint-xs: 450px;

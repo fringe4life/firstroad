@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { Heading } from "@/components/heading";
+import { ResponsiveLabel } from "@/components/responsive-label";
 import { Suspend } from "@/components/suspend";
 import { buttonVariants } from "@/components/ui/button";
 import { getUser } from "@/features/auth/queries/get-user";
@@ -25,10 +26,13 @@ const SelectActiveOrganisationPage = async () => {
     <>
       <Heading
         actions={
-          <Link className={buttonVariants()} href={onboardingPath()}>
-            <LucidePlus className="aspect-square w-4" />
-            Create Organisation
-          </Link>
+          <ResponsiveLabel
+            fullLabel="Create Organisation"
+            icon={<LucidePlus className="aspect-square w-4" />}
+            shortLabel="Create"
+          >
+            <Link className={buttonVariants()} href={onboardingPath()} />
+          </ResponsiveLabel>
         }
         description="Select your active organisation"
         title="Select Active Organisation"

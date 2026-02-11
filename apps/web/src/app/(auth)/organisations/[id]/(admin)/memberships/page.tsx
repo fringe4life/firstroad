@@ -19,7 +19,7 @@ const OrganisationDetailPage = async ({
     <>
       <Heading
         actions={<InviteMemberButton organizationId={id} />}
-        description="Manage memberships in your organisation"
+        description="Manage your members"
         tabs={<AdminTabs organizationId={id} />}
         title="Memberships"
       />
