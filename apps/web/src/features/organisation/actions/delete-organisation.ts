@@ -1,8 +1,10 @@
 "use server";
 
+import { refresh } from "next/cache";
 import { headers } from "next/headers";
 import { minLength, object, pipe, safeParse, string } from "valibot";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
+import { getAdminOwnerOrRedirect } from "@/features/memberships/queries/get-admin-owner-or-redirect";
 import { auth } from "@/lib/auth";
 import { invalidateOrganisationsForUser } from "@/utils/invalidate-cache";
 import {
@@ -12,15 +14,17 @@ import {
 } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
 
-const setActiveOrganisationSchema = object({
+const deleteOrganisationSchema = object({
   organizationId: pipe(string(), minLength(1)),
 });
 
-const setActiveOrganisation = async (
+const deleteOrganisation = async (
   organizationId: string,
-  _prevState: ActionState<string>,
-): Promise<ActionState<string>> => {
-  const result = safeParse(setActiveOrganisationSchema, { organizationId });
+  _prevState: ActionState,
+): Promise<ActionState> => {
+  await getAdminOwnerOrRedirect(organizationId);
+
+  const result = safeParse(deleteOrganisationSchema, { organizationId });
 
   if (!result.success) {
     return fromErrorToActionState(result.issues);
@@ -29,26 +33,24 @@ const setActiveOrganisation = async (
   const user = await getUserOrRedirect();
 
   const { error } = await tryCatch(async () =>
-    auth.api.setActiveOrganization({
-      body: { organizationId: result.output.organizationId },
+    auth.api.deleteOrganization({
+      body: {
+        organizationId: result.output.organizationId,
+      },
       headers: await headers(),
     }),
   );
 
   if (error) {
-    return fromErrorToActionState(error);
+    return toActionState("Failed to delete organization", "ERROR");
   }
 
   if (user?.id) {
     invalidateOrganisationsForUser(user.id);
   }
 
-  return toActionState(
-    "Organisation switched",
-    "SUCCESS",
-    undefined,
-    organizationId,
-  );
+  refresh();
+  return toActionState("Organization deleted", "SUCCESS");
 };
 
-export { setActiveOrganisation };
+export { deleteOrganisation };

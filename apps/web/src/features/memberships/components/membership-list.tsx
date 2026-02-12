@@ -1,4 +1,5 @@
 import { Bug, CircleSlash2 } from "lucide-react";
+import { ViewTransition } from "react";
 import { TableBody } from "@/components/ui/table";
 import { UnsuccessfulTable } from "@/components/unsuccessful-table";
 import type { MembershipListProps } from "../types";
@@ -23,12 +24,14 @@ const MembershipList = ({
   return (
     <TableBody className="items-start">
       {members.map((member) => (
-        <MembershipItem
-          currentUserEmail={currentUserEmail}
-          key={member.id}
-          member={member}
-          organizationId={organizationId}
-        />
+        <ViewTransition key={member.id}>
+          <MembershipItem
+            currentUserEmail={currentUserEmail}
+            key={member.id}
+            member={member}
+            organizationId={organizationId}
+          />
+        </ViewTransition>
       ))}
     </TableBody>
   );

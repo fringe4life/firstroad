@@ -1,10 +1,21 @@
 "use server";
 
 import { createSlug } from "@firstroad/utils";
+import { refresh } from "next/cache";
 import { headers } from "next/headers";
-import { maxLength, minLength, object, pipe, safeParse, string } from "valibot";
+import {
+  maxLength,
+  minLength,
+  object,
+  pipe,
+  safeParse,
+  string,
+  trim,
+} from "valibot";
+import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { auth } from "@/lib/auth";
 import { setCookieByKey } from "@/utils/cookies";
+import { invalidateOrganisationsForUser } from "@/utils/invalidate-cache";
 import {
   type ActionState,
   fromErrorToActionState,
@@ -14,7 +25,7 @@ import { tryCatch } from "@/utils/try-catch";
 
 const updateOrganisationSchema = object({
   name: pipe(string(), minLength(6), maxLength(191)),
-  organizationId: pipe(string(), minLength(1)),
+  organizationId: pipe(string(), trim(), minLength(1)),
 });
 
 const updateOrganisation = async (
@@ -22,9 +33,6 @@ const updateOrganisation = async (
   formData: FormData,
 ): Promise<ActionState> => {
   const payload = Object.fromEntries(formData.entries());
-  if (typeof payload.name === "string") {
-    payload.name = payload.name.trim();
-  }
 
   const result = safeParse(updateOrganisationSchema, payload);
 
@@ -52,6 +60,12 @@ const updateOrganisation = async (
   if (error) {
     return fromErrorToActionState(error, formData);
   }
+
+  const user = await getUserOrRedirect({ checkOrganistation: false });
+  if (user?.id) {
+    invalidateOrganisationsForUser(user.id);
+  }
+  refresh();
 
   await setCookieByKey("toast", "Organisation updated");
   return toActionState("Organisation updated", "SUCCESS");

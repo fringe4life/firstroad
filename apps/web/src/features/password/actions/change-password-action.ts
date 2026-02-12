@@ -84,12 +84,8 @@ export async function changePassword(
   const { error } = await tryCatch(async () => {
     const parsed = parse(schema, formDataObject);
     const headersData = await headers();
-
-    const changePasswordBody = {
-      currentPassword: parsed.currentPassword,
-      newPassword: parsed.newPassword,
-      revokeOtherSessions: parsed.revokeOtherSessions,
-    };
+    console.log(parsed, "{parsed}");
+    const { confirmPassword, ...changePasswordBody } = parsed;
 
     await auth.api.changePassword({
       headers: headersData,

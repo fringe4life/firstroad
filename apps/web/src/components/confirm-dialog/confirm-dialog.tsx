@@ -26,7 +26,10 @@ import {
 } from "./context";
 
 interface ConfirmDialogProps {
-  action: () => Promise<ActionState>;
+  action: (
+    prevState?: ActionState,
+    formData?: FormData,
+  ) => Promise<ActionState>;
   children:
     | React.ReactNode
     | ((context: ConfirmDialogContextValue) => React.ReactNode);

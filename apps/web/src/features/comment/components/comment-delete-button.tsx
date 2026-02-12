@@ -1,9 +1,8 @@
 "use client";
 
-import { ConfirmDeleteIcon } from "@/components/confirm-delete-icon";
+import { LucideTrash } from "lucide-react";
 import { ConfirmDialog } from "@/components/confirm-dialog/index";
-
-import { Button } from "@/components/ui/button";
+import { PendingIconButton } from "@/components/pending-icon-button";
 import type { CommentDeleteButtonProps } from "@/features/comment/types";
 
 const CommentDeleteButton = ({
@@ -19,9 +18,12 @@ const CommentDeleteButton = ({
     >
       {({ isPending }) => (
         <ConfirmDialog.Trigger>
-          <Button size="icon" variant="outline">
-            <ConfirmDeleteIcon isPending={isPending} />
-          </Button>
+          <PendingIconButton
+            disabled={isPending}
+            icon={<LucideTrash />}
+            size="icon"
+            variant="destructive"
+          />
         </ConfirmDialog.Trigger>
       )}
     </ConfirmDialog>

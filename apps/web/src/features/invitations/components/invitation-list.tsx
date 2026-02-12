@@ -1,4 +1,5 @@
 import { Bug, CircleSlash2 } from "lucide-react";
+import { ViewTransition } from "react";
 import { TableBody } from "@/components/ui/table";
 import { UnsuccessfulTable } from "@/components/unsuccessful-table";
 import type { InvitationListProps } from "../types";
@@ -22,11 +23,13 @@ const InvitationList = ({
   return (
     <TableBody className="items-start">
       {invitations.map((invitation) => (
-        <InvitationItem
-          invitation={invitation}
-          key={invitation.id}
-          organizationId={organizationId}
-        />
+        <ViewTransition key={invitation.id}>
+          <InvitationItem
+            invitation={invitation}
+            key={invitation.id}
+            organizationId={organizationId}
+          />
+        </ViewTransition>
       ))}
     </TableBody>
   );

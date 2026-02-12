@@ -1,30 +1,34 @@
 import { prisma } from "@firstroad/db";
-import { getUser } from "@/features/auth/queries/get-user";
+import { cacheLife, cacheTag } from "next/cache";
 import type { Maybe } from "@/types";
+import {
+  organisationCache,
+  organisationsForUserCache,
+} from "@/utils/cache-tags";
 import { tryCatch } from "@/utils/try-catch";
 import type { BaseOrganisation, Member } from "../types";
 
-const getOrganisationByUser = async (): Promise<Maybe<BaseOrganisation[]>> => {
-  "use cache: private";
-  const { user } = await getUser();
+const getOrganisationByUser = async (
+  userId: string,
+): Promise<Maybe<BaseOrganisation[]>> => {
+  "use cache: remote";
+  cacheTag(organisationCache());
+  cacheTag(organisationsForUserCache(userId));
+  cacheLife({ stale: 60 });
 
-  if (!user) {
-    return null;
-  }
-  const { id } = user;
   const { data: organisations } = await tryCatch(() =>
     prisma.organization.findMany({
       where: {
         members: {
           some: {
-            userId: id,
+            userId,
           },
         },
       },
       include: {
         members: {
           where: {
-            userId: id,
+            userId,
           },
         },
         _count: { select: { members: true } },

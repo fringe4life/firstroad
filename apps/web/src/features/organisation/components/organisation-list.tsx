@@ -1,4 +1,5 @@
 import { Bug, CircleSlash2 } from "lucide-react";
+import { ViewTransition } from "react";
 import { TableBody } from "@/components/ui/table";
 import { UnsuccessfulTable } from "@/components/unsuccessful-table";
 import type { OrganisationListProps } from "../types";
@@ -23,12 +24,14 @@ const OrganisationList = ({
   return (
     <TableBody className="items-start">
       {organisations.map((organisation) => (
-        <OrganisationItem
-          activeOrganizationId={activeOrganizationId}
-          key={organisation.id}
-          limitedAccess={limitedAccess}
-          organisation={organisation}
-        />
+        <ViewTransition key={organisation.id}>
+          <OrganisationItem
+            activeOrganizationId={activeOrganizationId}
+            key={organisation.id}
+            limitedAccess={limitedAccess}
+            organisation={organisation}
+          />
+        </ViewTransition>
       ))}
     </TableBody>
   );

@@ -6,9 +6,8 @@ import {
   LucideTrash,
 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { type MouseEventHandler, useTransition } from "react";
-import { toast } from "sonner";
+import { ConfirmDialog } from "@/components/confirm-dialog/index";
+import { PendingIconButton } from "@/components/pending-icon-button";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Dialog,
@@ -19,8 +18,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useToggle } from "@/hooks/use-toggle";
-import { authClient } from "@/lib/auth-client";
-import { membershipsPath, organisationsPath } from "@/path";
+import { membershipsPath } from "@/path";
+import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
+import { deleteOrganisation } from "../actions/delete-organisation";
+import { leaveOrganisation } from "../actions/leave-organisation";
 import { updateOrganisation } from "../actions/update-organisation";
 import type { OrganisationActionButtonProps } from "../types";
 import { SwitchOrgButton } from "./switch-org-button";
@@ -33,45 +34,7 @@ const OrganisationActionButtons = ({
   isAdminOrOwner,
   limitedAccess,
 }: OrganisationActionButtonProps) => {
-  const router = useRouter();
-  const [, startTransition] = useTransition();
   const { isOpen, close, open } = useToggle(false);
-
-  const handleLeave: MouseEventHandler<HTMLButtonElement> = () => {
-    startTransition(async () => {
-      const { error } = await authClient.organization.leave({
-        organizationId,
-      });
-      if (error) {
-        // Check if it's the "last member" error
-        const errorMessage =
-          error.message?.includes("last member") ||
-          error.message?.includes("Cannot remove")
-            ? "Cannot leave as the last member of an organization"
-            : "Failed to leave organization";
-        toast.error(errorMessage);
-        return;
-      }
-      toast.success("Left organization successfully");
-      // Redirect to organizations list - if user has no orgs, they'll be redirected to onboarding by auth checks
-      router.push(organisationsPath());
-    });
-  };
-
-  const handleDelete: MouseEventHandler<HTMLButtonElement> = () => {
-    startTransition(async () => {
-      const { error } = await authClient.organization.delete({
-        organizationId,
-      });
-      if (error) {
-        toast.error("Failed to delete organization");
-        return;
-      }
-
-      toast.success("Organization deleted");
-      router.refresh();
-    });
-  };
 
   let handleDeleteButton: React.ReactNode = (
     <Button disabled size="icon" variant="ghost" />
@@ -113,10 +76,7 @@ const OrganisationActionButtons = ({
           </DialogHeader>
           <UpdateOrganisationForm
             key={`${organizationId}-${organizationName}`}
-            onSuccess={() => {
-              close();
-              router.refresh();
-            }}
+            onSuccess={close}
             organizationId={organizationId}
             organizationName={organizationName}
             updateOrganisationAction={updateOrganisation}
@@ -125,18 +85,50 @@ const OrganisationActionButtons = ({
       </Dialog>
     );
     handleDeleteButton = (
-      <Button onClick={handleDelete} size="icon" variant="destructive">
-        <LucideTrash className="aspect-square w-4" />
-      </Button>
+      <ConfirmDialog
+        action={(prevState) =>
+          deleteOrganisation(organizationId, prevState ?? EMPTY_ACTION_STATE)
+        }
+        closeOnSubmit
+        description="This will permanently delete the organisation and all its data. This action cannot be undone."
+        title="Delete organisation"
+      >
+        {({ isPending }) => (
+          <ConfirmDialog.Trigger>
+            <PendingIconButton
+              disabled={isPending}
+              icon={<LucideTrash />}
+              size="icon"
+              variant="destructive"
+            />
+          </ConfirmDialog.Trigger>
+        )}
+      </ConfirmDialog>
     );
   }
 
   // Leave button remain visible to all members (when !limitedAccess)
   if (!limitedAccess) {
     leaveButton = (
-      <Button onClick={handleLeave} size="icon" variant="destructive">
-        <LucideLogOut className="aspect-square w-4" />
-      </Button>
+      <ConfirmDialog
+        action={(prevState) =>
+          leaveOrganisation(organizationId, prevState ?? EMPTY_ACTION_STATE)
+        }
+        closeOnSubmit
+        description="You will lose access to this organisation. You can rejoin only if invited again."
+        title="Leave organisation"
+      >
+        {({ isPending }) => (
+          <ConfirmDialog.Trigger>
+            <PendingIconButton
+              disabled={isPending}
+              icon={<LucideLogOut />}
+              size="icon"
+              variant="destructive"
+            />
+          </ConfirmDialog.Trigger>
+        )}
+      </ConfirmDialog>
     );
   }
 

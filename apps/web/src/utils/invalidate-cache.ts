@@ -5,6 +5,8 @@ import {
   commentCache,
   commentsCache,
   commentsForTicketCache,
+  organisationCache,
+  organisationsForUserCache,
   ticketCache,
   ticketsCache,
 } from "./cache-tags";
@@ -73,6 +75,12 @@ const invalidateTicketAndAttachments = (
   updateTag(attachmentsForTicketCache(ticketId));
 };
 
+// Organisation invalidation
+const invalidateOrganisationsForUser = (userId: string): void => {
+  updateTag(organisationCache());
+  updateTag(organisationsForUserCache(userId));
+};
+
 export {
   invalidateAttachmentsForTicket,
   invalidateComment,
@@ -83,5 +91,6 @@ export {
   invalidateTicketAndAttachments,
   invalidateTicketAndList,
   invalidateTicketWithComments,
+  invalidateOrganisationsForUser,
   invalidateTickets,
 };

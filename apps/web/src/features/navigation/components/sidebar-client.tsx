@@ -15,11 +15,14 @@ const SidebarClient = ({ children }: { children: React.ReactNode }) => {
   return (
     <Activity mode={isOpen ? "visible" : "hidden"}>
       <Sheet onOpenChange={close} open={isOpen}>
-        <SheetContent className="w-80 p-0 md:hidden" side="left">
+        <SheetContent className="w-full max-w-84 p-0 md:hidden" side="left">
           <SheetHeader className="border-b px-6 py-4">
-            <SheetTitle>Navigation</SheetTitle>
+            <SheetTitle>TicketBounty</SheetTitle>
           </SheetHeader>
-          <nav aria-label="Mobile navigation" className="space-y-2 px-3 py-2">
+          <nav
+            aria-label="Mobile navigation"
+            className="space-y-2 px-3 py-2 landscape:space-x-2"
+          >
             {children}
           </nav>
         </SheetContent>

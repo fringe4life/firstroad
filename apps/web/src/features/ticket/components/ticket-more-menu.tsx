@@ -1,8 +1,9 @@
 "use client";
 import type { TicketStatus } from "@firstroad/db/client-types";
+import { LucideTrash } from "lucide-react";
 import { toast } from "sonner";
-import { ConfirmDeleteIcon } from "@/components/confirm-delete-icon";
 import { ConfirmDialog } from "@/components/confirm-dialog/index";
+import { PendingIcon } from "@/components/pending-icon-button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -62,7 +63,7 @@ const TicketMoreMenu = ({
             {({ isPending }) => (
               <ConfirmDialog.Trigger>
                 <DropdownMenuItem className="flex justify-between px-4">
-                  <ConfirmDeleteIcon isPending={isPending} />
+                  <PendingIcon icon={<LucideTrash />} isPending={isPending} />
                   <span>Delete</span>
                 </DropdownMenuItem>
               </ConfirmDialog.Trigger>

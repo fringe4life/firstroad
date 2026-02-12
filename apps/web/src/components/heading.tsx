@@ -10,7 +10,7 @@ const Heading = ({ title, description, tabs, actions }: HeadingProps) => (
   <>
     {tabs}
     <div
-      className="grid h-min w-full grid-cols-1 items-center justify-between gap-x-4 self-start px-4 data-[item='true']:grid-cols-[max-content_0.5fr] sm:px-8"
+      className="grid h-min w-full grid-cols-1 items-center justify-between gap-x-4 self-start px-4 data-[item='true']:grid-cols-[max-content_0.5fr] sm:px-8 lg:data-[item='true']:grid-cols-[max-content_0.35fr] xl:data-[item='true']:grid-cols-[max-content_0.25fr]"
       data-item={Boolean(actions)}
     >
       <div>

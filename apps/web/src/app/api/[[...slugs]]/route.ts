@@ -7,10 +7,18 @@ import { getTicketsApi } from "@/features/ticket/dal/get-tickets-api";
 import { getTicketBySlugApi } from "@/features/ticket/queries/get-ticket-api";
 import { app } from "@/lib/app";
 import { auth } from "@/lib/auth";
+import { OpenAPI } from "./better-auth-openapi";
 import { inngestHandler } from "./inngest-plugin";
 
 // apply cors to all routes
-app.use(openapi());
+app.use(
+  openapi({
+    documentation: {
+      components: await OpenAPI.components,
+      paths: await OpenAPI.getPaths(),
+    },
+  }),
+);
 app.use(
   cors({
     origin: process.env.NEXT_PUBLIC_APP_URL,

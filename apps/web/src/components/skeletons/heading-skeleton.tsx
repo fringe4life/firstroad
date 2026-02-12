@@ -1,5 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ActionsSkeleton } from "./actions-skeleton";
+import { TabsSkeleton } from "./tabs-skeleton";
 
 interface HeadingSkeletonProps {
   showTabs?: boolean;
@@ -11,22 +13,16 @@ const HeadingSkeleton = ({
   showActions = false,
 }: HeadingSkeletonProps) => (
   <>
-    {showTabs && (
-      <div className="inline-flex h-9 w-fit items-center gap-[3px] justify-self-start rounded-lg bg-muted p-[3px]">
-        <Skeleton className="h-[calc(100%-1px)] w-24 rounded-md" />
-        <Skeleton className="h-[calc(100%-1px)] w-24 rounded-md" />
-      </div>
-    )}
-    <div className="flex h-min w-full items-center justify-between self-start px-4 sm:px-8">
+    {showTabs && <TabsSkeleton />}
+    <div
+      className="grid h-min w-full grid-cols-1 items-center justify-between gap-x-4 self-start px-4 data-[item='true']:grid-cols-[max-content_0.5fr] sm:px-8 lg:data-[item='true']:grid-cols-[max-content_0.35fr] xl:data-[item='true']:grid-cols-[max-content_0.25fr]"
+      data-item={Boolean(showActions)}
+    >
       <div className="w-full space-y-2 justify-self-stretch">
         <Skeleton className="h-9 w-64" />
         <Skeleton className="h-4 w-80" />
       </div>
-      {showActions && (
-        <div className="flex items-center gap-x-2">
-          <Skeleton className="h-10 w-20" />
-        </div>
-      )}
+      {showActions && <ActionsSkeleton />}
     </div>
     <Separator />
   </>

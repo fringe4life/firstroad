@@ -12,7 +12,7 @@ export const sendPasswordChangedEmail = async (
     template: {
       id: "password-changed-email",
       variables: {
-        TO_NAME: userName || email,
+        TO_NAME: userName ?? "User",
         // biome-ignore lint/style/noNonNullAssertion: exists
         APP_URL: process.env.NEXT_PUBLIC_APP_URL!,
       },

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 
 interface SubmitButtonProps {
   label?: string;
-  icon?: React.ReactElement<SVGAElement>;
+  icon?: React.ReactElement<React.SVGProps<SVGSVGElement>>;
   variant?: React.ComponentProps<typeof Button>["variant"];
   size?: React.ComponentProps<typeof Button>["size"];
   disabled?: boolean;

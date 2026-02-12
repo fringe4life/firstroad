@@ -8,6 +8,14 @@ import { CommentListSkeleton } from "@/features/comment/components/skeletons/com
 const CommentPagination = () => {
   const { isPending, hasNextPage, handleLoadMore } = useComments();
 
+  if (!hasNextPage) {
+    return (
+      <p className="pr-1 text-right text-muted-foreground text-sm italic">
+        No more comments
+      </p>
+    );
+  }
+
   return (
     <>
       <Activity mode={isPending ? "visible" : "hidden"}>

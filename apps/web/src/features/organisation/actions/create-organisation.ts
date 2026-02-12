@@ -3,9 +3,11 @@ import { createSlug } from "@firstroad/utils";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { maxLength, minLength, object, pipe, safeParse, string } from "valibot";
+import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { auth } from "@/lib/auth";
 import { ticketsPath } from "@/path";
 import { setCookieByKey } from "@/utils/cookies";
+import { invalidateOrganisationsForUser } from "@/utils/invalidate-cache";
 import {
   type ActionState,
   fromErrorToActionState,
@@ -29,6 +31,8 @@ const createOrganisation = async (
     return fromErrorToActionState(result.issues, formData);
   }
 
+  const user = await getUserOrRedirect();
+
   const {
     output: { name },
   } = result;
@@ -48,7 +52,7 @@ const createOrganisation = async (
   if (error) {
     return fromErrorToActionState(error, formData);
   }
-
+  invalidateOrganisationsForUser(user.id);
   await setCookieByKey("toast", "Organisation created");
   throw redirect(ticketsPath());
 };
