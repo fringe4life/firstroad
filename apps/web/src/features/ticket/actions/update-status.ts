@@ -1,8 +1,7 @@
 "use server";
 import type { TicketStatus } from "@firstroad/db/client-types";
-import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
+import { itemWithPermissions } from "@/features/auth/dto/item-with-permissions";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
-import { getMemberPermission } from "@/features/memberships/queries/get-member-permission";
 import { invalidateTicketAndList } from "@/utils/invalidate-cache";
 import { fromErrorToActionState, toActionState } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
@@ -14,20 +13,13 @@ export const updateStatus = async (newValue: TicketStatus, id: string) => {
 
   const { data: slug, error } = await tryCatch(async () => {
     // Verify ticket exists and user is owner
-    const ticket = await itemWithOwnership(findTicket(id), user);
+    const ticket = await itemWithPermissions(findTicket(id), user, "TICKET");
 
     if (!ticket?.isOwner) {
       throw new Error("Ticket Not Found");
     }
 
-    // Check if user has permission to update tickets in this organization
-    const permission = await getMemberPermission(
-      user.id,
-      ticket.organizationId,
-      "TICKET",
-    );
-
-    if (!permission?.canUpdate) {
+    if (!ticket?.canUpdate) {
       throw new Error("You do not have permission to update this ticket");
     }
 

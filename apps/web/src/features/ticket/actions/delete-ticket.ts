@@ -1,8 +1,7 @@
 "use server";
 import { redirect } from "next/navigation";
-import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
+import { itemWithPermissions } from "@/features/auth/dto/item-with-permissions";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
-import { getMemberPermission } from "@/features/memberships/queries/get-member-permission";
 import { ticketsPath } from "@/path";
 import { setCookieByKey } from "@/utils/cookies";
 import { invalidateTicketAndList } from "@/utils/invalidate-cache";
@@ -17,21 +16,13 @@ export const deleteTicket = async (id: string) => {
     const user = await getUserOrRedirect();
 
     // verify ticket exists and user is owner
-    const ticket = await itemWithOwnership(findTicket(id), user);
+    const ticket = await itemWithPermissions(findTicket(id), user, "TICKET");
 
     // check if user is owner
     if (!ticket?.isOwner) {
       throw new Error("Ticket Not Found");
     }
-
-    // check if user has permission to delete tickets in this organization
-    const permission = await getMemberPermission(
-      user.id,
-      ticket.organizationId,
-      "TICKET",
-    );
-
-    if (!permission?.canDelete) {
+    if (!ticket?.canDelete) {
       throw new Error("You do not have permission to delete this ticket");
     }
 

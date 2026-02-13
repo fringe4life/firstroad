@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
+import { connection } from "next/server";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { CardCompact } from "@/components/card-compact";
-import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
+import { itemWithPermissions } from "@/features/auth/dto/item-with-permissions";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { upsertTicket } from "@/features/ticket/actions/upsert-ticket";
 import { TicketUpsertForm } from "@/features/ticket/components/ticket-upsert-form";
@@ -11,16 +12,21 @@ import { ticketPath, ticketsPath } from "@/path";
 const EditTicketPage = async ({
   params,
 }: PageProps<"/tickets/[slug]/edit">) => {
+  await connection();
   const user = await getUserOrRedirect();
   const { slug } = await params;
-  const ticket = await itemWithOwnership(getTicketBySlug(slug), user);
-  // TODO: add ticket fine grained permissions check
-  if (!ticket?.isOwner) {
+  const ticket = await itemWithPermissions(
+    getTicketBySlug(slug),
+    user,
+    "TICKET",
+  );
+
+  if (!(ticket?.canUpdate && ticket?.isOwner)) {
     throw notFound();
   }
 
   return (
-    <div className="grid h-full grid-rows-[min-content_1fr] gap-y-4">
+    <>
       <Breadcrumbs
         breadcrumbs={[
           { title: "Tickets", href: ticketsPath() },
@@ -33,10 +39,10 @@ const EditTicketPage = async ({
         content={
           <TicketUpsertForm ticket={ticket} upsertTicketAction={upsertTicket} />
         }
-        description="A new ticket will be created"
+        description="Edit your ticket"
         title="Edit Ticket"
       />
-    </div>
+    </>
   );
 };
 

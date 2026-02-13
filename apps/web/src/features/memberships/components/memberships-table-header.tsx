@@ -8,9 +8,9 @@ const MembershipsTableHeader = () => {
         <TableHead>Email</TableHead>
         <TableHead>Joined At</TableHead>
         <TableHead>Verified</TableHead>
-        <TableHead>Can Ticket Create?</TableHead>
-        <TableHead>Can Ticket Update?</TableHead>
-        <TableHead>Can Ticket Delete?</TableHead>
+        <TableHead>Can Create Ticket?</TableHead>
+        <TableHead>Can Update Ticket?</TableHead>
+        <TableHead>Can Delete Ticket?</TableHead>
         <TableHead />
       </TableRow>
     </TableHeader>

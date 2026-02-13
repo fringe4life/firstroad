@@ -13,7 +13,7 @@ import {
   string,
   toNumber,
 } from "valibot";
-import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
+import { itemWithPermissions } from "@/features/auth/dto/item-with-permissions";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { getMemberPermission } from "@/features/memberships/queries/get-member-permission";
 import { ticketPath, ticketsPath } from "@/path";
@@ -63,19 +63,12 @@ const upsertTicket = async (
 
   const { error } = await tryCatch(async () => {
     if (id) {
-      const ticket = await itemWithOwnership(findTicket(id), user);
+      const ticket = await itemWithPermissions(findTicket(id), user, "TICKET");
       if (!ticket?.isOwner) {
         throw new Error("Ticket Not Found");
       }
 
-      // Check if user has permission to update tickets in this organization
-      const permission = await getMemberPermission(
-        user.id,
-        ticket.organizationId,
-        "TICKET",
-      );
-
-      if (!permission?.canUpdate) {
+      if (!ticket?.canUpdate) {
         throw new Error("You do not have permission to update this ticket");
       }
     } else {

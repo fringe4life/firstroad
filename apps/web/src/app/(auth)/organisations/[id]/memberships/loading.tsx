@@ -6,7 +6,7 @@ const MembershipsLoading = () => (
   <>
     <Heading
       actions={<ActionsSkeleton />}
-      description="Manage memberships in your organisation"
+      description="Manage your members"
       title="Memberships"
     />
     <MembershipsSkeleton />

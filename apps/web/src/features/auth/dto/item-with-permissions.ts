@@ -6,7 +6,7 @@ import type {
 } from "@/features/memberships/types";
 import type { Maybe } from "@/types";
 import { getUser } from "../queries/get-user";
-import type { User } from "../types";
+import type { IsOwner, User } from "../types";
 import { isOwner } from "../utils/owner";
 
 /**
@@ -23,7 +23,7 @@ const itemWithPermissions = async <T extends OrgScopedResource>(
   item: Maybe<T> | Promise<Maybe<T>>,
   user: Maybe<User>,
   resourceType: ResourceType,
-): Promise<Maybe<T & WithPermissions>> => {
+): Promise<Maybe<T & WithPermissions & IsOwner>> => {
   const [currentUser, resolvedItem] = await Promise.all([
     user != null ? Promise.resolve(user) : getUser().then(({ user: u }) => u),
     Promise.resolve(item),
@@ -43,6 +43,7 @@ const itemWithPermissions = async <T extends OrgScopedResource>(
 
   return {
     ...resolvedItem,
+    isOwner: owns,
     canCreate: false,
     canUpdate: owns && (permission?.canUpdate ?? false),
     canDelete: owns && (permission?.canDelete ?? false),

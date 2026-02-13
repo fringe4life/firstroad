@@ -1,7 +1,7 @@
 import type { MemberModel, MemberRole } from "@firstroad/db/client-types";
 
 import type { List, UnsuccessfulState } from "@/types";
-import type { User } from "../auth/types";
+import type { User, UserVerifiable } from "../auth/types";
 import type { OrganisationId } from "../organisation/types";
 
 export type ResourceType = "TICKET" | "COMMENT";
@@ -14,8 +14,7 @@ export interface ResourcePermission {
   canDelete: boolean;
 }
 
-export interface OrgScopedResource {
-  userId: string;
+export interface OrgScopedResource extends UserVerifiable {
   organizationId: string;
 }
 

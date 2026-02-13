@@ -6,7 +6,7 @@ const InvitationsLoader = () => (
   <>
     <Heading
       actions={<ActionsSkeleton />}
-      description="Manage invitations to your organisation"
+      description="Manage invitations"
       title="Invitations"
     />
     <InvitationsSkeleton />

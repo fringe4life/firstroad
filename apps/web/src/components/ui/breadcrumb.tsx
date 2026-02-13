@@ -14,7 +14,10 @@ const BreadcrumbList = ({
 }: React.ComponentProps<"ol">) => (
   <ol
     className={cn(
-      "wrap-break-word flex flex-wrap items-center gap-1.5 text-muted-foreground text-sm sm:gap-2.5",
+      "flex min-w-0 flex-nowrap items-center gap-1.5 overflow-hidden text-muted-foreground text-sm sm:gap-2.5",
+      "[&>li[data-slot=breadcrumb-item]:first-child]:shrink-0 [&>li[data-slot=breadcrumb-item]:last-child]:shrink-0",
+      "[&>li[data-slot=breadcrumb-item]:not(:first-child)]:min-w-0",
+      "[&>li[data-slot=breadcrumb-item]:not(:first-child)>*]:truncate",
       className,
     )}
     data-slot="breadcrumb-list"

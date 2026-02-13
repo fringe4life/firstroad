@@ -28,7 +28,7 @@ const TicketFormSkeleton = () => (
     </div>
 
     {/* Submit button */}
-    <Skeleton className="h-9 w-full bg-muted-foreground/20" />
+    <Skeleton className="h-9 w-full bg-primary/50" />
   </div>
 );
 

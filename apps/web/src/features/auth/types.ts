@@ -1,6 +1,7 @@
 import type { TicketModel } from "@firstroad/db/client-types";
 import type { auth } from "@/lib/auth";
 import type { authClient } from "@/lib/auth-client";
+import type { ResourcePermission } from "../memberships/types";
 
 // Server-side session type (from auth instance)
 export type ServerSession = typeof auth.$Infer.Session;
@@ -36,4 +37,8 @@ export interface IsOwner {
 
 export interface EmailSearchParams {
   searchParams: Promise<{ email?: string }>;
+}
+
+export interface ItemsWithPermissionsOptions {
+  permissionsMap?: Map<string, ResourcePermission>;
 }

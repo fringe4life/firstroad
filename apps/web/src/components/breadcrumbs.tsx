@@ -23,7 +23,7 @@ interface BreadcrumbsProps<T> {
 const Breadcrumbs = <T extends BreadcrumbItemProps>({
   breadcrumbs,
 }: BreadcrumbsProps<T>) => (
-  <Breadcrumb className="self-start justify-self-stretch">
+  <Breadcrumb className="min-w-0 overflow-hidden">
     <BreadcrumbList>
       {breadcrumbs.map((breadcrumb, index) => {
         let breadcrumbItem = (
@@ -33,10 +33,7 @@ const Breadcrumbs = <T extends BreadcrumbItemProps>({
         if (breadcrumb.href) {
           breadcrumbItem = (
             <BreadcrumbLink asChild>
-              <Link
-                className="flex items-center gap-1 truncate"
-                href={breadcrumb.href}
-              >
+              <Link className="inline-block" href={breadcrumb.href}>
                 {breadcrumb.title}
               </Link>
             </BreadcrumbLink>
@@ -44,11 +41,11 @@ const Breadcrumbs = <T extends BreadcrumbItemProps>({
         }
 
         return (
-          <Fragment key={breadcrumb.title}>
+          <Fragment key={`${breadcrumb.title}-${index}`}>
             <BreadcrumbItem>{breadcrumbItem}</BreadcrumbItem>
             {index < breadcrumbs.length - 1 && (
               <BreadcrumbSeparator>
-                <LucideSlash className="h-4 w-4" />
+                <LucideSlash className="h-4 shrink-0" />
               </BreadcrumbSeparator>
             )}
           </Fragment>
