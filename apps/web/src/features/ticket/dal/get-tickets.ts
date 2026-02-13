@@ -81,7 +81,11 @@ export const getTickets = async (
     ]);
 
     // Fetch permissions for all user's organizations
-    const permissionsMap = await getMemberPermissionsBatch(user.id, orgIds);
+    const permissionsMap = await getMemberPermissionsBatch(
+      user.id,
+      orgIds,
+      "TICKET",
+    );
 
     // All tickets are owned, pass pre-fetched permissions
     const ticketsWithAccess = await addTicketsAccess(result.items, user, {

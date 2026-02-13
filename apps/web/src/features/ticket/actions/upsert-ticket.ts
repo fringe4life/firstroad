@@ -63,7 +63,7 @@ const upsertTicket = async (
 
   const { error } = await tryCatch(async () => {
     if (id) {
-      const ticket = await itemWithOwnership(findTicket(id));
+      const ticket = await itemWithOwnership(findTicket(id), user);
       if (!ticket?.isOwner) {
         throw new Error("Ticket Not Found");
       }
@@ -72,10 +72,22 @@ const upsertTicket = async (
       const permission = await getMemberPermission(
         user.id,
         ticket.organizationId,
+        "TICKET",
       );
 
-      if (!permission?.canUpdateTicket) {
+      if (!permission?.canUpdate) {
         throw new Error("You do not have permission to update this ticket");
+      }
+    } else {
+      // Check if user has permission to create tickets in this organization
+      const permission = await getMemberPermission(
+        user.id,
+        organizationId,
+        "TICKET",
+      );
+
+      if (!permission?.canCreate) {
+        throw new Error("You do not have permission to create tickets");
       }
     }
 

@@ -21,14 +21,14 @@ const TicketOwnerOptionsContent = ({
   ticket,
   isDetail = false,
   isOwner: ticketIsOwner,
-  canDeleteTicket,
-  canUpdateTicket,
+  canDelete,
+  canUpdate,
 }: TicketOwnerOptionsWithAccessProps) => {
   if (!ticketIsOwner) {
     return null;
   }
 
-  const editButton = canUpdateTicket ? (
+  const editButton = canUpdate ? (
     <Link
       className={buttonVariants({ variant: "outline", size: "icon" })}
       href={ticketEditPath(ticket.slug)}
@@ -40,8 +40,8 @@ const TicketOwnerOptionsContent = ({
 
   const moreMenu = isDetail ? (
     <TicketMoreMenu
-      canDeleteTicket={canDeleteTicket}
-      canUpdateTicket={canUpdateTicket}
+      canDelete={canDelete}
+      canUpdate={canUpdate}
       ticket={{ id: ticket.id, status: ticket.status }}
       trigger={
         <Button size="icon" variant="outline">
@@ -72,14 +72,19 @@ const TicketOwnerOptionsFetchInner = async ({
   }
 
   // Fetch the user's permission for this ticket's organization
-  const permission = await getMemberPermission(user.id, ticket.organizationId);
-  const canDeleteTicket = permission?.canDeleteTicket ?? false;
-  const canUpdateTicket = permission?.canUpdateTicket ?? false;
+  const permission = await getMemberPermission(
+    user.id,
+    ticket.organizationId,
+    "TICKET",
+  );
+  const canDelete = permission?.canDelete ?? false;
+  const canUpdate = permission?.canUpdate ?? false;
 
   return (
     <TicketOwnerOptionsContent
-      canDeleteTicket={canDeleteTicket}
-      canUpdateTicket={canUpdateTicket}
+      canCreate={false}
+      canDelete={canDelete}
+      canUpdate={canUpdate}
       isDetail={isDetail}
       isOwner={true}
       ticket={ticket}

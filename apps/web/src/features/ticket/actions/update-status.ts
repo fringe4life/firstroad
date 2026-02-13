@@ -24,9 +24,10 @@ export const updateStatus = async (newValue: TicketStatus, id: string) => {
     const permission = await getMemberPermission(
       user.id,
       ticket.organizationId,
+      "TICKET",
     );
 
-    if (!permission?.canUpdateTicket) {
+    if (!permission?.canUpdate) {
       throw new Error("You do not have permission to update this ticket");
     }
 

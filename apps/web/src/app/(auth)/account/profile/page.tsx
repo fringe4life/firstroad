@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { connection } from "next/server";
-import { AccountTabs } from "@/app/(auth)/account/_components/account-tabs";
 import { Heading } from "@/components/heading";
 import { Suspend } from "@/components/suspend";
 import { ProfileSkeleton } from "@/features/auth/components/profile-skeleton";
@@ -32,11 +31,7 @@ const ProfilePage = async () => {
 
   return (
     <>
-      <Heading
-        description="All your profile information"
-        tabs={<AccountTabs />}
-        title="Profile"
-      />
+      <Heading description="All your profile information" title="Profile" />
       <Suspend fallback={<ProfileSkeleton />}>
         <ProfileContent user={user} />
       </Suspend>

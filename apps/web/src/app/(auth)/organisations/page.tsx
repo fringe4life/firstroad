@@ -12,7 +12,7 @@ import { organisationsCreatePath } from "@/path";
 
 const OrganisationsPage = async () => {
   await connection();
-  const user = await getUserOrRedirect({ checkOrganistation: false });
+  await getUserOrRedirect();
   return (
     <div className="grid h-full grid-rows-[min-content_min-content_1fr] gap-y-8">
       <Heading
@@ -32,7 +32,7 @@ const OrganisationsPage = async () => {
         title="Organisations"
       />
       <Suspend fallback={<OrganisationsSkeleton />}>
-        <Organisations user={user} />
+        <Organisations />
       </Suspend>
     </div>
   );

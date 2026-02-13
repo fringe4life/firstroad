@@ -38,7 +38,7 @@ const SelectActiveOrganisationPage = async () => {
         title="Select Active Organisation"
       />
       <Suspend fallback={<OrganisationsSkeleton />}>
-        <Organisations limitedAccess user={user} />
+        <Organisations limitedAccess />
       </Suspend>
     </>
   );

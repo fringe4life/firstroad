@@ -11,6 +11,7 @@ const MembershipItem = ({
   organizationId,
 }: MembershipItemProps) => {
   const isCurrentUser = member.email === currentUserEmail;
+  const ticketPerms = member.permissions.TICKET;
 
   return (
     <TableRow>
@@ -25,18 +26,29 @@ const MembershipItem = ({
       </TableCell>
       <TableCell>
         <PermissionToggle
+          action="canCreate"
           memberId={member.id}
           organizationId={organizationId}
-          permissionKey="canDeleteTicket"
-          permissionValue={member.canDeleteTicket}
+          permissionValue={ticketPerms.canCreate}
+          resourceType="TICKET"
         />
       </TableCell>
       <TableCell>
         <PermissionToggle
+          action="canUpdate"
           memberId={member.id}
           organizationId={organizationId}
-          permissionKey="canUpdateTicket"
-          permissionValue={member.canUpdateTicket}
+          permissionValue={ticketPerms.canUpdate}
+          resourceType="TICKET"
+        />
+      </TableCell>
+      <TableCell>
+        <PermissionToggle
+          action="canDelete"
+          memberId={member.id}
+          organizationId={organizationId}
+          permissionValue={ticketPerms.canDelete}
+          resourceType="TICKET"
         />
       </TableCell>
       <TableCell>

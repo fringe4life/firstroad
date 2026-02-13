@@ -1,0 +1,18 @@
+enum ResourceType {
+  TICKET
+  COMMENT
+}
+
+model MemberPermission {
+  id           String       @id @default(cuid())
+  memberId     String
+  member      Member       @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  resourceType ResourceType
+  canCreate   Boolean      @default(true)
+  canUpdate   Boolean      @default(true)
+  canDelete   Boolean      @default(true)
+
+  @@unique([memberId, resourceType])
+  @@index([memberId])
+  @@map("member_permission")
+}

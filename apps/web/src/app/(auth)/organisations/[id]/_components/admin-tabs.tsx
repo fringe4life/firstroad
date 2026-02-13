@@ -1,16 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { invitationsPath, membershipsPath } from "@/path";
 
-interface AdminTabsProps {
-  organizationId: string;
-}
-
-const AdminTabs = ({ organizationId }: AdminTabsProps) => {
+const AdminTabs = () => {
   const pathname = usePathname();
+  const params = useParams();
+  const organizationId = params.id as string;
 
   return (
     <Tabs className="justify-self-start" value={pathname.split("/").at(-1)}>

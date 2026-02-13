@@ -17,19 +17,21 @@ import {
 } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
 import { getAdminOwnerOrRedirect } from "../queries/get-admin-owner-or-redirect";
-import type { PermissionKey } from "../types";
+import type { PermissionAction, ResourceType } from "../types";
 
 const togglePermissionSchema = object({
   memberId: pipe(string(), minLength(1)),
   organizationId: pipe(string(), minLength(1)),
-  permissionKey: picklist(["canDeleteTicket", "canUpdateTicket"]),
+  resourceType: picklist(["TICKET", "COMMENT"] as const),
+  action: picklist(["canCreate", "canUpdate", "canDelete"] as const),
   permissionValue: boolean(),
 });
 
 const togglePermission = async (
   memberId: string,
   organizationId: string,
-  permissionKey: PermissionKey,
+  resourceType: ResourceType,
+  action: PermissionAction,
   permissionValue: boolean,
   _prevState: ActionState<boolean>,
 ): Promise<ActionState<boolean>> => {
@@ -38,7 +40,8 @@ const togglePermission = async (
   const result = safeParse(togglePermissionSchema, {
     memberId,
     organizationId,
-    permissionKey,
+    resourceType,
+    action,
     permissionValue,
   });
 
@@ -47,10 +50,29 @@ const togglePermission = async (
   }
 
   const { error } = await tryCatch(async () => {
-    await prisma.member.update({
-      where: { id: result.output.memberId },
-      data: {
-        [result.output.permissionKey]: result.output.permissionValue,
+    const {
+      memberId: mid,
+      resourceType: rt,
+      action: act,
+      permissionValue: pv,
+    } = result.output;
+
+    await prisma.memberPermission.upsert({
+      where: {
+        memberId_resourceType: {
+          memberId: mid,
+          resourceType: rt,
+        },
+      },
+      create: {
+        memberId: mid,
+        resourceType: rt,
+        canCreate: act === "canCreate" ? pv : true,
+        canUpdate: act === "canUpdate" ? pv : true,
+        canDelete: act === "canDelete" ? pv : true,
+      },
+      update: {
+        [act]: pv,
       },
     });
   });

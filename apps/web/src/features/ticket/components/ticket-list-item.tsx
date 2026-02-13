@@ -16,8 +16,9 @@ interface TicketListItemProps extends TicketAccess {
 const TicketListItem = ({
   ticket,
   isOwner,
-  canDeleteTicket,
-  canUpdateTicket,
+  canCreate,
+  canDelete,
+  canUpdate,
 }: TicketListItemProps) => {
   const { slug, id, status } = ticket;
 
@@ -29,8 +30,9 @@ const TicketListItem = ({
       <TicketCard
         actions={
           <TicketActionsDesktop
-            canDeleteTicket={canDeleteTicket}
-            canUpdateTicket={canUpdateTicket}
+            canCreate={canCreate}
+            canDelete={canDelete}
+            canUpdate={canUpdate}
             isOwner={isOwner}
             ticket={{ id, slug, status }}
             variant="list"
@@ -38,8 +40,9 @@ const TicketListItem = ({
         }
         mobileActions={
           <TicketActionsMobile
-            canDeleteTicket={canDeleteTicket}
-            canUpdateTicket={canUpdateTicket}
+            canCreate={canCreate}
+            canDelete={canDelete}
+            canUpdate={canUpdate}
             isOwner={isOwner}
             onActionClick={(e) => e.stopPropagation()}
             ticket={{ id, slug, status }}

@@ -21,14 +21,19 @@ const TicketDetailActionsDesktop = async ({
     return null;
   }
 
-  const permission = await getMemberPermission(user.id, ticket.organizationId);
-  const canUpdateTicket = permission?.canUpdateTicket ?? false;
-  const canDeleteTicket = permission?.canDeleteTicket ?? false;
+  const permission = await getMemberPermission(
+    user.id,
+    ticket.organizationId,
+    "TICKET",
+  );
+  const canUpdate = permission?.canUpdate ?? false;
+  const canDelete = permission?.canDelete ?? false;
 
   return (
     <TicketActionsDesktop
-      canDeleteTicket={canDeleteTicket}
-      canUpdateTicket={canUpdateTicket}
+      canCreate={false}
+      canDelete={canDelete}
+      canUpdate={canUpdate}
       isOwner={true}
       ticket={{ id: ticket.id, slug: ticket.slug, status: ticket.status }}
       variant="detail"

@@ -1,5 +1,5 @@
 import type { MemberModel } from "@firstroad/db/client-types";
-import type { ActiveOrganizationId, User } from "@/features/auth/types";
+import type { ActiveOrganizationId } from "@/features/auth/types";
 import type { auth } from "@/lib/auth";
 import type { List, UnsuccessfulState } from "@/types";
 
@@ -32,7 +32,6 @@ interface LimitedAccess {
 
 export interface OrganisationProps extends LimitedAccess {
   organisations?: List<BaseOrganisation>;
-  user?: User;
 }
 
 export interface OrganisationListProps
@@ -49,8 +48,8 @@ export interface OrganisationItemProps
 }
 
 export interface OrganisationActionButtonProps
-  extends LimitedAccess,
-    OrganisationId {
+  extends OrganisationId,
+    LimitedAccess {
   organizationName: string;
   isActive: boolean;
   isAdminOrOwner: boolean;

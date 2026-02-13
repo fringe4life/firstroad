@@ -28,9 +28,10 @@ export const deleteTicket = async (id: string) => {
     const permission = await getMemberPermission(
       user.id,
       ticket.organizationId,
+      "TICKET",
     );
 
-    if (!permission?.canDeleteTicket) {
+    if (!permission?.canDelete) {
       throw new Error("You do not have permission to delete this ticket");
     }
 

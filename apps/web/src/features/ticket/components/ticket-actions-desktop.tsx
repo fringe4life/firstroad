@@ -22,8 +22,9 @@ const TicketActionsDesktop = ({
   ticket,
   variant,
   isOwner,
-  canUpdateTicket,
-  canDeleteTicket,
+
+  canUpdate,
+  canDelete,
 }: TicketActionsDesktopProps) => {
   if (!isOwner && variant === "list") {
     return (
@@ -57,7 +58,7 @@ const TicketActionsDesktop = ({
       </Link>
     ) : null;
 
-  const editLink = canUpdateTicket ? (
+  const editLink = canUpdate ? (
     <Link
       className={buttonVariants({ variant: "outline", size: "icon" })}
       href={ticketEditPath(ticket.slug)}
@@ -70,8 +71,8 @@ const TicketActionsDesktop = ({
   const moreMenu =
     variant === "detail" ? (
       <TicketMoreMenu
-        canDeleteTicket={canDeleteTicket}
-        canUpdateTicket={canUpdateTicket}
+        canDelete={canDelete}
+        canUpdate={canUpdate}
         ticket={{ id: ticket.id, status: ticket.status }}
         trigger={
           <Button size="icon" variant="outline">

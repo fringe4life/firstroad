@@ -5,6 +5,7 @@ import type {
   DeleteAttachmentForOwnerInput,
 } from "../attachments/utils/attachment-dal";
 import type { IsOwner, UserVerifiable } from "../auth/types";
+import type { WithPermissions } from "../memberships/types";
 import type { OrganisationId } from "../organisation/types";
 
 // Base ticket with user for display
@@ -49,18 +50,7 @@ export interface TicketListProps {
 /**
  * Access control properties for a ticket
  */
-export interface CanDeleteTicket {
-  canDeleteTicket: boolean;
-}
-
-export interface CanUpdateTicket {
-  canUpdateTicket: boolean;
-}
-
-export interface TicketAccess
-  extends IsOwner,
-    CanDeleteTicket,
-    CanUpdateTicket {}
+export interface TicketAccess extends IsOwner, WithPermissions {}
 
 /**
  * Ticket with ownership and permission information
@@ -97,8 +87,7 @@ export type TicketOwnerOptionsProps =
   | TicketOwnerOptionsWithAccessProps
   | TicketOwnerOptionsFetchProps;
 
-export interface TicketMoreMenuProps
-  extends Partial<CanDeleteTicket & CanUpdateTicket> {
+export interface TicketMoreMenuProps extends Partial<WithPermissions> {
   ticket: Pick<BaseTicket, "id" | "status">;
   trigger: React.ReactNode;
 }

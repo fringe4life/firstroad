@@ -1,14 +1,9 @@
 import { Heading } from "@/components/heading";
-import { TabsSkeleton } from "@/components/skeletons/tabs-skeleton";
 import { PasswordSkeleton } from "@/features/password/components/skeletons/password-skeleton";
 
 const PasswordLoading = () => (
   <>
-    <Heading
-      description="All your password information"
-      tabs={<TabsSkeleton />}
-      title="Password"
-    />
+    <Heading description="All your password information" title="Password" />
     <PasswordSkeleton />
   </>
 );

@@ -3,12 +3,38 @@ import type { MemberModel, MemberRole } from "@firstroad/db/client-types";
 import type { List, UnsuccessfulState } from "@/types";
 import type { User } from "../auth/types";
 import type { OrganisationId } from "../organisation/types";
-import type { CanDeleteTicket, CanUpdateTicket } from "../ticket/types";
+
+export type ResourceType = "TICKET" | "COMMENT";
+
+export type PermissionAction = "canCreate" | "canUpdate" | "canDelete";
+
+export interface ResourcePermission {
+  canCreate: boolean;
+  canUpdate: boolean;
+  canDelete: boolean;
+}
+
+export interface OrgScopedResource {
+  userId: string;
+  organizationId: string;
+}
+
+export interface WithPermissions {
+  canCreate: boolean;
+  canUpdate: boolean;
+  canDelete: boolean;
+}
+
+export interface PermissionKey {
+  resourceType: ResourceType;
+  action: PermissionAction;
+}
 
 export interface OrganisationMemberRow
   extends Omit<MemberModel, "createdAt" | "organizationId" | "userId">,
     Pick<User, "name" | "email" | "emailVerified"> {
   joinedAt: Date;
+  permissions: Record<ResourceType, ResourcePermission>;
 }
 
 export interface MemberId {
@@ -33,13 +59,10 @@ export interface MembershipsMoreMenuProps extends OrganisationId, MemberId {
   role: MemberRole;
 }
 
-export type PermissionKey = "canDeleteTicket" | "canUpdateTicket";
-
 export interface PermissionToggleProps extends OrganisationId, MemberId {
-  permissionKey: PermissionKey;
+  resourceType: ResourceType;
+  action: PermissionAction;
   permissionValue: boolean;
 }
 
 export interface MemberShipProps extends OrganisationId {}
-
-export interface MemberPermission extends CanDeleteTicket, CanUpdateTicket {}

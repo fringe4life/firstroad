@@ -18,8 +18,9 @@ const TicketList = ({ tickets }: TicketListProps) => {
     <div className="grid h-full content-start justify-items-center gap-y-4 self-start justify-self-stretch">
       {tickets.map((ticket) => (
         <TicketListItem
-          canDeleteTicket={ticket.canDeleteTicket}
-          canUpdateTicket={ticket.canUpdateTicket}
+          canCreate={ticket.canCreate}
+          canDelete={ticket.canDelete}
+          canUpdate={ticket.canUpdate}
           isOwner={ticket.isOwner}
           key={ticket.id}
           ticket={ticket}

@@ -36,14 +36,22 @@ const main = async () => {
         try {
           // Direct Prisma insert (Better Auth's auth.api.addMember requires
           // server-only context which isn't available in standalone scripts)
-          await prisma.member.create({
+          const member = await prisma.member.create({
             data: {
               id: crypto.randomUUID(),
               userId: user.id,
               organizationId: org.id,
               role: "member",
-              canDeleteTicket: true,
               createdAt: new Date(),
+            },
+          });
+          await prisma.memberPermission.create({
+            data: {
+              memberId: member.id,
+              resourceType: "TICKET",
+              canCreate: true,
+              canUpdate: true,
+              canDelete: true,
             },
           });
           console.log(`Added ${user.email} to ${org.name}`);

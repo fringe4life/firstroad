@@ -1,10 +1,9 @@
 "use client";
 
 import { LucideArrowLeftRight } from "lucide-react";
-import type { SubmitEventHandler } from "react";
 import { useActionState, useOptimistic, useTransition } from "react";
 import { Form } from "@/components/form/form";
-import { SubmitButton } from "@/components/form/submit-button";
+import { Button } from "@/components/ui/button";
 import type { ActionState } from "@/utils/to-action-state";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 import { setActiveOrganisation } from "../actions/set-active-organisation";
@@ -24,21 +23,17 @@ const SwitchOrgButton = ({
 
   const [isPending, startTransition] = useTransition();
 
-  // 2. Derive current value from action state if success, otherwise from prop
   const currentIsActive =
     state.status === "SUCCESS" && typeof state.data === "string"
       ? state.data === organizationId
       : isActive;
 
-  // 3. useOptimistic uses the derived current value
   const [optimisticIsActive, setOptimisticIsActive] = useOptimistic(
     currentIsActive,
     (_current, newValue: boolean) => newValue,
   );
 
-  const handleSubmit: SubmitEventHandler<HTMLFormElement> = (event) => {
-    event.preventDefault();
-
+  const handleClick = () => {
     startTransition(async () => {
       setOptimisticIsActive(true);
       await action();
@@ -46,19 +41,16 @@ const SwitchOrgButton = ({
   };
 
   return (
-    <Form
-      action={action}
-      className={isPending ? "opacity-75" : ""}
-      onSubmit={handleSubmit}
-      state={state}
-    >
-      <SubmitButton
+    <Form className={isPending ? "opacity-75" : ""} state={state}>
+      <Button
         disabled={optimisticIsActive}
-        icon={<LucideArrowLeftRight />}
-        showLoader={false}
+        onClick={handleClick}
         size="icon"
+        type="button"
         variant="outline"
-      />
+      >
+        <LucideArrowLeftRight className="aspect-square w-4" />
+      </Button>
     </Form>
   );
 };

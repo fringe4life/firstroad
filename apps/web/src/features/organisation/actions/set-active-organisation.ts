@@ -1,5 +1,6 @@
 "use server";
 
+import { refresh } from "next/cache";
 import { headers } from "next/headers";
 import { minLength, object, pipe, safeParse, string } from "valibot";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
@@ -26,7 +27,7 @@ const setActiveOrganisation = async (
     return fromErrorToActionState(result.issues);
   }
 
-  const user = await getUserOrRedirect();
+  const user = await getUserOrRedirect({ checkActiveOrganisation: false });
 
   const { error } = await tryCatch(async () =>
     auth.api.setActiveOrganization({
@@ -42,6 +43,8 @@ const setActiveOrganisation = async (
   if (user?.id) {
     invalidateOrganisationsForUser(user.id);
   }
+
+  refresh();
 
   return toActionState(
     "Organisation switched",

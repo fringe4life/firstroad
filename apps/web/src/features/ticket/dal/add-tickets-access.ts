@@ -1,7 +1,10 @@
 import type { User } from "@/features/auth/types";
 import { isOwner } from "@/features/auth/utils/owner";
 import { getMemberPermissionsBatch } from "@/features/memberships/queries/get-member-permissions-batch";
-import type { MemberPermission } from "@/features/memberships/types";
+import type {
+  ResourcePermission,
+  ResourceType,
+} from "@/features/memberships/types";
 import type { List, Maybe } from "@/types";
 import type { BaseTicket, TicketWithAccess } from "../types";
 
@@ -12,7 +15,7 @@ interface AddTicketsAccessOptions {
   /** When true, all tickets are owned by the user (skip isOwner checks) */
   allOwned?: boolean;
   /** Pre-fetched permissions map to avoid additional query */
-  permissionsMap?: Map<string, MemberPermission>;
+  permissionsMap?: Map<string, ResourcePermission>;
 }
 
 /**
@@ -22,7 +25,7 @@ interface AddTicketsAccessOptions {
  * @param tickets - List of tickets
  * @param user - Current user (or null if not authenticated)
  * @param options - Optional pre-computed ownership/permissions for parallel fetch optimization
- * @returns List of tickets with isOwner and canDeleteTicket properties
+ * @returns List of tickets with isOwner, canUpdate, and canDelete properties
  */
 const addTicketsAccess = async (
   tickets: List<BaseTicket>,
@@ -41,8 +44,9 @@ const addTicketsAccess = async (
     return tickets.map((ticket) => ({
       ...ticket,
       isOwner: false,
-      canDeleteTicket: false,
-      canUpdateTicket: false,
+      canCreate: false,
+      canUpdate: false,
+      canDelete: false,
     }));
   }
 
@@ -59,20 +63,25 @@ const addTicketsAccess = async (
     ];
 
     // Batch fetch permissions for all relevant organizations
-    permissionsMap = await getMemberPermissionsBatch(user.id, organizationIds);
+    permissionsMap = await getMemberPermissionsBatch(
+      user.id,
+      organizationIds,
+      "TICKET" satisfies ResourceType,
+    );
   }
 
   // Map tickets with access info
   return tickets.map((ticket) => {
     // When allOwned is true, skip isOwner check (all tickets belong to user)
     const ticketIsOwner = options?.allOwned || isOwner(user, ticket);
-    const permission = permissionsMap.get(ticket.organizationId);
+    const permission = permissionsMap?.get(ticket.organizationId);
 
     return {
       ...ticket,
       isOwner: ticketIsOwner,
-      canDeleteTicket: ticketIsOwner && (permission?.canDeleteTicket ?? false),
-      canUpdateTicket: ticketIsOwner && (permission?.canUpdateTicket ?? false),
+      canCreate: false,
+      canUpdate: ticketIsOwner && (permission?.canUpdate ?? false),
+      canDelete: ticketIsOwner && (permission?.canDelete ?? false),
     };
   });
 };

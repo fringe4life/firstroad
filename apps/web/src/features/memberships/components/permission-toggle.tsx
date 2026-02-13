@@ -13,17 +13,18 @@ import type { PermissionToggleProps } from "../types";
 const PermissionToggle = ({
   memberId,
   organizationId,
-  permissionKey,
+  resourceType,
+  action,
   permissionValue,
 }: PermissionToggleProps) => {
-  // 1. useActionState first to get action result
-  const [state, action] = useActionState(
+  const [state, formAction] = useActionState(
     async (prevState: ActionState<boolean>, formData: FormData) => {
       const newValue = formData.get("permissionValue") === "true";
       return await togglePermission(
         memberId,
         organizationId,
-        permissionKey,
+        resourceType,
+        action,
         newValue,
         prevState,
       );
@@ -33,13 +34,11 @@ const PermissionToggle = ({
 
   const [isPending, startTransition] = useTransition();
 
-  // 2. Derive current value from action state if success, otherwise from prop
   const currentValue =
     state.status === "SUCCESS" && typeof state.data === "boolean"
       ? state.data
       : permissionValue;
 
-  // 3. useOptimistic uses the derived current value
   const [optimisticValue, setOptimisticValue] = useOptimistic(
     currentValue,
     (_current, newValue: boolean) => newValue,
@@ -54,13 +53,13 @@ const PermissionToggle = ({
 
     startTransition(async () => {
       setOptimisticValue(nextValue);
-      await action(formData);
+      await formAction(formData);
     });
   };
 
   return (
     <Form
-      action={action}
+      action={formAction}
       className={isPending ? "opacity-75" : ""}
       onSubmit={handleSubmit}
       state={state}

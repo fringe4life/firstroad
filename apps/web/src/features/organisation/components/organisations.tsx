@@ -8,14 +8,11 @@ import { OrganisationsTableHeader } from "./organisations-table-header";
 const Organisations = async ({
   limitedAccess,
   organisations: prefetchedOrganisations,
-  user: prefetchedUser,
 }: OrganisationProps) => {
-  const user =
-    prefetchedUser ??
-    (await getUserOrRedirect({
-      checkActiveOrganisation: !limitedAccess,
-      checkOrganistation: false,
-    }));
+  const user = await getUserOrRedirect({
+    checkActiveOrganisation: !limitedAccess,
+    checkOrganistation: false,
+  });
   const organisations =
     prefetchedOrganisations ?? (await getOrganisationByUser(user.id));
   const activeOrganizationId = user.activeOrganizationId;

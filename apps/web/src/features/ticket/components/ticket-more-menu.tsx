@@ -20,8 +20,8 @@ import type { TicketMoreMenuProps } from "@/features/ticket/types";
 const TicketMoreMenu = ({
   ticket,
   trigger,
-  canDeleteTicket = true,
-  canUpdateTicket = true,
+  canDelete = true,
+  canUpdate = true,
 }: TicketMoreMenuProps) => {
   const handleValueChange = async (value: string) => {
     const promise = updateStatus(value as TicketStatus, ticket.id);
@@ -56,9 +56,9 @@ const TicketMoreMenu = ({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" side="left">
-        {canUpdateTicket && radioOptions}
+        {canUpdate && radioOptions}
 
-        {canDeleteTicket && (
+        {canDelete && (
           <ConfirmDialog action={deleteTicket.bind(null, ticket.id)}>
             {({ isPending }) => (
               <ConfirmDialog.Trigger>

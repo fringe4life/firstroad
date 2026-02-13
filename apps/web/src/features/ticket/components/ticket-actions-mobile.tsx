@@ -28,8 +28,9 @@ interface TicketActionsMobileProps extends TicketAccess {
 const TicketActionsMobile = ({
   ticket,
   isOwner,
-  canUpdateTicket,
-  canDeleteTicket,
+
+  canUpdate,
+  canDelete,
   onActionClick,
 }: TicketActionsMobileProps) => {
   if (!isOwner) {
@@ -51,7 +52,7 @@ const TicketActionsMobile = ({
 
   return (
     <>
-      {canUpdateTicket && (
+      {canUpdate && (
         <Button
           asChild
           className="flex-1 md:flex-none"
@@ -65,7 +66,7 @@ const TicketActionsMobile = ({
           </Link>
         </Button>
       )}
-      {canUpdateTicket && (
+      {canUpdate && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -93,7 +94,7 @@ const TicketActionsMobile = ({
           </DropdownMenuContent>
         </DropdownMenu>
       )}
-      {canDeleteTicket && (
+      {canDelete && (
         <ConfirmDialog action={deleteTicket.bind(null, ticket.id)}>
           <ConfirmDialog.Trigger>
             <Button

@@ -5,7 +5,6 @@ import { InviteMemberButton } from "@/features/invitations/components/invite-mem
 import { Memberships } from "@/features/memberships/components/memberships";
 import { MembershipsSkeleton } from "@/features/memberships/components/skeletons/memberships-skeleton";
 import { getAdminOwnerOrRedirect } from "@/features/memberships/queries/get-admin-owner-or-redirect";
-import { AdminTabs } from "../_components/admin-tabs";
 
 const OrganisationDetailPage = async ({
   params,
@@ -20,7 +19,6 @@ const OrganisationDetailPage = async ({
       <Heading
         actions={<InviteMemberButton organizationId={id} />}
         description="Manage your members"
-        tabs={<AdminTabs organizationId={id} />}
         title="Memberships"
       />
       <Suspend fallback={<MembershipsSkeleton />}>

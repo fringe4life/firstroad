@@ -1,26 +1,31 @@
 import { prisma } from "@firstroad/db";
 import type { Maybe } from "@/types";
 import { tryCatch } from "@/utils/try-catch";
-import type { MemberPermission } from "../types";
+import type { ResourcePermission, ResourceType } from "../types";
 
 const getMemberPermission = async (
   userId: string,
   organizationId: string,
-): Promise<Maybe<MemberPermission>> => {
-  const { data: member } = await tryCatch(() =>
-    prisma.member.findFirst({
+  resourceType: ResourceType,
+): Promise<Maybe<ResourcePermission>> => {
+  const { data: permission } = await tryCatch(() =>
+    prisma.memberPermission.findFirst({
       where: {
-        organizationId,
-        userId,
+        member: {
+          userId,
+          organizationId,
+        },
+        resourceType,
       },
       select: {
-        canDeleteTicket: true,
-        canUpdateTicket: true,
+        canCreate: true,
+        canUpdate: true,
+        canDelete: true,
       },
     }),
   );
 
-  return member;
+  return permission;
 };
 
 export { getMemberPermission };
