@@ -58,9 +58,7 @@ const removeMember = async (
     return toActionState(message, "ERROR");
   }
 
-  if (user?.id) {
-    invalidateOrganisationsForUser(user.id);
-  }
+  invalidateOrganisationsForUser(user.id);
 
   refresh();
   return toActionState("Member removed successfully", "SUCCESS");

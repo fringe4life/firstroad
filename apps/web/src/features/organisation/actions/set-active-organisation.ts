@@ -40,9 +40,7 @@ const setActiveOrganisation = async (
     return fromErrorToActionState(error);
   }
 
-  if (user?.id) {
-    invalidateOrganisationsForUser(user.id);
-  }
+  invalidateOrganisationsForUser(user.id);
 
   refresh();
 

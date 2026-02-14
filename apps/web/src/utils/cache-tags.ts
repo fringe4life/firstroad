@@ -38,9 +38,15 @@ const organisationsForUserCache = (userId: string): string => {
   return `organisations-${userId}`;
 };
 
+// Invitation cache tags
+const invitationsForOrganizationCache = (organizationId: string): string => {
+  return `invitations-${organizationId}`;
+};
+
 export {
   attachmentCache,
   attachmentsForTicketCache,
+  invitationsForOrganizationCache,
   organisationCache,
   organisationsForUserCache,
   commentCache,

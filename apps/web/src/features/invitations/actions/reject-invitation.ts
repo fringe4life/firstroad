@@ -1,10 +1,13 @@
 "use server";
 
+import { prisma } from "@firstroad/db";
+import { refresh } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { minLength, object, pipe, safeParse, string } from "valibot";
 import { auth } from "@/lib/auth";
 import { homePath } from "@/path";
+import { invalidateInvitationsForOrganization } from "@/utils/invalidate-cache";
 import {
   type ActionState,
   fromErrorToActionState,
@@ -38,6 +41,17 @@ const rejectInvitation = async (
   if (error) {
     return fromErrorToActionState(error);
   }
+
+  // Invalidate invitations cache for the org (invitation was for that org)
+  const invitation = await prisma.invitation.findUnique({
+    where: { id: result.output.invitationId },
+    select: { organizationId: true },
+  });
+  if (invitation) {
+    invalidateInvitationsForOrganization(invitation.organizationId);
+  }
+
+  refresh();
 
   // Redirect to home page after rejecting
   redirect(homePath());

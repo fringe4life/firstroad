@@ -10,7 +10,7 @@ const UnsuccessfulTable = ({
   ...placeholderProps
 }: UnsuccessfulTableProps) => {
   return (
-    <TableBody className="h-full">
+    <TableBody className="h-full" data-unsuccessful="true">
       <TableRow>
         <TableCell colSpan={colSpan}>
           <Placeholder {...placeholderProps} />

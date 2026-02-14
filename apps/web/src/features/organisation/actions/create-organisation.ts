@@ -31,7 +31,10 @@ const createOrganisation = async (
     return fromErrorToActionState(result.issues, formData);
   }
 
-  const user = await getUserOrRedirect();
+  const user = await getUserOrRedirect({
+    checkOrganistation: false,
+    checkActiveOrganisation: false,
+  });
 
   const {
     output: { name },

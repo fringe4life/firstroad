@@ -1,11 +1,16 @@
 "use server";
 
+import { refresh } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { minLength, object, pipe, safeParse, string } from "valibot";
 import { isAdminOrOwner } from "@/features/organisation/utils/admin";
 import { auth } from "@/lib/auth";
 import { organisationPath, organisationsPath } from "@/path";
+import {
+  invalidateInvitationsForOrganization,
+  invalidateOrganisationsForUser,
+} from "@/utils/invalidate-cache";
 import {
   type ActionState,
   fromErrorToActionState,
@@ -39,6 +44,14 @@ const acceptInvitation = async (
   if (error) {
     return fromErrorToActionState(error);
   }
+
+  // Invalidate caches so organisations list and invitations refresh
+  if (data?.member) {
+    invalidateInvitationsForOrganization(data.member.organizationId);
+    invalidateOrganisationsForUser(data.member.userId);
+  }
+
+  refresh();
 
   // Redirect to the organisation page on success
   // Admins/owners go to the specific org, members go to the list

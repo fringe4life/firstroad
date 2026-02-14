@@ -16,7 +16,7 @@ const InvitationCancelButton = ({
 }: InvitationCancelButtonProps) => {
   return (
     <ConfirmDialog
-      action={() => cancelInvitation(organizationId, invitationId)}
+      action={cancelInvitation.bind(null, organizationId, invitationId)}
       closeOnSubmit
       description="Are you sure you want to cancel this invitation? The invitee will no longer be able to join using this invitation."
       title="Cancel invitation"
@@ -27,7 +27,7 @@ const InvitationCancelButton = ({
             disabled={isPending}
             icon={<LucideTrash />}
             size="icon"
-            variant="outline"
+            variant="destructive"
           />
         </ConfirmDialog.Trigger>
       )}

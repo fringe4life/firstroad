@@ -1,15 +1,20 @@
-import type { CommentGetPayload } from "@firstroad/db/client-types";
+import type {
+  CommentGetPayload,
+  CommentModel,
+} from "@firstroad/db/client-types";
 import type { ReactNode, RefObject } from "react";
 import type {
   CreateAttachmentAction,
   UIAttachment,
 } from "@/features/attachments/types";
-import type { Maybe } from "@/types";
+import type { Id, Maybe } from "@/types";
 import type { ActionState } from "@/utils/to-action-state";
 import type {
   CreateAttachmentsForOwnerInput,
   DeleteAttachmentForOwnerInput,
 } from "../attachments/utils/attachment-dal";
+import type { UserVerifiable } from "../auth/types";
+import type { OrganisationId } from "../organisation/types";
 import type { PaginatedResult } from "../pagination/types";
 
 export type CreateCommentAttachmentsInput = Omit<
@@ -25,6 +30,12 @@ export type DeleteCommentAttachmentInput = Omit<
 > & {
   commentId: string;
 };
+
+export interface VerifyComment
+  extends UserVerifiable,
+    Id,
+    OrganisationId,
+    Pick<CommentModel, "ticketId"> {}
 
 type CommentModelWithUserInfo = CommentGetPayload<{
   include: { user: { select: { name: true } } };

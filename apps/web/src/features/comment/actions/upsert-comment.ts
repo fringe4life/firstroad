@@ -2,10 +2,11 @@
 "use server";
 import type { CommentWhereUniqueInput } from "@firstroad/db/client-types";
 import { maxLength, minLength, object, pipe, safeParse, string } from "valibot";
-import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
+import { itemWithPermissions } from "@/features/auth/dto/item-with-permissions";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
 import type { CommentWithUserInfo } from "@/features/comment/types";
+import { getMemberPermission } from "@/features/memberships/queries/get-member-permission";
 import { findTicket } from "@/features/ticket/queries/find-ticket";
 import type { Maybe } from "@/types";
 import { invalidateCommentAndTicketComments } from "@/utils/invalidate-cache";
@@ -32,10 +33,13 @@ export const upsertComment = async (
   _state: ActionState<unknown>,
   formData: FormData,
 ): Promise<ActionState<CommentWithUserInfo>> => {
-  const user = await getUserOrRedirect({
-    checkOrganistation: false,
-    checkEmailVerified: false,
-  });
+  const formDataObject = Object.fromEntries(formData.entries());
+  const parsedData = safeParse(upsertCommentSchema, formDataObject);
+
+  if (!parsedData.success) {
+    return fromErrorToActionState(parsedData.issues, formData);
+  }
+  const user = await getUserOrRedirect();
 
   // Verify the ticket exists
   const { data: ticket, error } = await tryCatch(() => findTicket(ticketId));
@@ -47,9 +51,9 @@ export const upsertComment = async (
   }
 
   if (commentId) {
-    // If updating, verify comment exists and user owns it
+    // If updating, verify comment exists and user owns it and can update it
     const { data: commentWithOwnership, error: commentError } = await tryCatch(
-      () => itemWithOwnership(findComment(commentId), user),
+      () => itemWithPermissions(findComment(commentId), user, "COMMENT"),
     );
     if (commentError) {
       return fromErrorToActionState(commentError);
@@ -57,13 +61,26 @@ export const upsertComment = async (
     if (!commentWithOwnership?.isOwner) {
       return toActionState("Comment not found", "ERROR");
     }
-  }
 
-  const formDataObject = Object.fromEntries(formData.entries());
-  const parsedData = safeParse(upsertCommentSchema, formDataObject);
-
-  if (!parsedData.success) {
-    return fromErrorToActionState(parsedData.issues, formData);
+    if (!commentWithOwnership?.canUpdate) {
+      return toActionState(
+        "You do not have permission to update this comment",
+        "ERROR",
+      );
+    }
+  } else {
+    // If creating, verify user has permission to create comments in this organization
+    const permission = await getMemberPermission(
+      user.id,
+      ticket.organizationId,
+      "COMMENT",
+    );
+    if (!permission?.canCreate) {
+      return toActionState(
+        "You do not have permission to create comments",
+        "ERROR",
+      );
+    }
   }
 
   const {

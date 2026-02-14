@@ -8,7 +8,7 @@ const Invitations = async ({ organizationId }: InvitationsProps) => {
   const invitations = await getInvitationsById(organizationId);
 
   return (
-    <Table>
+    <Table className="has-unsuccessful:h-full">
       <InvitationsTableHeader />
       <InvitationList
         emptyStateMessage="No invitations found"

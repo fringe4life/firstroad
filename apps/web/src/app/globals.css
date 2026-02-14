@@ -4,6 +4,8 @@
 @custom-variant detail (&:where([data-detail="true"] *));
 @custom-variant owner (&:where([data-owner="true"] *));
 @custom-variant item (&:where([data-item="true"] *));
+@custom-variant open (&:where([data-open="true"] *));
+@custom-variant unsuccessful (&:where([data-unsuccessful="true"] *));
 
 @theme {
   --breakpoint-xs: 450px;
@@ -266,12 +268,18 @@
   html {
     scrollbar-gutter: stable;
     scrollbar-width: thin;
+    /* container-type: scroll-state; */
 
     /* Dynamic sidebar calculations - must run AFTER HTML class overrides */
     --sidebar-current-width: max(
       var(--side-width),
       var(--expanded-sidebar-width)
     );
+    /* body > nav {
+      @container scroll-state(stuck: top) {
+        @apply rounded-4xl shadow-2xl;
+      }
+    } */
   }
 
   body[data-scroll-locked="1"] {

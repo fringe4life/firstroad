@@ -1,11 +1,11 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { refresh } from "next/cache";
 import { headers } from "next/headers";
 import { email, object, picklist, pipe, safeParse, string } from "valibot";
 import { getAdminOwnerOrRedirect } from "@/features/memberships/queries/get-admin-owner-or-redirect";
 import { auth } from "@/lib/auth";
-import { invitationsPath } from "@/path";
+import { invalidateInvitationsForOrganization } from "@/utils/invalidate-cache";
 import {
   type ActionState,
   fromErrorToActionState,
@@ -51,8 +51,9 @@ const createInvitation = async (
     return fromErrorToActionState(error, formData);
   }
 
-  // Refresh the invitations list
-  revalidatePath(invitationsPath(organizationId));
+  invalidateInvitationsForOrganization(organizationId);
+
+  refresh();
 
   return toActionState("Invitation sent", "SUCCESS");
 };

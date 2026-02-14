@@ -22,7 +22,7 @@ const Header = () => (
         href={homePath()}
       >
         <Kanban />
-        <h1 className="font-semibold text-lg">TicketBounty</h1>
+        <h1 className="font-semibold text-base xs:text-lg">TicketBounty</h1>
       </Link>
     </div>
     <div className="flex items-center gap-x-1">

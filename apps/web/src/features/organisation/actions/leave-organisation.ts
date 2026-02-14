@@ -1,5 +1,6 @@
 "use server";
 
+import { refresh } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { minLength, object, pipe, safeParse, string } from "valibot";
@@ -50,9 +51,8 @@ const leaveOrganisation = async (
     return toActionState(message, "ERROR");
   }
 
-  if (user?.id) {
-    invalidateOrganisationsForUser(user.id);
-  }
+  invalidateOrganisationsForUser(user.id);
+  refresh();
   await setCookieByKey("toast", "Left organization successfully");
   redirect(organisationsPath());
 };

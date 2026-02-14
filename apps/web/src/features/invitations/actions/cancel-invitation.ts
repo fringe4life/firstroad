@@ -1,11 +1,11 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { refresh } from "next/cache";
 import { headers } from "next/headers";
 import { minLength, object, pipe, safeParse, string } from "valibot";
 import { getAdminOwnerOrRedirect } from "@/features/memberships/queries/get-admin-owner-or-redirect";
 import { auth } from "@/lib/auth";
-import { invitationsPath } from "@/path";
+import { invalidateInvitationsForOrganization } from "@/utils/invalidate-cache";
 import {
   type ActionState,
   fromErrorToActionState,
@@ -32,7 +32,6 @@ const cancelInvitation = async (
     return fromErrorToActionState(result.issues);
   }
 
-  // Authenticate and authorize inside the action (server-auth-actions pattern)
   await getAdminOwnerOrRedirect(organizationId);
 
   const { error } = await tryCatch(async () =>
@@ -48,8 +47,9 @@ const cancelInvitation = async (
     return fromErrorToActionState(error);
   }
 
-  // Refresh the invitations list
-  revalidatePath(invitationsPath(organizationId));
+  invalidateInvitationsForOrganization(organizationId);
+
+  refresh();
 
   return toActionState("Invitation cancelled", "SUCCESS");
 };

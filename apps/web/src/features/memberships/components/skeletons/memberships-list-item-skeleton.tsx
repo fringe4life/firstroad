@@ -22,6 +22,9 @@ const MembershipsListItemSkeleton = () => (
       <Skeleton className="h-4 w-20" />
     </TableCell>
     <TableCell>
+      <Skeleton className="h-4 w-20" />
+    </TableCell>
+    <TableCell>
       <div className="flex gap-x-2">
         <Skeleton className="aspect-square h-10" />
         <Skeleton className="aspect-square h-10 bg-destructive/50" />

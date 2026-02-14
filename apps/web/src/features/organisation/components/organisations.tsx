@@ -18,7 +18,7 @@ const Organisations = async ({
   const activeOrganizationId = user.activeOrganizationId;
 
   return (
-    <Table>
+    <Table className="has-unsuccessful:h-full">
       <OrganisationsTableHeader />
       <OrganisationList
         activeOrganizationId={activeOrganizationId}

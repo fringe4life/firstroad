@@ -11,7 +11,7 @@ const Memberships = async ({ organizationId }: MemberShipProps) => {
   const currentUserEmail = user?.email ?? null;
 
   return (
-    <Table>
+    <Table className="has-unsuccessful:h-full">
       <MembershipsTableHeader />
       <MembershipList
         currentUserEmail={currentUserEmail}

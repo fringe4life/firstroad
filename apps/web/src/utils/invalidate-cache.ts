@@ -5,6 +5,7 @@ import {
   commentCache,
   commentsCache,
   commentsForTicketCache,
+  invitationsForOrganizationCache,
   organisationCache,
   organisationsForUserCache,
   ticketCache,
@@ -81,12 +82,18 @@ const invalidateOrganisationsForUser = (userId: string): void => {
   updateTag(organisationsForUserCache(userId));
 };
 
+// Invitation invalidation
+const invalidateInvitationsForOrganization = (organizationId: string): void => {
+  updateTag(invitationsForOrganizationCache(organizationId));
+};
+
 export {
   invalidateAttachmentsForTicket,
   invalidateComment,
   invalidateCommentAndTicketComments,
   invalidateComments,
   invalidateCommentsForTicket,
+  invalidateInvitationsForOrganization,
   invalidateTicket,
   invalidateTicketAndAttachments,
   invalidateTicketAndList,
