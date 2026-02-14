@@ -19,7 +19,7 @@ The AI should:
 7. Choose emojis that match the type of change
 8. Keep each bullet point concise and descriptive
 9. Prioritize the most impactful changes first
-10. **Automatically stage, commit, and push** unless specifically instructed otherwise
+10. **Automatically stage, commit, and push** via GitKraken MCP unless specifically instructed otherwise
 
 ## Commit Types
 
@@ -148,13 +148,13 @@ chore:
 
 ## Instructions for AI
 
-1. Run `git diff` to see unstaged changes
-2. Run `git diff --cached` to see staged changes
-3. Run `git diff --stat` to see change summary
-4. Analyze the changes and categorize them (note when changes touch multiple areas: root, apps/web, packages/database, packages/emails)
-5. Count files changed and lines modified
-6. Include newly added files in the commit message summary
-6. Generate a commit message:
+**Use the GitKraken MCP** for all git operations (status, diff, stage, commit, push). Do not use terminal `git` commands—the sandbox may lack SSH key access for push, and the GitKraken MCP handles credentials correctly. Fall back to git commands only if the MCP is unavailable or lacks a needed feature.
+
+1. Use GitKraken MCP to get git status and diff (unstaged and staged changes)
+2. Analyze the changes and categorize them (note when changes touch multiple areas: root, apps/web, packages/database, packages/emails)
+3. Count files changed and lines modified
+4. Include newly added files in the commit message summary
+5. Generate a commit message:
    - Start with commit type and colon (e.g., `feat:`, `refactor:`, `docs:`)
    - Add a newline
    - List changes as emoji bullet points
@@ -163,15 +163,15 @@ chore:
    - Order by importance (most impactful first)
    - Keep bullet points concise and descriptive
    - **ESCAPE SPECIAL CHARACTERS**: Use `\'` for apostrophes, `\"` for quotes, `\\` for backslashes
-7. Scale based on change size:
+6. Scale based on change size:
    - Small (1-5 files): 2-3 bullet points
    - Medium (6-15 files): 3-4 bullet points
    - Large (16-30 files): 5-7 bullet points
    - Extensive (30+ files): 7-10 bullet points
-8. **Automatically execute git operations**:
-   - Stage all changes: `git add .`
+7. **Automatically execute git operations via GitKraken MCP**:
+   - Stage all changes
    - Commit with generated message
-   - Push to origin: `git push origin main`
+   - Push to origin
    - **Skip git operations only if explicitly instructed** (e.g., "just generate the message", "don't commit", etc.)
 
 ## Character Escaping Rules

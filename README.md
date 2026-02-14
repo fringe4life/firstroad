@@ -8,7 +8,7 @@
 [![Prisma](https://img.shields.io/badge/Prisma-7.4.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
 [![Better Auth](https://img.shields.io/badge/Better%20Auth-beta-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.18-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![Biome](https://img.shields.io/badge/Biome-2.3.13-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
+[![Biome](https://img.shields.io/badge/Biome-2.3.15-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.8.8-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.2.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Elysia](https://img.shields.io/badge/Elysia-1.4.25-000000)](https://elysiajs.com/)
@@ -16,7 +16,7 @@
 [![Resend](https://img.shields.io/badge/Resend-6.9.2-000000)](https://resend.com/)
 [![React Email](https://img.shields.io/badge/React%20Email-5.2.8-000000)](https://react.email/)
 [![Bun](https://img.shields.io/badge/Bun-1.3.9-FBF0DF?logo=bun&logoColor=FBF0DF)](https://bun.sh/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-7.1.5-000000)](https://ultracite.dev/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-7.2.0-000000)](https://ultracite.dev/)
 
 </div>
 
@@ -64,7 +64,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **Background Jobs**: Inngest 3.52 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
 - **Shared Utilities**: `@firstroad/utils` (packages/utils) for shared helpers (e.g. `createSlug`)
-- **Linting**: Biome 2.3.13 for fast formatting and linting with Ultracite 7.1.5 rules
+- **Linting**: Biome 2.3.15 for fast formatting and linting with Ultracite 7.2.0 rules
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 
@@ -246,6 +246,8 @@ RESEND_API_KEY="your-resend-api-key"
 # NEXT_PUBLIC_RESEND_FROM should be an email address, not an HTTP URL
 # Format: "Your App Name <your-email@domain.com>" or just "your-email@domain.com"
 NEXT_PUBLIC_RESEND_FROM="Your App <onboarding@resend.dev>"
+# Optional: Resend Full Access key for template scripts (resend:list, resend:download)
+# RESEND_FULL_ACCESS="re_..."
 
 # Social Authentication (GitHub)
 # Docs: https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app
@@ -485,6 +487,7 @@ bun run resend:download  # Download templates to emails/downloaded/
 bunx turbo run db:generate --filter=@firstroad/db   # Generate Prisma client
 bun run reset:tickets    # Reset ticket/comment data (preserves users)
 bun run clear:non-auth   # Clear non-auth tables
+bun run clear:attachments # Clear attachment records and S3 objects
 bun run seed:members     # Seed org members
 
 # Inngest
@@ -514,7 +517,7 @@ The project uses Tailwind CSS v4 with custom configuration for dark mode, theme 
 
 ### Database
 
-PostgreSQL with Prisma Client 7.3 using:
+PostgreSQL with Prisma Client 7.4 using:
 
 - **relationJoins** preview feature for optimized queries
 - **Client-side engine** for edge compatibility

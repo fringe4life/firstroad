@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
+import { connection } from "next/server";
 import { CardCompact } from "@/components/card-compact";
 import { Heading } from "@/components/heading";
 import { Suspend } from "@/components/suspend";
-import { RequireAuthSuspense } from "@/features/auth/components/require-auth";
+import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
+import { PaginationSkeleton } from "@/features/pagination/components/skeletons/pagination-skeleton";
 import { upsertTicket } from "@/features/ticket/actions/upsert-ticket";
 import { TicketsControlSkeleton } from "@/features/ticket/components/skeletons/ticket-controls-skeleton";
 import { TicketFormSkeleton } from "@/features/ticket/components/skeletons/ticket-form-skeleton";
 import { TicketListSkeleton } from "@/features/ticket/components/skeletons/ticket-list-skeleton";
 import { TicketUpsertForm } from "@/features/ticket/components/ticket-upsert-form";
 import { Tickets } from "@/features/ticket/components/tickets";
-import { ticketsPath } from "@/path";
 
 export const metadata: Metadata = {
   title: "My Tickets",
@@ -22,7 +23,9 @@ export const metadata: Metadata = {
   },
 };
 
-const TicketsPage = ({ searchParams }: PageProps<"/tickets">) => {
+const TicketsPage = async ({ searchParams }: PageProps<"/tickets">) => {
+  await connection();
+  const user = await getUserOrRedirect();
   return (
     <div className="grid h-full w-full grid-rows-[min-content_min-content_min-content_1fr] gap-y-8">
       <Heading description="All your tickets at one place" title="My Tickets" />
@@ -36,17 +39,17 @@ const TicketsPage = ({ searchParams }: PageProps<"/tickets">) => {
         description="A new ticket will be created"
         title="Create Ticket"
       />
-      <RequireAuthSuspense
+      <Suspend
         fallback={
           <div className="grid grid-rows-[min-content_1fr] gap-y-4">
             <TicketsControlSkeleton />
             <TicketListSkeleton />
+            <PaginationSkeleton />
           </div>
         }
-        redirectPath={ticketsPath()}
       >
-        {(user) => <Tickets searchParams={searchParams} userId={user.id} />}
-      </RequireAuthSuspense>
+        <Tickets searchParams={searchParams} userId={user.id} />
+      </Suspend>
     </div>
   );
 };

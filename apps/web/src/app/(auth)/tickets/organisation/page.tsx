@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { connection } from "next/server";
 import { CardCompact } from "@/components/card-compact";
 import { Heading } from "@/components/heading";
 import { Suspend } from "@/components/suspend";
@@ -24,6 +25,7 @@ export const metadata: Metadata = {
 const TicketsOrganisationPage = async ({
   searchParams,
 }: PageProps<"/tickets">) => {
+  await connection();
   await getUserOrRedirect();
   return (
     <>
