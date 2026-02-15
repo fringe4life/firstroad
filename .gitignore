@@ -52,3 +52,6 @@ next-env.d.ts
 
 # generated files
 src/generated/
+
+# database dumps
+*.dump

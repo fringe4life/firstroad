@@ -9,7 +9,7 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "turbo run dev --filter=./apps/*",
+    "dev": "turbo run dev --filter=@firstroad/web",
     "dev:email": "turbo run dev --filter=@firstroad/emails",
     "build": "turbo run build --filter='!@firstroad/emails'",
     "start": "turbo run start",

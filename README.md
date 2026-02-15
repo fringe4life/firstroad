@@ -230,9 +230,12 @@ cp apps/web/env.example apps/web/.env.local
 Update `apps/web/.env.local` with your configuration:
 
 ```env
-# Database
+# Database (for Docker Postgres: postgresql://postgres:postgres@localhost:5432/firstroad)
 DATABASE_URL="postgresql://username:password@localhost:5432/your_database"
 DIRECT_URL="postgresql://username:password@localhost:5432/your_database"
+
+# Inngest (set INNGEST_DEV=1 for local dev with docker-compose inngest service)
+# INNGEST_DEV=1
 
 # Auth (Better Auth; validated as BETTER_AUTH_SECRET in src/lib/env.ts)
 BETTER_AUTH_SECRET="your-secret-key-here"
@@ -269,18 +272,46 @@ S3_BUCKET="your-bucket-name"
 
 ### 4. Set up the database
 
-Prisma lives in `packages/database`. From repo root:
+**Option A: Docker Postgres (recommended for local dev)**
+
+Start Postgres and Inngest Dev Server in Docker:
+
+```bash
+docker-compose up -d postgres inngest
+```
+
+Set in `apps/web/.env.local`:
+
+```env
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/firstroad"
+INNGEST_DEV=1
+```
+
+This keeps all dev DB traffic local and avoids Neon free-tier limits. Inngest Dev Server UI: http://localhost:8288.
+
+**Option B: External Postgres (e.g. Neon)**
+
+Use your Neon or other Postgres URL for `DATABASE_URL`. Omit `INNGEST_DEV` if using Inngest Cloud; for local Inngest, run `bun run inngest` from root and set `INNGEST_DEV=1`.
+
+Prisma lives in `packages/database`. Use `.env` for production/Neon; use `.env.local` for local Docker Postgres (copy from `packages/database/env.example`).
+
+From repo root:
 
 ```bash
 # Generate Prisma client (runs automatically after bun install via postinstall)
 bunx turbo run db:generate --filter=@firstroad/db
 
 # Run migrations (from packages/database)
-cd packages/database && bun run db:migrate
-# Or push schema for dev: bunx prisma db push
+cd packages/database && bun run db:migrate        # uses .env (prod)
+cd packages/database && bun run db:migrate:local # uses .env.local (local Docker)
+
+# Or push schema for dev
+cd packages/database && bun run db:push           # uses .env
+cd packages/database && bun run db:push:local     # uses .env.local
 
 # Seed (from packages/database; seed script in prisma.config.ts)
-cd packages/database && bunx prisma db seed
+cd packages/database && bun run db:seed           # uses .env
+cd packages/database && bun run db:seed:local     # uses .env.local
 ```
 
 ### 5. Start the development server
@@ -299,6 +330,8 @@ Turborepo monorepo: root workspace with `apps/*` and `packages/*`.
 
 ```
 firstroad/
+├── .dockerignore
+├── docker-compose.yml
 ├── apps/
 │   ├── web/                  # Next.js app (main app)
 │   │   ├── src/
@@ -310,12 +343,14 @@ firstroad/
 │   │   │   ├── utils/       # cache-tags, invalidate-cache, slug, to-action-state, etc.
 │   │   │   ├── path.ts
 │   │   │   └── proxy.ts
+│   │   ├── Dockerfile
 │   │   ├── env.example
 │   │   ├── next.config.ts
 │   │   └── vercel.json
 │   └── inngest/              # Inngest dev tooling
 ├── packages/
 │   ├── database/             # Prisma (schema, migrations, models, seed)
+│   │   ├── env.example       # Copy to .env or .env.local
 │   │   ├── prisma/
 │   │   ├── prisma.config.ts
 │   │   └── src/              # client, client-types, index
@@ -485,6 +520,9 @@ bun run resend:download  # Download templates to emails/downloaded/
 
 # Database (packages/database via turbo)
 bunx turbo run db:generate --filter=@firstroad/db   # Generate Prisma client
+cd packages/database && bun run db:migrate:local     # Migrate local Docker DB
+cd packages/database && bun run db:push:local        # Push schema to local
+cd packages/database && bun run db:seed:local        # Seed local DB
 bun run reset:tickets    # Reset ticket/comment data (preserves users)
 bun run clear:non-auth   # Clear non-auth tables
 bun run clear:attachments # Clear attachment records and S3 objects
@@ -698,6 +736,29 @@ Centralized cache tag system for consistent cache invalidation:
 1. Connect your GitHub repository to Vercel
 2. Configure environment variables in Vercel dashboard
 3. Deploy automatically on push to main branch
+
+### Docker
+
+Build the production image (requires Neon `DATABASE_URL` for `generateStaticParams` at build time):
+
+```bash
+docker build -f apps/web/Dockerfile \
+  --build-arg DATABASE_URL="$NEON_DATABASE_URL" \
+  -t firstroad-web .
+```
+
+Run the container (pass all required env vars: `DATABASE_URL`, `BETTER_AUTH_SECRET`, `NEXT_PUBLIC_APP_URL`, `RESEND_*`, `GITHUB_*`, `S3_*`, `INNGEST_SIGNING_KEY`, `INNGEST_EVENT_KEY`):
+
+```bash
+docker run -p 3000:3000 \
+  -e DATABASE_URL="$NEON_DATABASE_URL" \
+  -e BETTER_AUTH_SECRET="..." \
+  -e NEXT_PUBLIC_APP_URL="https://your-domain.com" \
+  # ... other env vars
+  firstroad-web
+```
+
+The app uses Bun runtime (required for `Bun.s3` attachments). For production, use Inngest Cloud (set `INNGEST_SIGNING_KEY` and `INNGEST_EVENT_KEY`; do not set `INNGEST_DEV`).
 
 ### Other Platforms
 

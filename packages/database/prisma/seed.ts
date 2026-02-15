@@ -1,12 +1,13 @@
-import { PrismaNeon } from "@prisma/adapter-neon";
 import { PrismaClient } from "../generated/prisma/client";
+import { createAdapter } from "../src/adapter";
 import { createComments } from "./seed-data/comments";
 import { createTickets } from "./seed-data/tickets";
 
-const adapter = new PrismaNeon({
-  connectionString: process.env.DATABASE_URL,
-});
-
+const connectionString = process.env.DATABASE_URL;
+if (!connectionString) {
+  throw new Error("DATABASE_URL is required");
+}
+const adapter = createAdapter(connectionString);
 const prisma = new PrismaClient({ adapter });
 
 const main = async () => {
