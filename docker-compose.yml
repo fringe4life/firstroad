@@ -1,0 +1,56 @@
+# Local development: postgres + Inngest Dev Server
+# Usage: docker compose up -d postgres inngest
+# Then: bun run dev (app runs on host, connects to postgres and inngest)
+#
+# Build web image (uses apps/web/.env for build args):
+#   docker compose --env-file apps/web/.env build web
+#
+# Run web container:
+#   docker compose --env-file apps/web/.env up web
+# Or: docker run -p 8080:8080 --env-file apps/web/.env firstroad-web
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: firstroad
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  inngest:
+    image: inngest/inngest:v0.27.0
+    command: inngest dev -u http://host.docker.internal:3000/api/inngest
+    ports:
+      - "8288:8288"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  web:
+    image: firstroad-web
+    environment:
+      PORT: 8080
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        DATABASE_URL: ${DATABASE_URL}
+        BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+        NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL}
+        RESEND_API_KEY: ${RESEND_API_KEY}
+        NEXT_PUBLIC_RESEND_FROM: ${NEXT_PUBLIC_RESEND_FROM}
+        GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
+        GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
+        S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID}
+        S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY}
+        S3_REGION: ${S3_REGION}
+        S3_BUCKET: ${S3_BUCKET}
+    env_file: apps/web/.env
+    ports:
+      - "8080:8080"  # PORT=8080 so app listens on 8080 (matches Railway)
+
+volumes:
+  postgres_data:

@@ -35,6 +35,16 @@ const envSchema = object({
     string(),
     minLength(1, "GITHUB_CLIENT_SECRET is required"),
   ),
+  S3_ACCESS_KEY_ID: pipe(
+    string(),
+    minLength(1, "S3_ACCESS_KEY_ID is required"),
+  ),
+  S3_SECRET_ACCESS_KEY: pipe(
+    string(),
+    minLength(1, "S3_SECRET_ACCESS_KEY is required"),
+  ),
+  S3_REGION: pipe(string(), minLength(1, "S3_REGION is required")),
+  S3_BUCKET: pipe(string(), minLength(1, "S3_BUCKET is required")),
 });
 
 // Export validated environment variables

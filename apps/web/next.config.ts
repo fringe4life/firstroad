@@ -1,8 +1,12 @@
+import path from "node:path";
 import type { NextConfig } from "next";
 
 const isDev = process.env.NODE_ENV === "development";
 
 const nextConfig: NextConfig = {
+  output: "standalone",
+  outputFileTracingRoot: path.join(import.meta.dirname, "../../"),
+  transpilePackages: ["@firstroad/utils", "@firstroad/db"],
   typedRoutes: true,
   reactCompiler: !isDev,
   cacheComponents: true,

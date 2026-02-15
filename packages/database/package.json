@@ -6,17 +6,24 @@
   "scripts": {
     "type": "tsc --noEmit --project tsconfig.json",
     "db:generate": "prisma generate",
-    "db:migrate": "bun --env-file .env prisma migrate dev --skip-generate",
+    "db:migrate": "bun --env-file .env prisma migrate dev",
     "db:deploy": "bun --env-file .env prisma migrate deploy",
     "clear:attachments": "bun --bun --env-file .env prisma/scripts/clear-attachments.ts",
     "clear:non-auth": "bun prisma/scripts/clear-non-auth-tables.ts",
     "seed:members": "bun prisma/scripts/seed-org-members.ts",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "db:migrate:local": "bun --env-file .env.local prisma migrate dev",
+    "db:push": "bun --env-file .env prisma db push",
+    "db:push:local": "bun --env-file .env.local prisma db push",
+    "db:seed": "bun --env-file .env prisma db seed",
+    "db:seed:local": "bun --env-file .env.local prisma db seed"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
     "@prisma/adapter-neon": "^7.4.0",
-    "@prisma/client": "^7.4.0"
+    "@prisma/adapter-pg": "^7.4.0",
+    "@prisma/client": "^7.4.0",
+    "pg": "^8.18.0"
   },
   "devDependencies": {
     "typescript": "^5.9.3",

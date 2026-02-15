@@ -9,7 +9,7 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "turbo run dev --filter=./apps/*",
+    "dev": "turbo run dev --filter=@firstroad/web",
     "dev:email": "turbo run dev --filter=@firstroad/emails",
     "build": "turbo run build --filter='!@firstroad/emails'",
     "start": "turbo run start",
@@ -41,7 +41,10 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "turbo": "2.8.8",
-    "ultracite": "7.2.1"
+    "ultracite": "7.2.2"
+  },
+  "optionalDependencies": {
+    "drizzle-orm": ">=0.41.0"
   },
   "overrides": {
     "undici": ">=7.18.2",
