@@ -136,11 +136,18 @@ Neon allows `pg_dump` on all plans (including free). To seed local from Neon:
 
 ```bash
 # 1. Dump from Neon (use unpooled connection string)
-pg_dump -Fc -v -d "YOUR_NEON_UNPOOLED_URL" -f neon-backup.dump
+# Data only (schema must exist first):
+pg_dump -Fc -a -v -d "YOUR_NEON_UNPOOLED_URL" -f neon-data-only.dump
 
-# 2. Restore to local
-pg_restore -v -d "postgresql://postgres:postgres@localhost:5432/firstroad" --clean --if-exists neon-backup.dump
+# 2. Ensure local schema exists (required before restore)
+# Use db:push when migrations fail (e.g. shadow DB errors); otherwise db:migrate:local
+cd packages/database && bun run db:push:local
+
+# 3. Restore to local (run from packages/database with dump file present)
+pg_restore -v -d "postgresql://postgres:postgres@localhost:5432/firstroad" --clean --if-exists neon-data-only.dump
 ```
+
+**Note:** The `relation "_prisma_migrations" does not exist` error means the schema is missing. Run step 2 first. If `db:migrate:local` fails (e.g. shadow database errors with empty baseline), use `db:push:local` instead to create the schema from the current Prisma models.
 
 ---
 

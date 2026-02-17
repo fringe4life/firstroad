@@ -5,13 +5,13 @@ import { flatten, ValiError } from "valibot";
 export type ActionStatePayload = Record<string, string>;
 
 export interface ActionState<T = unknown> {
+  data?: T;
+  fieldErrors: Record<string, string[] | undefined>;
   message: string;
   /** Plain object only (FormData/File/Date/Map cannot be passed to Client Components). */
   payload?: ActionStatePayload;
-  fieldErrors: Record<string, string[] | undefined>;
   status?: "SUCCESS" | "ERROR";
   timestamp: number;
-  data?: T;
 }
 
 export const EMPTY_ACTION_STATE: ActionState = {

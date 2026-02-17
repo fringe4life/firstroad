@@ -203,17 +203,6 @@
 
   --animate-slide-right-skew: --slide-right-skew 350ms ease-in;
 
-  @keyframes --slide-right-skew {
-    from {
-      transform: translateX(0) skewX(0deg);
-      opacity: 1;
-    }
-    to {
-      transform: translateX(100%) skewX(-8deg);
-      opacity: 0;
-    }
-  }
-
   /* Layout dimensions */
   --header-padding-y: 0.625rem;
   --header-content-height: 2.5rem;
@@ -239,6 +228,17 @@
   --auth-nav-width: 10.5rem;
   --max-content-widest: 30rem;
   --max-content-narrow: 26.25rem;
+
+  @keyframes --slide-right-skew {
+    from {
+      transform: translateX(0) skewX(0deg);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(100%) skewX(-8deg);
+      opacity: 0;
+    }
+  }
 }
 
 @utility max-content-* {
@@ -253,12 +253,11 @@
 }
 
 @utility no-scrollbar {
-  ::-webkit-scrollbar {
-    display: none;
-  }
-
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+  ::-webkit-scrollbar {
+    display: none;
+  } /* Firefox */
 }
 
 @layer base {
@@ -266,15 +265,12 @@
     @apply border-border outline-ring/50;
   }
   html {
-    scrollbar-gutter: stable;
-    scrollbar-width: thin;
-    /* container-type: scroll-state; */
-
-    /* Dynamic sidebar calculations - must run AFTER HTML class overrides */
     --sidebar-current-width: max(
       var(--side-width),
       var(--expanded-sidebar-width)
     );
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
     /* body > nav {
       @container scroll-state(stuck: top) {
         @apply rounded-4xl shadow-2xl;

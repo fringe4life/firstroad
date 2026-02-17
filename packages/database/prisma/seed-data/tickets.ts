@@ -17,8 +17,8 @@ interface TicketWithoutUserId
   > {}
 
 interface SeedUser {
-  userId: string;
   organizationIds: string[];
+  userId: string;
 }
 
 // Base tickets list without userId assignment

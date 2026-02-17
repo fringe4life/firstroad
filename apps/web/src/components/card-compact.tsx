@@ -8,11 +8,11 @@ import {
 } from "./ui/card";
 
 interface CardCompactProps {
-  title: string;
-  description: string;
-  content: React.ReactNode;
-  footer?: React.ReactNode;
   className?: string;
+  content: React.ReactNode;
+  description: string;
+  footer?: React.ReactNode;
+  title: string;
 }
 
 const CardCompact = ({

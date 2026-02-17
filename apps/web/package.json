@@ -57,7 +57,7 @@
     "server-only": "^0.0.1",
     "slugify": "^1.6.6",
     "sonner": "^2.0.7",
-    "tailwind-merge": "^3.4.0",
+    "tailwind-merge": "^3.4.1",
     "valibot": "^1.2.0"
   },
   "devDependencies": {
@@ -68,10 +68,10 @@
     "@types/node": "^25.2.3",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@typescript/native-preview": "^7.0.0-dev.20260213.1",
+    "@typescript/native-preview": "^7.0.0-dev.20260216.1",
     "lint-staged": "^16.2.7",
     "next-devtools-mcp": "^0.3.10",
-    "shadcn": "^3.8.4",
+    "shadcn": "^3.8.5",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3",
     "typescript-plugin-directives": "^0.0.3"

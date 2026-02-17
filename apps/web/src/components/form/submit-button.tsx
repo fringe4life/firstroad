@@ -6,14 +6,14 @@ import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
 
 interface SubmitButtonProps {
-  label?: string;
-  icon?: React.ReactElement<React.SVGProps<SVGSVGElement>>;
-  variant?: React.ComponentProps<typeof Button>["variant"];
-  size?: React.ComponentProps<typeof Button>["size"];
   disabled?: boolean;
+  icon?: React.ReactElement<React.SVGProps<SVGSVGElement>>;
+  label?: string;
   name?: string;
   showLoader?: boolean;
+  size?: React.ComponentProps<typeof Button>["size"];
   value?: string;
+  variant?: React.ComponentProps<typeof Button>["variant"];
 }
 
 const SubmitButton = ({

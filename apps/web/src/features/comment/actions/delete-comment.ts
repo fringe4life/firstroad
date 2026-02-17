@@ -3,7 +3,7 @@
 import { prisma } from "@firstroad/db";
 import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
-import { invalidateCommentAndTicketComments } from "@/utils/invalidate-cache";
+import { invalidateCommentsForTicket } from "@/utils/invalidate-cache";
 import {
   type ActionState,
   fromErrorToActionState,
@@ -48,11 +48,7 @@ export const deleteComment = async (
     return fromErrorToActionState<string>(deleteError);
   }
 
-  invalidateCommentAndTicketComments(
-    commentWithOwnership.id,
-    commentWithOwnership.ticketId,
-    commentWithOwnership.ticket.slug,
-  );
+  invalidateCommentsForTicket(commentWithOwnership.ticket.slug);
 
   return toActionState<string>("Comment deleted successfully", "SUCCESS");
 };

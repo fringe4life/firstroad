@@ -12,15 +12,15 @@ interface ResponsiveLabelProps {
    * render the responsive icon/short/full spans as its children.
    */
   children: ReactElement<{ className?: string; children?: ReactNode }>;
+  /**
+   * Full label for large width (e.g. "Create Organisation").
+   */
+  fullLabel: string;
   icon: ReactNode;
   /**
    * Short label for medium width (e.g. "Create").
    */
   shortLabel: string;
-  /**
-   * Full label for large width (e.g. "Create Organisation").
-   */
-  fullLabel: string;
 }
 
 const ResponsiveLabel = ({

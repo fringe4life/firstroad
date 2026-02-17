@@ -17,16 +17,16 @@ import { type ActionState, EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 
 interface UseConfirmDialogProps {
   action: () => Promise<ActionState>;
+  closeOnSubmit?: boolean; // Optional flag to close dialog immediately on submit
+  description?: string;
+  onError?: (result: ActionState) => void;
+  onIsPending?: (isPending: boolean) => void;
+  onSuccess?: (result: ActionState) => void;
+  title?: string;
   trigger: (props: {
     isPending: boolean;
     onClick: () => void;
   }) => React.ReactElement;
-  title?: string;
-  description?: string;
-  closeOnSubmit?: boolean; // Optional flag to close dialog immediately on submit
-  onSuccess?: (result: ActionState) => void;
-  onError?: (result: ActionState) => void;
-  onIsPending?: (isPending: boolean) => void;
 }
 
 const useConfirmDialog = ({

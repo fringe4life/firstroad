@@ -11,8 +11,8 @@ import {
 } from "@react-email/components";
 
 interface EmailOTPVerificationProps {
-  TO_NAME: string;
   OTP: string;
+  TO_NAME: string;
   TYPE: string;
 }
 

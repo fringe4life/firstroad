@@ -50,9 +50,9 @@ export interface OrganisationItemProps
 export interface OrganisationActionButtonProps
   extends OrganisationId,
     LimitedAccess {
-  organizationName: string;
   isActive: boolean;
   isAdminOrOwner: boolean;
+  organizationName: string;
 }
 
 export interface SwitchOrgButtonProps extends OrganisationId {

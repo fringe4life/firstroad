@@ -10,8 +10,8 @@ export type PermissionAction = "canCreate" | "canUpdate" | "canDelete";
 
 export interface ResourcePermission {
   canCreate: boolean;
-  canUpdate: boolean;
   canDelete: boolean;
+  canUpdate: boolean;
 }
 
 export interface OrgScopedResource extends UserVerifiable {
@@ -20,13 +20,13 @@ export interface OrgScopedResource extends UserVerifiable {
 
 export interface WithPermissions {
   canCreate: boolean;
-  canUpdate: boolean;
   canDelete: boolean;
+  canUpdate: boolean;
 }
 
 export interface PermissionKey {
-  resourceType: ResourceType;
   action: PermissionAction;
+  resourceType: ResourceType;
 }
 
 export interface OrganisationMemberRow
@@ -59,9 +59,9 @@ export interface MembershipsMoreMenuProps extends OrganisationId, MemberId {
 }
 
 export interface PermissionToggleProps extends OrganisationId, MemberId {
-  resourceType: ResourceType;
   action: PermissionAction;
   permissionValue: boolean;
+  resourceType: ResourceType;
 }
 
 export interface MemberShipProps extends OrganisationId {}

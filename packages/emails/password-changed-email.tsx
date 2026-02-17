@@ -12,8 +12,8 @@ import {
 } from "@react-email/components";
 
 interface PasswordChangedEmailProps {
-  TO_NAME: string;
   APP_URL: string;
+  TO_NAME: string;
 }
 
 const PasswordChangedEmail = ({

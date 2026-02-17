@@ -12,11 +12,11 @@ import {
 } from "@react-email/components";
 
 interface OrganizationInvitationProps {
-  TO_NAME: string;
-  ORGANIZATION_NAME: string;
-  INVITER_NAME: string;
-  ROLE: string;
   INVITE_URL: string;
+  INVITER_NAME: string;
+  ORGANIZATION_NAME: string;
+  ROLE: string;
+  TO_NAME: string;
 }
 
 const OrganizationInvitation = ({

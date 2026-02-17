@@ -8,8 +8,8 @@ interface onArgs {
 }
 
 export interface FeedBackOption {
-  onSuccess?: (onArgs: onArgs) => void;
   onError?: (onArgs: onArgs) => void;
+  onSuccess?: (onArgs: onArgs) => void;
 }
 
 const useActionFeedback = (

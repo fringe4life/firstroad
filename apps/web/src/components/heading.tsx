@@ -1,10 +1,10 @@
 import { Separator } from "@/components/ui/separator";
 
 interface HeadingProps {
-  title: string;
+  actions?: React.ReactNode;
   description: string;
   tabs?: React.ReactNode;
-  actions?: React.ReactNode;
+  title: string;
 }
 const Heading = ({ title, description, tabs, actions }: HeadingProps) => (
   <>

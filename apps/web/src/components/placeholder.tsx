@@ -3,9 +3,9 @@ import { MessageSquareWarning } from "lucide-react";
 import { cloneElement } from "react";
 
 export interface PlaceholderProps {
-  label: string;
   button?: React.ReactElement<HTMLElement>;
   icon?: React.ReactElement<React.SVGProps<SVGSVGElement>, "svg">;
+  label: string;
 }
 
 const Placeholder = ({

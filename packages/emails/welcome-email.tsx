@@ -12,8 +12,8 @@ import {
 } from "@react-email/components";
 
 interface WelcomeEmailProps {
-  TO_NAME: string;
   APP_URL: string;
+  TO_NAME: string;
 }
 
 const WelcomeEmail = ({ TO_NAME, APP_URL }: WelcomeEmailProps) => (

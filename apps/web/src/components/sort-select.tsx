@@ -18,9 +18,9 @@ export interface SortOption {
 
 export interface SortObject extends Omit<SortOption, "label"> {}
 interface SortSelectProps {
+  onValueChange: (sort: SortObject) => void;
   options: readonly SortOption[];
   value: SortObject;
-  onValueChange: (sort: SortObject) => void;
 }
 
 const createKey = (option: SortOption | SortObject) =>

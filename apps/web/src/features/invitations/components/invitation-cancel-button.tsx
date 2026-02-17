@@ -6,8 +6,8 @@ import { PendingIconButton } from "@/components/pending-icon-button";
 import { cancelInvitation } from "../actions/cancel-invitation";
 
 interface InvitationCancelButtonProps {
-  organizationId: string;
   invitationId: string;
+  organizationId: string;
 }
 
 const InvitationCancelButton = ({

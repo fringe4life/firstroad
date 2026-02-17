@@ -18,7 +18,7 @@ const TimeAgoClient = <T extends Time>({ createdAt, updatedAt }: T) => {
 
   return (
     <div className="flex items-center gap-2 text-muted-foreground text-xs">
-      <span>{timeAgo}</span>
+      <span suppressHydrationWarning>{timeAgo}</span>
       {Boolean(isEdited) && (
         <>
           <span>•</span>

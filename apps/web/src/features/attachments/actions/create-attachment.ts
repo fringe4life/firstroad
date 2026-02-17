@@ -1,5 +1,6 @@
 "use server";
-import { revalidatePath } from "next/cache";
+
+import { refresh } from "next/cache";
 import {
   array,
   custom,
@@ -17,7 +18,6 @@ import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
 import { getUser } from "@/features/auth/queries/get-user";
 import { createTicketAttachments } from "@/features/ticket/dal/create-ticket-attachment";
 import { findTicket } from "@/features/ticket/queries/find-ticket";
-import { ticketPath } from "@/path";
 import { invalidateTicketAndAttachments } from "@/utils/invalidate-cache";
 import {
   type ActionState,
@@ -92,7 +92,7 @@ const createAttachment = async (
   }
 
   invalidateTicketAndAttachments(ticket.slug, ticketId);
-  revalidatePath(ticketPath(ticket.slug));
+  refresh();
   return toActionState("Attachment(s) uploaded", "SUCCESS");
 };
 

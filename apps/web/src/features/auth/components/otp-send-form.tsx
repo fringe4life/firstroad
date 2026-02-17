@@ -10,10 +10,10 @@ import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 import type { sendEmailVerificationOTP } from "../actions/send-otp-action";
 
 interface OTPSendFormProps {
-  sendOTPAction: typeof sendEmailVerificationOTP;
-  title: string;
   description: string;
+  sendOTPAction: typeof sendEmailVerificationOTP;
   submitLabel: string;
+  title: string;
 }
 
 const OTPSendForm = ({

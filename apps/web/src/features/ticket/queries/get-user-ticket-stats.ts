@@ -4,10 +4,10 @@ import { ticketsCache } from "@/utils/cache-tags";
 import { tryCatch } from "@/utils/try-catch";
 
 export interface TicketStats {
-  total: number;
-  open: number;
-  inProgress: number;
   done: number;
+  inProgress: number;
+  open: number;
+  total: number;
 }
 
 export const getUserTicketStats = async (

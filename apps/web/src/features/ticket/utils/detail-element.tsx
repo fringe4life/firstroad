@@ -1,7 +1,7 @@
 interface DetailElementProps {
-  isDetail: boolean;
   element: React.ReactNode;
   elementIfIsDetail: React.ReactNode;
+  isDetail: boolean;
 }
 
 const selectDetailElement = ({

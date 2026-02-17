@@ -67,16 +67,16 @@ export interface CommentState {
 
 export interface CommentCreateFormProps {
   action: (formData: FormData) => void;
-  state: ActionState<CommentWithUserInfo>;
   commentId?: string;
   initialContent?: Exclude<Maybe<string>, null>;
   onCancel?: () => void;
   onSuccessState?: (state: ActionState<CommentWithUserInfo>) => void;
+  state: ActionState<CommentWithUserInfo>;
 }
 
 export interface CommentItemProps {
-  comment: Comment;
   buttons?: ReactNode;
+  comment: Comment;
 }
 
 export interface CommentContentProps {
@@ -99,6 +99,8 @@ export interface CommentOwnerButtonsProps
   extends CommentContentProps,
     CommentEditHandler,
     CommentDeleteHandler {
+  canDelete?: boolean;
+  canUpdate?: boolean;
   createAttachmentAction?: CreateAttachmentAction;
 }
 
@@ -107,46 +109,58 @@ export interface CommentEditButtonProps
     CommentEditHandler {}
 
 export interface CommentActions {
+  createAttachmentAction: CreateAttachmentAction;
+  deleteCommentAction: (commentId: string) => Promise<ActionState<string>>;
   loadMoreAction: (
     ticketSlug: string,
     cursor?: string,
     take?: number,
+    organizationId?: string,
+    userId?: string,
   ) => Promise<PaginatedResult<CommentWithUserInfo>>;
+  loadMoreOrganizationId?: string;
+  loadMoreUserId?: string;
   upsertCommentAction: (
     commentId: Exclude<Maybe<string>, null>,
     ticketId: string,
     _state: ActionState<CommentWithUserInfo>,
     formData: FormData,
   ) => Promise<ActionState<CommentWithUserInfo>>;
-  deleteCommentAction: (commentId: string) => Promise<ActionState<string>>;
-  createAttachmentAction: CreateAttachmentAction;
 }
 
 export interface CommentsProviderProps
   extends CommentActions,
     PaginatedResult<Comment> {
-  ticketSlug: string;
+  canCreate?: boolean;
+  canDelete?: boolean;
+  /** Org-level COMMENT permission for current user's own comments (fallback when item lacks canUpdate/canDelete, e.g. optimistic) */
+  canUpdate?: boolean;
+  children: ReactNode;
   ticketId: string;
+  ticketSlug: string;
   userId?: string;
   userName?: string;
-  children: ReactNode;
 }
 
 export type CommentsProps = Omit<CommentsProviderProps, "children">;
 
 export interface CommentsContextValue {
-  formRef: RefObject<HTMLDivElement | null>;
-  optimisticComments: CommentWithUserInfo[];
-  editingState: EditingState;
-  upsertState: ActionState<CommentWithUserInfo>;
-  upsertAction: (formData: FormData) => void;
-  userId?: string;
-  isPending: boolean;
-  hasNextPage: boolean;
-  handleUpsertSuccess: (state: ActionState<CommentWithUserInfo>) => void;
-  handleEdit: (commentId: string, content: string) => void;
-  handleCancelEdit: () => void;
-  handleLoadMore: () => void;
-  handleDelete: (commentId: string) => Promise<ActionState<string>>;
+  canCreate?: boolean;
+  canDelete?: boolean;
+  /** Org-level COMMENT permission for own comments (fallback when item lacks canUpdate/canDelete) */
+  canUpdate?: boolean;
   createAttachmentAction: CreateAttachmentAction;
+  editingState: EditingState;
+  formRef: RefObject<HTMLDivElement | null>;
+  handleCancelEdit: () => void;
+  handleDelete: (commentId: string) => Promise<ActionState<string>>;
+  handleEdit: (commentId: string, content: string) => void;
+  handleLoadMore: () => void;
+  handleUpsertSuccess: (state: ActionState<CommentWithUserInfo>) => void;
+  hasNextPage: boolean;
+  isPending: boolean;
+  optimisticComments: CommentWithUserInfo[];
+  upsertAction: (formData: FormData) => void;
+  upsertState: ActionState<CommentWithUserInfo>;
+  userId?: string;
 }

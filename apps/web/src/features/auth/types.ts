@@ -19,13 +19,13 @@ export interface ActiveOrganizationId
 export type User = BaseUser & ActiveOrganizationId;
 
 interface NoUser {
-  user: null | undefined;
   hasUser: false;
+  user: null | undefined;
 }
 
 interface HasUser {
-  user: User;
   hasUser: true;
+  user: User;
 }
 export type UserProp = NoUser | HasUser;
 

@@ -11,9 +11,9 @@ const LOADER_CLASSES = "aspect-square w-4 animate-spin";
 
 interface PendingIconProps {
   icon: React.ReactElement<React.SVGProps<SVGSVGElement>>;
+  isPending: boolean;
   /** Defaults to LucideLoader. If provided, cloned with loader styles. */
   loader?: React.ReactElement<React.SVGProps<SVGSVGElement>>;
-  isPending: boolean;
 }
 
 const PendingIcon = ({ icon, loader, isPending }: PendingIconProps) => (

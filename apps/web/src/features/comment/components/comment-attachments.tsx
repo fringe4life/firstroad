@@ -6,9 +6,9 @@ import { getAttachmentsByComment } from "@/features/comment/queries/get-attachme
 
 interface CommentAttachmentsProps {
   commentId: string;
-  ticketId: string;
-  organizationId: string;
   isOwner: boolean;
+  organizationId: string;
+  ticketId: string;
 }
 
 const CommentAttachments = async ({

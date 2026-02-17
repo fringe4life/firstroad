@@ -33,11 +33,11 @@ interface ConfirmDialogProps {
   children:
     | React.ReactNode
     | ((context: ConfirmDialogContextValue) => React.ReactNode);
-  title?: string;
-  description?: string;
   closeOnSubmit?: boolean;
-  onSuccess?: (result: ActionState) => void;
+  description?: string;
   onError?: (result: ActionState) => void;
+  onSuccess?: (result: ActionState) => void;
+  title?: string;
 }
 
 const ConfirmDialog = ({

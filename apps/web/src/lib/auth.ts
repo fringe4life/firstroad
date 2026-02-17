@@ -1,5 +1,9 @@
 import { prisma } from "@firstroad/db";
 import type { MemberRole } from "@firstroad/db/client-types";
+import {
+  addMemberPermissions,
+  removeMemberPermissions,
+} from "@firstroad/db/member-permissions";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { createAuthMiddleware } from "better-auth/api";
 import { betterAuth } from "better-auth/minimal";
@@ -80,6 +84,15 @@ export const auth = betterAuth({
         );
       },
       organizationHooks: {
+        afterAcceptInvitation: async ({ member }) => {
+          await addMemberPermissions(prisma, member.id, ["TICKET", "COMMENT"]);
+        },
+        afterAddMember: async ({ member }) => {
+          await addMemberPermissions(prisma, member.id, ["TICKET", "COMMENT"]);
+        },
+        afterCreateOrganization: async ({ member }) => {
+          await addMemberPermissions(prisma, member.id, ["TICKET", "COMMENT"]);
+        },
         beforeRemoveMember: async ({ member, organization }) => {
           // Prevent removing the last member from an organization
           const memberCount = await prisma.member.count({
@@ -112,6 +125,11 @@ export const auth = betterAuth({
               );
             }
           }
+
+          await removeMemberPermissions(prisma, member.id, [
+            "TICKET",
+            "COMMENT",
+          ]);
         },
       },
     }),

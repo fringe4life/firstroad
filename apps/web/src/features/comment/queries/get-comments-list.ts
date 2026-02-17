@@ -1,9 +1,5 @@
-"use cache";
-
 import { prisma } from "@firstroad/db";
-import { cacheTag } from "next/cache";
 import { COMMENT_WITH_USER_INCLUDE } from "@/features/comment/constants";
-import { commentsCache } from "@/utils/cache-tags";
 
 // biome-ignore lint/suspicious/useAwait: needs to be for "use cache"
 const getCommentsList = async ({
@@ -15,7 +11,6 @@ const getCommentsList = async ({
   cursor?: string;
   take: number;
 }) => {
-  cacheTag(commentsCache());
   return prisma.comment.findMany({
     where: {
       ticket: { slug: ticketSlug },

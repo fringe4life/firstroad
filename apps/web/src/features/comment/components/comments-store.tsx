@@ -29,12 +29,17 @@ const CommentsProvider = ({
   metadata,
   ticketSlug,
   loadMoreAction,
+  loadMoreOrganizationId,
+  loadMoreUserId,
   upsertCommentAction,
   deleteCommentAction,
   createAttachmentAction,
   userId,
   userName,
   ticketId,
+  canCreate,
+  canUpdate,
+  canDelete,
   children,
 }: CommentsProviderProps) => {
   const [commentsState, setCommentsState] = useState<CommentState>(() => ({
@@ -133,6 +138,8 @@ const CommentsProvider = ({
           ticketSlug,
           commentsState.metadata.nextCursor ?? "",
           3,
+          loadMoreOrganizationId,
+          loadMoreUserId,
         );
         setCommentsState((prev) => ({
           list: [...prev.list, ...(newData.list ?? [])],
@@ -170,6 +177,9 @@ const CommentsProvider = ({
     upsertState,
     upsertAction,
     userId,
+    canCreate,
+    canUpdate,
+    canDelete,
     isPending,
     hasNextPage: commentsState.metadata.hasNextPage,
     handleUpsertSuccess,

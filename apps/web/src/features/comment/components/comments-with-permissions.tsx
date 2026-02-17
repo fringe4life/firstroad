@@ -1,0 +1,83 @@
+import { addCommentsAccess } from "@/features/auth/dto/add-comments-access";
+import type { User } from "@/features/auth/types";
+import { Comments } from "@/features/comment/components/comments";
+import type { CommentWithUserInfo } from "@/features/comment/types";
+import { getMemberPermission } from "@/features/memberships/queries/get-member-permission";
+import type { PaginatedResult } from "@/features/pagination/types";
+import type { List, Maybe } from "@/types";
+
+interface CommentsWithPermissionsProps {
+  createAttachmentAction: Parameters<
+    typeof Comments
+  >[0]["createAttachmentAction"];
+  deleteCommentAction: Parameters<typeof Comments>[0]["deleteCommentAction"];
+  listWithAttachments: List<CommentWithUserInfo>;
+  loadMoreAction: Parameters<typeof Comments>[0]["loadMoreAction"];
+  metadata: PaginatedResult<CommentWithUserInfo>["metadata"];
+  ticket: { id: string; slug: string; organizationId: string };
+  upsertCommentAction: Parameters<typeof Comments>[0]["upsertCommentAction"];
+  user: Maybe<User>;
+}
+
+export const CommentsWithPermissions = async ({
+  user,
+  ticket,
+  listWithAttachments,
+  metadata,
+  loadMoreAction,
+  createAttachmentAction,
+  deleteCommentAction,
+  upsertCommentAction,
+}: CommentsWithPermissionsProps) => {
+  const list = listWithAttachments ?? [];
+
+  if (!user) {
+    const listWithAccess = list.map((comment) => ({
+      ...comment,
+      isOwner: false,
+      canCreate: false,
+      canUpdate: false,
+      canDelete: false,
+    }));
+    return (
+      <Comments
+        canCreate={false}
+        canDelete={false}
+        canUpdate={false}
+        createAttachmentAction={createAttachmentAction}
+        deleteCommentAction={deleteCommentAction}
+        list={listWithAccess}
+        loadMoreAction={loadMoreAction}
+        metadata={metadata}
+        ticketId={ticket.id}
+        ticketSlug={ticket.slug}
+        upsertCommentAction={upsertCommentAction}
+      />
+    );
+  }
+
+  const [permission, listWithAccess] = await Promise.all([
+    getMemberPermission(user.id, ticket.organizationId, "COMMENT"),
+    addCommentsAccess(list, user, ticket.organizationId),
+  ]);
+
+  return (
+    <Comments
+      canCreate={permission?.canCreate ?? false}
+      canDelete={permission?.canDelete ?? false}
+      canUpdate={permission?.canUpdate ?? false}
+      createAttachmentAction={createAttachmentAction}
+      deleteCommentAction={deleteCommentAction}
+      list={listWithAccess ?? []}
+      loadMoreAction={loadMoreAction}
+      loadMoreOrganizationId={ticket.organizationId}
+      loadMoreUserId={user.id}
+      metadata={metadata}
+      ticketId={ticket.id}
+      ticketSlug={ticket.slug}
+      upsertCommentAction={upsertCommentAction}
+      userId={user.id}
+      userName={user.name}
+    />
+  );
+};

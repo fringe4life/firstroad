@@ -18,9 +18,9 @@ export interface DateReset {
 }
 
 interface DatePickerProps {
+  defaultValue?: string;
   id: string;
   name: string;
-  defaultValue?: string;
   ref: React.RefObject<Maybe<DateReset>>;
 }
 

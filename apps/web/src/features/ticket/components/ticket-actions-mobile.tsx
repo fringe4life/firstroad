@@ -20,9 +20,9 @@ import type { TicketAccess } from "@/features/ticket/types";
 import { ticketEditPath } from "@/path";
 
 interface TicketActionsMobileProps extends TicketAccess {
-  ticket: { slug: string; id: string; status: string };
   /** Callback to stop propagation when used inside a clickable card (e.g. list item). */
   onActionClick?: (e: React.MouseEvent) => void;
+  ticket: { slug: string; id: string; status: string };
 }
 
 const TicketActionsMobile = ({

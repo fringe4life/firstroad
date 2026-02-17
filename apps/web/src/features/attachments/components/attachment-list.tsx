@@ -7,9 +7,9 @@ import type { DeleteAttachmentAction, UIAttachment } from "../types";
 
 interface AttachmentListProps {
   attachments: List<UIAttachment>;
+  deleteAttachmentAction: DeleteAttachmentAction;
   isOwner: boolean;
   ownerId: string;
-  deleteAttachmentAction: DeleteAttachmentAction;
 }
 
 const AttachmentList = ({

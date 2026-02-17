@@ -29,9 +29,9 @@ export type BaseTicket = TicketGetPayload<{
 }>;
 
 export interface TicketCardProps {
-  ticket: BaseTicket;
   actions?: React.ReactNode;
   mobileActions?: React.ReactNode;
+  ticket: BaseTicket;
   variant?: "list" | "detail";
 }
 

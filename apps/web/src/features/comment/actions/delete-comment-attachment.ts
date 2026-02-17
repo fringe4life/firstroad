@@ -1,14 +1,13 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { refresh } from "next/cache";
 import { minLength, object, pipe, safeParse, string, ValiError } from "valibot";
 import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
 import { getUser } from "@/features/auth/queries/get-user";
 import { deleteCommentAttachmentRecord } from "@/features/comment/dal/delete-comment-attachment";
 import { findComment } from "@/features/comment/queries/find-comment";
 import { findTicket } from "@/features/ticket/queries/find-ticket";
-import { ticketPath } from "@/path";
-import { invalidateTicketAndAttachments } from "@/utils/invalidate-cache";
+import { invalidateAttachmentsForComment } from "@/utils/invalidate-cache";
 import {
   type ActionState,
   fromErrorToActionState,
@@ -85,9 +84,8 @@ const deleteCommentAttachment = async (
     return fromErrorToActionState(error);
   }
 
-  invalidateTicketAndAttachments(ticket.slug, ticket.id);
-  revalidatePath(ticketPath(ticket.slug));
-
+  invalidateAttachmentsForComment(comment.id);
+  refresh();
   return toActionState("Attachment deleted", "SUCCESS");
 };
 

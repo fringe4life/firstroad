@@ -21,9 +21,9 @@ import type { AttachmentPreview } from "../utils/attachment-previews";
 import { createAttachmentPreviews } from "../utils/attachment-previews";
 
 interface AttachmentCreateFormProps {
-  ownerId: string;
   createAttachmentAction: CreateAttachmentAction;
   onSuccess?: () => void;
+  ownerId: string;
 }
 
 const AttachmentCreateForm = ({

@@ -8,16 +8,20 @@ const CommentOwnerButtons = ({
   onEdit,
   onDeleteComment,
   createAttachmentAction,
+  canUpdate = false,
+  canDelete = false,
 }: CommentOwnerButtonsProps) => (
   <div className="grid gap-1">
-    <CommentEditButton comment={comment} onEdit={onEdit} />
-    {createAttachmentAction ? (
+    {canUpdate ? <CommentEditButton comment={comment} onEdit={onEdit} /> : null}
+    {createAttachmentAction && canUpdate ? (
       <AddCommentAttachmentButton
         commentId={comment.id}
         createAttachmentAction={createAttachmentAction}
       />
     ) : null}
-    <CommentDeleteButton id={comment.id} onDeleteComment={onDeleteComment} />
+    {canDelete ? (
+      <CommentDeleteButton id={comment.id} onDeleteComment={onDeleteComment} />
+    ) : null}
   </div>
 );
 

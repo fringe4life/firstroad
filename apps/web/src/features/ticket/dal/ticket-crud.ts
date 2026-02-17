@@ -19,9 +19,9 @@ interface TicketCreateArgs {
 }
 
 interface TicketUpdateArgs {
-  where: TicketWhereUniqueInput;
   data: TicketUpdateData;
   includeUser?: boolean;
+  where: TicketWhereUniqueInput;
 }
 
 /**

@@ -1,21 +1,21 @@
 type AttachmentPreviewKind = "image" | "pdf" | "other";
 
 interface ImageAttachmentPreview {
-  id: string;
   file: File;
+  id: string;
   kind: "image";
   objectUrl: string;
 }
 
 interface PdfAttachmentPreview {
-  id: string;
   file: File;
+  id: string;
   kind: "pdf";
 }
 
 interface OtherAttachmentPreview {
-  id: string;
   file: File;
+  id: string;
   kind: "other";
 }
 

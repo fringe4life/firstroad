@@ -6,11 +6,11 @@ import type { BaseTicket } from "@/features/ticket/types";
 import type { Maybe } from "@/types";
 
 interface TicketDetailActionsDesktopProps {
-  user: Maybe<User>;
   ticket: Pick<
     BaseTicket,
     "userId" | "slug" | "id" | "status" | "organizationId"
   >;
+  user: Maybe<User>;
 }
 
 const TicketDetailActionsDesktop = async ({

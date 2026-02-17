@@ -7,17 +7,17 @@ import type { AttachmentRecord, OwnerKind } from "../types";
 import { attachmentS3Key } from "./presign-attachments";
 
 interface CreateAttachmentsForOwnerInput {
-  ownerKind: OwnerKind;
+  files: File[];
   organizationId: string;
   ownerId: string;
-  files: File[];
+  ownerKind: OwnerKind;
 }
 
 interface DeleteAttachmentForOwnerInput {
-  ownerKind: OwnerKind;
+  attachmentId: string;
   organizationId: string;
   ownerId: string;
-  attachmentId: string;
+  ownerKind: OwnerKind;
 }
 
 /**

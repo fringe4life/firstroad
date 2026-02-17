@@ -8,7 +8,7 @@
 [![Prisma](https://img.shields.io/badge/Prisma-7.4.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
 [![Better Auth](https://img.shields.io/badge/Better%20Auth-beta-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.18-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![Biome](https://img.shields.io/badge/Biome-2.3.15-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
+[![Biome](https://img.shields.io/badge/Biome-2.4.0-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.8.8-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.2.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Elysia](https://img.shields.io/badge/Elysia-1.4.25-000000)](https://elysiajs.com/)
@@ -28,7 +28,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **🏢 Organization Management**: Create and manage organizations with membership and invitation systems, role-based access control (owner, admin, member), granular permissions (canDeleteTicket), and admin tabs for managing members and invitations
 - **🎫 Ticket Management**: Create, edit, and manage tickets with status tracking
 - **📎 Ticket Attachments**: Owner-only file uploads with Bun S3, image previews before upload, and owner-only delete actions; presigned download URLs for all viewers (Bun runtime + Webpack; on Vercel use `bunVersion: "1.x"` in vercel.json so Server Actions run on Bun and `Bun.s3` works)
-- **💬 Comments System**: Add, edit, and delete comments on tickets with infinite pagination
+- **💬 Comments System**: Add, edit, and delete comments on tickets with infinite pagination and owner-only attachments
 - **🌙 Dark Mode**: Beautiful light/dark theme with smooth transitions
 - **📱 Responsive Design**: Optimized for desktop and mobile devices with PPR navigation and cached components
 - **⚡ Real-time Updates**: Server-side rendering with React Suspense and PPR dynamic holes
@@ -64,7 +64,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **Background Jobs**: Inngest 3.52 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
 - **Shared Utilities**: `@firstroad/utils` (packages/utils) for shared helpers (e.g. `createSlug`)
-- **Linting**: Biome 2.3.15 for fast formatting and linting with Ultracite 7.2.0 rules
+- **Linting**: Biome 2.4.0 for fast formatting and linting with Ultracite 7.2 rules
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 
@@ -277,7 +277,8 @@ S3_BUCKET="your-bucket-name"
 Start Postgres and Inngest Dev Server in Docker:
 
 ```bash
-docker-compose up -d postgres inngest
+docker compose up -d postgres inngest
+# Or with env file to avoid build-arg warnings: docker compose --env-file apps/web/.env up -d postgres inngest
 ```
 
 Set in `apps/web/.env.local`:
@@ -478,6 +479,7 @@ The database is seeded with sample tickets and comments for existing users:
 - **Add Comments**: Users can add comments to tickets with optimistic UI updates
 - **Edit Comments**: Comment owners can edit their comments with optimistic UI updates
 - **Delete Comments**: Comment owners can delete their comments with optimistic UI updates
+- **Comment Attachments**: Owner-only file uploads on comments (Bun S3, same as ticket attachments)
 - **Infinite Pagination**: Efficient cursor-based pagination for large comment lists
 - **Optimistic Updates**: Instant UI feedback using React 19's `useOptimistic` hook
 - **State Management**: Context store for comments and pagination metadata
@@ -722,9 +724,9 @@ Centralized type-safe route definitions in `src/path.ts`:
 Centralized cache tag system for consistent cache invalidation:
 
 - **`src/utils/cache-tags.ts`**: Centralized cache tag functions (similar to `path.ts`)
-  - `ticketsCache()`, `ticketCache(slug)`, `commentsCache()`, `commentsForTicketCache(ticketId)`, `commentCache(commentId)`, `attachmentCache()`, `attachmentsForTicketCache(ticketId)`
+  - `ticketsCache()`, `ticketCache(slug)`, `commentsCache()`, `commentsForTicketCache(ticketSlug)`, `commentCache(commentId)`, `attachmentCache()`, `attachmentsForTicketCache(ticketId)`
 - **`src/utils/invalidate-cache.ts`**: High-level invalidation functions
-  - `invalidateTicketAndList(slug)`, `invalidateCommentAndTicketComments(...)`, `invalidateAttachmentsForTicket(ticketId)`, `invalidateTicketAndAttachments(slug, ticketId)`, etc.
+  - `invalidateTicketAndList(slug)`, `invalidateCommentsForTicket(ticketSlug)`, `invalidateAttachmentsForTicket(ticketId)`, `invalidateTicketAndAttachments(slug, ticketId)`, etc.
 - Ensures consistency between `cacheTag()` and `updateTag()` calls
 - All ticket-related cache operations use slugs (not IDs) for consistency
 - Single source of truth for cache tag strings

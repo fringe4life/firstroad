@@ -12,7 +12,29 @@ const CommentFormCard = () => {
     handleCancelEdit,
     handleUpsertSuccess,
     upsertState,
+    userId,
+    canCreate,
+    optimisticComments,
   } = useComments();
+
+  if (!userId) {
+    return null;
+  }
+
+  if (editingState.commentId) {
+    const comment = optimisticComments.find(
+      (c) => c.id === editingState.commentId,
+    );
+    const canUpdate =
+      comment && "canUpdate" in comment
+        ? (comment as { canUpdate: boolean }).canUpdate
+        : false;
+    if (!canUpdate) {
+      return null;
+    }
+  } else if (!canCreate) {
+    return null;
+  }
 
   return (
     <CardCompact

@@ -12,8 +12,8 @@ import {
 } from "./ui/breadcrumb";
 
 interface BreadcrumbItemProps {
-  title: string;
   href?: Route;
+  title: string;
 }
 
 interface BreadcrumbsProps<T> {

@@ -1,3 +1,4 @@
+import { addMemberPermissions } from "@firstroad/db/member-permissions";
 import { PrismaClient } from "../../generated/prisma/client";
 import { createAdapter } from "../../src/adapter";
 
@@ -46,15 +47,7 @@ const main = async () => {
               createdAt: new Date(),
             },
           });
-          await prisma.memberPermission.create({
-            data: {
-              memberId: member.id,
-              resourceType: "TICKET",
-              canCreate: true,
-              canUpdate: true,
-              canDelete: true,
-            },
-          });
+          await addMemberPermissions(prisma, member.id, ["TICKET", "COMMENT"]);
           console.log(`Added ${user.email} to ${org.name}`);
           added++;
         } catch (error) {

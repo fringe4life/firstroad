@@ -21,9 +21,9 @@ interface CommentCreateArgs {
 }
 
 interface CommentUpdateArgs {
-  where: CommentWhereUniqueInput;
   data: CommentUpdateData;
   includeUser?: boolean;
+  where: CommentWhereUniqueInput;
 }
 
 /**

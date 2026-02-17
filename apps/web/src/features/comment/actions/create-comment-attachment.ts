@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { refresh } from "next/cache";
 import {
   array,
   custom,
@@ -25,8 +25,7 @@ import { getUser } from "@/features/auth/queries/get-user";
 import { createCommentAttachments } from "@/features/comment/dal/create-comment-attachment";
 import { findComment } from "@/features/comment/queries/find-comment";
 import { findTicket } from "@/features/ticket/queries/find-ticket";
-import { ticketPath } from "@/path";
-import { invalidateTicketAndAttachments } from "@/utils/invalidate-cache";
+import { invalidateAttachmentsForComment } from "@/utils/invalidate-cache";
 import {
   type ActionState,
   fromErrorToActionState,
@@ -106,8 +105,8 @@ const createCommentAttachment = async (
     return fromErrorToActionState(error);
   }
 
-  invalidateTicketAndAttachments(ticket.slug, ticket.id);
-  revalidatePath(ticketPath(ticket.slug));
+  invalidateAttachmentsForComment(comment.id);
+  refresh();
   return toActionState("Attachment(s) uploaded", "SUCCESS");
 };
 

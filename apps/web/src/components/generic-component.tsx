@@ -7,12 +7,12 @@ export interface GenericComponentProps<
   P,
   E extends React.ElementType = "div",
 > extends UnsuccessfulState {
+  as?: E;
   Component: React.ComponentType<P>;
-  items: List<T>;
-  renderProps: (item: T, index: number) => P;
   // renderKey: (item: T, index: number) => React.Key;
   className?: string;
-  as?: E;
+  items: List<T>;
+  renderProps: (item: T, index: number) => P;
   wrapperProps?: React.ComponentPropsWithoutRef<E>;
 }
 const GenericComponent = <

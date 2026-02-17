@@ -4,8 +4,8 @@ import { ActionsSkeleton } from "./actions-skeleton";
 import { TabsSkeleton } from "./tabs-skeleton";
 
 interface HeadingSkeletonProps {
-  showTabs?: boolean;
   showActions?: boolean;
+  showTabs?: boolean;
 }
 
 const HeadingSkeleton = ({

@@ -16,7 +16,10 @@
     "db:push": "bun --env-file .env prisma db push",
     "db:push:local": "bun --env-file .env.local prisma db push",
     "db:seed": "bun --env-file .env prisma db seed",
-    "db:seed:local": "bun --env-file .env.local prisma db seed"
+    "db:seed:local": "bun --env-file .env.local prisma db seed",
+    "db:restore:local": "bun --env-file .env.local pg_restore -v -d \"$DATABASE_URL\" --clean --if-exists neon-data-only.dump",
+    "seed:comment-permissions": "bun --env-file .env prisma/scripts/seed-member-permissions-comment.ts",
+    "seed:comment-permissions:local": "bun --env-file .env.local prisma/scripts/seed-member-permissions-comment.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
@@ -33,6 +36,7 @@
   },
   "exports": {
     ".": "./src/index.ts",
-    "./client-types": "./src/client-types.ts"
+    "./client-types": "./src/client-types.ts",
+    "./member-permissions": "./src/member-permissions.ts"
   }
 }

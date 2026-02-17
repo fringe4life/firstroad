@@ -3,9 +3,9 @@
 import { Input } from "./ui/input";
 
 interface SearchInputProps {
-  value?: string;
   onChange: (value: string) => void;
   placeholder: string;
+  value?: string;
 }
 
 const SearchInput = ({

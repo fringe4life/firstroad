@@ -10,9 +10,9 @@ import {
 } from "@/path";
 
 export interface GetUserRedirectOptions {
+  checkActiveOrganisation?: boolean;
   checkEmailVerified?: boolean;
   checkOrganistation?: boolean;
-  checkActiveOrganisation?: boolean;
 }
 
 export const getUserOrRedirect = async (

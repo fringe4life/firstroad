@@ -14,9 +14,9 @@ import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 import type { verifyEmailVerificationOTP } from "../actions/verify-otp-action";
 
 export interface OTPVerifyFormProps {
-  verifyOTPAction: typeof verifyEmailVerificationOTP;
-  submitLabel: string;
   email: string;
+  submitLabel: string;
+  verifyOTPAction: typeof verifyEmailVerificationOTP;
 }
 
 const OTPVerifyForm = ({

@@ -11,9 +11,9 @@ import { getAttachmentKindFromName } from "../utils/attachment-kind";
 
 interface AttachmentItemProps {
   attachment: UIAttachment;
+  deleteAttachmentAction: DeleteAttachmentAction;
   isOwner: boolean;
   ownerId: string;
-  deleteAttachmentAction: DeleteAttachmentAction;
 }
 
 const AttachmentItem = ({

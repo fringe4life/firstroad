@@ -1,13 +1,15 @@
 import { updateTag } from "next/cache";
 import {
-  attachmentCache,
+  attachmentsForCommentCache,
   attachmentsForTicketCache,
+  commentAttachmentsCache,
   commentCache,
   commentsCache,
   commentsForTicketCache,
   invitationsForOrganizationCache,
   organisationCache,
   organisationsForUserCache,
+  ticketAttachmentsCache,
   ticketCache,
   ticketsCache,
 } from "./cache-tags";
@@ -31,39 +33,35 @@ const invalidateComments = (): void => {
   updateTag(commentsCache());
 };
 
-const invalidateCommentsForTicket = (ticketId: string): void => {
+const invalidateCommentsForTicket = (ticketSlug: string): void => {
   updateTag(commentsCache());
-  updateTag(commentsForTicketCache(ticketId));
+  updateTag(commentsForTicketCache(ticketSlug));
 };
 
 const invalidateComment = (commentId: string): void => {
   updateTag(commentCache(commentId));
 };
 
-const invalidateCommentAndTicketComments = (
-  commentId: string,
-  ticketId: string,
-  ticketSlug: string,
-): void => {
-  updateTag(ticketsCache());
-  updateTag(ticketCache(ticketSlug));
-  updateTag(commentsCache());
-  updateTag(commentsForTicketCache(ticketId));
-  updateTag(commentCache(commentId));
-};
-
-// Attachment invalidation
+// Attachment invalidation (ticket and comment scoped separately)
 const invalidateAttachmentsForTicket = (ticketId: string): void => {
-  updateTag(attachmentCache());
+  updateTag(ticketAttachmentsCache());
   updateTag(attachmentsForTicketCache(ticketId));
 };
 
+const invalidateAttachmentsForComment = (commentId: string): void => {
+  updateTag(commentAttachmentsCache());
+  updateTag(attachmentsForCommentCache(commentId));
+};
+
 // Combined invalidation
-const invalidateTicketWithComments = (slug: string, ticketId: string): void => {
+const invalidateTicketWithComments = (
+  slug: string,
+  _ticketId: string,
+): void => {
   updateTag(ticketsCache());
   updateTag(ticketCache(slug));
   updateTag(commentsCache());
-  updateTag(commentsForTicketCache(ticketId));
+  updateTag(commentsForTicketCache(slug));
 };
 
 const invalidateTicketAndAttachments = (
@@ -72,7 +70,7 @@ const invalidateTicketAndAttachments = (
 ): void => {
   updateTag(ticketsCache());
   updateTag(ticketCache(slug));
-  updateTag(attachmentCache());
+  updateTag(ticketAttachmentsCache());
   updateTag(attachmentsForTicketCache(ticketId));
 };
 
@@ -88,9 +86,9 @@ const invalidateInvitationsForOrganization = (organizationId: string): void => {
 };
 
 export {
+  invalidateAttachmentsForComment,
   invalidateAttachmentsForTicket,
   invalidateComment,
-  invalidateCommentAndTicketComments,
   invalidateComments,
   invalidateCommentsForTicket,
   invalidateInvitationsForOrganization,

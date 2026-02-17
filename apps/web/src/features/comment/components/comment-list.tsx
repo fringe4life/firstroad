@@ -9,6 +9,8 @@ const CommentList = () => {
   const {
     optimisticComments,
     userId,
+    canUpdate: canUpdatePermission,
+    canDelete: canDeletePermission,
     handleDelete,
     handleEdit,
     createAttachmentAction,
@@ -23,15 +25,33 @@ const CommentList = () => {
       items={optimisticComments}
       renderProps={(item) => ({
         comment: item,
-        buttons:
-          userId === item.userId ? (
+        buttons: (() => {
+          if (userId !== item.userId) {
+            return null;
+          }
+          // Item may have canUpdate/canDelete from addCommentsAccess (server) or lack them (optimistic/new)
+          const canUpdate =
+            (item as { canUpdate?: boolean }).canUpdate ??
+            canUpdatePermission ??
+            false;
+          const canDelete =
+            (item as { canDelete?: boolean }).canDelete ??
+            canDeletePermission ??
+            false;
+          if (!(canUpdate || canDelete)) {
+            return null;
+          }
+          return (
             <CommentOwnerButtons
+              canDelete={canDelete}
+              canUpdate={canUpdate}
               comment={{ id: item.id, content: item.content }}
               createAttachmentAction={createAttachmentAction}
               onDeleteComment={handleDelete}
               onEdit={(commentId, content) => handleEdit(commentId, content)}
             />
-          ) : null,
+          );
+        })(),
       })}
     />
   );

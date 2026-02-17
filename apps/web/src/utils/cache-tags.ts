@@ -12,21 +12,29 @@ const commentsCache = (): string => {
   return "comments";
 };
 
-const commentsForTicketCache = (ticketId: string): string => {
-  return `comments-${ticketId}`;
+const commentsForTicketCache = (ticketSlug: string): string => {
+  return `comments-${ticketSlug}`;
 };
 
 const commentCache = (commentId: string): string => {
   return `comment-${commentId}`;
 };
 
-// Attachment cache tags
-const attachmentCache = (): string => {
-  return "attachments";
+// Attachment cache tags (ticket and comment scoped separately)
+const ticketAttachmentsCache = (): string => {
+  return "ticket-attachments";
 };
 
 const attachmentsForTicketCache = (ticketId: string): string => {
-  return `attachments-${ticketId}`;
+  return `ticket-attachments-${ticketId}`;
+};
+
+const commentAttachmentsCache = (): string => {
+  return "comment-attachments";
+};
+
+const attachmentsForCommentCache = (commentId: string): string => {
+  return `comment-attachments-${commentId}`;
 };
 
 // Organisation cache tags
@@ -44,14 +52,16 @@ const invitationsForOrganizationCache = (organizationId: string): string => {
 };
 
 export {
-  attachmentCache,
+  attachmentsForCommentCache,
   attachmentsForTicketCache,
+  commentAttachmentsCache,
   invitationsForOrganizationCache,
   organisationCache,
   organisationsForUserCache,
   commentCache,
   commentsCache,
   commentsForTicketCache,
+  ticketAttachmentsCache,
   ticketCache,
   ticketsCache,
 };

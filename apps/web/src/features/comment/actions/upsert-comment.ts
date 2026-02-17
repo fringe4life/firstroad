@@ -9,7 +9,7 @@ import type { CommentWithUserInfo } from "@/features/comment/types";
 import { getMemberPermission } from "@/features/memberships/queries/get-member-permission";
 import { findTicket } from "@/features/ticket/queries/find-ticket";
 import type { Maybe } from "@/types";
-import { invalidateCommentAndTicketComments } from "@/utils/invalidate-cache";
+import { invalidateCommentsForTicket } from "@/utils/invalidate-cache";
 import {
   type ActionState,
   fromErrorToActionState,
@@ -124,7 +124,7 @@ export const upsertComment = async (
     ? "Comment updated successfully"
     : "Comment created successfully";
 
-  invalidateCommentAndTicketComments(comment.id, ticketId, ticket.slug);
+  invalidateCommentsForTicket(ticket.slug);
   return toActionState(
     successMessage,
     "SUCCESS",

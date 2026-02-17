@@ -11,10 +11,13 @@ import { isOwner } from "@/features/auth/utils/owner";
 import { createCommentAttachment } from "@/features/comment/actions/create-comment-attachment";
 import { deleteComment } from "@/features/comment/actions/delete-comment";
 import { upsertComment } from "@/features/comment/actions/upsert-comment";
-import { Comments } from "@/features/comment/components/comments";
+import { CommentsWithPermissions } from "@/features/comment/components/comments-with-permissions";
 import { CommentFormSkeleton } from "@/features/comment/components/skeletons/comment-form-skeleton";
 import { CommentListSkeleton } from "@/features/comment/components/skeletons/comment-list-skeleton";
-import { getCommentsByTicketSlug } from "@/features/comment/dal/get-comments";
+import {
+  getCommentsByTicketSlug,
+  getCommentsLoadMore,
+} from "@/features/comment/dal/get-comments";
 import { getAttachmentsByComment } from "@/features/comment/queries/get-attachments-by-comment";
 import { TicketActionBarSkeleton } from "@/features/ticket/components/skeletons/ticket-action-bar-skeleton";
 import { TicketActionsDesktopSkeleton } from "@/features/ticket/components/skeletons/ticket-actions-desktop-skeleton";
@@ -129,17 +132,15 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
             }
           >
             {(user) => (
-              <Comments
+              <CommentsWithPermissions
                 createAttachmentAction={createCommentAttachment}
                 deleteCommentAction={deleteComment}
-                list={listWithAttachments}
-                loadMoreAction={getCommentsByTicketSlug}
+                listWithAttachments={listWithAttachments}
+                loadMoreAction={getCommentsLoadMore}
                 metadata={metadata}
-                ticketId={ticket.id}
-                ticketSlug={ticket.slug}
+                ticket={ticket}
                 upsertCommentAction={upsertComment}
-                userId={user?.id}
-                userName={user?.name}
+                user={user}
               />
             )}
           </HasAuthSuspense>

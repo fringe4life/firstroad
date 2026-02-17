@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import type { AttachmentPreview } from "../utils/attachment-previews";
 
 interface AttachmentPreviewProps {
-  preview: AttachmentPreview;
   onRemove: (id: string) => void;
+  preview: AttachmentPreview;
 }
 
 const AttachmentPreviewCard = ({

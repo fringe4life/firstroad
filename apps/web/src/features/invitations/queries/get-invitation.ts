@@ -3,14 +3,14 @@ import { auth } from "@/lib/auth";
 import { tryCatch } from "@/utils/try-catch";
 
 export interface InvitationDetails {
-  id: string;
   email: string;
+  expiresAt: Date;
+  id: string;
+  inviterName: string | null;
   organizationName: string;
   organizationSlug: string;
-  inviterName: string | null;
   role: string;
   status: string;
-  expiresAt: Date;
 }
 
 export const getInvitation = async (
