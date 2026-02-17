@@ -1,66 +1,39 @@
 "use server";
 
 import { refresh } from "next/cache";
-import {
-  array,
-  custom,
-  file,
-  maxLength,
-  maxSize,
-  mimeType,
-  minLength,
-  minSize,
-  pipe,
-  safeParse,
-  ValiError,
-} from "valibot";
-import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
+import { safeParse, ValiError } from "valibot";
 import { getUser } from "@/features/auth/queries/get-user";
-import { createTicketAttachments } from "@/features/ticket/dal/create-ticket-attachment";
-import { findTicket } from "@/features/ticket/queries/find-ticket";
-import { invalidateTicketAndAttachments } from "@/utils/invalidate-cache";
+import type { ResourceType } from "@/features/memberships/types";
+import {
+  invalidateAttachmentsForComment,
+  invalidateTicketAndAttachments,
+} from "@/utils/invalidate-cache";
 import {
   type ActionState,
   fromErrorToActionState,
   toActionState,
 } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
-import {
-  ACCEPTED_FILE_TYPES,
-  FILE_NAME_MAX,
-  MAX_SIZE_BYTES,
-  MAX_SIZE_MB,
-} from "../constants";
-
-const fileSchema = pipe(
-  file("Please select a file."),
-  mimeType(ACCEPTED_FILE_TYPES, "File type is not supported"),
-  minSize(0, "File must not be empty"),
-  maxSize(MAX_SIZE_BYTES, `The maximum file size is ${MAX_SIZE_MB}MB`),
-  custom<File>((f) => {
-    const file = f as File;
-    return file.name.length >= 1 && file.name.length <= FILE_NAME_MAX;
-  }, `File name must be between 1 and ${FILE_NAME_MAX} characters`),
-);
-
-const filesSchema = pipe(
-  array(fileSchema),
-  minLength(1, "File is required"),
-  maxLength(5, "You can only upload up to 5 files at a time"),
-);
+import { filesSchema } from "../schemas";
+import { createAttachmentsForOwner } from "../utils/attachment-dal";
+import { getVerifiableItem } from "../utils/get-verifiable-item";
+import { toOwnerKind } from "../utils/to-owner-kind";
 
 const createAttachment = async (
-  ticketId: string,
+  resourceType: ResourceType,
+  ownerId: string,
   _state: ActionState,
   formData: FormData,
 ): Promise<ActionState> => {
-  const { user } = await getUser();
   const files = Array.from(formData.getAll("files"));
 
   const parseResult = safeParse(filesSchema, files);
   if (!parseResult.success) {
     return fromErrorToActionState(new ValiError(parseResult.issues));
   }
+  const validatedFiles = parseResult.output;
+
+  const { user } = await getUser();
   if (!user?.id) {
     return toActionState(
       "You must be signed in to upload attachments",
@@ -68,22 +41,24 @@ const createAttachment = async (
     );
   }
 
-  const ticket = await itemWithOwnership(findTicket(ticketId), user);
-  if (!ticket) {
-    return toActionState("Ticket not found", "ERROR");
+  const item = await getVerifiableItem(resourceType, ownerId, user);
+  if (!item) {
+    const label = resourceType === "TICKET" ? "Ticket" : "Comment";
+    return toActionState(`${label} not found`, "ERROR");
   }
-  if (!ticket.isOwner) {
-    return toActionState("Only the ticket owner can add attachments", "ERROR");
+  if (!item.isOwner) {
+    return toActionState(
+      `Only the ${item.ownerLabel} owner can add attachments`,
+      "ERROR",
+    );
   }
-
-  const validatedFiles = parseResult.output;
 
   const { error } = await tryCatch(() =>
-    createTicketAttachments({
-      organizationId: ticket.organizationId,
-      ticketId,
+    createAttachmentsForOwner({
+      ownerKind: toOwnerKind(resourceType),
+      organizationId: item.organizationId,
+      ownerId,
       files: validatedFiles,
-      ownerId: ticket.id,
     }),
   );
 
@@ -91,7 +66,17 @@ const createAttachment = async (
     return fromErrorToActionState(error);
   }
 
-  invalidateTicketAndAttachments(ticket.slug, ticketId);
+  switch (item.resourceType) {
+    case "TICKET":
+      invalidateTicketAndAttachments(item.slug, ownerId);
+      break;
+    case "COMMENT":
+      invalidateAttachmentsForComment(item.commentId);
+      break;
+    default:
+      break;
+  }
+
   refresh();
   return toActionState("Attachment(s) uploaded", "SUCCESS");
 };

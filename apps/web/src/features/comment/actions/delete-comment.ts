@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@firstroad/db";
+import { refresh } from "next/cache";
 import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { invalidateCommentsForTicket } from "@/utils/invalidate-cache";
@@ -49,6 +50,8 @@ export const deleteComment = async (
   }
 
   invalidateCommentsForTicket(commentWithOwnership.ticket.slug);
+
+  refresh();
 
   return toActionState<string>("Comment deleted successfully", "SUCCESS");
 };

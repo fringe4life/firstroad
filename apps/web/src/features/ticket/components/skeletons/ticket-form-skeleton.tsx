@@ -26,6 +26,11 @@ const TicketFormSkeleton = () => (
         <Skeleton className="h-9 w-full bg-muted-foreground/20" />
       </div>
     </div>
+    {/* file input */}
+    <div className="space-y-2">
+      <Skeleton className="mb-2 h-3.5 w-16" />
+      <Skeleton className="h-9 w-full bg-muted-foreground/20" />
+    </div>
 
     {/* Submit button */}
     <Skeleton className="h-9 w-full bg-primary/50" />

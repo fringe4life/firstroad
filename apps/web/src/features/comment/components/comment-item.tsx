@@ -4,13 +4,12 @@ import { ViewTransition } from "react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { AttachmentList } from "@/features/attachments/components/attachment-list";
-import { deleteCommentAttachment } from "@/features/comment/actions/delete-comment-attachment";
 import { useComments } from "@/features/comment/components/comments-store";
 import type { CommentItemProps } from "@/features/comment/types";
 import { TimeAgo } from "./time-ago";
 
 const CommentItem = ({ comment, buttons }: CommentItemProps) => {
-  const { userId } = useComments();
+  const { userId, deleteAttachmentAction } = useComments();
   const { updatedAt, createdAt, content, user, attachments, id } = comment;
   const isOwner = userId === comment.userId;
 
@@ -48,7 +47,7 @@ const CommentItem = ({ comment, buttons }: CommentItemProps) => {
               <div className="mt-3">
                 <AttachmentList
                   attachments={attachments}
-                  deleteAttachmentAction={deleteCommentAttachment}
+                  deleteAttachmentAction={deleteAttachmentAction}
                   isOwner={userId === comment.userId}
                   ownerId={comment.id}
                 />
@@ -56,7 +55,7 @@ const CommentItem = ({ comment, buttons }: CommentItemProps) => {
             )}
           </CardContent>
         </Card>
-        <div className="grid gap-1">{buttons}</div>
+        <div className="grid content-start gap-1">{buttons}</div>
       </div>
     </ViewTransition>
   );

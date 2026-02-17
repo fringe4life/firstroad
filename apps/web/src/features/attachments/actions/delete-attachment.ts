@@ -1,23 +1,23 @@
 "use server";
 
 import { refresh } from "next/cache";
-import { minLength, object, pipe, safeParse, string, ValiError } from "valibot";
-import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
+import { safeParse, ValiError } from "valibot";
 import { getUser } from "@/features/auth/queries/get-user";
-import { deleteTicketAttachmentRecord } from "@/features/ticket/dal/delete-ticket-attachment";
-import { findTicket } from "@/features/ticket/queries/find-ticket";
-import { invalidateTicketAndAttachments } from "@/utils/invalidate-cache";
+import type { ResourceType } from "@/features/memberships/types";
+import {
+  invalidateAttachmentsForComment,
+  invalidateTicketAndAttachments,
+} from "@/utils/invalidate-cache";
 import {
   type ActionState,
   fromErrorToActionState,
   toActionState,
 } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
-
-const deleteAttachmentInputSchema = object({
-  attachmentId: pipe(string(), minLength(1, "Attachment id is required")),
-  ownerId: pipe(string(), minLength(1, "Owner id is required")),
-});
+import { deleteAttachmentInputSchema } from "../schemas";
+import { deleteAttachmentForOwner } from "../utils/attachment-dal";
+import { getVerifiableItem } from "../utils/get-verifiable-item";
+import { toOwnerKind } from "../utils/to-owner-kind";
 
 interface DeleteAttachmentArgs {
   attachmentId: string;
@@ -25,6 +25,7 @@ interface DeleteAttachmentArgs {
 }
 
 const deleteAttachment = async (
+  resourceType: ResourceType,
   { attachmentId, ownerId }: DeleteAttachmentArgs,
   _prevState: ActionState,
   _formData: FormData,
@@ -37,8 +38,8 @@ const deleteAttachment = async (
   if (!parseResult.success) {
     return fromErrorToActionState(new ValiError(parseResult.issues));
   }
-  const { user } = await getUser();
 
+  const { user } = await getUser();
   if (!user?.id) {
     return toActionState(
       "You must be signed in to delete attachments",
@@ -46,25 +47,24 @@ const deleteAttachment = async (
     );
   }
 
-  const ticket = await itemWithOwnership(findTicket(ownerId), user);
-
-  if (!ticket) {
-    return toActionState("Ticket not found", "ERROR");
+  const item = await getVerifiableItem(resourceType, ownerId, user);
+  if (!item) {
+    const label = resourceType === "TICKET" ? "Ticket" : "Comment";
+    return toActionState(`${label} not found`, "ERROR");
   }
-
-  if (!ticket.isOwner) {
+  if (!item.isOwner) {
     return toActionState(
-      "Only the ticket owner can delete attachments",
+      `Only the ${item.ownerLabel} owner can delete attachments`,
       "ERROR",
     );
   }
 
   const { error } = await tryCatch(() =>
-    deleteTicketAttachmentRecord({
-      organizationId: ticket.organizationId,
-      ticketId: ticket.id,
+    deleteAttachmentForOwner({
+      ownerKind: toOwnerKind(resourceType),
+      organizationId: item.organizationId,
+      ownerId,
       attachmentId,
-      ownerId: ticket.id,
     }),
   );
 
@@ -72,7 +72,17 @@ const deleteAttachment = async (
     return fromErrorToActionState(error);
   }
 
-  invalidateTicketAndAttachments(ticket.slug, ticket.id);
+  switch (item.resourceType) {
+    case "TICKET":
+      invalidateTicketAndAttachments(item.slug, ownerId);
+      break;
+    case "COMMENT":
+      invalidateAttachmentsForComment(item.commentId);
+      break;
+    default:
+      break;
+  }
+
   refresh();
   return toActionState("Attachment deleted", "SUCCESS");
 };

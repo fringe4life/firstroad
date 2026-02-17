@@ -10,6 +10,9 @@ interface CommentsWithPermissionsProps {
   createAttachmentAction: Parameters<
     typeof Comments
   >[0]["createAttachmentAction"];
+  deleteAttachmentAction: Parameters<
+    typeof Comments
+  >[0]["deleteAttachmentAction"];
   deleteCommentAction: Parameters<typeof Comments>[0]["deleteCommentAction"];
   listWithAttachments: List<CommentWithUserInfo>;
   loadMoreAction: Parameters<typeof Comments>[0]["loadMoreAction"];
@@ -26,6 +29,7 @@ export const CommentsWithPermissions = async ({
   metadata,
   loadMoreAction,
   createAttachmentAction,
+  deleteAttachmentAction,
   deleteCommentAction,
   upsertCommentAction,
 }: CommentsWithPermissionsProps) => {
@@ -45,6 +49,7 @@ export const CommentsWithPermissions = async ({
         canDelete={false}
         canUpdate={false}
         createAttachmentAction={createAttachmentAction}
+        deleteAttachmentAction={deleteAttachmentAction}
         deleteCommentAction={deleteCommentAction}
         list={listWithAccess}
         loadMoreAction={loadMoreAction}
@@ -67,6 +72,7 @@ export const CommentsWithPermissions = async ({
       canDelete={permission?.canDelete ?? false}
       canUpdate={permission?.canUpdate ?? false}
       createAttachmentAction={createAttachmentAction}
+      deleteAttachmentAction={deleteAttachmentAction}
       deleteCommentAction={deleteCommentAction}
       list={listWithAccess ?? []}
       loadMoreAction={loadMoreAction}

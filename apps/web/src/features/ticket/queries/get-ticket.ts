@@ -1,3 +1,4 @@
+"use cache";
 import { prisma } from "@firstroad/db";
 import { cacheTag } from "next/cache";
 import { TICKET_WITH_USER_INCLUDE } from "@/features/ticket/constants";
@@ -9,7 +10,6 @@ export const getTicketBySlug = async (
   slug: string,
 ): Promise<Maybe<BaseTicket>> => {
   // Only cache the database query
-  "use cache";
   cacheTag(ticketsCache());
   cacheTag(ticketCache(slug));
 

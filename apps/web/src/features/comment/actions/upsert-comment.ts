@@ -1,7 +1,20 @@
 /** biome-ignore-all lint/style/noMagicNumbers: are well explained zod schema */
+/** biome-ignore-all lint/complexity/noExcessiveCognitiveComplexity: upsert flow has many validation branches */
 "use server";
 import type { CommentWhereUniqueInput } from "@firstroad/db/client-types";
-import { maxLength, minLength, object, pipe, safeParse, string } from "valibot";
+import {
+  maxLength,
+  minLength,
+  object,
+  pipe,
+  safeParse,
+  string,
+  ValiError,
+} from "valibot";
+import { optionalFilesSchema } from "@/features/attachments/schemas";
+import { createAttachmentsForOwner } from "@/features/attachments/utils/attachment-dal";
+import { getFilesFromFormData } from "@/features/attachments/utils/get-files-from-form-data";
+import { presignAttachments } from "@/features/attachments/utils/presign-attachments";
 import { itemWithPermissions } from "@/features/auth/dto/item-with-permissions";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { isOwner } from "@/features/auth/utils/owner";
@@ -9,7 +22,10 @@ import type { CommentWithUserInfo } from "@/features/comment/types";
 import { getMemberPermission } from "@/features/memberships/queries/get-member-permission";
 import { findTicket } from "@/features/ticket/queries/find-ticket";
 import type { Maybe } from "@/types";
-import { invalidateCommentsForTicket } from "@/utils/invalidate-cache";
+import {
+  invalidateAttachmentsForComment,
+  invalidateCommentsForTicket,
+} from "@/utils/invalidate-cache";
 import {
   type ActionState,
   fromErrorToActionState,
@@ -114,17 +130,50 @@ export const upsertComment = async (
     return toActionState("Comment not created", "ERROR");
   }
 
-  // Add isOwner property to the comment
+  let attachmentsWithUrls: CommentWithUserInfo["attachments"];
+
+  const files = getFilesFromFormData(formData);
+  if (files.length > 0) {
+    const parseFiles = safeParse(optionalFilesSchema, files);
+    if (!parseFiles.success) {
+      return fromErrorToActionState(new ValiError(parseFiles.issues), formData);
+    }
+    const { data: createdAttachments, error: attachError } = await tryCatch(
+      () =>
+        createAttachmentsForOwner({
+          ownerKind: "comment",
+          organizationId: ticket.organizationId,
+          ownerId: comment.id,
+          files: parseFiles.output,
+        }),
+    );
+    if (attachError) {
+      return fromErrorToActionState(attachError, formData);
+    }
+    invalidateAttachmentsForComment(comment.id);
+    const presigned = presignAttachments(
+      ticket.organizationId,
+      "comment",
+      comment.id,
+      createdAttachments ?? [],
+    );
+    attachmentsWithUrls = presigned ?? undefined;
+  }
+
+  // Add isOwner and attachments to the comment
   const commentWithOwnership = {
     ...comment,
     isOwner: isOwner(user, comment),
-  };
+    ...(attachmentsWithUrls &&
+      attachmentsWithUrls.length > 0 && { attachments: attachmentsWithUrls }),
+  } as CommentWithUserInfo;
 
   const successMessage = commentId
     ? "Comment updated successfully"
     : "Comment created successfully";
 
   invalidateCommentsForTicket(ticket.slug);
+
   return toActionState(
     successMessage,
     "SUCCESS",

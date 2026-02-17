@@ -1,5 +1,6 @@
 "use server";
 import type { TicketStatus } from "@firstroad/db/client-types";
+import { refresh } from "next/cache";
 import { itemWithPermissions } from "@/features/auth/dto/item-with-permissions";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { invalidateTicketAndList } from "@/utils/invalidate-cache";
@@ -40,5 +41,6 @@ export const updateStatus = async (newValue: TicketStatus, id: string) => {
   if (slug) {
     invalidateTicketAndList(slug);
   }
+  refresh();
   return toActionState("Status updated", "SUCCESS");
 };

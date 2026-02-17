@@ -1,4 +1,5 @@
 "use server";
+import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
 import { itemWithPermissions } from "@/features/auth/dto/item-with-permissions";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
@@ -39,6 +40,7 @@ export const deleteTicket = async (id: string) => {
   // invalidate cache
   if (slug) {
     invalidateTicketAndList(slug);
+    refresh();
   }
 
   await setCookieByKey("toast", "Ticket deleted");

@@ -6,6 +6,10 @@ import { Form } from "@/components/form/form";
 import { SubmitButton } from "@/components/form/submit-button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  AttachmentInputWithPreviews,
+  type AttachmentInputWithPreviewsRef,
+} from "@/features/attachments/components/attachment-input-with-previews";
 import type { ActionState } from "@/utils/to-action-state";
 import type { CommentCreateFormProps, CommentWithUserInfo } from "../types";
 
@@ -18,6 +22,7 @@ const CommentCreateForm = ({
   onSuccessState,
 }: CommentCreateFormProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const attachmentInputRef = useRef<AttachmentInputWithPreviewsRef>(null);
   const contentId = useId();
 
   // Populate form when editing
@@ -39,6 +44,7 @@ const CommentCreateForm = ({
     if (textareaRef.current) {
       textareaRef.current.value = "";
     }
+    attachmentInputRef.current?.reset();
     // Call onSuccessState callback with the action state (includes returned comment)
     if (onSuccessState) {
       onSuccessState(stateArg as ActionState<CommentWithUserInfo>);
@@ -70,6 +76,7 @@ const CommentCreateForm = ({
         />
         <FieldError actionState={state} name="content" />
       </div>
+      <AttachmentInputWithPreviews ref={attachmentInputRef} />
       <div className="flex gap-2">
         <SubmitButton label={commentId ? "Update comment" : "Post comment"} />
         {Boolean(commentId) && Boolean(onCancel) && (

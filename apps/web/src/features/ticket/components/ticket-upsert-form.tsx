@@ -9,6 +9,10 @@ import { SubmitButton } from "@/components/form/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  AttachmentInputWithPreviews,
+  type AttachmentInputWithPreviewsRef,
+} from "@/features/attachments/components/attachment-input-with-previews";
 import { fromCent } from "@/utils/currency";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 import type { upsertTicket } from "../actions/upsert-ticket";
@@ -45,9 +49,11 @@ const TicketUpsertForm = ({
   );
 
   const datePickerImperativeHandleRef = useRef<DateReset>(null);
+  const attachmentInputRef = useRef<AttachmentInputWithPreviewsRef>(null);
 
   const handleSuccess = () => {
     datePickerImperativeHandleRef.current?.reset();
+    attachmentInputRef.current?.reset();
   };
 
   return (
@@ -99,6 +105,8 @@ const TicketUpsertForm = ({
           <FieldError actionState={actionState} name="bounty" />
         </div>
       </div>
+
+      <AttachmentInputWithPreviews ref={attachmentInputRef} />
 
       <SubmitButton label={ticket ? "Edit" : "Create"} />
     </Form>

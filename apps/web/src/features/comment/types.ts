@@ -5,31 +5,14 @@ import type {
 import type { ReactNode, RefObject } from "react";
 import type {
   CreateAttachmentAction,
+  DeleteAttachmentAction,
   UIAttachment,
 } from "@/features/attachments/types";
 import type { Id, Maybe } from "@/types";
 import type { ActionState } from "@/utils/to-action-state";
-import type {
-  CreateAttachmentsForOwnerInput,
-  DeleteAttachmentForOwnerInput,
-} from "../attachments/utils/attachment-dal";
 import type { UserVerifiable } from "../auth/types";
 import type { OrganisationId } from "../organisation/types";
 import type { PaginatedResult } from "../pagination/types";
-
-export type CreateCommentAttachmentsInput = Omit<
-  CreateAttachmentsForOwnerInput,
-  "ownerKind" | "ownerId"
-> & {
-  commentId: string;
-};
-
-export type DeleteCommentAttachmentInput = Omit<
-  DeleteAttachmentForOwnerInput,
-  "ownerKind" | "ownerId"
-> & {
-  commentId: string;
-};
 
 export interface VerifyComment
   extends UserVerifiable,
@@ -110,6 +93,7 @@ export interface CommentEditButtonProps
 
 export interface CommentActions {
   createAttachmentAction: CreateAttachmentAction;
+  deleteAttachmentAction: DeleteAttachmentAction;
   deleteCommentAction: (commentId: string) => Promise<ActionState<string>>;
   loadMoreAction: (
     ticketSlug: string,
@@ -150,6 +134,7 @@ export interface CommentsContextValue {
   /** Org-level COMMENT permission for own comments (fallback when item lacks canUpdate/canDelete) */
   canUpdate?: boolean;
   createAttachmentAction: CreateAttachmentAction;
+  deleteAttachmentAction: DeleteAttachmentAction;
   editingState: EditingState;
   formRef: RefObject<HTMLDivElement | null>;
   handleCancelEdit: () => void;

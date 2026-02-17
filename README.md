@@ -479,7 +479,7 @@ The database is seeded with sample tickets and comments for existing users:
 - **Add Comments**: Users can add comments to tickets with optimistic UI updates
 - **Edit Comments**: Comment owners can edit their comments with optimistic UI updates
 - **Delete Comments**: Comment owners can delete their comments with optimistic UI updates
-- **Comment Attachments**: Owner-only file uploads on comments (Bun S3, same as ticket attachments)
+- **Comment Attachments**: Owner-only file uploads on comments (Bun S3, same as ticket attachments); optimistic placeholders show real file names while uploading (valibot-free client parsing via `getFilesFromFormData`)
 - **Infinite Pagination**: Efficient cursor-based pagination for large comment lists
 - **Optimistic Updates**: Instant UI feedback using React 19's `useOptimistic` hook
 - **State Management**: Context store for comments and pagination metadata

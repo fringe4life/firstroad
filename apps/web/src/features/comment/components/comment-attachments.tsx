@@ -1,7 +1,7 @@
+import { createAttachment } from "@/features/attachments/actions/create-attachment";
+import { deleteAttachment } from "@/features/attachments/actions/delete-attachment";
 import { Attachments } from "@/features/attachments/components/attachments";
 import { presignAttachments } from "@/features/attachments/utils/presign-attachments";
-import { createCommentAttachment } from "@/features/comment/actions/create-comment-attachment";
-import { deleteCommentAttachment } from "@/features/comment/actions/delete-comment-attachment";
 import { getAttachmentsByComment } from "@/features/comment/queries/get-attachments-by-comment";
 
 interface CommentAttachmentsProps {
@@ -27,8 +27,8 @@ const CommentAttachments = async ({
   return (
     <Attachments
       attachments={attachmentsWithUrls}
-      createAttachmentAction={createCommentAttachment}
-      deleteAttachmentAction={deleteCommentAttachment}
+      createAttachmentAction={createAttachment.bind(null, "COMMENT")}
+      deleteAttachmentAction={deleteAttachment.bind(null, "COMMENT")}
       isOwner={isOwner}
       ownerId={commentId}
     />

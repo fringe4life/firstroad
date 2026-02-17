@@ -9,6 +9,7 @@ import {
   useState,
   useTransition,
 } from "react";
+import { getFilesFromFormData } from "@/features/attachments/utils/get-files-from-form-data";
 import { commentReducer } from "@/features/comment/hooks/use-comment-optimistic";
 import type {
   CommentState,
@@ -34,6 +35,7 @@ const CommentsProvider = ({
   upsertCommentAction,
   deleteCommentAction,
   createAttachmentAction,
+  deleteAttachmentAction,
   userId,
   userName,
   ticketId,
@@ -72,6 +74,15 @@ const CommentsProvider = ({
           addOptimisticUpdate({ type: "edit", commentId, content });
         });
       } else if (userId && userName && ticketId) {
+        const files = getFilesFromFormData(formData);
+        const optimisticAttachments =
+          files.length > 0
+            ? files.map((file: File) => ({
+                id: crypto.randomUUID(),
+                name: file.name,
+                downloadUrl: null as string | null,
+              }))
+            : undefined;
         startTransition(() => {
           addOptimisticUpdate({
             type: "add",
@@ -82,6 +93,10 @@ const CommentsProvider = ({
               user: {
                 name: userName,
               },
+              ...(optimisticAttachments &&
+                optimisticAttachments.length > 0 && {
+                  attachments: optimisticAttachments,
+                }),
             },
           });
         });
@@ -188,6 +203,7 @@ const CommentsProvider = ({
     handleLoadMore,
     handleDelete,
     createAttachmentAction,
+    deleteAttachmentAction,
   };
 
   return (

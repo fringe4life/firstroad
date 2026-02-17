@@ -1,6 +1,7 @@
 /** biome-ignore-all lint/style/noMagicNumbers: numbers are called in a max function */
 "use server";
 import { createSlug } from "@firstroad/utils";
+import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
 import {
   maxLength,
@@ -12,7 +13,11 @@ import {
   safeParse,
   string,
   toNumber,
+  ValiError,
 } from "valibot";
+import { optionalFilesSchema } from "@/features/attachments/schemas";
+import { createAttachmentsForOwner } from "@/features/attachments/utils/attachment-dal";
+import { getFilesFromFormData } from "@/features/attachments/utils/get-files-from-form-data";
 import { itemWithPermissions } from "@/features/auth/dto/item-with-permissions";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { getMemberPermission } from "@/features/memberships/queries/get-member-permission";
@@ -20,7 +25,10 @@ import { ticketPath, ticketsPath } from "@/path";
 import type { Maybe } from "@/types";
 import { setCookieByKey } from "@/utils/cookies";
 import { toCent } from "@/utils/currency";
-import { invalidateTicketAndList } from "@/utils/invalidate-cache";
+import {
+  invalidateAttachmentsForTicket,
+  invalidateTicketAndList,
+} from "@/utils/invalidate-cache";
 import {
   type ActionState,
   fromErrorToActionState,
@@ -61,18 +69,21 @@ const upsertTicket = async (
   }
   const slug = createSlug(result.output.title);
 
-  const { error } = await tryCatch(async () => {
+  const { data: ticket, error } = await tryCatch(async () => {
     if (id) {
-      const ticket = await itemWithPermissions(findTicket(id), user, "TICKET");
-      if (!ticket?.isOwner) {
+      const existing = await itemWithPermissions(
+        findTicket(id),
+        user,
+        "TICKET",
+      );
+      if (!existing?.isOwner) {
         throw new Error("Ticket Not Found");
       }
 
-      if (!ticket?.canUpdate) {
+      if (!existing?.canUpdate) {
         throw new Error("You do not have permission to update this ticket");
       }
     } else {
-      // Check if user has permission to create tickets in this organization
       const permission = await getMemberPermission(
         user.id,
         organizationId,
@@ -96,7 +107,7 @@ const upsertTicket = async (
       userId: user.id,
       description,
     };
-    const ticket = id
+    return id
       ? await updateTicket({
           where: { id },
           data: dbData,
@@ -106,15 +117,38 @@ const upsertTicket = async (
           data: { ...dbData, organizationId },
           includeUser: false,
         });
-
-    if (ticket.slug) {
-      invalidateTicketAndList(ticket.slug);
-    }
   });
 
   if (error) {
     return fromErrorToActionState(error, formData);
   }
+
+  if (!ticket) {
+    return toActionState("Failed to save ticket", "ERROR");
+  }
+
+  const files = getFilesFromFormData(formData);
+  if (files.length > 0) {
+    const parseFiles = safeParse(optionalFilesSchema, files);
+    if (!parseFiles.success) {
+      return fromErrorToActionState(new ValiError(parseFiles.issues), formData);
+    }
+    const { error: attachError } = await tryCatch(() =>
+      createAttachmentsForOwner({
+        ownerKind: "ticket",
+        organizationId: ticket.organizationId,
+        ownerId: ticket.id,
+        files: parseFiles.output,
+      }),
+    );
+    if (attachError) {
+      return fromErrorToActionState(attachError, formData);
+    }
+    invalidateAttachmentsForTicket(ticket.id);
+  }
+
+  invalidateTicketAndList(ticket.slug);
+  refresh();
 
   if (id) {
     await setCookieByKey("toast", "Ticket updated");

@@ -8,7 +8,6 @@ import { AttachmentsSkeleton } from "@/features/attachments/components/skeletons
 import { presignAttachments } from "@/features/attachments/utils/presign-attachments";
 import { HasAuthSuspense } from "@/features/auth/components/has-auth";
 import { isOwner } from "@/features/auth/utils/owner";
-import { createCommentAttachment } from "@/features/comment/actions/create-comment-attachment";
 import { deleteComment } from "@/features/comment/actions/delete-comment";
 import { upsertComment } from "@/features/comment/actions/upsert-comment";
 import { CommentsWithPermissions } from "@/features/comment/components/comments-with-permissions";
@@ -114,8 +113,8 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
             {(user) => (
               <Attachments
                 attachments={attachmentsWithUrls}
-                createAttachmentAction={createAttachment}
-                deleteAttachmentAction={deleteAttachment}
+                createAttachmentAction={createAttachment.bind(null, "TICKET")}
+                deleteAttachmentAction={deleteAttachment.bind(null, "TICKET")}
                 isOwner={isOwner(user, { userId: ticket.userId })}
                 ownerId={ticket.id}
               />
@@ -133,7 +132,8 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
           >
             {(user) => (
               <CommentsWithPermissions
-                createAttachmentAction={createCommentAttachment}
+                createAttachmentAction={createAttachment.bind(null, "COMMENT")}
+                deleteAttachmentAction={deleteAttachment.bind(null, "COMMENT")}
                 deleteCommentAction={deleteComment}
                 listWithAttachments={listWithAttachments}
                 loadMoreAction={getCommentsLoadMore}
