@@ -5,12 +5,17 @@ import { FieldError } from "@/components/form/field-error";
 import { Form } from "@/components/form/form";
 import { SubmitButton } from "@/components/form/submit-button";
 import { type ActionState, EMPTY_ACTION_STATE } from "@/utils/to-action-state";
-import type { CreateAttachmentAction } from "../types";
+import {
+  type AttachmentCreatedPayload,
+  type CreateAttachmentAction,
+  hasAttachmentCreatedPayload,
+} from "../types";
 import type { AttachmentInputWithPreviewsRef } from "./attachment-input-with-previews";
 import { AttachmentInputWithPreviews } from "./attachment-input-with-previews";
 
 interface AttachmentCreateFormProps {
   createAttachmentAction: CreateAttachmentAction;
+  onClientAttachmentCreated?: (payload: AttachmentCreatedPayload) => void;
   onSuccess?: () => void;
   ownerId: string;
 }
@@ -19,12 +24,16 @@ const AttachmentCreateForm = ({
   ownerId,
   createAttachmentAction,
   onSuccess,
+  onClientAttachmentCreated,
 }: AttachmentCreateFormProps) => {
   const inputRef = useRef<AttachmentInputWithPreviewsRef>(null);
   const [previewCount, setPreviewCount] = useState(0);
 
   const [actionState, action] = useActionState(
-    async (prevState: ActionState, formData: FormData) => {
+    async (
+      prevState: ActionState<AttachmentCreatedPayload | unknown>,
+      formData: FormData,
+    ) => {
       const nextState = await createAttachmentAction(
         ownerId,
         prevState,
@@ -32,6 +41,9 @@ const AttachmentCreateForm = ({
       );
 
       if (nextState.status === "SUCCESS") {
+        if (hasAttachmentCreatedPayload(nextState)) {
+          onClientAttachmentCreated?.(nextState.data);
+        }
         inputRef.current?.reset();
         setPreviewCount(0);
         onSuccess?.();
@@ -39,7 +51,7 @@ const AttachmentCreateForm = ({
 
       return nextState;
     },
-    EMPTY_ACTION_STATE,
+    EMPTY_ACTION_STATE as ActionState<AttachmentCreatedPayload | unknown>,
   );
 
   return (

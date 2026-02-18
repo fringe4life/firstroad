@@ -27,8 +27,18 @@ const CommentAttachments = async ({
   return (
     <Attachments
       attachments={attachmentsWithUrls}
-      createAttachmentAction={createAttachment.bind(null, "COMMENT")}
-      deleteAttachmentAction={deleteAttachment.bind(null, "COMMENT")}
+      createAttachmentAction={createAttachment.bind(
+        null,
+        //@ts-expect-error - createAttachment is not typed
+        "CLIENT",
+        "COMMENT",
+      )}
+      deleteAttachmentAction={deleteAttachment.bind(
+        null,
+        // @ts-expect-error - deleteAttachment is not typed
+        "CLIENT",
+        "COMMENT",
+      )}
       isOwner={isOwner}
       ownerId={commentId}
     />

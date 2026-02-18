@@ -3,12 +3,17 @@
 import { GenericComponent } from "@/components/generic-component";
 import { AttachmentItem } from "@/features/attachments/components/attachment-item";
 import type { List } from "@/types";
-import type { DeleteAttachmentAction, UIAttachment } from "../types";
+import type {
+  AttachmentDeletedPayload,
+  DeleteAttachmentAction,
+  UIAttachment,
+} from "../types";
 
 interface AttachmentListProps {
   attachments: List<UIAttachment>;
   deleteAttachmentAction: DeleteAttachmentAction;
   isOwner: boolean;
+  onClientAttachmentDeleted?: (payload: AttachmentDeletedPayload) => void;
   ownerId: string;
 }
 
@@ -17,6 +22,7 @@ const AttachmentList = ({
   isOwner,
   ownerId,
   deleteAttachmentAction,
+  onClientAttachmentDeleted,
 }: AttachmentListProps) => (
   <GenericComponent
     as="ul"
@@ -30,6 +36,7 @@ const AttachmentList = ({
       isOwner,
       ownerId,
       deleteAttachmentAction,
+      onClientAttachmentDeleted,
     })}
   />
 );

@@ -9,7 +9,8 @@ import type { CommentItemProps } from "@/features/comment/types";
 import { TimeAgo } from "./time-ago";
 
 const CommentItem = ({ comment, buttons }: CommentItemProps) => {
-  const { userId, deleteAttachmentAction } = useComments();
+  const { userId, deleteAttachmentAction, handleClientAttachmentDeleted } =
+    useComments();
   const { updatedAt, createdAt, content, user, attachments, id } = comment;
   const isOwner = userId === comment.userId;
 
@@ -49,6 +50,7 @@ const CommentItem = ({ comment, buttons }: CommentItemProps) => {
                   attachments={attachments}
                   deleteAttachmentAction={deleteAttachmentAction}
                   isOwner={userId === comment.userId}
+                  onClientAttachmentDeleted={handleClientAttachmentDeleted}
                   ownerId={comment.id}
                 />
               </div>

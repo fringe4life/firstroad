@@ -15,6 +15,7 @@ import {
 } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
 import { deleteAttachmentInputSchema } from "../schemas";
+import type { AttachmentDeletedPayload } from "../types";
 import { deleteAttachmentForOwner } from "../utils/attachment-dal";
 import { getVerifiableItem } from "../utils/get-verifiable-item";
 import { toOwnerKind } from "../utils/to-owner-kind";
@@ -24,12 +25,13 @@ interface DeleteAttachmentArgs {
   ownerId: string;
 }
 
-const deleteAttachment = async (
+async function deleteAttachmentImpl(
+  updateBoundary: "CLIENT" | "SERVER",
   resourceType: ResourceType,
   { attachmentId, ownerId }: DeleteAttachmentArgs,
-  _prevState: ActionState,
+  _prevState: ActionState<AttachmentDeletedPayload | unknown>,
   _formData: FormData,
-): Promise<ActionState> => {
+): Promise<ActionState<AttachmentDeletedPayload> | ActionState<unknown>> {
   const parseResult = safeParse(deleteAttachmentInputSchema, {
     attachmentId,
     ownerId,
@@ -59,9 +61,10 @@ const deleteAttachment = async (
     );
   }
 
+  const ownerKind = toOwnerKind(resourceType);
   const { error } = await tryCatch(() =>
     deleteAttachmentForOwner({
-      ownerKind: toOwnerKind(resourceType),
+      ownerKind,
       organizationId: item.organizationId,
       ownerId,
       attachmentId,
@@ -83,8 +86,46 @@ const deleteAttachment = async (
       break;
   }
 
-  refresh();
-  return toActionState("Attachment deleted", "SUCCESS");
-};
+  const payload: AttachmentDeletedPayload = {
+    item,
+    deletedAttachmentId: attachmentId,
+  };
+
+  if (updateBoundary === "SERVER") {
+    refresh();
+    return toActionState("Attachment deleted", "SUCCESS");
+  }
+  return toActionState("Attachment deleted", "SUCCESS", undefined, payload);
+}
+
+async function deleteAttachment(
+  updateBoundary: "CLIENT",
+  resourceType: ResourceType,
+  args: DeleteAttachmentArgs,
+  _prevState: ActionState<AttachmentDeletedPayload | unknown>,
+  _formData: FormData,
+): Promise<ActionState<AttachmentDeletedPayload>>;
+async function deleteAttachment(
+  updateBoundary: "SERVER",
+  resourceType: ResourceType,
+  args: DeleteAttachmentArgs,
+  _prevState: ActionState<AttachmentDeletedPayload | unknown>,
+  _formData: FormData,
+): Promise<ActionState<unknown>>;
+async function deleteAttachment(
+  updateBoundary: "CLIENT" | "SERVER",
+  resourceType: ResourceType,
+  args: DeleteAttachmentArgs,
+  _prevState: ActionState<AttachmentDeletedPayload | unknown>,
+  _formData: FormData,
+): Promise<ActionState<AttachmentDeletedPayload> | ActionState<unknown>> {
+  return await deleteAttachmentImpl(
+    updateBoundary,
+    resourceType,
+    args,
+    _prevState,
+    _formData,
+  );
+}
 
 export { deleteAttachment };

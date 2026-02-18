@@ -12,6 +12,22 @@
 docs
 
 # ------------------------------------------------------------------------------
+# Other deployment platforms (Railway, Docker, etc. – not used by Vercel)
+# ------------------------------------------------------------------------------
+railway.json
+railway.toml
+docker-compose.yml
+docker-compose.*.yml
+.dockerignore
+Dockerfile
+Dockerfile.*
+apps/web/Dockerfile
+render.yaml
+fly.toml
+netlify.toml
+.nixpacks
+
+# ------------------------------------------------------------------------------
 # Other apps (only @firstroad/web is deployed)
 # ------------------------------------------------------------------------------
 apps/inngest
@@ -32,6 +48,9 @@ packages/database/prisma/seed.ts
 # Cache & generated (smaller upload; Vercel already ignores .next, node_modules)
 # ------------------------------------------------------------------------------
 .turbo
+.vercel
+out/
+.next/
 
 # ------------------------------------------------------------------------------
 # Test & debug

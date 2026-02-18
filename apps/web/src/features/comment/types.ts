@@ -4,6 +4,8 @@ import type {
 } from "@firstroad/db/client-types";
 import type { ReactNode, RefObject } from "react";
 import type {
+  AttachmentCreatedPayload,
+  AttachmentDeletedPayload,
   CreateAttachmentAction,
   DeleteAttachmentAction,
   UIAttachment,
@@ -85,6 +87,7 @@ export interface CommentOwnerButtonsProps
   canDelete?: boolean;
   canUpdate?: boolean;
   createAttachmentAction?: CreateAttachmentAction;
+  onClientAttachmentCreated?: (payload: AttachmentCreatedPayload) => void;
 }
 
 export interface CommentEditButtonProps
@@ -138,6 +141,8 @@ export interface CommentsContextValue {
   editingState: EditingState;
   formRef: RefObject<HTMLDivElement | null>;
   handleCancelEdit: () => void;
+  handleClientAttachmentCreated: (payload: AttachmentCreatedPayload) => void;
+  handleClientAttachmentDeleted: (payload: AttachmentDeletedPayload) => void;
   handleDelete: (commentId: string) => Promise<ActionState<string>>;
   handleEdit: (commentId: string, content: string) => void;
   handleLoadMore: () => void;

@@ -10,17 +10,22 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { AttachmentCreateForm } from "@/features/attachments/components/attachment-create-form";
-import type { CreateAttachmentAction } from "@/features/attachments/types";
+import type {
+  AttachmentCreatedPayload,
+  CreateAttachmentAction,
+} from "@/features/attachments/types";
 import { useToggle } from "@/hooks/use-toggle";
 
 interface AddCommentAttachmentButtonProps {
   commentId: string;
   createAttachmentAction: CreateAttachmentAction;
+  onClientAttachmentCreated?: (payload: AttachmentCreatedPayload) => void;
 }
 
 const AddCommentAttachmentButton = ({
   commentId,
   createAttachmentAction,
+  onClientAttachmentCreated,
 }: AddCommentAttachmentButtonProps) => {
   const { isOpen, open, close } = useToggle(false);
 
@@ -41,6 +46,7 @@ const AddCommentAttachmentButton = ({
 
           <AttachmentCreateForm
             createAttachmentAction={createAttachmentAction}
+            onClientAttachmentCreated={onClientAttachmentCreated}
             onSuccess={close}
             ownerId={commentId}
           />

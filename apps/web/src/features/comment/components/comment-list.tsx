@@ -14,6 +14,7 @@ const CommentList = () => {
     handleDelete,
     handleEdit,
     createAttachmentAction,
+    handleClientAttachmentCreated,
   } = useComments();
 
   return (
@@ -47,6 +48,7 @@ const CommentList = () => {
               canUpdate={canUpdate}
               comment={{ id: item.id, content: item.content }}
               createAttachmentAction={createAttachmentAction}
+              onClientAttachmentCreated={handleClientAttachmentCreated}
               onDeleteComment={handleDelete}
               onEdit={(commentId, content) => handleEdit(commentId, content)}
             />

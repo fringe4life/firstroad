@@ -15,16 +15,19 @@ import {
 } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
 import { filesSchema } from "../schemas";
+import type { AttachmentCreatedPayload } from "../types";
 import { createAttachmentsForOwner } from "../utils/attachment-dal";
 import { getVerifiableItem } from "../utils/get-verifiable-item";
+import { presignAttachments } from "../utils/presign-attachments";
 import { toOwnerKind } from "../utils/to-owner-kind";
 
-const createAttachment = async (
+async function createAttachmentImpl(
+  updateBoundary: "CLIENT" | "SERVER",
   resourceType: ResourceType,
   ownerId: string,
-  _state: ActionState,
+  _state: ActionState<AttachmentCreatedPayload | unknown>,
   formData: FormData,
-): Promise<ActionState> => {
+): Promise<ActionState<AttachmentCreatedPayload> | ActionState<unknown>> {
   const files = Array.from(formData.getAll("files"));
 
   const parseResult = safeParse(filesSchema, files);
@@ -53,9 +56,10 @@ const createAttachment = async (
     );
   }
 
-  const { error } = await tryCatch(() =>
+  const ownerKind = toOwnerKind(resourceType);
+  const { data: createdRecords, error } = await tryCatch(() =>
     createAttachmentsForOwner({
-      ownerKind: toOwnerKind(resourceType),
+      ownerKind,
       organizationId: item.organizationId,
       ownerId,
       files: validatedFiles,
@@ -77,8 +81,59 @@ const createAttachment = async (
       break;
   }
 
-  refresh();
-  return toActionState("Attachment(s) uploaded", "SUCCESS");
-};
+  // Build payload so clients can update local state without a full refresh (CLIENT boundary only).
+  let payload: AttachmentCreatedPayload | undefined;
+  if (createdRecords && createdRecords.length > 0) {
+    const ownerKey = (
+      ownerKind === "comment" && "commentId" in item ? item.commentId : ownerId
+    ) as string;
+    const withUrls = presignAttachments(
+      item.organizationId,
+      ownerKind,
+      ownerKey,
+      createdRecords,
+    );
+    payload = {
+      item,
+      created: withUrls ?? [],
+    };
+  }
+
+  if (updateBoundary === "SERVER") {
+    refresh();
+    return toActionState("Attachment(s) uploaded", "SUCCESS");
+  }
+  return toActionState("Attachment(s) uploaded", "SUCCESS", undefined, payload);
+}
+
+async function createAttachment(
+  updateBoundary: "CLIENT",
+  resourceType: ResourceType,
+  ownerId: string,
+  _state: ActionState<AttachmentCreatedPayload | unknown>,
+  formData: FormData,
+): Promise<ActionState<AttachmentCreatedPayload>>;
+async function createAttachment(
+  updateBoundary: "SERVER",
+  resourceType: ResourceType,
+  ownerId: string,
+  _state: ActionState<AttachmentCreatedPayload | unknown>,
+  formData: FormData,
+): Promise<ActionState<unknown>>;
+async function createAttachment(
+  updateBoundary: "CLIENT" | "SERVER",
+  resourceType: ResourceType,
+  ownerId: string,
+  _state: ActionState<AttachmentCreatedPayload | unknown>,
+  formData: FormData,
+): Promise<ActionState<AttachmentCreatedPayload> | ActionState<unknown>> {
+  return await createAttachmentImpl(
+    updateBoundary,
+    resourceType,
+    ownerId,
+    _state,
+    formData,
+  );
+}
 
 export { createAttachment };

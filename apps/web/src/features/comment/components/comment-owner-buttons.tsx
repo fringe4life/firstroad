@@ -8,6 +8,7 @@ const CommentOwnerButtons = ({
   onEdit,
   onDeleteComment,
   createAttachmentAction,
+  onClientAttachmentCreated,
   canUpdate = false,
   canDelete = false,
 }: CommentOwnerButtonsProps) => (
@@ -17,6 +18,7 @@ const CommentOwnerButtons = ({
       <AddCommentAttachmentButton
         commentId={comment.id}
         createAttachmentAction={createAttachmentAction}
+        onClientAttachmentCreated={onClientAttachmentCreated}
       />
     ) : null}
     {canDelete ? (

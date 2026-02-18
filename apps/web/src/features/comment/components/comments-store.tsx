@@ -9,6 +9,10 @@ import {
   useState,
   useTransition,
 } from "react";
+import type {
+  AttachmentCreatedPayload,
+  AttachmentDeletedPayload,
+} from "@/features/attachments/types";
 import { getFilesFromFormData } from "@/features/attachments/utils/get-files-from-form-data";
 import { commentReducer } from "@/features/comment/hooks/use-comment-optimistic";
 import type {
@@ -171,9 +175,7 @@ const CommentsProvider = ({
       addOptimisticUpdate({ type: "delete", commentId });
     });
 
-    const result = (await deleteCommentAction(
-      commentId,
-    )) as ActionState<string>;
+    const result = await deleteCommentAction(commentId);
 
     if (result.status === "SUCCESS") {
       setCommentsState((prev) => ({
@@ -183,6 +185,36 @@ const CommentsProvider = ({
     }
 
     return result;
+  };
+
+  const handleClientAttachmentCreated = (payload: AttachmentCreatedPayload) => {
+    setCommentsState((prev) => ({
+      ...prev,
+      list: prev.list.map((comment) =>
+        comment.id === payload.item.commentId
+          ? {
+              ...comment,
+              attachments: [...(comment.attachments ?? []), ...payload.created],
+            }
+          : comment,
+      ),
+    }));
+  };
+
+  const handleClientAttachmentDeleted = (payload: AttachmentDeletedPayload) => {
+    setCommentsState((prev) => ({
+      ...prev,
+      list: prev.list.map((comment) =>
+        comment.id === payload.item.commentId
+          ? {
+              ...comment,
+              attachments: (comment.attachments ?? []).filter(
+                (attachment) => attachment.id !== payload.deletedAttachmentId,
+              ),
+            }
+          : comment,
+      ),
+    }));
   };
 
   const value: CommentsContextValue = {
@@ -200,6 +232,8 @@ const CommentsProvider = ({
     handleUpsertSuccess,
     handleEdit,
     handleCancelEdit,
+    handleClientAttachmentCreated,
+    handleClientAttachmentDeleted,
     handleLoadMore,
     handleDelete,
     createAttachmentAction,

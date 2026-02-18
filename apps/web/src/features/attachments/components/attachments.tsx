@@ -9,6 +9,8 @@ const Attachments = ({
   attachments,
   createAttachmentAction,
   deleteAttachmentAction,
+  onClientAttachmentCreated,
+  onClientAttachmentDeleted,
 }: AttachmentsProps) => (
   <CardCompact
     content={
@@ -17,11 +19,13 @@ const Attachments = ({
           attachments={attachments}
           deleteAttachmentAction={deleteAttachmentAction}
           isOwner={isOwner}
+          onClientAttachmentDeleted={onClientAttachmentDeleted}
           ownerId={ownerId}
         />
         {isOwner && (
           <AttachmentCreateForm
             createAttachmentAction={createAttachmentAction}
+            onClientAttachmentCreated={onClientAttachmentCreated}
             ownerId={ownerId}
           />
         )}

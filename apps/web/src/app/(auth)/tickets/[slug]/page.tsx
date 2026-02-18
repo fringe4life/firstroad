@@ -113,8 +113,16 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
             {(user) => (
               <Attachments
                 attachments={attachmentsWithUrls}
-                createAttachmentAction={createAttachment.bind(null, "TICKET")}
-                deleteAttachmentAction={deleteAttachment.bind(null, "TICKET")}
+                createAttachmentAction={createAttachment.bind(
+                  null,
+                  "SERVER",
+                  "TICKET",
+                )}
+                deleteAttachmentAction={deleteAttachment.bind(
+                  null,
+                  "SERVER",
+                  "TICKET",
+                )}
                 isOwner={isOwner(user, { userId: ticket.userId })}
                 ownerId={ticket.id}
               />
@@ -132,8 +140,18 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
           >
             {(user) => (
               <CommentsWithPermissions
-                createAttachmentAction={createAttachment.bind(null, "COMMENT")}
-                deleteAttachmentAction={deleteAttachment.bind(null, "COMMENT")}
+                createAttachmentAction={createAttachment.bind(
+                  null,
+                  // @ts-expect-error - createAttachment is not typed
+                  "CLIENT",
+                  "COMMENT",
+                )}
+                deleteAttachmentAction={deleteAttachment.bind(
+                  null,
+                  // @ts-expect-error - deleteAttachment is not typed
+                  "CLIENT",
+                  "COMMENT",
+                )}
                 deleteCommentAction={deleteComment}
                 listWithAttachments={listWithAttachments}
                 loadMoreAction={getCommentsLoadMore}
