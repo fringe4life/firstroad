@@ -40,13 +40,13 @@
     "@biomejs/biome": "2.4.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
-    "turbo": "^2.8.9",
+    "turbo": "^2.8.10",
     "ultracite": "7.2.3"
   },
   "overrides": {
     "undici": ">=7.18.2",
     "lodash": ">4.17.22",
-    "hono": ">=4.11.7",
+    "hono": ">=4.11.10",
     "@modelcontextprotocol/sdk": ">1.25.3",
     "js-yaml": "^4.1.1",
     "glob": "^11.1.0",
@@ -59,6 +59,7 @@
     "tar": ">=7.5.8",
     "next": ">=16.1.5",
     "@isaacs/brace-expansion": ">5.0.0",
-    "ajv": ">=8.18"
+    "ajv": ">=8.18",
+    "minimatch": ">=10.2.1"
   }
 }

@@ -41,7 +41,7 @@ const Breadcrumbs = <T extends BreadcrumbItemProps>({
         }
 
         return (
-          <Fragment key={`${breadcrumb.title}-${index}`}>
+          <Fragment key={`${breadcrumb.title}-${breadcrumb.href ?? "href"}`}>
             <BreadcrumbItem>{breadcrumbItem}</BreadcrumbItem>
             {index < breadcrumbs.length - 1 && (
               <BreadcrumbSeparator>

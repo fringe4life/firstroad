@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 interface ClientDateProps {
   date: Date;
@@ -8,16 +8,44 @@ interface ClientDateProps {
 }
 
 /**
- * Renders a date with the user's locale only after mount to avoid hydration
+ * "Client mounted" store: false on server and first client render, then true
+ * after a microtask so server and initial client HTML match (placeholder).
+ * Avoids setState-in-effect and satisfies React Compiler.
+ */
+let clientMounted = false;
+const emptySubscribe = () => () => null;
+function subscribe(callback: () => void) {
+  if (clientMounted) {
+    return emptySubscribe();
+  }
+  const schedule =
+    typeof queueMicrotask !== "undefined"
+      ? queueMicrotask
+      : (fn: () => void) => setTimeout(fn, 0);
+  schedule(() => {
+    clientMounted = true;
+    callback();
+  });
+  return emptySubscribe();
+}
+function getSnapshot() {
+  return clientMounted;
+}
+function getServerSnapshot() {
+  return false;
+}
+
+/**
+ * Renders a date with the user's locale only after client mount to avoid hydration
  * mismatch (server and client can format dates differently).
- * Shows a fixed-size placeholder until then. Uses a span so it is valid inside <p>.
+ * Shows a fixed-size placeholder until then to avoid layout shift.
  */
 const ClientDate = ({ date, options }: ClientDateProps) => {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    getServerSnapshot,
+  );
 
   if (!mounted) {
     return (

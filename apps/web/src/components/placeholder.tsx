@@ -8,22 +8,21 @@ export interface PlaceholderProps {
   label: string;
 }
 
-const Placeholder = ({
-  label,
-  icon = <MessageSquareWarning />,
-  button,
-}: PlaceholderProps) => (
-  <div className="grid h-full place-content-center gap-y-2">
-    {cloneElement(icon, {
-      className: "w-16 aspect-square justify-self-center",
-    })}
-    <h2 className="text-center text-lg">{label}</h2>
+const Placeholder = ({ label, icon, button }: PlaceholderProps) => {
+  const resolvedIcon = icon ?? <MessageSquareWarning />;
+  return (
+    <div className="grid h-full place-content-center gap-y-2">
+      {cloneElement(resolvedIcon, {
+        className: "w-16 aspect-square justify-self-center",
+      })}
+      <h2 className="text-center text-lg">{label}</h2>
 
-    {button
-      ? cloneElement(button, {
-          className: "h-10",
-        })
-      : null}
-  </div>
-);
+      {button
+        ? cloneElement(button, {
+            className: "h-10",
+          })
+        : null}
+    </div>
+  );
+};
 export { Placeholder };

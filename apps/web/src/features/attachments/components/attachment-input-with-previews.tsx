@@ -3,6 +3,7 @@
 import {
   forwardRef,
   useEffect,
+  useEffectEvent,
   useId,
   useImperativeHandle,
   useRef,
@@ -14,6 +15,15 @@ import { AttachmentPreviewCard } from "@/features/attachments/components/attachm
 import { ACCEPTED_FILE_TYPES } from "../constants";
 import type { AttachmentPreview } from "../utils/attachment-previews";
 import { createAttachmentPreviews } from "../utils/attachment-previews";
+
+/** Revoke object URLs for image previews so they can be garbage-collected. */
+const revokeImagePreviews = (previews: AttachmentPreview[]): void => {
+  for (const preview of previews) {
+    if (preview.kind === "image") {
+      URL.revokeObjectURL(preview.objectUrl);
+    }
+  }
+};
 
 export interface AttachmentInputWithPreviewsRef {
   reset: () => void;
@@ -47,65 +57,45 @@ const AttachmentInputWithPreviews = forwardRef<
 
   const hasPreviews = previews.length > 0;
 
-  useEffect(() => {
-    onPreviewsChange?.(previews.length);
-  }, [previews.length, onPreviewsChange]);
-
-  const reset = () => {
+  const reset = useEffectEvent(() => {
     setPreviews((previous) => {
-      for (const preview of previous) {
-        if (preview.kind === "image") {
-          URL.revokeObjectURL(preview.objectUrl);
-        }
-      }
+      revokeImagePreviews(previous);
       return [];
     });
     if (inputRef.current) {
       inputRef.current.value = "";
     }
-  };
+    // Defer so we never update parent during render (avoids "setState in render" when parent calls reset())
+    queueMicrotask(() => onPreviewsChange?.(0));
+  });
 
-  const resetRef = useRef(reset);
-  resetRef.current = reset;
-  useImperativeHandle(ref, () => ({ reset: () => resetRef.current() }), []);
+  useImperativeHandle(ref, () => ({ reset }), []);
 
-  useEffect(
-    () => () => {
-      for (const preview of previews) {
-        if (preview.kind === "image") {
-          URL.revokeObjectURL(preview.objectUrl);
-        }
-      }
-    },
-    [previews],
-  );
+  useEffect(() => () => revokeImagePreviews(previews), [previews]);
 
   const handleFilesChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ): void => {
     const { files } = event.target;
-
+    const nextPreviews = createAttachmentPreviews(files);
     setPreviews((previousPreviews) => {
-      for (const preview of previousPreviews) {
-        if (preview.kind === "image") {
-          URL.revokeObjectURL(preview.objectUrl);
-        }
-      }
-      return createAttachmentPreviews(files);
+      revokeImagePreviews(previousPreviews);
+      return nextPreviews;
     });
+    onPreviewsChange?.(nextPreviews.length);
   };
 
   const handleRemovePreview = (previewId: string): void => {
     setPreviews((previousPreviews) => {
-      const nextPreviews = previousPreviews.filter(
-        (preview) => preview.id !== previewId,
-      );
       const removedPreview = previousPreviews.find(
         (preview) => preview.id === previewId,
       );
-      if (removedPreview?.kind === "image") {
-        URL.revokeObjectURL(removedPreview.objectUrl);
+      if (removedPreview) {
+        revokeImagePreviews([removedPreview]);
       }
+      const nextPreviews = previousPreviews.filter(
+        (preview) => preview.id !== previewId,
+      );
       const input = inputRef.current;
       if (input) {
         const dataTransfer = new DataTransfer();
@@ -114,6 +104,7 @@ const AttachmentInputWithPreviews = forwardRef<
         }
         input.files = dataTransfer.files;
       }
+      onPreviewsChange?.(nextPreviews.length);
       return nextPreviews;
     });
   };

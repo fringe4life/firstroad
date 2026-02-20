@@ -54,12 +54,7 @@ const DatePicker = ({ id, name, defaultValue, ref }: DatePickerProps) => {
         </Button>
       </PopoverTrigger>
       <PopoverContent align="start" className="w-auto p-0">
-        <Calendar
-          autoFocus
-          mode="single"
-          onSelect={handleSelect}
-          selected={date}
-        />
+        <Calendar mode="single" onSelect={handleSelect} selected={date} />
       </PopoverContent>
     </Popover>
   );

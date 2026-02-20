@@ -26,7 +26,7 @@ const UpdateOrganisationForm = ({
     updateOrganisationAction,
     EMPTY_ACTION_STATE,
   );
-  const [name, setName] = useState(organizationName);
+  const [name, setName] = useState(() => organizationName);
   const organisationNameId = useId();
   const isSubmitDisabled = name.trim().length === 0;
 
