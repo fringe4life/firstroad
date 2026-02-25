@@ -70,7 +70,7 @@ const TicketCard = ({
               </p>
             </div>
             {mobileActions && (
-              <div className="no-scrollbar relative z-30 flex w-full gap-2 overflow-x-auto md:hidden">
+              <div className="no-scrollbar relative z-30 grid w-full auto-cols-fr grid-flow-col gap-2 overflow-x-auto md:hidden">
                 {mobileActions}
               </div>
             )}
@@ -78,9 +78,7 @@ const TicketCard = ({
         </Card>
 
         {actions && (
-          <div className="hidden space-y-1 self-start md:flex md:flex-col">
-            {actions}
-          </div>
+          <div className="hidden space-y-1 self-start md:grid">{actions}</div>
         )}
       </div>
     </ViewTransition>

@@ -32,7 +32,7 @@ interface InviteMemberButtonProps {
 }
 
 const InviteMemberButton = ({ organizationId }: InviteMemberButtonProps) => {
-  const { isOpen, open, close } = useToggle(false);
+  const { value: isOpen, open, close } = useToggle(false);
   const emailId = useId();
   const roleId = useId();
 

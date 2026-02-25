@@ -27,7 +27,7 @@ const AddCommentAttachmentButton = ({
   createAttachmentAction,
   onClientAttachmentCreated,
 }: AddCommentAttachmentButtonProps) => {
-  const { isOpen, open, close } = useToggle(false);
+  const { value: isOpen, open, close } = useToggle(false);
 
   return (
     <>

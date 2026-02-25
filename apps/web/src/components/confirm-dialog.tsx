@@ -39,7 +39,7 @@ const useConfirmDialog = ({
   onError,
   onIsPending,
 }: UseConfirmDialogProps) => {
-  const { isOpen, toggle, close } = useToggle(false);
+  const { value: isOpen, toggle, close } = useToggle(false);
 
   // Render prop pattern: pass onClick and isPending to the trigger function
   const getTriggerElement = (isPendingArg: boolean) =>

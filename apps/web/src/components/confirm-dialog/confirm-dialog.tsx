@@ -51,7 +51,7 @@ const ConfirmDialog = ({
 }: ConfirmDialogProps) => {
   // 1. Use toggle hook (same pattern as MobileSidebarProvider)
   const toggleState = useToggle(false);
-  const { isOpen, close } = toggleState;
+  const { value: isOpen, close } = toggleState;
 
   // 2. Action state
   const [actionState, formAction, actionIsPending] = useActionState(

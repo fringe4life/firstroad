@@ -5,18 +5,18 @@
 [![Next.js](https://img.shields.io/badge/Next.js-16.1.6-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.2.4-61DAFB?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Prisma](https://img.shields.io/badge/Prisma-7.4.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
+[![Prisma](https://img.shields.io/badge/Prisma-7.4.1-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
 [![Better Auth](https://img.shields.io/badge/Better%20Auth-beta-000000)](https://better-auth.com/)
-[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.18-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.2.1-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Biome](https://img.shields.io/badge/Biome-2.4.0-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.8.8-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.2.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
-[![Elysia](https://img.shields.io/badge/Elysia-1.4.25-000000)](https://elysiajs.com/)
-[![Inngest](https://img.shields.io/badge/Inngest-3.52.0-000000)](https://www.inngest.com/)
+[![Elysia](https://img.shields.io/badge/Elysia-1.4.26-000000)](https://elysiajs.com/)
+[![Inngest](https://img.shields.io/badge/Inngest-3.52.3-000000)](https://www.inngest.com/)
 [![Resend](https://img.shields.io/badge/Resend-6.9.2-000000)](https://resend.com/)
 [![React Email](https://img.shields.io/badge/React%20Email-5.2.8-000000)](https://react.email/)
 [![Bun](https://img.shields.io/badge/Bun-1.3.9-FBF0DF?logo=bun&logoColor=FBF0DF)](https://bun.sh/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-7.2.0-000000)](https://ultracite.dev/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-7.2.3-000000)](https://ultracite.dev/)
 
 </div>
 
@@ -53,7 +53,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **Language**: TypeScript 5.9 with strict type checking
 - **Database**: PostgreSQL with Prisma Client 7.4 (relationJoins preview, Neon adapter)
 - **Authentication**: Better Auth 1.5 (beta) with email/password provider and session cookie caching
-- **Styling**: Tailwind CSS v4.1.18 with shadcn/ui components
+- **Styling**: Tailwind CSS v4.2.1 with shadcn/ui components
 - **Icons**: Lucide React
 - **Forms**: React Hook Form with Valibot validation
 - **Notifications**: Sonner toast notifications

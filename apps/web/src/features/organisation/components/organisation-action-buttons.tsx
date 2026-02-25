@@ -34,7 +34,7 @@ const OrganisationActionButtons = ({
   isAdminOrOwner,
   limitedAccess,
 }: OrganisationActionButtonProps) => {
-  const { isOpen, close, open } = useToggle(false);
+  const { value: isOpen, close, open } = useToggle(false);
 
   let handleDeleteButton: React.ReactNode = (
     <Button disabled size="icon" variant="ghost" />

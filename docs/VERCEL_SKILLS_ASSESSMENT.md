@@ -1,11 +1,11 @@
 # Vercel Skills Assessment
 
-This document describes the two Vercel-derived agent skills available in this repo and how they fit the codebase.
+This document describes the two Vercel-derived agent skills and how they fit the codebase. Skill content may be installed via `npx skills add vercel-labs/next-skills` (next-skills bundle); this repo does not necessarily commit the full skill trees under `.agents/skills/`.
 
-**Location in this project:** `.agents/skills/`
+**Referenced in this project:**
 
-- `vercel-composition-patterns/` — component architecture and composition
-- `vercel-react-best-practices/` — React/Next.js performance and patterns
+- **Composition patterns** — component architecture, state placement, composition (see [vercel-composition-patterns-violations.md](vercel-composition-patterns-violations.md))
+- **React best practices** — performance, data fetching, re-renders (see [vercel-react-best-practices-violations.md](vercel-react-best-practices-violations.md))
 
 ---
 
@@ -124,10 +124,10 @@ Neither skill replaces the other: composition improves maintainability and clari
 
 ## How to Use These Skills in This Repo
 
-- **Skill definitions and rules:**  
-  - Composition: `.agents/skills/vercel-composition-patterns/SKILL.md` and `rules/*.md`  
-  - Best practices: `.agents/skills/vercel-react-best-practices/SKILL.md` and `rules/*.md`  
-  Full expanded text is in each skill’s `AGENTS.md`.
+- **Violations and rule application:**  
+  - Composition: [vercel-composition-patterns-violations.md](vercel-composition-patterns-violations.md)  
+  - Best practices: [vercel-react-best-practices-violations.md](vercel-react-best-practices-violations.md)  
+  These docs list concrete file paths, current status (e.g. acknowledged vs optional), and suggested fixes.
 
 - **When implementing or reviewing:**
   - **New or changing UI/components** — Check composition patterns for prop design and state placement; check best practices for data loading, server actions, and re-render/rendering.
@@ -135,4 +135,4 @@ Neither skill replaces the other: composition improves maintainability and clari
   - **Forms and pending state** — Prefer single-form + `useFormStatus` or `useTransition` where it fits; avoid manual loading state and effects for submit (per best practices).
   - **Refactors** — Use composition skill to simplify APIs first; then apply async/bundle/server/rerender rules as needed.
 
-This assessment is a snapshot of the skills as present under `.agents/skills/`. For exact rule text and examples, use the linked `SKILL.md` and `rules/` files in each skill folder.
+This assessment is a snapshot of how the two skill areas apply to this repo. Violations and reassessments are in the linked violations docs. For exact rule text and examples, use the next-skills bundle or the skill repos; the violations docs reference paths under `apps/web/src/` and align with [react-doctor-report.md](react-doctor-report.md) where relevant (e.g. sequential awaits acknowledged as intentional on three pages).

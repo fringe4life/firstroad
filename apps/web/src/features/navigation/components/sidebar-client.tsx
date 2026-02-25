@@ -10,13 +10,15 @@ import {
 import { useMobileSidebar } from "@/features/navigation/context/context";
 
 const SidebarClient = ({ children }: { children: React.ReactNode }) => {
-  const { isOpen, close } = useMobileSidebar();
-
+  const { value: isOpen, close } = useMobileSidebar();
   return (
     <Activity mode={isOpen ? "visible" : "hidden"}>
       <Sheet onOpenChange={close} open={isOpen}>
-        <SheetContent className="w-full max-w-84 p-0 md:hidden" side="left">
-          <SheetHeader className="border-b px-6 py-4">
+        <SheetContent
+          className="w-full max-w-84 p-0 supports-scroll-timeline:mt-15 md:hidden"
+          side="left"
+        >
+          <SheetHeader className="border-b px-6 py-4 supports-scroll-timeline:sr-only">
             <SheetTitle>TicketBounty</SheetTitle>
           </SheetHeader>
           <nav

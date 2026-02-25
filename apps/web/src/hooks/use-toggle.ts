@@ -11,7 +11,6 @@ export const useToggle = (initialValue = false) => {
 
   return {
     value,
-    isOpen: value,
     toggle,
     open,
     close,

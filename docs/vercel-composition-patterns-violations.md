@@ -1,6 +1,6 @@
 # Vercel Composition Patterns — Codebase Violations
 
-Assessment of this codebase against the rules in `.agents/skills/vercel-composition-patterns/`. Each section maps to a rule and lists concrete violations with file paths and suggested fixes.
+Assessment of this codebase against the Vercel composition-patterns rules (e.g. from `npx skills add vercel-labs/next-skills`). Each section maps to a rule and lists concrete violations with file paths and suggested fixes. Paths are under `apps/web/src/`.
 
 ---
 
@@ -12,8 +12,8 @@ Assessment of this codebase against the rules in `.agents/skills/vercel-composit
 
 | Location | Issue | Suggestion |
 |----------|--------|------------|
-| [src/components/heading-skeleton.tsx](../src/components/heading-skeleton.tsx) | `showTabs?: boolean` and `showActions?: boolean` control which skeleton blocks render. | Prefer composition: e.g. `<HeadingSkeleton><HeadingSkeleton.Tabs /><HeadingSkeleton.Actions /></HeadingSkeleton>` or separate `HeadingTabsSkeleton` / `HeadingActionsSkeleton` components that callers compose. |
-| [src/components/ui/dialog.tsx](../src/components/ui/dialog.tsx) | `showCloseButton?: boolean` toggles the close button. | Optional: expose a slot or child (e.g. `Dialog.CloseButton`) so the consumer composes the close control when needed, or keep a single default that can be overridden via children. |
+| [src/components/skeletons/heading-skeleton.tsx](../apps/web/src/components/skeletons/heading-skeleton.tsx) | `showTabs?: boolean` and `showActions?: boolean` control which skeleton blocks render. | Prefer composition: e.g. `<HeadingSkeleton><HeadingSkeleton.Tabs /><HeadingSkeleton.Actions /></HeadingSkeleton>` or separate `HeadingTabsSkeleton` / `HeadingActionsSkeleton` components that callers compose. |
+| [src/components/ui/dialog.tsx](../apps/web/src/components/ui/dialog.tsx) | `showCloseButton?: boolean` toggles the close button. | Optional: expose a slot or child (e.g. `Dialog.CloseButton`) so the consumer composes the close control when needed, or keep a single default that can be overridden via children. |
 
 
 ### Low priority / acceptable
@@ -32,10 +32,10 @@ Assessment of this codebase against the rules in `.agents/skills/vercel-composit
 
 | Location | Issue | Suggestion |
 |----------|--------|------------|
-| [src/components/generic-component.tsx](../src/components/generic-component.tsx) | `renderProps: (item: T, index: number) => P` is a render-prop API. Used to map each item to props for a single `Component`. | Prefer a children-based API: e.g. `items.map(item => <Component key={item.id} {...getProps(item)} />)` at the call site, or a compound list that accepts `children` / `itemRenderer` as a child component receiving item via context. |
-| [src/features/attachments/components/attachment-list.tsx](../src/features/attachments/components/attachment-list.tsx) | Passes `renderProps={(item) => ({ attachment: item })}` into `GenericComponent`. | Refactor to a list component that composes children or an explicit item component (e.g. `<AttachmentList items={…}><AttachmentListItem /></AttachmentList>`). |
-| [src/features/ticket/components/ticket-list.tsx](../src/features/ticket/components/ticket-list.tsx) | Passes `renderProps={(ticket) => ({…})}` into the generic list. | Same as above: move to children-based or compound list + item component. |
-| [src/features/comment/components/comment-list.tsx](../src/features/comment/components/comment-list.tsx) | Passes `renderProps={(item) => ({…})}` into the generic list. | Same as above. |
+| [src/components/generic-component.tsx](../apps/web/src/components/generic-component.tsx) | `renderProps: (item: T, index: number) => P` is a render-prop API. Used to map each item to props for a single `Component`. | Prefer a children-based API: e.g. `items.map(item => <Component key={item.id} {...getProps(item)} />)` at the call site, or a compound list that accepts `children` / `itemRenderer` as a child component receiving item via context. |
+| [src/features/attachments/components/attachment-list.tsx](../apps/web/src/features/attachments/components/attachment-list.tsx) | Passes `renderProps={(item) => ({ attachment: item })}` into `GenericComponent`. | Refactor to a list component that composes children or an explicit item component (e.g. `<AttachmentList items={…}><AttachmentListItem /></AttachmentList>`). |
+| [src/features/ticket/components/ticket-list.tsx](../apps/web/src/features/ticket/components/ticket-list.tsx) | Passes `renderProps={(ticket) => ({…})}` into the generic list. | Same as above: move to children-based or compound list + item component. |
+| [src/features/comment/components/comment-list.tsx](../apps/web/src/features/comment/components/comment-list.tsx) | Passes `renderProps={(item) => ({…})}` into the generic list. | Same as above. |
 
 
 ---
