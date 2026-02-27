@@ -23,14 +23,13 @@ const TicketDetailView = ({
   actionsSlot,
   mobileActionsSlot,
 }: TicketDetailViewProps) => (
-  <div className="max-content-widest grid gap-y-4 self-start justify-self-center">
+  <div className="max-content-widest grid h-full grid-rows-[min-content_min-content_1fr] gap-y-4 self-start justify-self-center">
     <TicketCard
       actions={actionsSlot}
       mobileActions={mobileActionsSlot}
       ticket={ticket}
       variant="detail"
     />
-
     {attachmentsSlot}
     {commentsSlot}
   </div>

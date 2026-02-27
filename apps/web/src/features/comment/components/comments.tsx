@@ -8,10 +8,12 @@ import type { CommentsProps } from "@/features/comment/types";
 
 const Comments = (props: CommentsProps) => (
   <CommentsProvider {...props}>
-    <CommentFormCard />
-    <div className="grid gap-y-2">
-      <CommentList />
-      <CommentPagination />
+    <div className="grid h-full gap-y-2 has-card:grid-rows-[min-content_1fr]">
+      <CommentFormCard />
+      <div className="grid h-full grid-rows-[1fr_min-content] gap-y-2">
+        <CommentList />
+        <CommentPagination />
+      </div>
     </div>
   </CommentsProvider>
 );

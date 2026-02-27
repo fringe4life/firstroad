@@ -6,6 +6,7 @@
 @custom-variant item (&:where([data-item="true"] *));
 @custom-variant open (&:where([data-open="true"] *));
 @custom-variant unsuccessful (&:where([data-unsuccessful="true"] *));
+@custom-variant card (&:where([data-slot="card"] *));
 
 @theme {
   --breakpoint-xs: 450px;
@@ -25,6 +26,7 @@
     box-shadow: var(--shadow-md);
     border-radius: 100vw;
     translate: 0 8px;
+    scale: 0.98 1;
   }
 }
 

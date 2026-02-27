@@ -51,7 +51,7 @@ const ClientDate = ({ date, options }: ClientDateProps) => {
     return (
       <span
         aria-hidden
-        className="inline-block h-3.5 w-34.5 animate-pulse rounded-md bg-accent"
+        className="inline-block h-4 w-34.5 animate-pulse rounded-sm bg-accent"
       />
     );
   }

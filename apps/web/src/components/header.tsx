@@ -12,67 +12,73 @@ import { Suspend } from "./suspend";
 import { Skeleton } from "./ui/skeleton";
 
 const Header = () => (
-  <nav className="nav-scroll fixed top-0 right-0 left-0 z-40 grid grid-flow-col items-center justify-between border-b bg-background/65 px-4 py-2.5 backdrop-blur supports-scroll-timeline:z-200 supports-backdrop-blur:bg-background/60">
-    <div className="flex items-center gap-x-2">
-      <Suspend fallback={<Skeleton className="aspect-square w-9 md:hidden" />}>
-        <MobileMenuButton />
-      </Suspend>
-      <Link
-        className={buttonVariants({ variant: "ghost", size: "lg" })}
-        href={homePath()}
-      >
-        <Kanban />
-        <h1 className="font-semibold text-base xs:text-lg">TicketBounty</h1>
-      </Link>
-    </div>
-    <div className="flex items-center gap-x-1">
-      <Suspend fallback={<Skeleton className="aspect-square w-9" />}>
-        <ThemeSwitcher />
-      </Suspend>
+  <ViewTransition name="header-navigation">
+    <nav className="nav-scroll fixed top-0 right-0 left-0 z-40 grid grid-flow-col items-center justify-between border-b bg-background/65 px-4 py-2.5 backdrop-blur supports-scroll-timeline:z-200 supports-backdrop-blur:bg-background/60">
+      <div className="flex items-center gap-x-2">
+        <Suspend
+          fallback={<Skeleton className="aspect-square w-9 md:hidden" />}
+        >
+          <MobileMenuButton />
+        </Suspend>
+        <Link
+          className={buttonVariants({ variant: "ghost", size: "lg" })}
+          href={homePath()}
+        >
+          <Kanban />
+          <h1 className="font-medium xs:font-semibold text-base xs:text-lg">
+            FirstTicket
+          </h1>
+        </Link>
+      </div>
+      <div className="flex items-center gap-x-1">
+        <Suspend fallback={<Skeleton className="aspect-square w-9" />}>
+          <ThemeSwitcher />
+        </Suspend>
 
-      <HasAuthSuspense
-        fallback={
-          <>
-            <span className="hidden md:inline-block">
-              <AuthNavSkeleton />
-            </span>
-            <span className="md:hidden">
-              <Skeleton className="aspect-square w-9 rounded-full" />
-            </span>
-          </>
-        }
-      >
-        {(user) => {
-          if (user) {
-            return (
-              <ViewTransition>
-                <AccountDropdown user={user} />
-              </ViewTransition>
-            );
+        <HasAuthSuspense
+          fallback={
+            <>
+              <span className="hidden md:inline-block">
+                <AuthNavSkeleton />
+              </span>
+              <span className="md:hidden">
+                <Skeleton className="aspect-square w-9 rounded-full" />
+              </span>
+            </>
           }
+        >
+          {(user) => {
+            if (user) {
+              return (
+                <ViewTransition>
+                  <AccountDropdown user={user} />
+                </ViewTransition>
+              );
+            }
 
-          return (
-            <div className="hidden items-center gap-x-1 md:flex">
-              <ViewTransition>
-                <Link
-                  className={buttonVariants({ variant: "outline" })}
-                  href={signUpPath()}
-                >
-                  Sign Up
-                </Link>
-                <Link
-                  className={buttonVariants({ variant: "default" })}
-                  href={signInPath()}
-                >
-                  Sign In
-                </Link>
-              </ViewTransition>
-            </div>
-          );
-        }}
-      </HasAuthSuspense>
-    </div>
-  </nav>
+            return (
+              <div className="hidden items-center gap-x-1 md:flex">
+                <ViewTransition>
+                  <Link
+                    className={buttonVariants({ variant: "outline" })}
+                    href={signUpPath()}
+                  >
+                    Sign Up
+                  </Link>
+                  <Link
+                    className={buttonVariants({ variant: "default" })}
+                    href={signInPath()}
+                  >
+                    Sign In
+                  </Link>
+                </ViewTransition>
+              </div>
+            );
+          }}
+        </HasAuthSuspense>
+      </div>
+    </nav>
+  </ViewTransition>
 );
 
 export { Header };

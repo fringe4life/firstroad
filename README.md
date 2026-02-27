@@ -12,7 +12,7 @@
 [![nuqs](https://img.shields.io/badge/nuqs-2.8.8-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.2.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Elysia](https://img.shields.io/badge/Elysia-1.4.26-000000)](https://elysiajs.com/)
-[![Inngest](https://img.shields.io/badge/Inngest-3.52.3-000000)](https://www.inngest.com/)
+[![Inngest](https://img.shields.io/badge/Inngest-3.52.4-000000)](https://www.inngest.com/)
 [![Resend](https://img.shields.io/badge/Resend-6.9.2-000000)](https://resend.com/)
 [![React Email](https://img.shields.io/badge/React%20Email-5.2.8-000000)](https://react.email/)
 [![Bun](https://img.shields.io/badge/Bun-1.3.9-FBF0DF?logo=bun&logoColor=FBF0DF)](https://bun.sh/)
@@ -61,7 +61,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **URL Search Params**: nuqs 2.8 for type-safe URL parameters
 - **Email**: React Email 5.2 with Resend 6.9 for transactional emails
 - **API Framework**: Elysia 1.4 with @elysiajs/cors 1.4 for unified API routes
-- **Background Jobs**: Inngest 3.52 for background tasks and event handling
+- **Background Jobs**: Inngest 3.52.4 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
 - **Shared Utilities**: `@firstroad/utils` (packages/utils) for shared helpers (e.g. `createSlug`)
 - **Linting**: Biome 2.4.0 for fast formatting and linting with Ultracite 7.2 rules

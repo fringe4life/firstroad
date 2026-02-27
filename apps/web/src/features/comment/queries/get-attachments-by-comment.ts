@@ -4,16 +4,12 @@ import { prisma } from "@firstroad/db";
 import { cacheTag } from "next/cache";
 import type { AttachmentRecord } from "@/features/attachments/types";
 import type { List } from "@/types";
-import {
-  attachmentsForCommentCache,
-  commentAttachmentsCache,
-} from "@/utils/cache-tags";
+import { attachmentsForCommentCache } from "@/utils/cache-tags";
 import { tryCatch } from "@/utils/try-catch";
 
 const getAttachmentsByComment = async (
   commentId: string,
 ): Promise<List<AttachmentRecord>> => {
-  cacheTag(commentAttachmentsCache());
   cacheTag(attachmentsForCommentCache(commentId));
 
   const { data: rows } = await tryCatch(() =>

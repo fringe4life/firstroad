@@ -6,11 +6,11 @@ import { SidebarSkeleton } from "./skeletons/sidebar-skeleton";
 
 const Sidebar = () => (
   <>
-    {/* Desktop sidebar - uses CSS peer hover for expansion */}
+    {/* Desktop sidebar */}
     <nav
       aria-label="Main navigation"
       aria-live="polite"
-      className="sidebar group fixed top-(--header-height) bottom-0 left-0 z-20 hidden w-(--side-width) overflow-x-clip border-r px-3 py-2 transition-all duration-200 hover:w-(--expanded-sidebar-width) md:block"
+      className="sidebar group fixed top-(--header-height) bottom-0 left-0 z-20 hidden w-(--side-width) overflow-x-clip border-r px-3 py-2 transition-all duration-200 hover:w-(--expanded-sidebar-width) supports-scroll-timeline:translate-y-2 md:block"
     >
       <div className="grid gap-y-2">
         <Suspend fallback={<SidebarSkeleton />}>

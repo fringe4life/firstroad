@@ -5,6 +5,7 @@ declare global {
     "use cache: private": never;
     "use cache: remote": never;
   }
+  module "*.css";
 }
 
 export {};
