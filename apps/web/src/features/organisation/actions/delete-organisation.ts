@@ -6,6 +6,7 @@ import { minLength, object, pipe, safeParse, string } from "valibot";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { getAdminOwnerOrRedirect } from "@/features/memberships/queries/get-admin-owner-or-redirect";
 import { auth } from "@/lib/auth";
+import { deleteCookieByKey } from "@/utils/cookies";
 import { invalidateOrganisationsForUser } from "@/utils/invalidate-cache";
 import {
   type ActionState,
@@ -47,6 +48,10 @@ const deleteOrganisation = async (
 
   if (user?.id) {
     invalidateOrganisationsForUser(user.id);
+  }
+
+  if (user?.activeOrganizationId === result.output.organizationId) {
+    await deleteCookieByKey("active_org_set");
   }
 
   refresh();

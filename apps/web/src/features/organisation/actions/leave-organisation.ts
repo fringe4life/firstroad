@@ -6,8 +6,8 @@ import { redirect } from "next/navigation";
 import { minLength, object, pipe, safeParse, string } from "valibot";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { auth } from "@/lib/auth";
-import { organisationsPath } from "@/path";
-import { setCookieByKey } from "@/utils/cookies";
+import { selectActiveOrganisationPath } from "@/path";
+import { deleteCookieByKey, setCookieByKey } from "@/utils/cookies";
 import { invalidateOrganisationsForUser } from "@/utils/invalidate-cache";
 import {
   type ActionState,
@@ -53,8 +53,9 @@ const leaveOrganisation = async (
 
   invalidateOrganisationsForUser(user.id);
   refresh();
+  await deleteCookieByKey("active_org_set");
   await setCookieByKey("toast", "Left organization successfully");
-  redirect(organisationsPath());
+  redirect(selectActiveOrganisationPath());
 };
 
 export { leaveOrganisation };

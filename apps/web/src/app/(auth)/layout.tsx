@@ -1,10 +1,20 @@
-import { RedirectToast } from "@/components/redirect-toast";
+import { redirect } from "next/navigation";
+import { getUser } from "@/features/auth/queries/get-user";
+import { signInPath } from "@/path";
+import { AuthLayoutClient } from "./auth-layout-client";
 
-const TicketLayout = ({ children }: { children: React.ReactNode }) => (
-  <>
-    {children}
-    <RedirectToast />
-  </>
-);
+const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
+  const { user, hasUser } = await getUser();
 
-export default TicketLayout;
+  if (!hasUser) {
+    redirect(signInPath());
+  }
+
+  return (
+    <AuthLayoutClient hasActiveOrg={!!user?.activeOrganizationId}>
+      {children}
+    </AuthLayoutClient>
+  );
+};
+
+export default AuthLayout;
