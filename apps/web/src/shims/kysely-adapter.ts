@@ -1,5 +1,8 @@
 "use client";
 
+// Kysely adapter shim; currently commented out in next.config (v1.5 + @better-auth/prisma-adapter).
+// Can be deleted when the runtime no longer needs it (Bun 1.3.10 has a fix; Vercel uses 1.3.6).
+
 const unsupportedAdapter = () => {
   throw new Error("Kysely adapter is disabled in this build.");
 };

@@ -48,32 +48,30 @@ const fromErrorToActionState = <T = unknown>(
     };
   }
 
-  // Check for Better Auth APIError
+  // Check for Better Auth APIError (v1.5+ uses { code, message } at top level; older versions use body)
   if (err instanceof APIError) {
     const apiError = err as {
-      status: string;
-      body: { code?: string; message?: string };
+      body?: { code?: string; message?: string };
+      code?: string;
+      message?: string;
     };
+    const code = apiError.body?.code ?? (apiError as { code?: string }).code;
+    const message =
+      apiError.body?.message ?? (apiError as { message?: string }).message;
 
     // Map Better Auth error codes to specific fields
     const fieldErrors: Record<string, string[]> = {};
 
-    if (apiError.body.code === "INVALID_PASSWORD") {
-      fieldErrors.currentPassword = [
-        apiError.body.message || "Invalid password",
-      ];
-    } else if (apiError.body.code === "PASSWORD_TOO_WEAK") {
-      fieldErrors.newPassword = [
-        apiError.body.message || "Password is too weak",
-      ];
-    } else if (apiError.body.code === "PASSWORD_COMPROMISED") {
-      fieldErrors.newPassword = [
-        apiError.body.message || "Password is compromised",
-      ];
+    if (code === "INVALID_PASSWORD") {
+      fieldErrors.currentPassword = [message || "Invalid password"];
+    } else if (code === "PASSWORD_TOO_WEAK") {
+      fieldErrors.newPassword = [message || "Password is too weak"];
+    } else if (code === "PASSWORD_COMPROMISED") {
+      fieldErrors.newPassword = [message || "Password is compromised"];
     }
 
     return {
-      message: apiError.body.message || "Authentication error",
+      message: message || "Authentication error",
       fieldErrors,
       payload,
       status: "ERROR",

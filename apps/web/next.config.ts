@@ -1,15 +1,16 @@
-import path from "node:path";
 import type { NextConfig } from "next";
 
 const isDev = process.env.NODE_ENV === "development";
 
 const nextConfig: NextConfig = {
-  output: "standalone",
-  outputFileTracingRoot: path.join(import.meta.dirname, "../../"),
-  transpilePackages: ["@firstroad/utils", "@firstroad/db"],
+  // these settings are for docker builds
+  // output: "standalone",
+  // outputFileTracingRoot: path.join(import.meta.dirname, "../../"),
+  // transpilePackages: ["@firstroad/utils", "@firstroad/db"],
   typedRoutes: true,
   reactCompiler: !isDev,
   cacheComponents: true,
+  // Kysely shim required: Bun 1.3.10 and Better Auth v1.5 do not fix the adapter incompatibility; keeps Vercel (Bun 1.3.6) and local builds working.
   serverExternalPackages: ["@better-auth/kysely-adapter"],
   experimental: {
     browserDebugInfoInTerminal: true,
@@ -26,7 +27,7 @@ const nextConfig: NextConfig = {
   turbopack: {
     resolveAlias: {
       // Shim Better Auth's Kysely adapter & related entry points so Turbopack
-      // never touches node:sqlite or the real adapter bundle.
+      // never touches node:sqlite or the real adapter bundle (see comment above).
       "node:sqlite": "./src/shims/kysely-adapter.ts",
       "@better-auth/kysely-adapter": "./src/shims/kysely-adapter.ts",
       "better-auth/dist/db/adapter-kysely.mjs": "./src/shims/kysely-adapter.ts",

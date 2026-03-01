@@ -15,7 +15,7 @@
 [![Inngest](https://img.shields.io/badge/Inngest-3.52.4-000000)](https://www.inngest.com/)
 [![Resend](https://img.shields.io/badge/Resend-6.9.2-000000)](https://resend.com/)
 [![React Email](https://img.shields.io/badge/React%20Email-5.2.8-000000)](https://react.email/)
-[![Bun](https://img.shields.io/badge/Bun-1.3.9-FBF0DF?logo=bun&logoColor=FBF0DF)](https://bun.sh/)
+[![Bun](https://img.shields.io/badge/Bun-1.3.10-FBF0DF?logo=bun&logoColor=FBF0DF)](https://bun.sh/)
 [![Ultracite](https://img.shields.io/badge/Ultracite-7.2.3-000000)](https://ultracite.dev/)
 
 </div>
@@ -27,7 +27,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **🔐 Authentication**: Secure user authentication with Better Auth (email/password + OTP + GitHub OAuth) with email enumeration protection
 - **🏢 Organization Management**: Create and manage organizations with membership and invitation systems, role-based access control (owner, admin, member), granular permissions (canDeleteTicket), and admin tabs for managing members and invitations
 - **🎫 Ticket Management**: Create, edit, and manage tickets with status tracking
-- **📎 Ticket Attachments**: Owner-only file uploads with Bun S3, image previews before upload, and owner-only delete actions; presigned download URLs for all viewers (Bun runtime + Webpack; on Vercel use `bunVersion: "1.x"` in vercel.json so Server Actions run on Bun and `Bun.s3` works)
+- **📎 Ticket Attachments**: Owner-only file uploads with Bun S3, image previews before upload, and owner-only delete actions; presigned download URLs for all viewers (Bun runtime; on Vercel use `bunVersion: "1.x"` in vercel.json so Server Actions run on Bun and `Bun.s3` works)
 - **💬 Comments System**: Add, edit, and delete comments on tickets with infinite pagination and owner-only attachments
 - **🌙 Dark Mode**: Beautiful light/dark theme with smooth transitions
 - **📱 Responsive Design**: Optimized for desktop and mobile devices with PPR navigation and cached components
@@ -546,7 +546,7 @@ bun run deploy:prod      # cd apps/web && vercel deploy --prod
 
 ### Build (Next.js + Bun)
 
-Production build supports Turbopack (`bun run next build --turbopack`). To avoid Better Auth Kysely adapter chunk errors with Bun + Next 16, `next.config.ts` uses `serverExternalPackages` for `node:sqlite`, `@better-auth/kysely-adapter`, and related Better Auth adapter paths (see [better-auth#6781](https://github.com/better-auth/better-auth/issues/6781)). The default `bun run build` uses Webpack.
+Production build supports Turbopack (`bun run next build --turbopack`). To avoid Better Auth Kysely adapter chunk errors with Bun + Next 16, `next.config.ts` uses `serverExternalPackages` for `node:sqlite`, `@better-auth/kysely-adapter`, and related Better Auth adapter paths (see [better-auth#6781](https://github.com/better-auth/better-auth/issues/6781)).
 
 ### Tailwind CSS
 
@@ -585,12 +585,13 @@ Better Auth configured with:
 - Email/password authentication
 - Password reset functionality with Resend templates via Inngest events
 - Email verification
-- Rate limiting for production security
-  - **Note**: Rate limiting currently uses in-memory storage, which does not persist across serverless function invocations on Vercel. For a portfolio project, this is acceptable. A proper fix would involve switching to `storage: "database"` or `storage: "secondary-storage"` (Redis/Upstash). See [GitHub issue #5452](https://github.com/better-auth/better-auth/issues/5452) for the secondary storage TTL bug that affects custom `window` values. Tracked in project issues for future resolution with either Redis or Neon database storage.
-- Prisma Client with Neon driver adapter
+- Rate limiting for production security (Better Auth v1.5)
+  - v1.5 improves the rate limiter: rejected requests are no longer counted, the memory backend has expired-entry cleanup, and built-in defaults are stricter (e.g. sign-in/sign-up, password reset/OTP).
+  - **Note**: Rate limiting uses in-memory storage, which does not persist across serverless function invocations on Vercel. For a portfolio project this is acceptable. A proper fix would use database or secondary storage for rate limits when supported. If using secondary storage (e.g. Redis), [GitHub issue #5452](https://github.com/better-auth/better-auth/issues/5452) is closed unresolved: custom `rateLimit.window` is not passed as TTL for some paths (hardcoded 10s), so the limitation still applies.
+- Prisma Client with Neon driver adapter; Better Auth uses `@better-auth/prisma-adapter`.
 - Session cookie caching (5-minute cache duration)
 - Session expiration (7 days) and update age (1 day)
-- Temporary Bun build shim: `@better-auth/kysely-adapter` is aliased to a local shim to avoid `node:sqlite` imports during Next.js builds. This should be removable once Better Auth v1.5 (stable) excludes Kysely from `better-auth/minimal` as documented in v1.4's bundle-size optimization note.
+- **Kysely adapter shim (required):** `@better-auth/kysely-adapter` and related entry points are aliased to a local shim in `next.config.ts` so Turbopack/Next never load `node:sqlite` or the real Kysely adapter. Bun 1.3.10 and Better Auth v1.5 have not resolved this incompatibility; the shim is still required. Builds succeed locally (Bun 1.3.10) and deploy to Vercel (Bun runtime 1.3.6) with the shim enabled.
 
 Inngest provides background job processing for:
 

@@ -1,10 +1,10 @@
+import { prismaAdapter } from "@better-auth/prisma-adapter";
 import { prisma } from "@firstroad/db";
 import type { MemberRole } from "@firstroad/db/client-types";
 import {
   addMemberPermissions,
   removeMemberPermissions,
 } from "@firstroad/db/member-permissions";
-import { prismaAdapter } from "better-auth/adapters/prisma";
 import { createAuthMiddleware } from "better-auth/api";
 import { betterAuth } from "better-auth/minimal";
 import { nextCookies } from "better-auth/next-js";
@@ -45,6 +45,9 @@ export const auth = betterAuth({
     openAPI(),
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {
+        if (type === "change-email") {
+          return;
+        }
         // Trigger Inngest event to handle OTP email asynchronously
         await tryCatch(() =>
           inngest.send({
