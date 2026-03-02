@@ -27,8 +27,6 @@ const SESSION_CACHE_DURATION_SECONDS =
 const SESSION_EXPIRES_IN_SECONDS = DAYS_PER_WEEK * DAYS_IN_SECONDS; // 7 days
 const SESSION_UPDATE_AGE_SECONDS = DAYS_IN_SECONDS; // 1 day
 
-const ACTIVE_ORG_COOKIE_MAX_AGE_SECONDS = SESSION_EXPIRES_IN_SECONDS;
-
 export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "postgresql" }),
   basePath: "/api/auth",
@@ -45,6 +43,8 @@ export const auth = betterAuth({
     cookieCache: {
       enabled: true,
       maxAge: SESSION_CACHE_DURATION_SECONDS,
+      strategy: "jwt",
+      refreshCache: true,
     },
     expiresIn: SESSION_EXPIRES_IN_SECONDS,
     updateAge: SESSION_UPDATE_AGE_SECONDS,
@@ -202,35 +202,6 @@ export const auth = betterAuth({
             },
           }),
         );
-      }
-
-      // Set or clear active_org_set cookie on sign-in so proxy can redirect when needed
-      const isSignIn =
-        ctx.path.startsWith("/sign-in") || ctx.path.startsWith("/callback/");
-      const session =
-        ctx.context.newSession?.session ?? ctx.context.session ?? null;
-      // Matches session.additionalFields; hooks context type does not infer it yet
-      const activeOrganizationId = (
-        session as { activeOrganizationId?: string | null } | null
-      )?.activeOrganizationId;
-      if (isSignIn && session) {
-        if (activeOrganizationId) {
-          ctx.setCookie("active_org_set", "1", {
-            httpOnly: true,
-            path: "/",
-            maxAge: ACTIVE_ORG_COOKIE_MAX_AGE_SECONDS,
-            sameSite: "lax",
-            secure: process.env.NODE_ENV === "production",
-          });
-        } else {
-          ctx.setCookie("active_org_set", "", {
-            httpOnly: true,
-            path: "/",
-            maxAge: 0,
-            sameSite: "lax",
-            secure: process.env.NODE_ENV === "production",
-          });
-        }
       }
     }),
   },

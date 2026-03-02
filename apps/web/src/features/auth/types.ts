@@ -42,3 +42,11 @@ export interface EmailSearchParams {
 export interface ItemsWithPermissionsOptions {
   permissionsMap?: Map<string, ResourcePermission>;
 }
+
+// Cookie cache JWT payload (better-auth session_data when cookieCache.strategy: "jwt")
+export interface SessionDataPayload {
+  session: ServerSession["session"];
+  updatedAt: number;
+  user: ServerSession["user"];
+  version?: string;
+}

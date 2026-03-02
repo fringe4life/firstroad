@@ -1,7 +1,7 @@
 "use server";
 
 import { refresh } from "next/cache";
-import { cookies, headers } from "next/headers";
+import { headers } from "next/headers";
 import { minLength, object, pipe, safeParse, string } from "valibot";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { auth } from "@/lib/auth";
@@ -12,10 +12,6 @@ import {
   toActionState,
 } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
-import {
-  ACTIVE_ORG_COOKIE_MAX_AGE_SECONDS,
-  ACTIVE_ORG_COOKIE_NAME,
-} from "../constants";
 
 const setActiveOrganisationSchema = object({
   organizationId: pipe(string(), minLength(1)),
@@ -43,14 +39,6 @@ const setActiveOrganisation = async (
   if (error) {
     return fromErrorToActionState(error);
   }
-
-  (await cookies()).set(ACTIVE_ORG_COOKIE_NAME, "1", {
-    httpOnly: true,
-    path: "/",
-    maxAge: ACTIVE_ORG_COOKIE_MAX_AGE_SECONDS,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-  });
 
   invalidateOrganisationsForUser(user.id);
 
