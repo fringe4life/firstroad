@@ -1,17 +1,12 @@
-import { jwtVerify } from "jose";
 import { type NextRequest, NextResponse } from "next/server";
-import type { SessionDataPayload } from "@/features/auth/types";
 import {
-  selectActiveOrganisationPath,
   signInPath,
   signUpPath,
   ticketsByOrganisationPath,
   ticketsPath,
 } from "@/path";
-import type { Maybe } from "./types";
-import { tryCatch } from "./utils/try-catch";
 
-const SESSION_DATA_COOKIE_NAME = "better-auth.session_data";
+const SESSION_TOKEN_COOKIE_NAME = "better-auth.session_token";
 
 const TICKET_EDIT_RE = /^\/tickets\/[^/]+\/edit$/;
 
@@ -25,30 +20,11 @@ const isProtectedPath = (pathname: string): boolean =>
 const isAuthRoute = (pathname: string): boolean =>
   pathname === signInPath() || pathname === signUpPath();
 
-const isOnboardingPath = (pathname: string): boolean =>
-  pathname.startsWith("/onboarding");
-
-const getSessionFromJwt = async (
-  token: string,
-): Promise<Maybe<SessionDataPayload>> => {
-  const secret = process.env.BETTER_AUTH_SECRET;
-  if (!secret) {
-    return null;
-  }
-
-  const { data } = await tryCatch(() =>
-    jwtVerify<SessionDataPayload>(token, new TextEncoder().encode(secret)),
-  );
-  return data?.payload;
-};
-
-export const proxy = async (request: NextRequest) => {
+export const proxy = (request: NextRequest) => {
   const pathname = request.nextUrl.pathname;
-  const token = request.cookies.get(SESSION_DATA_COOKIE_NAME)?.value;
-  const sessionPayload = token ? await getSessionFromJwt(token) : null;
-  const hasSession = sessionPayload != null;
-  const activeOrganizationId =
-    sessionPayload?.session?.activeOrganizationId ?? null;
+  const token = request.cookies.get(SESSION_TOKEN_COOKIE_NAME)?.value;
+
+  const hasSession = token != null;
 
   if (isProtectedPath(pathname) && !hasSession) {
     const signInUrl = new URL(signInPath(), request.url);
@@ -57,17 +33,6 @@ export const proxy = async (request: NextRequest) => {
 
   if (isAuthRoute(pathname) && hasSession) {
     return NextResponse.redirect(new URL("/", request.url));
-  }
-
-  if (isProtectedPath(pathname) && hasSession) {
-    if (isOnboardingPath(pathname)) {
-      return NextResponse.next();
-    }
-    if (!activeOrganizationId) {
-      return NextResponse.redirect(
-        new URL(selectActiveOrganisationPath(), request.url),
-      );
-    }
   }
 
   return NextResponse.next();

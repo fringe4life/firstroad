@@ -43,8 +43,6 @@ export const auth = betterAuth({
     cookieCache: {
       enabled: true,
       maxAge: SESSION_CACHE_DURATION_SECONDS,
-      strategy: "jwt",
-      refreshCache: true,
     },
     expiresIn: SESSION_EXPIRES_IN_SECONDS,
     updateAge: SESSION_UPDATE_AGE_SECONDS,

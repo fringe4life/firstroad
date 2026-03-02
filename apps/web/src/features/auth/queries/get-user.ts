@@ -24,8 +24,7 @@ const getUser = cache(async (): Promise<UserProp> => {
       return DEFAULT_NO_USER;
     }
     // Extract activeOrganizationId from session.session and append to user
-    const activeOrganizationId =
-      authSession.session?.activeOrganizationId ?? null;
+    const activeOrganizationId = authSession.session?.activeOrganizationId;
     return {
       user: {
         ...authSession.user,
