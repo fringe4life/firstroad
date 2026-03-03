@@ -334,6 +334,14 @@
   animation: --circle-in-bottom-center 0.5s;
 }
 
+::view-transition-old(.circle-out-top-center) {
+  animation-delay: 0.5s;
+}
+
+::view-transition-old(.circle-out-bottom-center) {
+  animation-delay: 0.5s;
+}
+
 /* View Transition Animations */
 /* Slide forward (list → detail) */
 ::view-transition-old(.slide-forward) {

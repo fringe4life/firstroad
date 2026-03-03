@@ -18,9 +18,8 @@ const getUser = cache(async (): Promise<UserProp> => {
     const now = Date.now();
 
     // DEFENSIVE coding just to ensure session is not expired
-    // If session is expired, return no user (Better Auth handles cleanup automatically)
+    // If session is expired, return no user
     if (expiresAt < now) {
-      // If session is expired, return no user (Better Auth handles cleanup automatically)
       return DEFAULT_NO_USER;
     }
     // Extract activeOrganizationId from session.session and append to user

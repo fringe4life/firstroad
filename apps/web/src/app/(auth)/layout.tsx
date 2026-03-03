@@ -1,21 +1,10 @@
 import { RedirectToast } from "@/components/redirect-toast";
 
-const AuthLayout = ({ children }: { children: React.ReactNode }) => {
-  // await connection();
-  // const { user, hasUser } = await getUser();
-
-  // if (!hasUser) {
-  //   redirect(signInPath());
-  // }
-
-  return (
-    // <AuthLayoutClient hasActiveOrg={!!user?.activeOrganizationId}>
-    <>
-      {children}
-      <RedirectToast />
-    </>
-    // </AuthLayoutClient>
-  );
-};
+const AuthLayout = ({ children }: { children: React.ReactNode }) => (
+  <>
+    {children}
+    <RedirectToast />
+  </>
+);
 
 export default AuthLayout;
