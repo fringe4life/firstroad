@@ -1,3 +1,4 @@
+import { eventType } from "inngest";
 import {
   email,
   examples,
@@ -7,7 +8,6 @@ import {
   minLength,
   object,
   optional,
-  parse,
   pipe,
   string,
   union,
@@ -37,17 +37,14 @@ const emailOTPSchema = object({
 
 export type EmailOTPEventData = InferOutput<typeof emailOTPSchema>;
 
-export const eventEmailOTP = inngest.createFunction(
-  { id: "event-email-otp" },
-  { event: "email.otp" },
-  async ({ event }) => {
-    const { data: parsed } = await tryCatch(async () =>
-      parse(emailOTPSchema, event.data),
-    );
-    if (!parsed) {
-      throw new Error("Invalid email OTP event data");
-    }
+export const emailOTP = eventType("email.otp", {
+  schema: emailOTPSchema,
+});
 
+export const eventEmailOTP = inngest.createFunction(
+  { id: "event-email-otp", triggers: [emailOTP] },
+  async ({ event }) => {
+    const parsed = event.data;
     const { error: sendError } = await tryCatch(async () =>
       sendEmailOTP(parsed.email, parsed.otp, parsed.type, parsed.userName),
     );

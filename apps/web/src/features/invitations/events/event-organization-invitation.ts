@@ -1,10 +1,10 @@
+import { eventType } from "inngest";
 import {
   email,
   examples,
   type InferOutput,
   minLength,
   object,
-  parse,
   picklist,
   pipe,
   string,
@@ -33,9 +33,12 @@ export type OrganizationInvitationEventData = InferOutput<
   typeof organizationInvitationSchema
 >;
 
+export const organizationInvitation = eventType("organization.invitation", {
+  schema: organizationInvitationSchema,
+});
+
 export const eventOrganizationInvitation = inngest.createFunction(
-  { id: "event-organization-invitation" },
-  { event: "organization.invitation" },
+  { id: "event-organization-invitation", triggers: [organizationInvitation] },
   async ({ event }) => {
     try {
       const {
@@ -44,7 +47,7 @@ export const eventOrganizationInvitation = inngest.createFunction(
         inviterName,
         role,
         inviteUrl,
-      } = parse(organizationInvitationSchema, event.data);
+      } = event.data;
       await sendInvitationEmail(
         userEmail,
         organizationName,

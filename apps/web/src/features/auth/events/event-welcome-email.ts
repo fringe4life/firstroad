@@ -1,3 +1,4 @@
+import { eventType } from "inngest";
 import {
   email,
   examples,
@@ -5,7 +6,6 @@ import {
   minLength,
   object,
   optional,
-  parse,
   pipe,
   string,
 } from "valibot";
@@ -25,26 +25,23 @@ const welcomeEmailSchema = object({
 
 export type WelcomeEmailEventData = InferOutput<typeof welcomeEmailSchema>;
 
+export const welcomeEmail = eventType("user.welcome", {
+  schema: welcomeEmailSchema,
+});
+
 export const eventWelcomeEmail = inngest.createFunction(
   {
     id: "event-welcome-email",
     retries: 3,
+    triggers: [welcomeEmail],
   },
-  {
-    event: "user.welcome",
-    step: {
-      delay: "2m", // Wait 2 minutes before sending
-    },
-  },
-  async ({ event }) => {
-    const { data: parsed } = await tryCatch(async () =>
-      parse(welcomeEmailSchema, event.data),
-    );
-    if (!parsed) {
-      throw new Error("Invalid welcome email event data");
-    }
+  async ({ event, step }) => {
+    // Delay sending the welcome email by 2 minutes in a durable way
+    await step.sleep("delay-welcome-email", "2m");
 
-    const { error: sendError } = await tryCatch(async () =>
+    const parsed = event.data;
+
+    const { error: sendError } = await tryCatch(() =>
       sendWelcomeEmail(parsed.email, parsed.userName),
     );
     if (sendError) {

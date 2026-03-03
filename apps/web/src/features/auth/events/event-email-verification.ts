@@ -1,3 +1,4 @@
+import { eventType } from "inngest";
 import {
   email,
   examples,
@@ -5,7 +6,6 @@ import {
   minLength,
   object,
   optional,
-  parse,
   pipe,
   string,
   url,
@@ -29,16 +29,14 @@ export type EmailVerificationEventData = InferOutput<
   typeof emailVerificationSchema
 >;
 
+export const emailVerification = eventType("email.verification", {
+  schema: emailVerificationSchema,
+});
+
 export const eventEmailVerification = inngest.createFunction(
-  { id: "event-email-verification" },
-  { event: "email.verification" },
+  { id: "event-email-verification", triggers: [emailVerification] },
   async ({ event }) => {
-    const { data: parsed } = await tryCatch(async () =>
-      parse(emailVerificationSchema, event.data),
-    );
-    if (!parsed) {
-      throw new Error("Invalid email verification event data");
-    }
+    const parsed = event.data;
 
     const { error: sendError } = await tryCatch(async () =>
       sendEmailVerification(

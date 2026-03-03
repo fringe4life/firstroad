@@ -1,10 +1,10 @@
+import { eventType } from "inngest";
 import {
   email,
   examples,
   type InferOutput,
   minLength,
   object,
-  parse,
   pipe,
   string,
   url,
@@ -25,16 +25,15 @@ const passwordResetSchema = object({
 
 export type PasswordResetEventData = InferOutput<typeof passwordResetSchema>;
 
+export const passwordReset = eventType("password.reset", {
+  schema: passwordResetSchema,
+});
+
 export const eventPasswordReset = inngest.createFunction(
-  { id: "event-password-reset" },
-  { event: "password.reset" },
+  { id: "event-password-reset", triggers: [passwordReset] },
   async ({ event }) => {
     try {
-      const {
-        email: userEmail,
-        resetUrl,
-        userName,
-      } = parse(passwordResetSchema, event.data);
+      const { email: userEmail, resetUrl, userName } = event.data;
       await sendPasswordResetEmail(userEmail, resetUrl, userName);
     } catch {
       throw new Error("Invalid password reset event data");

@@ -55,6 +55,8 @@ This starts:
 ```env
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/firstroad"
 INNGEST_DEV=1
+# Required for Inngest Dev Server (Docker) to sync when app runs on host at :3000
+INNGEST_SERVE_ORIGIN=http://host.docker.internal:3000
 # ... other vars from apps/web/env.example
 ```
 
@@ -155,9 +157,11 @@ pg_restore -v -d "postgresql://postgres:postgres@localhost:5432/firstroad" --cle
 
 | Context | Inngest Server | App env vars |
 |---------|----------------|--------------|
-| **Dev (app on host)** | `inngest/inngest` container with `-u http://host.docker.internal:3000/api/inngest` | `INNGEST_DEV=1`, `INNGEST_BASE_URL=http://localhost:8288` |
+| **Dev (app on host)** | `inngest/inngest` container with `-u http://host.docker.internal:3000/api/inngest` | `INNGEST_DEV=1`, `INNGEST_SERVE_ORIGIN=http://host.docker.internal:3000` (required for sync). Optional: `INNGEST_BASE_URL=http://localhost:8288` |
 | **Dev (app in Docker)** | `inngest/inngest` with `-u http://web:3000/api/inngest` | `INNGEST_DEV=1`, `INNGEST_BASE_URL=http://inngest:8288` |
 | **Prod** | Inngest Cloud (no container) | `INNGEST_SIGNING_KEY`, `INNGEST_EVENT_KEY`; do **not** set `INNGEST_DEV` |
+
+**Why `INNGEST_SERVE_ORIGIN`?** When the Inngest Dev Server runs in Docker, it must reach your app using `host.docker.internal` (not `localhost`). Setting `INNGEST_SERVE_ORIGIN=http://host.docker.internal:3000` tells the SDK to advertise that URL during sync so the dev server can poll your app and show "Synced" in the UI.
 
 ---
 
@@ -328,3 +332,14 @@ Prisma in `packages/database` uses its own `.env` or `.env.local`. Ensure `packa
 ### `host.docker.internal` not resolving (Linux)
 
 The `docker-compose.yml` includes `extra_hosts: host.docker.internal:host-gateway` for Linux. If Inngest cannot reach the app, verify this is present.
+
+### Inngest Dev Server shows "Not Synced" (app on host, Inngest in Docker)
+
+Ensure `apps/web/.env.local` includes:
+
+```env
+INNGEST_DEV=1
+INNGEST_SERVE_ORIGIN=http://host.docker.internal:3000
+```
+
+Without `INNGEST_SERVE_ORIGIN`, the app reports `localhost:3000` to the dev server; the container cannot reach the host at `localhost`. Setting `INNGEST_SERVE_ORIGIN` makes the app advertise the URL the container can use (`host.docker.internal:3000`).

@@ -23,6 +23,8 @@ Per Turborepo best practices, `.env` files belong in the **application package**
 | `S3_REGION` | If using attachments | e.g. `us-east-1` |
 | `S3_BUCKET` | If using attachments | Bucket name |
 | `S3_ENDPOINT` | Optional | For non-AWS S3 (e.g. MinIO, R2) |
+| `INNGEST_DEV` | No | Set to `1` for local dev when using Inngest Dev Server (Docker or CLI) |
+| `INNGEST_SERVE_ORIGIN` | No* | **Local dev only:** When Inngest Dev Server runs in Docker and the app runs on the host at port 3000, set to `http://host.docker.internal:3000` so the dev server can sync. Omit when not using Docker Inngest or when app runs in Docker. |
 
 Copy from `apps/web/env.example` and fill in values. Use **`BETTER_AUTH_SECRET`** (not `AUTH_SECRET`) for Better Auth.
 

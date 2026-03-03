@@ -1,37 +1,6 @@
-import { EventSchemas, Inngest } from "inngest";
-import type { EmailOTPEventData } from "@/features/auth/events/event-email-otp";
-import type { EmailVerificationEventData } from "@/features/auth/events/event-email-verification";
-import type { WelcomeEmailEventData } from "@/features/auth/events/event-welcome-email";
-import type { OrganizationInvitationEventData } from "@/features/invitations/events/event-organization-invitation";
-import type { PasswordChangedEventData } from "@/features/password/events/event-password-changed";
-import type { PasswordResetEventData } from "@/features/password/events/event-password-reset";
+import { Inngest } from "inngest";
 
-// Define the event schemas for Inngest
-// biome-ignore lint/style/useConsistentTypeDefinitions: needs to be a type for inngest
-type Events = {
-  "password.reset": {
-    data: PasswordResetEventData;
-  };
-  "email.verification": {
-    data: EmailVerificationEventData;
-  };
-  "email.otp": {
-    data: EmailOTPEventData;
-  };
-  "user.welcome": {
-    data: WelcomeEmailEventData;
-  };
-  "password.changed": {
-    data: PasswordChangedEventData;
-  };
-  "organization.invitation": {
-    data: OrganizationInvitationEventData;
-  };
-};
-
-// Create a client to send and receive events with type-safe event schemas
+// Create a client to send and receive events
 export const inngest = new Inngest({
   id: "firstroad",
-  schemas: new EventSchemas().fromRecord<Events>(),
-  checkpointing: true,
 });
