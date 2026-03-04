@@ -17,8 +17,12 @@ const forgotPasswordPath = (): Route => "/forgot-password";
 const resetPasswordPath = (token: string): Route =>
   `/reset-password/${token}` as Route;
 
-const verifyEmailOTPSendPath = (): Route => "/verify-email/otp/send";
-const verifyEmailOTPVerifyPath = (): Route => "/verify-email/otp/verify";
+const verifyEmailPath = (): Route => "/verify-email";
+
+const verifyEmailOTPSendPath = (): Route =>
+  `${verifyEmailPath()}/otp/send` as Route;
+const verifyEmailOTPVerifyPath = (): Route =>
+  `${verifyEmailPath()}/otp/verify` as Route;
 
 const signInOTPSendPath = (): Route => "/sign-in/otp/send";
 const signInOTPVerifyPath = (): Route => "/sign-in/otp/verify";
@@ -70,6 +74,7 @@ export {
   ticketPath,
   ticketsByOrganisationPath,
   ticketsPath,
+  verifyEmailPath,
   verifyEmailOTPSendPath,
   verifyEmailOTPVerifyPath,
 };

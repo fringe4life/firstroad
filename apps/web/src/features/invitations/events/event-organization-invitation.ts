@@ -2,7 +2,6 @@ import { eventType } from "inngest";
 import {
   email,
   examples,
-  type InferOutput,
   minLength,
   object,
   picklist,
@@ -12,6 +11,7 @@ import {
 } from "valibot";
 import { sendInvitationEmail } from "@/features/invitations/utils/send-invitation-email";
 import { inngest } from "@/lib/inngest";
+import { tryCatch } from "@/utils/try-catch";
 
 const organizationInvitationSchema = object({
   email: pipe(
@@ -29,10 +29,6 @@ const organizationInvitationSchema = object({
   inviteUrl: pipe(string(), url()),
 });
 
-export type OrganizationInvitationEventData = InferOutput<
-  typeof organizationInvitationSchema
->;
-
 export const organizationInvitation = eventType("organization.invitation", {
   schema: organizationInvitationSchema,
 });
@@ -40,22 +36,23 @@ export const organizationInvitation = eventType("organization.invitation", {
 export const eventOrganizationInvitation = inngest.createFunction(
   { id: "event-organization-invitation", triggers: [organizationInvitation] },
   async ({ event }) => {
-    try {
-      const {
-        email: userEmail,
-        organizationName,
-        inviterName,
-        role,
-        inviteUrl,
-      } = event.data;
-      await sendInvitationEmail(
+    const {
+      email: userEmail,
+      organizationName,
+      inviterName,
+      role,
+      inviteUrl,
+    } = event.data;
+    const { error } = await tryCatch(() =>
+      sendInvitationEmail(
         userEmail,
         organizationName,
         inviterName,
         role,
         inviteUrl,
-      );
-    } catch {
+      ),
+    );
+    if (error) {
       throw new Error("Invalid organization invitation event data");
     }
   },

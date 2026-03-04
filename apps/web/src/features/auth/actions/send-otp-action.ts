@@ -69,7 +69,7 @@ const sendEmailVerificationOTP = async (
 
     // Redirect to verify page with email in URL
     const verifyUrl = `${verifyEmailOTPVerifyPath()}?email=${encodeURIComponent(result.output.email)}`;
-    throw redirect(verifyUrl as Route);
+    redirect(verifyUrl as Route);
   });
 
   if (error) {
@@ -121,7 +121,7 @@ const sendSignInOTP = async (
 
     // Redirect to verify page with email in URL
     const verifyUrl = `${signInOTPVerifyPath()}?email=${encodeURIComponent(result.output.email)}`;
-    throw redirect(verifyUrl as Route);
+    redirect(verifyUrl as Route);
   });
 
   if (error) {

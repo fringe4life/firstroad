@@ -1,20 +1,21 @@
 "use server";
 
 import { headers } from "next/headers";
-import { redirect, unstable_rethrow } from "next/navigation";
+import { RedirectType, redirect } from "next/navigation";
 import {
   email,
   forward,
   maxLength,
   minLength,
   object,
-  parse,
   partialCheck,
   pipe,
+  safeParse,
   string,
 } from "valibot";
 import { auth } from "@/lib/auth";
-import { ticketsPath } from "@/path";
+import { verifyEmailPath } from "@/path";
+import { setCookieByKey } from "@/utils/cookies";
 import {
   type ActionState,
   fromErrorToActionState,
@@ -47,30 +48,27 @@ const signUpSchema = pipe(
 );
 
 const signup = async (_state: ActionState | undefined, formData: FormData) => {
+  const formDataObj = Object.fromEntries(formData);
+  const result = safeParse(signUpSchema, formDataObj);
+  if (!result.success) {
+    return fromErrorToActionState(result.issues, formData);
+  }
   const { error } = await tryCatch(async () => {
-    const formDataObj = Object.fromEntries(formData);
-    const {
-      name,
-      email: userEmail,
-      password,
-    } = parse(signUpSchema, formDataObj);
-
     await auth.api.signUpEmail({
       body: {
-        name,
-        email: userEmail,
-        password,
+        name: result.output.name,
+        email: result.output.email,
+        password: result.output.password,
       },
       headers: await headers(),
     });
-
-    throw redirect(ticketsPath());
   });
 
   if (error) {
-    unstable_rethrow(error);
     return fromErrorToActionState(error, formData);
   }
+  await setCookieByKey("toast", "Signed up successfully");
+  redirect(verifyEmailPath(), RedirectType.replace);
 };
 
 export { signup };

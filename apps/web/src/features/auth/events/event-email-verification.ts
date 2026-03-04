@@ -2,7 +2,6 @@ import { eventType } from "inngest";
 import {
   email,
   examples,
-  type InferOutput,
   minLength,
   object,
   optional,
@@ -24,10 +23,6 @@ const emailVerificationSchema = object({
   verificationUrl: pipe(string(), url()),
   userName: optional(string()),
 });
-
-export type EmailVerificationEventData = InferOutput<
-  typeof emailVerificationSchema
->;
 
 export const emailVerification = eventType("email.verification", {
   schema: emailVerificationSchema,

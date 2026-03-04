@@ -57,7 +57,7 @@ const createOrganisation = async (
   }
   invalidateOrganisationsForUser(user.id);
   await setCookieByKey("toast", "Organisation created");
-  throw redirect(ticketsPath());
+  redirect(ticketsPath());
 };
 
 export { createOrganisation };

@@ -23,28 +23,13 @@ const AcceptInvitationContent = async ({
   const { user, hasUser } = await getUser();
   if (!hasUser) {
     // Redirect to sign-in with return URL
-    redirect(`${signInPath()}?callbackUrl=${acceptInvitationPath(id)}`);
+    throw redirect(`${signInPath()}?callbackUrl=${acceptInvitationPath(id)}`);
   }
 
   const invitation = await getInvitation(id);
 
-  if (!invitation) {
+  if (!invitation || invitation.email !== user.email) {
     notFound();
-  }
-
-  // Check if the invitation email matches the logged-in user
-  // Use generic message to prevent email enumeration
-  if (invitation.email !== user.email) {
-    return (
-      <div className="space-y-4 text-center">
-        <p className="text-muted-foreground">
-          This invitation is not associated with your account.
-        </p>
-        <p className="text-muted-foreground text-sm">
-          Please sign in with the email address the invitation was sent to.
-        </p>
-      </div>
-    );
   }
 
   return <AcceptInvitationCard invitation={invitation} />;

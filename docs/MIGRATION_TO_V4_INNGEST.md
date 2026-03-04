@@ -43,21 +43,18 @@ This document tracks how `@firstroad/web` migrated from **Inngest TypeScript SDK
 
 All event modules under `apps/web/src/features/**/events` already used **Valibot** to describe payloads and manually parsed `event.data`. With v4 we:
 
-1. **Keep Valibot as the source of truth.**
-   - Each event file continues to export a Valibot schema (e.g. `passwordResetSchema`) and a TypeScript type alias (e.g. `PasswordResetEventData = InferOutput<typeof passwordResetSchema>`), so other code can still reference the payload shape.
-
-2. **Define v4 event types with Valibot schemas.**
+1. **Define v4 event types with Valibot schemas.**
    - Each event now defines a v4 `eventType()` using the existing Valibot schema, e.g.:
      - `const passwordReset = eventType("password.reset", { schema: passwordResetSchema });`
    - Valibot implements the Standard Schema spec, so Inngest can use these schemas directly for **runtime validation**.
 
-3. **Use `triggers` instead of v3 `event` options.**
+2. **Use `triggers` instead of v3 `event` options.**
    - v3 code used the second argument to `createFunction` to specify `{ event: "name" }`.
    - v4 moves triggers into the options object, and event types are passed as triggers:
      - `inngest.createFunction({ id: "event-password-reset", triggers: [passwordReset] }, async ({ event }) => { ... });`
    - Where functions had additional options (e.g. retries, step delay), those remain in the same options object, alongside `triggers`.
 
-4. **Let Inngest + Valibot handle payload validation.**
+3. **Let Inngest + Valibot handle payload validation.**
    - Manual `parse(schema, event.data)` calls have been removed where Inngest already guarantees the shape via `eventType()`:
      - Handlers now destructure directly from `event.data`, e.g.:
        - `const { email, resetUrl, userName } = event.data;`

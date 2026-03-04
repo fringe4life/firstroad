@@ -34,11 +34,11 @@ export const getTickets = async (
     : undefined;
 
   if (byOrganisation && !user) {
-    throw redirect(signInPath());
+    redirect(signInPath());
   }
 
   if (byOrganisation && !organizationId) {
-    throw redirect(onboardingPath());
+    redirect(onboardingPath());
   }
   // Parse search params (not cached - fast and user-specific)
   const resolvedSearchParams = await searchParams;

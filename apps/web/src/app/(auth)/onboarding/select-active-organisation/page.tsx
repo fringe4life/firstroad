@@ -16,11 +16,11 @@ const SelectActiveOrganisationPage = async () => {
   const { user, hasUser } = await getUser();
 
   if (!hasUser) {
-    throw redirect(signInPath());
+    redirect(signInPath());
   }
 
   if (user.activeOrganizationId) {
-    throw redirect(organisationsPath());
+    redirect(organisationsPath());
   }
   return (
     <>

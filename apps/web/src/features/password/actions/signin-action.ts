@@ -47,7 +47,7 @@ const signin = async (_state: ActionState | undefined, formData: FormData) => {
   if (error) {
     return fromErrorToActionState(error, formData);
   }
-  throw redirect(ticketsPath(), RedirectType.replace);
+  redirect(ticketsPath(), RedirectType.replace);
 };
 
 export { signin };

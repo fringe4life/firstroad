@@ -19,7 +19,7 @@ const githubSignin = async () => {
   if (error) {
     return fromErrorToActionState(error);
   }
-  throw redirect(data?.url as Route, RedirectType.replace);
+  redirect(data?.url as Route, RedirectType.replace);
 };
 
 export { githubSignin };

@@ -13,7 +13,7 @@ export const sendEmailVerification = async (
     template: {
       id: "email-verification",
       variables: {
-        TO_NAME: userName || email,
+        TO_NAME: userName ?? "User",
         URL: verificationUrl,
       },
     },

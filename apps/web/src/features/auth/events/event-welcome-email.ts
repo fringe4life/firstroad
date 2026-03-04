@@ -2,7 +2,6 @@ import { eventType } from "inngest";
 import {
   email,
   examples,
-  type InferOutput,
   minLength,
   object,
   optional,
@@ -22,8 +21,6 @@ const welcomeEmailSchema = object({
   ),
   userName: optional(string()),
 });
-
-export type WelcomeEmailEventData = InferOutput<typeof welcomeEmailSchema>;
 
 export const welcomeEmail = eventType("user.welcome", {
   schema: welcomeEmailSchema,

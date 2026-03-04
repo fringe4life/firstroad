@@ -22,7 +22,7 @@ export const getUserOrRedirect = async (
 
   // default: no-session branch
   if (!hasUser) {
-    throw redirect(signInPath());
+    redirect(signInPath());
   }
   const {
     checkEmailVerified = true,
@@ -33,14 +33,14 @@ export const getUserOrRedirect = async (
   const userNeedsEmailVerification = checkEmailVerified && !user.emailVerified;
 
   if (userNeedsEmailVerification) {
-    throw redirect(verifyEmailOTPSendPath());
+    redirect(verifyEmailOTPSendPath());
   }
 
   if (checkOrganistation) {
     const organisations = await getOrganisationByUser(user.id);
 
     if (!organisations || organisations.length === 0) {
-      throw redirect(onboardingPath());
+      redirect(onboardingPath());
     }
   }
 
@@ -48,7 +48,7 @@ export const getUserOrRedirect = async (
     checkActiveOrganisation && !user.activeOrganizationId;
 
   if (userNeedsActiveOrganisation) {
-    throw redirect(selectActiveOrganisationPath());
+    redirect(selectActiveOrganisationPath());
   }
   return user;
 };

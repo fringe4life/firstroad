@@ -1,12 +1,5 @@
 import { eventType } from "inngest";
-import {
-  email,
-  type InferOutput,
-  object,
-  optional,
-  pipe,
-  string,
-} from "valibot";
+import { email, object, optional, pipe, string } from "valibot";
 import { sendPasswordChangedEmail } from "@/features/auth/utils/send-password-changed-email";
 import { inngest } from "@/lib/inngest";
 import { tryCatch } from "@/utils/try-catch";
@@ -15,10 +8,6 @@ const passwordChangedSchema = object({
   email: pipe(string(), email()),
   userName: optional(string()),
 });
-
-export type PasswordChangedEventData = InferOutput<
-  typeof passwordChangedSchema
->;
 
 export const passwordChanged = eventType("password.changed", {
   schema: passwordChangedSchema,

@@ -16,7 +16,7 @@ export const sendEmailOTP = async (
     template: {
       id: "email-otp-verification",
       variables: {
-        TO_NAME: userName || email,
+        TO_NAME: userName ?? "User",
         OTP: otp,
         TYPE: getOTPSubject(type),
       },

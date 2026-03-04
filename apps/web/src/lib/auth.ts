@@ -96,7 +96,8 @@ export const auth = betterAuth({
     organization({
       async sendInvitationEmail(data) {
         const baseUrl =
-          process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+          // biome-ignore lint/style/noNonNullAssertion: will exist
+          process.env.NEXT_PUBLIC_APP_URL!;
         const inviteUrl = `${baseUrl}${acceptInvitationPath(data.id)}`;
 
         // Trigger Inngest event to handle invitation email asynchronously
@@ -232,7 +233,8 @@ export const auth = betterAuth({
     sendResetPassword: async ({ user, token }) => {
       // Base app URL used to construct absolute reset links
       const baseUrl =
-        process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+        // biome-ignore lint/style/noNonNullAssertion: will exist
+        process.env.NEXT_PUBLIC_APP_URL!;
       // Always construct absolute URL for email
       const resetUrl = `${baseUrl}/reset-password/${token}`;
 
@@ -264,37 +266,14 @@ export const auth = betterAuth({
   },
 
   emailVerification: {
-    sendVerificationEmail: async ({ user, url }, _request) => {
-      // Extract the token from the URL and construct a dynamic verification URL
-      const baseUrl =
-        process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-
-      // Parse URL with base URL to handle relative paths
-      const urlObj = new URL(url, baseUrl);
-
-      // Try to extract token from query params first, then from pathname
-      let token = urlObj.searchParams.get("token");
-      if (!token) {
-        // Extract token from pathname like /verify-email/TOKEN
-        const pathParts = urlObj.pathname.split("/");
-        token = pathParts.at(-1) || null;
-      }
-
-      // Ensure we have a valid token
-      if (!token) {
-        throw new Error("Email verification token not found in URL");
-      }
-
-      // Always construct absolute URL for email
-      const verificationUrl = `${baseUrl}/verify-email?token=${token}`;
-
+    sendVerificationEmail: async ({ user, url }) => {
       // Trigger Inngest event to handle email verification asynchronously
       await tryCatch(() =>
         inngest.send({
           name: "email.verification",
           data: {
             email: user.email,
-            verificationUrl,
+            verificationUrl: url,
             userName: user.name ?? "User",
           },
         }),

@@ -2,7 +2,6 @@ import { eventType } from "inngest";
 import {
   email,
   examples,
-  type InferOutput,
   literal,
   maxLength,
   minLength,
@@ -34,8 +33,6 @@ const emailOTPSchema = object({
   ]),
   userName: optional(string()),
 });
-
-export type EmailOTPEventData = InferOutput<typeof emailOTPSchema>;
 
 export const emailOTP = eventType("email.otp", {
   schema: emailOTPSchema,

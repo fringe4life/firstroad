@@ -18,7 +18,7 @@ const signOut = async () => {
     return fromErrorToActionState(error);
   }
 
-  throw redirect(homePath(), RedirectType.replace);
+  redirect(homePath(), RedirectType.replace);
 };
 
 export { signOut };

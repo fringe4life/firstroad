@@ -9,8 +9,9 @@ export const sendWelcomeEmail = async (email: string, userName?: string) =>
     template: {
       id: "welcome-email",
       variables: {
-        TO_NAME: userName || email,
-        APP_URL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+        TO_NAME: userName ?? "User",
+        // biome-ignore lint/style/noNonNullAssertion: will exist
+        APP_URL: process.env.NEXT_PUBLIC_APP_URL!,
       },
     },
   });

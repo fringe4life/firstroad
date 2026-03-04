@@ -2,25 +2,27 @@
 "use server";
 
 import { headers } from "next/headers";
-import { redirect, unstable_rethrow } from "next/navigation";
+import { redirect } from "next/navigation";
 import {
   forward,
   literal,
   minLength,
   object,
   optional,
-  parse,
   partialCheck,
   pipe,
+  safeParse,
   string,
   transform,
   union,
 } from "valibot";
+import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { auth } from "@/lib/auth";
+import { inngest } from "@/lib/inngest";
 import { accountProfilePath } from "@/path";
 import { setCookieByKey } from "@/utils/cookies";
 import type { ActionState } from "@/utils/to-action-state";
-import { fromErrorToActionState, toActionState } from "@/utils/to-action-state";
+import { fromErrorToActionState } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
 
 // Valibot schema for password change validation
@@ -80,27 +82,30 @@ export async function changePassword(
   const formDataObject = Object.fromEntries(formData.entries());
 
   // Validate form data with Valibot schema
+  const parsed = safeParse(schema, formDataObject);
 
+  if (!parsed.success) {
+    return fromErrorToActionState(parsed.issues, formData);
+  }
+  const { confirmPassword, ...changePasswordBody } = parsed.output;
+
+  const user = await getUserOrRedirect();
   const { error } = await tryCatch(async () => {
-    const parsed = parse(schema, formDataObject);
-    const headersData = await headers();
-    console.log(parsed, "{parsed}");
-    const { confirmPassword, ...changePasswordBody } = parsed;
-
     await auth.api.changePassword({
-      headers: headersData,
+      headers: await headers(),
       body: changePasswordBody,
     });
 
-    await setCookieByKey("toast", "Password successfully changed");
-    throw redirect(accountProfilePath());
+    await inngest.send({
+      name: "password.changed",
+      data: { email: user.email, userName: user.name },
+    });
   });
 
   if (error) {
-    unstable_rethrow(error);
     return fromErrorToActionState(error, formData);
   }
 
-  // This should never be reached due to redirect, but satisfies TypeScript
-  return toActionState("Password changed successfully", "SUCCESS");
+  await setCookieByKey("toast", "Password successfully changed");
+  redirect(accountProfilePath());
 }

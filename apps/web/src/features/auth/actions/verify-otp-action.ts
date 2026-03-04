@@ -1,7 +1,7 @@
 "use server";
 
 import { headers } from "next/headers";
-import { redirect, unstable_rethrow } from "next/navigation";
+import { RedirectType, redirect } from "next/navigation";
 import {
   email,
   examples,
@@ -15,6 +15,7 @@ import {
 } from "valibot";
 import { auth } from "@/lib/auth";
 import { accountProfilePath, ticketsPath } from "@/path";
+import { setCookieByKey } from "@/utils/cookies";
 import type { ActionState } from "@/utils/to-action-state";
 import { fromErrorToActionState, toActionState } from "@/utils/to-action-state";
 import { tryCatch } from "@/utils/try-catch";
@@ -44,12 +45,12 @@ const verifyEmailVerificationOTP = async (
   }
 
   // Check if user exists to prevent email enumeration
-  const { data: exists, error: dbError } = await tryCatch(async () =>
+  const { data: exists, error: dbError } = await tryCatch(() =>
     userExists(result.output.email),
   );
 
   if (dbError || !exists) {
-    return toActionState("Something went wrong", "ERROR", formData);
+    return toActionState("Something went wrong", "ERROR");
   }
 
   const { error } = await tryCatch(async () => {
@@ -61,18 +62,15 @@ const verifyEmailVerificationOTP = async (
       },
       headers: await headers(),
     });
-
-    // Redirect to account profile
-    throw redirect(accountProfilePath());
   });
 
   if (error) {
-    unstable_rethrow(error);
-    return fromErrorToActionState(new Error("Something went wrong"), formData);
+    return fromErrorToActionState(
+      new Error("Something went wrong verifying your email"),
+    );
   }
-
-  // This should never be reached due to redirect, but satisfies TypeScript
-  return toActionState("OTP verified successfully", "SUCCESS");
+  await setCookieByKey("toast", "Email verified successfully");
+  redirect(accountProfilePath(), RedirectType.replace);
 };
 
 const verifySignInOTP = async (
@@ -88,12 +86,12 @@ const verifySignInOTP = async (
   }
 
   // Check if user exists to prevent email enumeration
-  const { data: exists, error: dbError } = await tryCatch(async () =>
+  const { data: exists, error: dbError } = await tryCatch(() =>
     userExists(result.output.email),
   );
 
   if (dbError || !exists) {
-    return toActionState("Something went wrong", "ERROR", formData);
+    return toActionState("Something went wrong", "ERROR");
   }
 
   const { error } = await tryCatch(async () => {
@@ -105,18 +103,14 @@ const verifySignInOTP = async (
       },
       headers: await headers(),
     });
-
-    // Redirect to tickets page
-    throw redirect(ticketsPath());
   });
 
   if (error) {
-    unstable_rethrow(error);
-    return fromErrorToActionState(new Error("Something went wrong"), formData);
+    return fromErrorToActionState(new Error("Something went wrong"));
   }
 
-  // This should never be reached due to redirect, but satisfies TypeScript
-  return toActionState("OTP verified successfully", "SUCCESS");
+  await setCookieByKey("toast", "Signed in successfully");
+  redirect(ticketsPath(), RedirectType.replace);
 };
 
 export { verifyEmailVerificationOTP, verifySignInOTP };
