@@ -72,8 +72,8 @@ const SheetContent = ({
       {...props}
     >
       {children}
-      <SheetPrimitive.Close className="absolute top-4 right-4 rounded-xs opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
-        <XIcon className="size-4" />
+      <SheetPrimitive.Close className="absolute top-4.5 left-6 rounded-xs opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
+        <XIcon className="aspect-square w-5" />
         <span className="sr-only">Close</span>
       </SheetPrimitive.Close>
     </SheetPrimitive.Content>
@@ -82,7 +82,7 @@ const SheetContent = ({
 
 const SheetHeader = ({ className, ...props }: React.ComponentProps<"div">) => (
   <div
-    className={cn("flex flex-col gap-1.5 p-4", className)}
+    className={cn("flex gap-1.5 p-4", className)}
     data-slot="sheet-header"
     {...props}
   />

@@ -13,7 +13,7 @@ import { Skeleton } from "./ui/skeleton";
 
 const Header = () => (
   <ViewTransition name="header-navigation">
-    <nav className="nav-scroll fixed top-0 right-0 left-0 z-40 grid grid-flow-col items-center justify-between border-b bg-background/65 px-4 py-2.5 backdrop-blur supports-scroll-timeline:z-200 supports-backdrop-blur:bg-background/60">
+    <nav className="nav-scroll fixed top-0 right-0 left-0 z-40 grid grid-flow-col items-center justify-between border-b bg-background/65 px-4 py-2.5 backdrop-blur supports-backdrop-blur:bg-background/60">
       <div className="flex items-center gap-x-2">
         <Suspend
           fallback={<Skeleton className="aspect-square w-9 md:hidden" />}

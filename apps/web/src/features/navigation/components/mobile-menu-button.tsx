@@ -1,25 +1,21 @@
 "use client";
 
-import { Menu, X } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useMobileSidebar } from "../context/context";
 
 const MobileMenuButton = () => {
-  const { value: isOpen, toggle } = useMobileSidebar();
+  const { open } = useMobileSidebar();
   return (
     <Button
-      aria-expanded={isOpen}
-      aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
-      aria-live="polite"
+      aria-label="Open navigation menu"
       className="md:hidden"
-      data-open={isOpen}
-      onClick={toggle}
+      onClick={open}
       size="icon"
       type="button"
       variant="ghost"
     >
-      <X className="aspect-square h-5 rotate-90 scale-0 transition-transform duration-150 open:rotate-0 open:scale-110" />
-      <Menu className="absolute aspect-square h-5 rotate-0 scale-110 transition-transform duration-150 open:rotate-90 open:scale-0" />
+      <Menu className="aspect-square h-5" />
     </Button>
   );
 };
