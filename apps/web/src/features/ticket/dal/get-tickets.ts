@@ -52,6 +52,8 @@ export const getTickets = async (
 
   if (sortKey === "bounty") {
     orderBy = { bounty: sortValue };
+  } else if (sortKey === "deadline") {
+    orderBy = { deadline: sortValue };
   }
 
   const where: TicketWhereInput = {

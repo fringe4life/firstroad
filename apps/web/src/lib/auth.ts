@@ -11,7 +11,7 @@ import { nextCookies } from "better-auth/next-js";
 import { emailOTP, openAPI, organization } from "better-auth/plugins";
 import { isAdminOrOwner } from "@/features/organisation/utils/admin";
 import { inngest } from "@/lib/inngest";
-import { acceptInvitationPath } from "@/path";
+import { acceptInvitationPath, resetPasswordPath } from "@/path";
 import { tryCatch } from "@/utils/try-catch";
 import { env } from "./env";
 
@@ -236,7 +236,7 @@ export const auth = betterAuth({
         // biome-ignore lint/style/noNonNullAssertion: will exist
         process.env.NEXT_PUBLIC_APP_URL!;
       // Always construct absolute URL for email
-      const resetUrl = `${baseUrl}/reset-password/${token}`;
+      const resetUrl = `${baseUrl}${resetPasswordPath(token)}`;
 
       // Trigger Inngest event to handle password reset email asynchronously
       await tryCatch(() =>

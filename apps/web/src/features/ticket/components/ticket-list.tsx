@@ -3,7 +3,7 @@ import { Placeholder } from "@/components/placeholder";
 import type { TicketListProps } from "@/features/ticket/types";
 import { TicketListItem } from "./ticket-list-item";
 
-const TicketList = ({ tickets }: TicketListProps) => {
+const TicketList = ({ sortKey, tickets }: TicketListProps) => {
   // Handle error state
   if (!tickets) {
     return <Placeholder icon={<Bug />} label="Failed to fetch tickets" />;
@@ -23,6 +23,7 @@ const TicketList = ({ tickets }: TicketListProps) => {
           canUpdate={ticket.canUpdate}
           isOwner={ticket.isOwner}
           key={ticket.id}
+          sortKey={sortKey}
           ticket={ticket}
         />
       ))}

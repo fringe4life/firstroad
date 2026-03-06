@@ -24,10 +24,7 @@ const TicketSortSelect = ({ options }: TicketSortSelectProps) => {
   const [, startTransition] = useTransition();
   const handleChange = (sortArg: SortObject): void => {
     startTransition(async () => {
-      await setSort({
-        ...sortArg,
-        sortValue: sort.sortValue,
-      });
+      await setSort(sortArg);
       await setPagination({ page: 0 });
     });
   };

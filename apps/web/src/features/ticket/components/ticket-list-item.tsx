@@ -6,6 +6,7 @@ import { TicketCard } from "@/features/ticket/components/ticket-card";
 import type { BaseTicket, TicketAccess } from "@/features/ticket/types";
 
 interface TicketListItemProps extends TicketAccess {
+  sortKey: string;
   ticket: BaseTicket;
 }
 
@@ -15,6 +16,7 @@ interface TicketListItemProps extends TicketAccess {
  */
 const TicketListItem = ({
   ticket,
+  sortKey,
   isOwner,
   canCreate,
   canDelete,
@@ -48,6 +50,7 @@ const TicketListItem = ({
             ticket={{ id, slug, status }}
           />
         }
+        sortKey={sortKey}
         ticket={ticket}
         variant="list"
       />

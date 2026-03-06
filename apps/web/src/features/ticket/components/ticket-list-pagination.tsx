@@ -1,6 +1,7 @@
 import { ViewTransition } from "react";
 import { Pagination } from "@/features/pagination/components/nuqs-pagination";
 import { PaginatedTransitions } from "@/features/pagination/components/paginated-transitions";
+import { searchParamsCache } from "@/features/pagination/pagination-search-params";
 import { getTickets } from "../dal/get-tickets";
 import type { TicketsProps } from "../types";
 import { TicketListSkeleton } from "./skeletons/ticket-list-skeleton";
@@ -11,8 +12,10 @@ const TicketListPagination = async ({
   userId,
   byOrganisation,
 }: TicketsProps) => {
+  const resolved = await searchParams;
+  const { sortKey } = searchParamsCache.parse(resolved);
   const { list: tickets, metadata } = await getTickets(
-    searchParams,
+    Promise.resolve(resolved),
     userId,
     byOrganisation,
   );
@@ -25,7 +28,7 @@ const TicketListPagination = async ({
           page: metadata.page,
         }}
       >
-        <TicketList tickets={tickets} />
+        <TicketList sortKey={sortKey} tickets={tickets} />
       </PaginatedTransitions>
       <div className="max-content-narrow">
         <ViewTransition>

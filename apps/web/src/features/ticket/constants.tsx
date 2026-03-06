@@ -22,6 +22,11 @@ const TICKET_SORT_OPTIONS: readonly SortOption[] = [
     sortValue: "desc",
   },
   {
+    label: "Due soon",
+    sortKey: "deadline",
+    sortValue: "asc",
+  },
+  {
     label: "Bounty",
     sortKey: "bounty",
     sortValue: "desc",

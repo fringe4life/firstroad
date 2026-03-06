@@ -21,8 +21,11 @@ const TicketCard = ({
   ticket,
   actions,
   mobileActions,
+  sortKey,
   variant = "list",
 }: TicketCardProps) => {
+  const dateToShow =
+    sortKey === "deadline" ? ticket.deadline : ticket.createdAt;
   let titleElement = <span className="truncate">{ticket.title}</span>;
   if (variant === "list") {
     titleElement = (
@@ -60,7 +63,7 @@ const TicketCard = ({
           <CardFooter className="flex flex-col gap-3">
             <div className="flex w-full items-center justify-between">
               <p className="self-center text-muted-foreground text-sm">
-                <ClientDate date={ticket.deadline} />{" "}
+                <ClientDate date={dateToShow} />{" "}
                 <span className="block xs:inline xs:text-left text-right italic">
                   by {ticket.user.name}
                 </span>

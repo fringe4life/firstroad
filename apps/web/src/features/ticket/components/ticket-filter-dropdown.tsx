@@ -17,6 +17,13 @@ import { sortParser } from "@/features/pagination/pagination-search-params";
  * Mobile filter dropdown that combines scope and sort options
  * Only visible on mobile screens (hidden on sm+)
  */
+const sortLabels: Record<string, string> = {
+  bounty: "Bounty",
+  createdAt: "Newest",
+  deadline: "Due soon",
+};
+const createKey = (sortKey: string, sortValue: string) =>
+  `${sortKey}_${sortValue}`;
 const TicketFilterDropdown = () => {
   const [sort, setSort] = useQueryStates(sortParser);
 
@@ -27,12 +34,9 @@ const TicketFilterDropdown = () => {
       sortValue: sortValue as SortOrder,
     });
   };
-
-  const createKey = (sortKey: string, sortValue: string) =>
-    `${sortKey}_${sortValue}`;
-
-  const sortText = sort.sortKey === "bounty" ? "Bounty" : "Newest";
-
+  console.log(sort.sortKey, sort.sortValue);
+  const sortText = sortLabels[sort.sortKey] ?? "Newest";
+  console.log("[sortText]", sortText);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -48,6 +52,9 @@ const TicketFilterDropdown = () => {
         >
           <DropdownMenuRadioItem value={createKey("createdAt", "desc")}>
             Newest
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value={createKey("deadline", "asc")}>
+            Due soon
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem value={createKey("bounty", "desc")}>
             Bounty

@@ -13,6 +13,7 @@ export type BaseTicket = TicketGetPayload<{
 export interface TicketCardProps {
   actions?: React.ReactNode;
   mobileActions?: React.ReactNode;
+  sortKey?: string;
   ticket: BaseTicket;
   variant?: "list" | "detail";
 }
@@ -26,6 +27,7 @@ export interface TicketsProps extends SearchParamsProps, ByOrganisation {
 }
 
 export interface TicketListProps {
+  sortKey: string;
   tickets: List<TicketWithAccess>;
 }
 
