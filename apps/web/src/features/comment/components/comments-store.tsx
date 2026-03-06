@@ -240,11 +240,7 @@ const CommentsProvider = ({
     deleteAttachmentAction,
   };
 
-  return (
-    <CommentsContext.Provider value={value}>
-      {children}
-    </CommentsContext.Provider>
-  );
+  return <CommentsContext value={value}>{children}</CommentsContext>;
 };
 
 const useComments = () => {

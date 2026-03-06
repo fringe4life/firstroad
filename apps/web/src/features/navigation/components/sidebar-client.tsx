@@ -16,7 +16,7 @@ const SidebarClient = ({ children }: { children: React.ReactNode }) => {
     <Activity mode={isOpen ? "visible" : "hidden"}>
       <Sheet onOpenChange={close} open={isOpen}>
         <SheetContent className="w-full max-w-84 p-0 md:hidden" side="left">
-          <SheetHeader className="ml-11 flex items-center gap-x-2 border-b px-6 py-4.5">
+          <SheetHeader className="flex items-center gap-x-2 border-b py-4.15 pl-19">
             <Kanban className="aspect-square w-4" />
             <SheetTitle className="font-medium xs:font-semibold text-base xs:text-lg">
               FirstTicket
