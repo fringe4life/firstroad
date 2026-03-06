@@ -23,7 +23,9 @@ export const proxy = async (request: NextRequest) => {
   const pathname = request.nextUrl.pathname;
   // THIS DOESNT DO A DATABASE LOOKUP AND ONLY WORKS IF COOKIE CACHE IS ENABLED
   // ONLY INTENDED FOR OPTIMISTIC ROUTING, ACTUAL AUTH CHECKS HANDLED AT PAGE LEVEL
-  const hasSession = await getCookieCache(request);
+  const cookieCache = await getCookieCache(request);
+
+  const hasSession = Boolean(cookieCache?.session);
 
   if (isProtectedPath(pathname) && !hasSession) {
     const signInUrl = new URL(signInPath(), request.url);

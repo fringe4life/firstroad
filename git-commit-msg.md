@@ -162,7 +162,7 @@ chore:
    - Use relevant emojis from the common emojis list
    - Order by importance (most impactful first)
    - Keep bullet points concise and descriptive
-   - **ESCAPE SPECIAL CHARACTERS**: Use `\'` for apostrophes, `\"` for quotes, `\\` for backslashes
+   - When passing the message to `git commit` via a shell, prefer a heredoc (see below) so you usually do not need to escape special characters manually
 6. Scale based on change size:
    - Small (1-5 files): 2-3 bullet points
    - Medium (6-15 files): 3-4 bullet points
@@ -174,9 +174,25 @@ chore:
    - Push to origin
    - **Skip git operations only if explicitly instructed** (e.g., "just generate the message", "don't commit", etc.)
 
+### Shell usage (recommended heredoc form)
+
+When you need to run `git commit` via a shell, wrap the generated message in a heredoc so the entire multi-line message is passed as a single, exact argument:
+
+```bash
+git commit -m "$(cat <<'EOF'
+feat(web):
+✨ Short summary line
+🎯 First bullet point
+🐛 Second bullet point
+EOF
+)"
+```
+
+This avoids most shell-escaping issues. The escaping rules below are only needed when you cannot use a heredoc and must pass the message directly as a literal shell argument.
+
 ## Character Escaping Rules
 
-When generating commit messages, escape these characters to prevent shell interpretation issues:
+When generating commit messages that will be passed directly as a literal shell argument (without a heredoc), escape these characters to prevent shell interpretation issues:
 
 - **Apostrophes**: `Valibot's` → `Valibot\'s`
 - **Double quotes**: `"feature"` → `\"feature\"`
