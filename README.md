@@ -5,18 +5,18 @@
 [![Next.js](https://img.shields.io/badge/Next.js-16.1.6-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.2.4-61DAFB?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Prisma](https://img.shields.io/badge/Prisma-7.4.1-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
-[![Better Auth](https://img.shields.io/badge/Better%20Auth-beta-000000)](https://better-auth.com/)
+[![Prisma](https://img.shields.io/badge/Prisma-7.4.2-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
+[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.5.4-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.2.1-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![Biome](https://img.shields.io/badge/Biome-2.4.0-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
-[![nuqs](https://img.shields.io/badge/nuqs-2.8.8-000000)](https://nuqs.47ng.com/)
+[![Biome](https://img.shields.io/badge/Biome-2.4.5-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
+[![nuqs](https://img.shields.io/badge/nuqs-2.8.9-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.2.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
-[![Elysia](https://img.shields.io/badge/Elysia-1.4.26-000000)](https://elysiajs.com/)
-[![Inngest](https://img.shields.io/badge/Inngest-3.52.4-000000)](https://www.inngest.com/)
-[![Resend](https://img.shields.io/badge/Resend-6.9.2-000000)](https://resend.com/)
-[![React Email](https://img.shields.io/badge/React%20Email-5.2.8-000000)](https://react.email/)
+[![Elysia](https://img.shields.io/badge/Elysia-1.4.27-000000)](https://elysiajs.com/)
+[![Inngest](https://img.shields.io/badge/Inngest-beta-000000)](https://www.inngest.com/)
+[![Resend](https://img.shields.io/badge/Resend-6.9.3-000000)](https://resend.com/)
+[![React Email](https://img.shields.io/badge/React%20Email-5.2.9-000000)](https://react.email/)
 [![Bun](https://img.shields.io/badge/Bun-1.3.10-FBF0DF?logo=bun&logoColor=FBF0DF)](https://bun.sh/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-7.2.3-000000)](https://ultracite.dev/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-7.2.5-000000)](https://ultracite.dev/)
 
 </div>
 
@@ -60,11 +60,11 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **Theme**: next-themes for dark/light mode
 - **URL Search Params**: nuqs 2.8 for type-safe URL parameters
 - **Email**: React Email 5.2 with Resend 6.9 for transactional emails
-- **API Framework**: Elysia 1.4 with @elysiajs/cors 1.4 for unified API routes
+- **API Framework**: Elysia 1.4 with @elysiajs/cors for unified API routes
 - **Background Jobs**: Inngest 3.52.4 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
 - **Shared Utilities**: `@firstroad/utils` (packages/utils) for shared helpers (e.g. `createSlug`)
-- **Linting**: Biome 2.4.0 for fast formatting and linting with Ultracite 7.2 rules
+- **Linting**: Biome 2.4.5 for fast formatting and linting with Ultracite 7.2 rules
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 
@@ -236,6 +236,8 @@ DIRECT_URL="postgresql://username:password@localhost:5432/your_database"
 
 # Inngest (set INNGEST_DEV=1 for local dev with docker-compose inngest service)
 # INNGEST_DEV=1
+# When Inngest Dev Server runs in Docker and the app runs on the host, set so the dev server can sync:
+# INNGEST_SERVE_ORIGIN=http://host.docker.internal:3000
 
 # Auth (Better Auth; validated as BETTER_AUTH_SECRET in src/lib/env.ts)
 BETTER_AUTH_SECRET="your-secret-key-here"
@@ -531,7 +533,7 @@ bun run clear:attachments # Clear attachment records and S3 objects
 bun run seed:members     # Seed org members
 
 # Inngest
-bun run inngest          # Inngest dev server (local)
+bunx turbo run dev --filter=@firstroad/inngest   # Inngest dev server (local; -u http://localhost:3000/api/inngest)
 
 # Code quality (Ultracite + Biome)
 bun run check            # Ultracite check
