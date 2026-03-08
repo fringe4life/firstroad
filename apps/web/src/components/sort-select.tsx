@@ -1,6 +1,5 @@
 "use client";
 
-import type { SortOrder } from "@firstroad/db/client-types";
 import { LucideArrowUpDown } from "lucide-react";
 import { startTransition } from "react";
 import { ResponsiveLabel } from "@/components/responsive-label";
@@ -11,6 +10,8 @@ import {
   SelectItem,
   SelectTrigger,
 } from "@/components/ui/select";
+import { createKey } from "@/utils/create-key";
+import { isSortOrder } from "@/utils/is-sort-order";
 export interface SortOption {
   label: string;
   sortKey: string;
@@ -24,14 +25,14 @@ interface SortSelectProps {
   value: SortObject;
 }
 
-const createKey = (option: SortOption | SortObject) =>
-  `${option.sortKey}_${option.sortValue}`;
-
 const SortSelect = ({ options, value, onValueChange }: SortSelectProps) => {
   const handleSortChange = (compositeKey: string) => {
     const [sortKey, sortValue] = compositeKey.split("_");
+    if (!isSortOrder(sortValue)) {
+      return;
+    }
     startTransition(() => {
-      onValueChange({ sortKey, sortValue: sortValue as SortOrder });
+      onValueChange({ sortKey, sortValue });
     });
   };
 

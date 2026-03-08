@@ -25,7 +25,9 @@ const TicketCard = ({
   variant = "list",
 }: TicketCardProps) => {
   const dateToShow =
-    sortKey === "deadline" ? ticket.deadline : ticket.createdAt;
+    sortKey === "deadline"
+      ? (ticket.deadline ?? ticket.createdAt)
+      : ticket.createdAt;
   let titleElement = <span className="truncate">{ticket.title}</span>;
   if (variant === "list") {
     titleElement = (

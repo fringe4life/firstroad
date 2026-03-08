@@ -15,7 +15,7 @@ const TicketListPagination = async ({
   const resolved = await searchParams;
   const { sortKey } = searchParamsCache.parse(resolved);
   const { list: tickets, metadata } = await getTickets(
-    Promise.resolve(resolved),
+    searchParams,
     userId,
     byOrganisation,
   );

@@ -68,10 +68,10 @@
     "@types/node": "^25.3.5",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@typescript/native-preview": "^7.0.0-dev.20260305.1",
+    "@typescript/native-preview": "^7.0.0-dev.20260307.1",
     "lint-staged": "^16.3.2",
     "next-devtools-mcp": "^0.3.10",
-    "shadcn": "^3.8.5",
+    "shadcn": "^4.0.0",
     "tailwindcss": "^4.2.1",
     "typescript": "^5.9.3",
     "typescript-plugin-directives": "^0.0.3"

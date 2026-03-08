@@ -1,6 +1,5 @@
 "use client";
 
-import type { SortOrder } from "@firstroad/db/client-types";
 import { useQueryStates } from "nuqs";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +11,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { sortParser } from "@/features/pagination/pagination-search-params";
+import { createKey } from "@/utils/create-key";
+import { isSortOrder } from "@/utils/is-sort-order";
 
 /**
  * Mobile filter dropdown that combines scope and sort options
@@ -22,21 +23,21 @@ const sortLabels: Record<string, string> = {
   createdAt: "Newest",
   deadline: "Due soon",
 };
-const createKey = (sortKey: string, sortValue: string) =>
-  `${sortKey}_${sortValue}`;
+
 const TicketFilterDropdown = () => {
   const [sort, setSort] = useQueryStates(sortParser);
 
   const handleSortChange = (compositeKey: string) => {
     const [sortKey, sortValue] = compositeKey.split("_");
+    if (!isSortOrder(sortValue)) {
+      return;
+    }
     setSort({
       sortKey,
-      sortValue: sortValue as SortOrder,
+      sortValue,
     });
   };
-  console.log(sort.sortKey, sort.sortValue);
   const sortText = sortLabels[sort.sortKey] ?? "Newest";
-  console.log("[sortText]", sortText);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -48,15 +49,21 @@ const TicketFilterDropdown = () => {
         <DropdownMenuLabel>Sort</DropdownMenuLabel>
         <DropdownMenuRadioGroup
           onValueChange={handleSortChange}
-          value={createKey(sort.sortKey, sort.sortValue)}
+          value={createKey(sort)}
         >
-          <DropdownMenuRadioItem value={createKey("createdAt", "desc")}>
+          <DropdownMenuRadioItem
+            value={createKey({ sortKey: "createdAt", sortValue: "desc" })}
+          >
             Newest
           </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value={createKey("deadline", "asc")}>
+          <DropdownMenuRadioItem
+            value={createKey({ sortKey: "deadline", sortValue: "asc" })}
+          >
             Due soon
           </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value={createKey("bounty", "desc")}>
+          <DropdownMenuRadioItem
+            value={createKey({ sortKey: "bounty", sortValue: "desc" })}
+          >
             Bounty
           </DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
