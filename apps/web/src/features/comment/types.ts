@@ -162,7 +162,7 @@ export interface CommentsContextValue extends Partial<ResourcePermission> {
   handleUpsertSuccess: (state: ActionState<CommentWithUserInfo>) => void;
   hasNextPage: boolean;
   isPending: boolean;
-  optimisticComments: CommentWithUserInfo[];
+  optimisticComments: Array<CommentWithUserInfo & Partial<ResourcePermission>>;
   upsertAction: (formData: FormData) => void;
   upsertState: ActionState<CommentWithUserInfo>;
   userId?: string;

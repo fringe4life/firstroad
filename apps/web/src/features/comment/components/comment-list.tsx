@@ -31,8 +31,8 @@ const CommentList = () => {
             return null;
           }
           // Item may have canUpdate/canDelete from addCommentsAccess (server) or lack them (optimistic/new)
-          const canUpdate = canUpdatePermission ?? false;
-          const canDelete = canDeletePermission ?? false;
+          const canUpdate = item?.canUpdate ?? canUpdatePermission ?? false;
+          const canDelete = item?.canDelete ?? canDeletePermission ?? false;
           if (!(canUpdate || canDelete)) {
             return null;
           }
