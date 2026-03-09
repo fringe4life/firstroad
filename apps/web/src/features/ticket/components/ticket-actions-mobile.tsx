@@ -3,7 +3,6 @@
 import type { TicketStatus } from "@firstroad/db/client-types";
 import { LucidePencil, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/confirm-dialog/index";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,9 +13,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { deleteTicket } from "@/features/ticket/actions/delete-ticket";
-import { updateStatus } from "@/features/ticket/actions/update-status";
 import { TICKET_STATUS_LABELS } from "@/features/ticket/constants";
 import type { TicketAccess } from "@/features/ticket/types";
+import { statusChangeWithToast } from "@/features/ticket/utils/status-change-with-toast";
 import { ticketEditPath } from "@/path";
 
 interface TicketActionsMobileProps extends TicketAccess {
@@ -28,7 +27,6 @@ interface TicketActionsMobileProps extends TicketAccess {
 const TicketActionsMobile = ({
   ticket,
   isOwner,
-
   canUpdate,
   canDelete,
   onActionClick,
@@ -36,17 +34,6 @@ const TicketActionsMobile = ({
   if (!isOwner) {
     return null;
   }
-
-  const handleStatusChange = async (value: string) => {
-    const promise = updateStatus(value as TicketStatus, ticket.id);
-    toast.promise(promise, { loading: "Updating status" });
-    const result = await promise;
-    if (result.status === "ERROR") {
-      toast.error(result.message);
-    } else if (result.status === "SUCCESS") {
-      toast.success(result.message);
-    }
-  };
 
   const clickProps = onActionClick ? { onClick: onActionClick } : undefined;
 
@@ -80,7 +67,7 @@ const TicketActionsMobile = ({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuRadioGroup
-              onValueChange={handleStatusChange}
+              onValueChange={statusChangeWithToast.bind(null, ticket.id)}
               value={ticket.status}
             >
               {(Object.keys(TICKET_STATUS_LABELS) as TicketStatus[]).map(

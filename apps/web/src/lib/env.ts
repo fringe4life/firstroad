@@ -45,9 +45,9 @@ const envSchema = object({
   ),
   S3_REGION: pipe(string(), minLength(1, "S3_REGION is required")),
   S3_BUCKET: pipe(string(), minLength(1, "S3_BUCKET is required")),
-  NEXT_PUBLIC_SESSION_TOKEN_COOKIE_NAME: pipe(
+  NEXT_PUBLIC_SESSION_COOKIE_NAME: pipe(
     string(),
-    minLength(1, "NEXT_PUBLIC_SESSION_TOKEN_COOKIE_NAME is required"),
+    minLength(1, "NEXT_PUBLIC_SESSION_COOKIE_NAME is required"),
   ),
 });
 

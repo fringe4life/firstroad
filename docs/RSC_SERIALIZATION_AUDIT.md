@@ -1,13 +1,14 @@
 # RSC Serialization Audit
 
 **Date:** January 24, 2026  
-**Focus:** Minimize data transfer at React Server Component → Client Component boundaries
+**Re-assessed:** March 2026 (against Vercel React Best Practices — versioned skills, AGENTS.md v1.0.0)  
+**Focus:** Minimize data transfer at React Server Component → Client Component boundaries (rule 3.5 Minimize Serialization at RSC Boundaries)
 
 ## Executive Summary
 
-Audited server-to-client data transfer across RSC boundaries. Found **3 areas** where data can be optimized by passing only required fields instead of full objects.
+Audited server-to-client data transfer across RSC boundaries. Several boundaries have been optimized since the original audit; remaining opportunities are noted below.
 
-**Overall Assessment:** 🟡 **GOOD** - Most components are well-optimized, but there are opportunities to reduce serialization overhead.
+**Overall Assessment:** 🟢 **IMPROVED** — Detail-page ticket actions already pass minimal props to client components. List-page ticket serialization and comments list payload remain as optimization opportunities where refactors are justified by payload size.
 
 ---
 
@@ -21,103 +22,47 @@ Audited server-to-client data transfer across RSC boundaries. Found **3 areas** 
 
 ### 🟡 **OPTIMIZATION OPPORTUNITIES**
 
-1. **TicketItem → Client Components** - Passing full `BaseTicket` object
-2. **CommentItem → Client Components** - Passing full `Comment` object  
-3. **OrganisationItem → Client Components** - Passing full `BaseOrganisation` object
+1. **Ticket list page** — List page had been sending full `BaseTicket` to client (`TicketListItem`); see §1 below for post-optimization status (server-rendered row + minimal action props).
+2. **Comments list** — Server sends full comment list to `Comments` client; per-item button props are already minimal. A minimal `CommentListPayload` type reduces the initial payload (see §2).
+
+### ✅ **ALREADY OPTIMIZED** (not opportunities)
+
+3. **OrganisationItem** — Only `organizationId` is passed to `OrganisationActionButtons`; no full `BaseOrganisation` object at the client boundary.
 
 ---
 
 ## Detailed Analysis
 
-### 1. TicketItem → Client Components 🔴
+### 1. Ticket → Client Components 🟢 (Detail) / 🟡 (List)
 
-**Server Component:** `src/features/ticket/components/ticket-item.tsx` (Server)  
-**Client Components:** 
-- `TicketOwnerOptions` (client)
-- `TicketMoreMenu` (client)
+**Detail page (ticket/[slug]):**  
+The server component `TicketDetailActionsDesktop` receives `ticket` from the page and passes **only** `{ id, slug, status }` to the client component `TicketActionsDesktop`. So the RSC boundary at the detail actions is **already optimized**. No change required for detail actions.
 
-**Current Implementation:**
-```typescript
-// Server component passes full ticket object
-<TicketOwnerOptions ticket={ticket} />
-<TicketMoreMenu ticket={ticket} />
-```
+**List page (tickets list):**  
+The client component `TicketListItem` receives full `BaseTicket` from the server (when the list is rendered by a server parent). It passes:
+- `ticket={{ id, slug, status }}` to `TicketActionsDesktop` and `TicketActionsMobile` — **minimal, good.**
+- `ticket={ticket}` (full) to `TicketCard` — required for display (title, description, deadline, user.name, bounty, etc.). So the **only** full-ticket serialization at the list boundary is for the card content. Reducing that would require splitting the card into server-rendered content and client-only actions, a larger refactor.
 
-**Fields in BaseTicket:**
-- `id`, `title`, `slug`, `description`, `status`, `bounty`
-- `createdAt`, `updatedAt`, `deadline`
-- `userId` (for ownership check)
-- `user: { name }` (nested object)
+**Summary:** Detail-page ticket actions: ✅ minimal. List page: full ticket is serialized to `TicketListItem` for card display; actions already receive minimal props.
 
-**Fields Actually Used:**
-
-**TicketItem (Server) uses:**
-- ✅ `ticket.id` (ViewTransition name)
-- ✅ `ticket.slug` (link)
-- ✅ `ticket.status` (icon)
-- ✅ `ticket.title` (display)
-- ✅ `ticket.description` (display)
-- ✅ `ticket.deadline` (display)
-- ✅ `ticket.user.name` (display)
-- ✅ `ticket.bounty` (display)
-
-**TicketOwnerOptions (Client) uses:**
-- ✅ `ticket.userId` (for `isOwner(session, ticket)` check - needs full object)
-- ✅ `ticket.slug` (for edit link)
-
-**Note:** `isOwner` utility function expects an object with `userId` property, so we need to pass at least `{ userId: string }` or update the utility.
-
-**TicketMoreMenu (Client) uses:**
-- ✅ `ticket.id` (for delete action)
-- ✅ `ticket.status` (for status dropdown)
-
-**Optimization Opportunity:**
-- `TicketOwnerOptions` only needs `userId` and `slug` - currently receives full ticket
-- `TicketMoreMenu` only needs `id` and `status` - currently receives full ticket
-
-**Impact:** 🟡 **MEDIUM** - Ticket object is relatively small (~10 fields), but serialization still adds overhead
+**Impact:** 🟢 Detail actions optimized; 🟡 List view full ticket remains for card display (acceptable unless targeting payload size).
 
 ---
 
-### 2. CommentItem → Client Components 🟡
+### 2. Comment → Client Components 🟡
 
-**Server Component:** `src/features/comment/components/comment-item.tsx` (Server)  
-**Client Components:**
-- `CommentOwnerButtons` (client)
+**Current implementation:**  
+`Comments` (client) receives `list` / `listWithAttachments` from the server (full comment objects with user info and attachments). That list is stored in client state and passed to `CommentList`, which renders `CommentItem` and `CommentOwnerButtons`.
 
-**Current Implementation:**
-```typescript
-// Server component passes full comment object
-<CommentOwnerButtons comment={comment} />
-```
+**CommentOwnerButtons:**  
+In `comment-list.tsx`, when rendering buttons we already pass **minimal** props: `comment={{ id: item.id, content: item.content }}`. So at the point where `CommentOwnerButtons` is rendered, only `id` and `content` are passed — no full comment object at that call site.
 
-**Fields in Comment:**
-- `id`, `content`, `createdAt`, `updatedAt`
-- `ticketId`, `userId`
-- `user: { name }` (nested object)
-- `ticket` (relation, but not used)
+**RSC boundary:**  
+The serialization cost is at the **server → Comments** boundary: the server sends the full `listWithAttachments` (array of full comment objects) once. So the initial payload still includes full comments (user, ticket relation, etc.). Reducing that would require the server to send a minimal list shape and the client to request full details only when needed, or to pass minimal props from server-rendered wrappers — a larger change.
 
-**Fields Actually Used:**
+**Summary:** Client-side rendering of buttons already uses minimal `{ id, content }`. Server → client boundary still sends full comment list for initial load.
 
-**CommentItem (Server) uses:**
-- ✅ `comment.updatedAt` (TimeAgo)
-- ✅ `comment.createdAt` (TimeAgo)
-- ✅ `comment.content` (display)
-- ✅ `comment.user?.name` (display)
-
-**CommentOwnerButtons (Client) uses:**
-- ✅ `comment.id` (for delete button)
-- ✅ `comment.content` (for edit button - passed to `onEdit`)
-
-**CommentEditButton (Client) uses:**
-- ✅ `comment.id` (for edit)
-- ✅ `comment.content` (for edit)
-
-**Optimization Opportunity:**
-- `CommentOwnerButtons` only needs `id` and `content` - currently receives full comment object
-- The `user` object is not used in client components (only in server CommentItem)
-
-**Impact:** 🟡 **MEDIUM** - Comment object is small, but `user` and `ticket` relations are unnecessary
+**Impact:** 🟡 **MEDIUM** — Initial list payload could be reduced with a refactor; per-item client props are already minimal where we control the call site.
 
 ---
 
@@ -158,85 +103,33 @@ Audited server-to-client data transfer across RSC boundaries. Found **3 areas** 
 
 ## Recommendations
 
-### Priority 1: Optimize Ticket Components 🔴
+### Priority 1: Ticket Components — ✅ Done for detail; optional for list
 
-**File:** `src/features/ticket/components/ticket-item.tsx`
+**Detail page:** Already optimized. `TicketDetailActionsDesktop` (server) passes only `ticket={{ id, slug, status }}` to `TicketActionsDesktop` (client). No change needed.
 
-**Current:**
-```typescript
-<TicketOwnerOptions ticket={ticket} />
-<TicketMoreMenu ticket={ticket} />
-```
-
-**Optimized:**
-```typescript
-// Option 1: Pass minimal object for isOwner check
-<TicketOwnerOptions 
-  ticket={{ userId: ticket.userId }} 
-  ticketSlug={ticket.slug} 
-/>
-
-// Option 2: Update isOwner to accept userId directly
-<TicketOwnerOptions 
-  ticketUserId={ticket.userId} 
-  ticketSlug={ticket.slug} 
-/>
-
-<TicketMoreMenu 
-  ticketId={ticket.id} 
-  ticketStatus={ticket.status} 
-/>
-```
-
-**Benefits:**
-- Reduces serialization from ~10 fields to 2-3 fields per component
-- Smaller payload size
-- Faster RSC boundary crossing
-
-**Trade-offs:**
-- Need to update prop types in client components
-- Slightly more verbose prop passing
+**List page:** `TicketListItem` (client) receives full ticket from server but passes only `{ id, slug, status }` to the action components. Full ticket is still serialized to `TicketListItem` because `TicketCard` needs display fields. To reduce list payload further would require a structural change (e.g. server-rendered card content with client-only action slots). Optional.
 
 ---
 
-### Priority 2: Optimize Comment Components 🟡
+### Priority 2: Comment Components — 🟡 Partially optimized
 
-**File:** `src/features/comment/components/comment-item.tsx`
+**CommentOwnerButtons:** Already receives minimal `comment={{ id, content }}` when rendered from `CommentList` (see `comment-list.tsx`). No change at that call site.
 
-**Current:**
-```typescript
-<CommentOwnerButtons comment={comment} />
-```
-
-**Optimized:**
-```typescript
-<CommentOwnerButtons 
-  commentId={comment.id} 
-  commentContent={comment.content} 
-/>
-```
-
-**Benefits:**
-- Removes unnecessary `user` and `ticket` relation serialization
-- Smaller payload
-- Faster RSC boundary
-
-**Trade-offs:**
-- Need to update `CommentOwnerButtons` prop types
-- Need to update `CommentEditButton` to accept `commentId` and `commentContent` separately
+**Server → Comments boundary:** The server still sends the full `listWithAttachments` array to `Comments` (client). To reduce initial payload, the server could send a minimal list (e.g. ids + content) and the client could hydrate or fetch full data as needed — a larger refactor. Optional unless targeting first-load payload size.
 
 ---
 
 ### Priority 3: Review Other Boundaries 🟢
 
-**Areas to check:**
-1. **Pagination components** - Already using minimal metadata ✅
-2. **Form components** - Passing action functions (good) ✅
-3. **Navigation components** - Minimal data ✅
+**Areas checked (March 2026):**
+1. **Pagination components** — Already using minimal metadata ✅
+2. **Form components** — Passing action functions (good) ✅
+3. **Navigation components** — Minimal data ✅
+4. **OrganisationActionButtons** — Only `organizationId` passed ✅
 
 ---
 
-## Implementation Guide
+## Implementation Guide (historical; detail/list already optimized)
 
 ### Step 1: Update Ticket Components
 
@@ -392,22 +285,22 @@ Since you're using TypeScript, this optimization is **safer and easier**:
 
 ## References
 
-- [Vercel Best Practices: Minimize Serialization](https://github.com/vercel-labs/agent-skills/blob/main/vercel-react-best-practices/rules/server-serialization.md)
+- Vercel React Best Practices AGENTS.md § 3.5 Minimize Serialization at RSC Boundaries (versioned: [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) — `skills/react-best-practices/`)
 - [Next.js RSC Documentation](https://nextjs.org/docs/app/building-your-application/rendering/server-components)
 
 ---
 
 ## Summary
 
-**Current Status:** 🟡 Good, but can be improved
+**Current Status (March 2026):** 🟢 Improved — Detail ticket actions and comment owner buttons already receive minimal props at the client boundary. Remaining opportunities are list-page ticket payload (full ticket for card display) and initial comments list payload.
 
 **Recommended Actions:**
-1. 🔴 **High Priority:** Optimize Ticket components (2 components)
-2. 🟡 **Medium Priority:** Optimize Comment components (1 component)
-3. 🟢 **Low Priority:** Review other boundaries (already optimized)
+1. ✅ **Done:** Ticket detail actions pass minimal `{ id, slug, status }` to client.
+2. ✅ **Done:** CommentOwnerButtons receives minimal `{ id, content }` from CommentList.
+3. 🟡 **Optional:** Reduce server → Comments initial payload (full list) if targeting first-load size.
+4. 🟡 **Optional:** Reduce list-page ticket serialization by splitting card into server-rendered content + client actions.
+5. 🟢 **Done:** OrganisationActionButtons and other boundaries use minimal data.
 
-**Expected Impact:**
-- ~10-16 KB reduction per page load
-- Faster RSC boundary serialization
-- Better performance on slower connections
-- Improved serverless cold start times
+**Expected Impact (if optional refactors done):**
+- Further payload reduction on list and comment-heavy pages
+- Faster RSC boundary serialization on slow connections

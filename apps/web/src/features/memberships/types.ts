@@ -18,12 +18,6 @@ export interface OrgScopedResource extends UserVerifiable {
   organizationId: string;
 }
 
-export interface WithPermissions {
-  canCreate: boolean;
-  canDelete: boolean;
-  canUpdate: boolean;
-}
-
 export interface PermissionKey {
   action: PermissionAction;
   resourceType: ResourceType;

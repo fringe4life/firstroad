@@ -2,8 +2,8 @@ import { DEFAULT_PERMISSION } from "@/features/memberships/constants";
 import { getMemberPermissionsBatch } from "@/features/memberships/queries/get-member-permissions-batch";
 import type {
   OrgScopedResource,
+  ResourcePermission,
   ResourceType,
-  WithPermissions,
 } from "@/features/memberships/types";
 import type { List, Maybe } from "@/types";
 import type { IsOwner, ItemsWithPermissionsOptions, User } from "../types";
@@ -24,7 +24,7 @@ const itemsWithPermissions = async <T extends OrgScopedResource>(
   user: Maybe<User>,
   resourceType: ResourceType,
   options?: ItemsWithPermissionsOptions,
-): Promise<List<T & WithPermissions & IsOwner>> => {
+): Promise<List<T & ResourcePermission & IsOwner>> => {
   const resolvedItems = await items;
 
   // dont do any async work if no items

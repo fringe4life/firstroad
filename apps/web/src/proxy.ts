@@ -1,5 +1,5 @@
-import { getCookieCache } from "better-auth/cookies";
 import { type NextRequest, NextResponse } from "next/server";
+import { getSessionCookie } from "@/features/auth/utils/get-session-cookie";
 import {
   signInPath,
   signUpPath,
@@ -19,13 +19,11 @@ const isProtectedPath = (pathname: string): boolean =>
 const isAuthRoute = (pathname: string): boolean =>
   pathname === signInPath() || pathname === signUpPath();
 
-export const proxy = async (request: NextRequest) => {
+export const proxy = (request: NextRequest) => {
   const pathname = request.nextUrl.pathname;
-  // THIS DOESNT DO A DATABASE LOOKUP AND ONLY WORKS IF COOKIE CACHE IS ENABLED
-  // ONLY INTENDED FOR OPTIMISTIC ROUTING, ACTUAL AUTH CHECKS HANDLED AT PAGE LEVEL
-  const cookieCache = await getCookieCache(request);
-
-  const hasSession = Boolean(cookieCache?.session);
+  // Optimistic only: presence of session token cookie (name from NEXT_PUBLIC_SESSION_TOKEN_COOKIE_NAME).
+  // No DB lookup or token validation; actual auth checks are at page level.
+  const hasSession = Boolean(getSessionCookie(request));
 
   if (isProtectedPath(pathname) && !hasSession) {
     const signInUrl = new URL(signInPath(), request.url);

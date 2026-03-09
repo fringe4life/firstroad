@@ -10,9 +10,10 @@ import type {
   DeleteAttachmentAction,
   UIAttachment,
 } from "@/features/attachments/types";
-import type { Id, Maybe } from "@/types";
+import type { Id, List, Maybe } from "@/types";
 import type { ActionState } from "@/utils/to-action-state";
 import type { UserVerifiable } from "../auth/types";
+import type { ResourcePermission } from "../memberships/types";
 import type { OrganisationId } from "../organisation/types";
 import type { PaginatedResult } from "../pagination/types";
 
@@ -34,6 +35,24 @@ export type Comment = CommentModelWithUserInfo & {
 
 // Comment type with required user info (for actions)
 export type CommentWithUserInfo = Comment;
+
+/**
+ * Minimal comment shape sent from server to Comments client (RSC boundary).
+ * Omits ticket relation and other fields not used by CommentItem / comments-store.
+ * Includes ticketId so the payload is assignable to CommentWithUserInfo (state/load-more).
+ */
+export type CommentListPayload = Pick<
+  Omit<CommentWithUserInfo, "ticket">,
+  | "id"
+  | "content"
+  | "createdAt"
+  | "updatedAt"
+  | "userId"
+  | "user"
+  | "attachments"
+  | "ticketId"
+> &
+  Partial<ResourcePermission>;
 
 export interface Time {
   createdAt: string;
@@ -83,9 +102,8 @@ export interface CommentDeleteButtonProps extends CommentDeleteHandler {
 export interface CommentOwnerButtonsProps
   extends CommentContentProps,
     CommentEditHandler,
-    CommentDeleteHandler {
-  canDelete?: boolean;
-  canUpdate?: boolean;
+    CommentDeleteHandler,
+    Partial<Pick<ResourcePermission, "canDelete" | "canUpdate">> {
   createAttachmentAction?: CreateAttachmentAction;
   onClientAttachmentCreated?: (payload: AttachmentCreatedPayload) => void;
 }
@@ -117,12 +135,11 @@ export interface CommentActions {
 
 export interface CommentsProviderProps
   extends CommentActions,
-    PaginatedResult<Comment> {
-  canCreate?: boolean;
-  canDelete?: boolean;
-  /** Org-level COMMENT permission for current user's own comments (fallback when item lacks canUpdate/canDelete, e.g. optimistic) */
-  canUpdate?: boolean;
+    Partial<ResourcePermission>,
+    Omit<PaginatedResult<Comment>, "list"> {
   children: ReactNode;
+  /** Initial list from server (minimal payload at RSC boundary). */
+  list?: List<CommentListPayload>;
   ticketId: string;
   ticketSlug: string;
   userId?: string;
@@ -131,11 +148,7 @@ export interface CommentsProviderProps
 
 export type CommentsProps = Omit<CommentsProviderProps, "children">;
 
-export interface CommentsContextValue {
-  canCreate?: boolean;
-  canDelete?: boolean;
-  /** Org-level COMMENT permission for own comments (fallback when item lacks canUpdate/canDelete) */
-  canUpdate?: boolean;
+export interface CommentsContextValue extends Partial<ResourcePermission> {
   createAttachmentAction: CreateAttachmentAction;
   deleteAttachmentAction: DeleteAttachmentAction;
   editingState: EditingState;

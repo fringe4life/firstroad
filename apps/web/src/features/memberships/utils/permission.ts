@@ -13,7 +13,7 @@ import type {
  * Rule: isOwner(resource, user) && permission.canDelete
  */
 const canDelete = async <T extends OrgScopedResource>(
-  user: User | null | undefined,
+  user: Maybe<User>,
   resource: T,
   resourceType: ResourceType,
 ): Promise<boolean> => {
@@ -52,7 +52,7 @@ const canUpdate = async <T extends OrgScopedResource>(
  * Check if user can create a resource in an organization (async - requires DB lookup).
  */
 const canCreate = async (
-  user: User | null | undefined,
+  user: Maybe<User>,
   organizationId: string,
   resourceType: ResourceType,
 ): Promise<boolean> => {
@@ -72,7 +72,7 @@ const canCreate = async (
  */
 const canDeleteWithPermission = (
   isOwner: boolean,
-  permission: ResourcePermission | null | undefined,
+  permission: Maybe<ResourcePermission>,
 ): boolean => isOwner && (permission?.canDelete ?? false);
 
 /**
@@ -80,7 +80,7 @@ const canDeleteWithPermission = (
  */
 const canUpdateWithPermission = (
   isOwner: boolean,
-  permission: ResourcePermission | null | undefined,
+  permission: Maybe<ResourcePermission>,
 ): boolean => isOwner && (permission?.canUpdate ?? false);
 
 export {

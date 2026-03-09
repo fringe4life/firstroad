@@ -1,7 +1,7 @@
 import type { TicketGetPayload, TicketModel } from "@firstroad/db/client-types";
 import type { Id, List, Maybe, SearchParamsProps } from "@/types";
 import type { IsOwner, UserVerifiable } from "../auth/types";
-import type { WithPermissions } from "../memberships/types";
+import type { ResourcePermission } from "../memberships/types";
 import type { OrganisationId } from "../organisation/types";
 
 // Base ticket with user for display
@@ -32,9 +32,25 @@ export interface TicketListProps {
 }
 
 /**
+ * Minimal props for list-row actions (client). Used at RSC boundary so only
+ * these fields are serialized, not the full ticket. Do not add event handlers
+ * here—they cannot be passed from server components; the client component
+ * supplies onActionClick internally for the mobile variant.
+ */
+export interface TicketListRowActionsProps
+  extends Pick<
+    TicketWithAccess,
+    "canCreate" | "canDelete" | "canUpdate" | "isOwner"
+  > {
+  ticket: Pick<BaseTicket, "id" | "slug" | "status">;
+  /** "desktop" for actions slot, "mobile" for mobileActions slot. */
+  variant: "desktop" | "mobile";
+}
+
+/**
  * Access control properties for a ticket
  */
-export interface TicketAccess extends IsOwner, WithPermissions {}
+export interface TicketAccess extends IsOwner, ResourcePermission {}
 
 /**
  * Ticket with ownership and permission information
@@ -71,7 +87,7 @@ export type TicketOwnerOptionsProps =
   | TicketOwnerOptionsWithAccessProps
   | TicketOwnerOptionsFetchProps;
 
-export interface TicketMoreMenuProps extends Partial<WithPermissions> {
+export interface TicketMoreMenuProps extends Partial<ResourcePermission> {
   ticket: Pick<BaseTicket, "id" | "status">;
   trigger: React.ReactNode;
 }

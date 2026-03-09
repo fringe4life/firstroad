@@ -29,4 +29,7 @@ model Ticket {
 
   comments    Comment[]
   attachments TicketAttachment[]
+
+  @@index([userId])
+  @@index([organizationId])
 }

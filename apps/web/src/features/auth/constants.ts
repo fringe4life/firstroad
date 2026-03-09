@@ -1,14 +1,7 @@
-import type { UserProp } from "./types";
+import type { IsOwner, UserProp } from "./types";
 
 const DEFAULT_NO_USER = { user: null, hasUser: false } satisfies UserProp;
 
-const SESSION_TOKEN_COOKIE_NAME = "better-auth.session_token";
+const DEFAULT_OWNERSHIP = { isOwner: false } satisfies IsOwner;
 
-const PRODUCTION_SESSION_TOKEN_COOKIE_NAME =
-  "__Secure-better-auth.session_token";
-
-export {
-  DEFAULT_NO_USER,
-  PRODUCTION_SESSION_TOKEN_COOKIE_NAME,
-  SESSION_TOKEN_COOKIE_NAME,
-};
+export { DEFAULT_NO_USER, DEFAULT_OWNERSHIP };

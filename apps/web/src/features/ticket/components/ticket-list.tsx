@@ -1,7 +1,7 @@
 import { Bug, CircleSlash2 } from "lucide-react";
 import { Placeholder } from "@/components/placeholder";
 import type { TicketListProps } from "@/features/ticket/types";
-import { TicketListItem } from "./ticket-list-item";
+import { TicketListRow } from "./ticket-list-row";
 
 const TicketList = ({ sortKey, tickets }: TicketListProps) => {
   // Handle error state
@@ -17,15 +17,7 @@ const TicketList = ({ sortKey, tickets }: TicketListProps) => {
   return (
     <div className="grid h-full content-start justify-items-center gap-y-4 self-start justify-self-stretch">
       {tickets.map((ticket) => (
-        <TicketListItem
-          canCreate={ticket.canCreate}
-          canDelete={ticket.canDelete}
-          canUpdate={ticket.canUpdate}
-          isOwner={ticket.isOwner}
-          key={ticket.id}
-          sortKey={sortKey}
-          ticket={ticket}
-        />
+        <TicketListRow key={ticket.id} sortKey={sortKey} ticket={ticket} />
       ))}
     </div>
   );

@@ -1,14 +1,18 @@
 import type { IsOwner, User } from "@/features/auth/types";
 import { isOwner } from "@/features/auth/utils/owner";
 import type { CommentWithUserInfo } from "@/features/comment/types";
+import { DEFAULT_PERMISSION } from "@/features/memberships/constants";
 import { getMemberPermissionsBatch } from "@/features/memberships/queries/get-member-permissions-batch";
 import type {
+  ResourcePermission,
   ResourceType,
-  WithPermissions,
 } from "@/features/memberships/types";
 import type { List, Maybe } from "@/types";
+import { DEFAULT_OWNERSHIP } from "../constants";
 
-export type CommentWithAccess = CommentWithUserInfo & WithPermissions & IsOwner;
+export type CommentWithAccess = CommentWithUserInfo &
+  ResourcePermission &
+  IsOwner;
 
 /**
  * Add ownership and permission access to a list of comments.
@@ -34,10 +38,8 @@ const addCommentsAccess = async (
   if (!user) {
     return list.map((comment) => ({
       ...comment,
-      isOwner: false,
-      canCreate: false,
-      canUpdate: false,
-      canDelete: false,
+      ...DEFAULT_OWNERSHIP,
+      ...DEFAULT_PERMISSION,
     }));
   }
 
@@ -53,7 +55,7 @@ const addCommentsAccess = async (
     return {
       ...comment,
       isOwner: owns,
-      canCreate: false,
+      canCreate: owns && (permission?.canCreate ?? false),
       canUpdate: owns && (permission?.canUpdate ?? false),
       canDelete: owns && (permission?.canDelete ?? false),
     };

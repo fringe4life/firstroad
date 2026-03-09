@@ -22,8 +22,9 @@ export const getCommentsByTicketSlugWithPermissions = async (
   const result = await getCommentsByTicketSlug(ticketSlug, cursor, take);
   const list = result?.list;
   if (!list) {
-    return { ...result, list: [] } as PaginatedResult<CommentWithAccess>;
+    return { ...result, list: null };
   }
+
   const listWithAccess = await addCommentsAccess(list, user, organizationId);
   return {
     ...result,

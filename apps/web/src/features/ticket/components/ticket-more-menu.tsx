@@ -1,7 +1,6 @@
 "use client";
 import type { TicketStatus } from "@firstroad/db/client-types";
 import { LucideTrash } from "lucide-react";
-import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/confirm-dialog/index";
 import { PendingIcon } from "@/components/pending-icon-button";
 import {
@@ -13,9 +12,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { deleteTicket } from "@/features/ticket/actions/delete-ticket";
-import { updateStatus } from "@/features/ticket/actions/update-status";
 import { TICKET_STATUS_LABELS } from "@/features/ticket/constants";
 import type { TicketMoreMenuProps } from "@/features/ticket/types";
+import { statusChangeWithToast } from "@/features/ticket/utils/status-change-with-toast";
 
 const TicketMoreMenu = ({
   ticket,
@@ -23,25 +22,9 @@ const TicketMoreMenu = ({
   canDelete = true,
   canUpdate = true,
 }: TicketMoreMenuProps) => {
-  const handleValueChange = async (value: string) => {
-    const promise = updateStatus(value as TicketStatus, ticket.id);
-
-    toast.promise(promise, {
-      loading: " Updating status",
-    });
-
-    const result = await promise;
-
-    if (result.status === "ERROR") {
-      toast.error(result.message);
-    } else if (result.status === "SUCCESS") {
-      toast.success(result.message);
-    }
-  };
-
   const radioOptions = (
     <DropdownMenuRadioGroup
-      onValueChange={handleValueChange}
+      onValueChange={statusChangeWithToast.bind(null, ticket.id)}
       value={ticket.status}
     >
       {(Object.keys(TICKET_STATUS_LABELS) as TicketStatus[]).map((state) => (

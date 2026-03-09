@@ -1,6 +1,8 @@
 # Vercel Skills Assessment
 
-This document describes the two Vercel-derived agent skills and how they fit the codebase. Skill content may be installed via `npx skills add vercel-labs/next-skills` (next-skills bundle); this repo does not necessarily commit the full skill trees under `.agents/skills/`.
+This document describes the two Vercel-derived agent skills and how they fit the codebase. Skill content may be installed via `npx skills add vercel-labs/next-skills` (next-skills bundle) or referenced from the versioned source; this repo does not necessarily commit the full skill trees under `.agents/skills/`.
+
+**Versioned source (as of March 2026):** The React Best Practices skill is maintained at [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) in `skills/react-best-practices/`. The canonical guide is **AGENTS.md** (version 1.0.0, January 2026), with 40+ rules across 8 categories. Rule numbering in the guide uses section numbers (e.g. 1.1 Defer Await, 2.1 Avoid Barrel File Imports, 6.8 Use Explicit Conditional Rendering). For detailed examples and incorrect/correct code, fetch the full document or individual rule files from the repo (see [vercel-react-best-practices-violations.md](vercel-react-best-practices-violations.md)).
 
 **Referenced in this project:**
 
@@ -91,7 +93,7 @@ This document describes the two Vercel-derived agent skills and how they fit the
 | 7        | JavaScript Performance     | LOW–MEDIUM  | `js-`          | 12         |
 | 8        | Advanced Patterns          | LOW         | `advanced-`    | 3          |
 
-**Total:** 57 rules across 8 categories.
+**Total:** 40+ rules in AGENTS.md (skill SKILL.md may cite 57 rule names; the canonical count and numbering follow AGENTS.md).
 
 ### High-Impact Areas (summary)
 
@@ -135,4 +137,6 @@ Neither skill replaces the other: composition improves maintainability and clari
   - **Forms and pending state** — Prefer single-form + `useFormStatus` or `useTransition` where it fits; avoid manual loading state and effects for submit (per best practices).
   - **Refactors** — Use composition skill to simplify APIs first; then apply async/bundle/server/rerender rules as needed.
 
-This assessment is a snapshot of how the two skill areas apply to this repo. Violations and reassessments are in the linked violations docs. For exact rule text and examples, use the next-skills bundle or the skill repos; the violations docs reference paths under `apps/web/src/` and align with [react-doctor-report.md](react-doctor-report.md) where relevant (e.g. sequential awaits acknowledged as intentional on three pages).
+This assessment is a snapshot of how the two skill areas apply to this repo. Violations and reassessments are in the linked violations docs. For exact rule text and examples, use the next-skills bundle or fetch the versioned AGENTS.md from [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) (see violations doc for URLs). The violations docs reference paths under `apps/web/src/` and align with [react-doctor-report.md](react-doctor-report.md) where relevant (e.g. sequential awaits acknowledged as intentional on three pages).
+
+**Last updated:** March 2026 — Re-examined codebase against versioned React Best Practices (AGENTS.md v1.0.0); updated [vercel-react-best-practices-violations.md](vercel-react-best-practices-violations.md) and [RSC_SERIALIZATION_AUDIT.md](RSC_SERIALIZATION_AUDIT.md) with current findings.

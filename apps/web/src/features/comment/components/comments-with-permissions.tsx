@@ -5,6 +5,7 @@ import type { CommentWithUserInfo } from "@/features/comment/types";
 import { getMemberPermission } from "@/features/memberships/queries/get-member-permission";
 import type { PaginatedResult } from "@/features/pagination/types";
 import type { List, Maybe } from "@/types";
+import { toCommentListPayload } from "../utils/to-comment-list-payload";
 
 interface CommentsWithPermissionsProps {
   createAttachmentAction: Parameters<
@@ -43,6 +44,7 @@ export const CommentsWithPermissions = async ({
       canUpdate: false,
       canDelete: false,
     }));
+    const listPayload = listWithAccess.map(toCommentListPayload);
     return (
       <Comments
         canCreate={false}
@@ -51,7 +53,7 @@ export const CommentsWithPermissions = async ({
         createAttachmentAction={createAttachmentAction}
         deleteAttachmentAction={deleteAttachmentAction}
         deleteCommentAction={deleteCommentAction}
-        list={listWithAccess}
+        list={listPayload}
         loadMoreAction={loadMoreAction}
         metadata={metadata}
         ticketId={ticket.id}
@@ -66,6 +68,8 @@ export const CommentsWithPermissions = async ({
     addCommentsAccess(list, user, ticket.organizationId),
   ]);
 
+  const listPayload = (listWithAccess ?? []).map(toCommentListPayload);
+
   return (
     <Comments
       canCreate={permission?.canCreate ?? false}
@@ -74,7 +78,7 @@ export const CommentsWithPermissions = async ({
       createAttachmentAction={createAttachmentAction}
       deleteAttachmentAction={deleteAttachmentAction}
       deleteCommentAction={deleteCommentAction}
-      list={listWithAccess ?? []}
+      list={listPayload}
       loadMoreAction={loadMoreAction}
       loadMoreOrganizationId={ticket.organizationId}
       loadMoreUserId={user.id}

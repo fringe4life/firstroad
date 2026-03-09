@@ -1,8 +1,13 @@
 # Vercel React Best Practices — Codebase Violations
 
-Assessment of this codebase against the rules in `.agents/skills/vercel-react-best-practices/` and `.agents/skills/next-best-practices/` (Vercel next-skills bundle). Each section maps to a rule category or rule and lists concrete violations with file paths and suggested fixes.
+Assessment of this codebase against the **versioned** Vercel React Best Practices (Vercel Engineering, January 2026). Rules are maintained at [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) in `skills/react-best-practices/`. The full guide (AGENTS.md, ~57 rules across 8 categories) can be fetched for detailed examples:
 
-**Last reassessed:** After React Doctor report and recent fixes (breadcrumbs compound key, date-picker autoFocus removed, update-organisation-form lazy state, attachment reset callback deferred). Sequential awaits for three pages are acknowledged as intentional; see [react-doctor-report.md](react-doctor-report.md). Rechecked against next-best-practices and vercel-react-best-practices skills; added note on `tryCatch` and sequential awaits.
+- Full guide: `https://raw.githubusercontent.com/vercel-labs/agent-skills/main/skills/react-best-practices/AGENTS.md`
+- Individual rule: `https://raw.githubusercontent.com/vercel-labs/agent-skills/main/skills/react-best-practices/rules/{rule-name}.md`
+
+Each section below maps to a rule category and lists concrete violations with file paths and suggested fixes.
+
+**Last reassessed:** March 2026 — Re-examined against current versioned skills (AGENTS.md v1.0.0). Previous assessment: React Doctor report and fixes (breadcrumbs compound key, date-picker autoFocus removed, update-organisation-form lazy state, attachment reset callback deferred). Sequential awaits for three pages remain intentional; see [react-doctor-report.md](react-doctor-report.md).
 
 ---
 
@@ -67,7 +72,8 @@ Assessment of this codebase against the rules in `.agents/skills/vercel-react-be
 
 | Location | Issue | Suggestion |
 |----------|--------|------------|
-| Package-level barrels | [PACKAGE_BARREL_FILE_ANALYSIS.md](PACKAGE_BARREL_FILE_ANALYSIS.md) notes **valibot** and **@radix-ui/*** as packages with barrel file issues. Imports like `from "valibot"` or `from "@radix-ui/react-dialog"` can pull extra code. | Add `optimizePackageImports` in `next.config` for `valibot` and relevant `@radix-ui/*` packages per the analysis doc; or import from subpaths where the package supports it. |
+| Package-level barrels | [PACKAGE_BARREL_FILE_ANALYSIS.md](PACKAGE_BARREL_FILE_ANALYSIS.md) notes **valibot** and **@radix-ui/*** as packages with barrel file issues. Imports like `from "valibot"` or `from "@radix-ui/react-dialog"` can pull extra code. | **Current:** `next.config` sets `optimizePackageImports: ["valibot"]` only when `!isDev` (production). In dev, valibot is not optimized. Consider adding `"valibot"` in dev as well if dev bundle/start is slow, or document why dev is excluded. For **@radix-ui/\***, add to `optimizePackageImports` per the analysis doc if measuring shows benefit. |
+| lucide-react | Many files import from `lucide-react`. | Next.js optimizes `lucide-react` by default; no change required per PACKAGE_BARREL_FILE_ANALYSIS.md. |
 
 - No internal `index.ts` barrels under `src/` were found; the main concern is package-level barrels.
 
@@ -84,7 +90,10 @@ Assessment of this codebase against the rules in `.agents/skills/vercel-react-be
 
 ### server-cache-react / server-cache-lru / server-parallel-fetching / server-serialization / server-dedup-props / server-after-nonblocking
 
-- No systematic audit was done for React cache, LRU cache, parallel fetching, serialization size, or dedup. Worth a separate pass when optimizing server data flow and payload size.
+- **React.cache():** Used in `apps/web/src/features/auth/queries/get-user.ts` for per-request deduplication of `getUser()`. Good.
+- **server-after-nonblocking:** No use of `after()` from `next/server` was found. Consider using `after()` for logging, analytics, or other non-blocking work in API routes or server actions so the response is not delayed.
+- **server-serialization / server-dedup-props:** See [RSC_SERIALIZATION_AUDIT.md](RSC_SERIALIZATION_AUDIT.md). Detail-page ticket actions already receive minimal props at the client boundary (`TicketDetailActionsDesktop` passes only `{ id, slug, status }` to client). List page still serializes full ticket to `TicketListItem` (client) for card display; actions already get minimal. Comments list from server to `Comments` (client) still sends full comment objects; `CommentOwnerButtons` receives minimal `{ id, content }` when rendered from client `CommentList`.
+- **LRU cache / parallel fetching / dedup:** No systematic audit. Worth a targeted pass when optimizing server data flow and payload size.
 
 ---
 
@@ -92,22 +101,25 @@ Assessment of this codebase against the rules in `.agents/skills/vercel-react-be
 
 ### rendering-conditional-render (MEDIUM)
 
-**Rule:** Use explicit conditional rendering (e.g. ternary) instead of `condition && <JSX />` to avoid accidentally rendering `0` or other falsy values.
+**Rule (6.8 in AGENTS.md):** Use explicit conditional rendering (e.g. ternary) instead of `condition && <JSX />` to avoid accidentally rendering `0` or other falsy values.
 
 | Location | Issue | Suggestion |
 |----------|--------|------------|
 | [src/features/invitations/components/accept-invitation-card.tsx](../apps/web/src/features/invitations/components/accept-invitation-card.tsx) | `{invitation.inviterName && (<p>...</p>)}` | Use ternary: `{invitation.inviterName ? <p>...</p> : null}`. |
-| [src/components/form/submit-button.tsx](../apps/web/src/components/form/submit-button.tsx) | `{shouldShowLoader && (<LucideLoaderCircle ... />)}` | Use ternary: `{shouldShowLoader ? <LucideLoaderCircle ... /> : null}` (or keep if `shouldShowLoader` is strictly boolean). |
+| [src/components/form/submit-button.tsx](../apps/web/src/components/form/submit-button.tsx) | `{shouldShowLoader && (<LucideLoaderCircle ... />)}`, `{shouldShowIcon && cloneElement(...)}` | Use ternary: `{shouldShowLoader ? <LucideLoaderCircle ... /> : null}`; `shouldShowLoader` is boolean (pending \|\| showLoader) but ternary avoids any falsy edge case. |
 | [src/components/ui/dialog.tsx](../apps/web/src/components/ui/dialog.tsx) | `{Boolean(showCloseButton) && (...)}` | Use ternary: `{showCloseButton ? (...) : null}`. |
-| [src/components/skeletons/heading-skeleton.tsx](../apps/web/src/components/skeletons/heading-skeleton.tsx) | `{showTabs && (...)}`, `{showActions && (...)}` | Use ternary: `{showTabs ? (...) : null}`, `{showActions ? (...) : null}`. |
-| [src/features/attachments/components/attachments.tsx](../apps/web/src/features/attachments/components/attachments.tsx) | `{isOwner && (...)}` | Use ternary if `isOwner` can be non-boolean; otherwise acceptable. |
+| [src/components/skeletons/heading-skeleton.tsx](../apps/web/src/components/skeletons/heading-skeleton.tsx) | `{showTabs && <TabsSkeleton />}`, `{showActions && <ActionsSkeleton />}` | Use ternary: `{showTabs ? <TabsSkeleton /> : null}`, `{showActions ? <ActionsSkeleton /> : null}`. |
+| [src/features/attachments/components/attachments.tsx](../apps/web/src/features/attachments/components/attachments.tsx) | `{isOwner && (<AttachmentCreateForm ... />)}` | Use ternary: `{isOwner ? <AttachmentCreateForm ... /> : null}`. |
 | [src/features/navigation/components/nav-items.tsx](../apps/web/src/features/navigation/components/nav-items.tsx) | `{Boolean(item.seperator) && <Separator />}` | Use ternary: `{item.seperator ? <Separator /> : null}`. |
 | [src/features/comment/components/comment-create-form.tsx](../apps/web/src/features/comment/components/comment-create-form.tsx) | `{Boolean(commentId) && Boolean(onCancel) && (...)}` | Use ternary: `{commentId && onCancel ? (...) : null}`. |
 | [src/features/comment/components/time-ago-client.tsx](../apps/web/src/features/comment/components/time-ago-client.tsx) | `{Boolean(isEdited) && (...)}` | Use ternary: `{isEdited ? (...) : null}`. |
-| [src/components/breadcrumbs.tsx](../apps/web/src/components/breadcrumbs.tsx) | `{index < breadcrumbs.length - 1 && (...)}` | Use ternary: `{index < breadcrumbs.length - 1 ? (...) : null}` (avoids rendering `0`). Breadcrumbs key is now compound (`title` + `href`). |
+| [src/components/breadcrumbs.tsx](../apps/web/src/components/breadcrumbs.tsx) | `{index < breadcrumbs.length - 1 && (...)}` | Use ternary: `{index < breadcrumbs.length - 1 ? (...) : null}` (avoids rendering `0`). Breadcrumbs key is compound (`title` + `href`). |
 | [src/features/auth/components/otp-verify-form.tsx](../apps/web/src/features/auth/components/otp-verify-form.tsx) | `{Boolean(email) && (...)}` | Use ternary: `{email ? (...) : null}`. |
 | [src/components/card-compact.tsx](../apps/web/src/components/card-compact.tsx) | `{Boolean(footer) && <CardFooter>...</CardFooter>}` | Use ternary: `{footer ? <CardFooter>...</CardFooter> : null}`. |
 | [src/components/ui/input-otp.tsx](../apps/web/src/components/ui/input-otp.tsx) | `{Boolean(hasFakeCaret) && (...)}` | Use ternary: `{hasFakeCaret ? (...) : null}`. |
+| [src/features/ticket/components/ticket-owner-options.tsx](../apps/web/src/features/ticket/components/ticket-owner-options.tsx) | `{isDetail && <IconButtonSkeleton />}` | Use ternary: `{isDetail ? <IconButtonSkeleton /> : null}`. |
+| [src/features/ticket/components/ticket-more-menu.tsx](../apps/web/src/features/ticket/components/ticket-more-menu.tsx) | `{canUpdate && radioOptions}` | Use ternary: `{canUpdate ? radioOptions : null}`. |
+| [src/features/memberships/components/membership-item.tsx](../apps/web/src/features/memberships/components/membership-item.tsx) | `{isCurrentUser && " (you)"}` | Use ternary: `{isCurrentUser ? " (you)" : null}` (avoids rendering `0`). |
 
 ### rerender-move-effect-to-event (MEDIUM)
 
@@ -149,13 +161,16 @@ Assessment of this codebase against the rules in `.agents/skills/vercel-react-be
 
 | Category | Rule | Violations | Priority |
 |----------|------|------------|----------|
-| async | async-parallel | 3 pages acknowledged (intentional order); 2 optional (edit page, profile page) | — / Low |
+| async | async-parallel | 3 pages acknowledged (intentional order); 2 optional (edit page, profile page). Ticket detail page already uses `Promise.all` for ticket + comments. | — / Low |
 | async | tryCatch + sequential await | Hidden source: `tryCatch` awaits one op; multiple `await tryCatch(...)` = sequential. Use `Promise.all([tryCatch(a), tryCatch(b)])` when independent. paginate-items.ts is correct; other call sites are dependency chains. | Watch when adding code |
 | async | async-defer-await / async-suspense-boundaries | 0 | — |
-| bundle | bundle-barrel-imports | Package barrels (valibot, @radix-ui); optional feature constants barrel | High (packages) |
+| bundle | bundle-barrel-imports | valibot in `optimizePackageImports` only when `!isDev`. Consider @radix-ui per [PACKAGE_BARREL_FILE_ANALYSIS.md](PACKAGE_BARREL_FILE_ANALYSIS.md). lucide-react optimized by Next by default. | Medium |
 | server | server-auth-actions | 0 | — |
-| rendering | rendering-conditional-render | 12+ files using `&&` for conditionals | Medium |
+| server | server-cache-react | `getUser` uses `React.cache()`. | — |
+| server | server-after-nonblocking | No `after()` usage; consider for logging/analytics. | Low |
+| server | server-serialization | See [RSC_SERIALIZATION_AUDIT.md](RSC_SERIALIZATION_AUDIT.md). Detail actions already minimal; list ticket + comments list still send full objects at boundary. | Medium |
+| rendering | rendering-conditional-render | 15 files using `&&` for conditionals (see table above). | Medium |
 | rerender | rerender-move-effect-to-event | 0 | — |
 | rendering | rendering-usetransition-loading | 0 | — |
 
-Recommended order of work: (1) Add `optimizePackageImports` for valibot and @radix-ui per [PACKAGE_BARREL_FILE_ANALYSIS.md](PACKAGE_BARREL_FILE_ANALYSIS.md). (2) Replace `condition && <JSX />` with `condition ? <JSX /> : null` in the listed files to satisfy rendering-conditional-render. (3) Optionally parallelize edit and profile page awaits if dynamic/params ordering is not required there. (4) When using `tryCatch` for multiple independent operations, use `Promise.all([tryCatch(op1), tryCatch(op2)])` instead of sequential `await tryCatch(...)`.
+Recommended order of work: (1) Replace `condition && <JSX />` with `condition ? <JSX /> : null` in the 15 listed files to satisfy rendering-conditional-render (rule 6.8). (2) Consider adding `optimizePackageImports` for valibot in dev if dev build is slow; consider @radix-ui per [PACKAGE_BARREL_FILE_ANALYSIS.md](PACKAGE_BARREL_FILE_ANALYSIS.md). (3) Optionally use `after()` from `next/server` for non-blocking work in API routes or server actions. (4) Optionally parallelize edit and profile page awaits if dynamic/params ordering is not required. (5) When using `tryCatch` for multiple independent operations, use `Promise.all([tryCatch(op1), tryCatch(op2)])` instead of sequential `await tryCatch(...)`.

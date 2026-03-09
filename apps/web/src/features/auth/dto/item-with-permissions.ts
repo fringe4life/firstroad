@@ -1,8 +1,8 @@
 import { getMemberPermission } from "@/features/memberships/queries/get-member-permission";
 import type {
   OrgScopedResource,
+  ResourcePermission,
   ResourceType,
-  WithPermissions,
 } from "@/features/memberships/types";
 import type { Maybe } from "@/types";
 import { getUser } from "../queries/get-user";
@@ -23,7 +23,7 @@ const itemWithPermissions = async <T extends OrgScopedResource>(
   item: Maybe<T> | Promise<Maybe<T>>,
   user: Maybe<User>,
   resourceType: ResourceType,
-): Promise<Maybe<T & WithPermissions & IsOwner>> => {
+): Promise<Maybe<T & ResourcePermission & IsOwner>> => {
   const [currentUser, resolvedItem] = await Promise.all([
     user != null ? Promise.resolve(user) : getUser().then(({ user: u }) => u),
     Promise.resolve(item),
