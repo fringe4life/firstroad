@@ -1,9 +1,17 @@
 import type { ResourcePermission } from "./types";
 
-const DEFAULT_PERMISSION: ResourcePermission = {
-  canCreate: false,
+// Default flags for item-scoped permissions (per resource instance).
+const DEFAULT_ITEM_PERMISSION: Pick<
+  ResourcePermission,
+  "canUpdate" | "canDelete"
+> = {
   canUpdate: false,
   canDelete: false,
 };
 
-export { DEFAULT_PERMISSION };
+// Default flag for org-scoped creation permission.
+const DEFAULT_CREATE_PERMISSION: Pick<ResourcePermission, "canCreate"> = {
+  canCreate: false,
+};
+
+export { DEFAULT_CREATE_PERMISSION, DEFAULT_ITEM_PERMISSION };

@@ -31,7 +31,6 @@ const TicketDetailActionsMobile = async ({
 
   return (
     <TicketActionsMobile
-      canCreate={false}
       canDelete={canDelete}
       canUpdate={canUpdate}
       isOwner={true}

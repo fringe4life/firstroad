@@ -1,4 +1,5 @@
 import type { NextRequest } from "next/server";
+import { EDGE_SESSION_COOKIE_NAME } from "@/lib/env-edge";
 import type { Maybe } from "@/types";
 
 /**
@@ -37,15 +38,9 @@ export const getSessionCookie = (
     return null;
   }
 
-  const name = process.env.NEXT_PUBLIC_SESSION_COOKIE_NAME;
-
-  if (!name) {
-    throw new Error("COOKIE NAME NOT FOUND");
-  }
-
   const parsed = parseCookieHeader(cookieHeader);
 
-  const value = parsed.get(name);
+  const value = parsed.get(EDGE_SESSION_COOKIE_NAME);
   const found = value && value.length > 0;
 
   if (found) {

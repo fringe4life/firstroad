@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AttachmentPreviewCard } from "@/features/attachments/components/attachment-preview";
 import { ACCEPTED_FILE_TYPES } from "../constants";
-import type { AttachmentPreview } from "../utils/attachment-previews";
+import type { AttachmentPreview } from "../types";
 import { createAttachmentPreviews } from "../utils/attachment-previews";
 
 /** Revoke object URLs for image previews so they can be garbage-collected. */

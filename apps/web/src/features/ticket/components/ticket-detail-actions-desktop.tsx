@@ -31,7 +31,6 @@ const TicketDetailActionsDesktop = async ({
 
   return (
     <TicketActionsDesktop
-      canCreate={false}
       canDelete={canDelete}
       canUpdate={canUpdate}
       isOwner={true}

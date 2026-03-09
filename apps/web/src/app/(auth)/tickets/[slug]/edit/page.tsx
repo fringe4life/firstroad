@@ -21,7 +21,7 @@ const EditTicketPage = async ({
     "TICKET",
   );
 
-  if (!(ticket?.canUpdate && ticket?.isOwner)) {
+  if (!ticket?.canUpdate) {
     throw notFound();
   }
 

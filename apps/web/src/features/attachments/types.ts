@@ -109,3 +109,29 @@ export interface VerifiableComment extends VerifiableItemBase {
 }
 
 export type VerifiableItem = VerifiableTicket | VerifiableComment;
+
+export type AttachmentPreviewKind = "image" | "pdf" | "other";
+
+export interface ImageAttachmentPreview {
+  file: File;
+  id: string;
+  kind: "image";
+  objectUrl: string;
+}
+
+export interface PdfAttachmentPreview {
+  file: File;
+  id: string;
+  kind: "pdf";
+}
+
+export interface OtherAttachmentPreview {
+  file: File;
+  id: string;
+  kind: "other";
+}
+
+export type AttachmentPreview =
+  | ImageAttachmentPreview
+  | PdfAttachmentPreview
+  | OtherAttachmentPreview;

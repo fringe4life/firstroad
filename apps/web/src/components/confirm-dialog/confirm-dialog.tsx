@@ -20,10 +20,8 @@ import {
 } from "@/components/ui/dialog";
 import { useToggle } from "@/hooks/use-toggle";
 import { type ActionState, EMPTY_ACTION_STATE } from "@/utils/to-action-state";
-import {
-  ConfirmDialogContext,
-  type ConfirmDialogContextValue,
-} from "./context";
+import { ConfirmDialogContext } from "./context";
+import type { ConfirmDialogContextValue } from "./types";
 
 interface ConfirmDialogProps {
   action: (

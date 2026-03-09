@@ -18,6 +18,14 @@ const ACCEPTED_FILE_TYPES = [
   "application/pdf",
 ] satisfies Mime[];
 
+const SUPPORTED_IMAGE_TYPES = new Set<string>([
+  "image/png",
+  "image/jpeg",
+  "image/jpg",
+  "image/gif",
+  "image/webp",
+]);
+
 const FILE_NAME_MAX = 255;
 const MAX_SIZE_MB = 4;
 const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
@@ -28,4 +36,5 @@ export {
   MAX_SIZE_BYTES,
   MAX_SIZE_MB,
   ATTACHMENT_KIND_ICONS,
+  SUPPORTED_IMAGE_TYPES,
 };

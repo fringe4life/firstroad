@@ -82,7 +82,6 @@ const TicketOwnerOptionsFetchInner = async ({
 
   return (
     <TicketOwnerOptionsContent
-      canCreate={false}
       canDelete={canDelete}
       canUpdate={canUpdate}
       isDetail={isDetail}

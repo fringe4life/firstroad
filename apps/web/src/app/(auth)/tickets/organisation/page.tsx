@@ -4,10 +4,12 @@ import { CardCompact } from "@/components/card-compact";
 import { Heading } from "@/components/heading";
 import { Suspend } from "@/components/suspend";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
+import { canCreate } from "@/features/memberships/utils/permission";
 import { upsertTicket } from "@/features/ticket/actions/upsert-ticket";
 import { TicketsControlSkeleton } from "@/features/ticket/components/skeletons/ticket-controls-skeleton";
 import { TicketFormSkeleton } from "@/features/ticket/components/skeletons/ticket-form-skeleton";
 import { TicketListSkeleton } from "@/features/ticket/components/skeletons/ticket-list-skeleton";
+import { TicketCreateDisabledCard } from "@/features/ticket/components/ticket-create-disabled-card";
 import { TicketUpsertForm } from "@/features/ticket/components/ticket-upsert-form";
 import { Tickets } from "@/features/ticket/components/tickets";
 
@@ -26,23 +28,31 @@ const TicketsOrganisationPage = async ({
   searchParams,
 }: PageProps<"/tickets">) => {
   await connection();
-  await getUserOrRedirect();
+  const user = await getUserOrRedirect();
+  const organizationId = user.activeOrganizationId;
+  const canCreateTicket = organizationId
+    ? await canCreate(user, organizationId, "TICKET")
+    : false;
   return (
     <>
       <Heading
         description="All your organisation's tickets at one place"
         title="Our Tickets"
       />
-      <CardCompact
-        className="max-content-narrow justify-self-center"
-        content={
-          <Suspend fallback={<TicketFormSkeleton />}>
-            <TicketUpsertForm upsertTicketAction={upsertTicket} />
-          </Suspend>
-        }
-        description="A new ticket will be created"
-        title="Create Ticket"
-      />
+      {canCreateTicket ? (
+        <CardCompact
+          className="max-content-narrow justify-self-center"
+          content={
+            <Suspend fallback={<TicketFormSkeleton />}>
+              <TicketUpsertForm upsertTicketAction={upsertTicket} />
+            </Suspend>
+          }
+          description="A new ticket will be created"
+          title="Create Ticket"
+        />
+      ) : (
+        <TicketCreateDisabledCard />
+      )}
       <Suspend
         fallback={
           <>

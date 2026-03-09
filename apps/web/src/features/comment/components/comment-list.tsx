@@ -9,8 +9,6 @@ const CommentList = () => {
   const {
     optimisticComments,
     userId,
-    canUpdate: canUpdatePermission,
-    canDelete: canDeletePermission,
     handleDelete,
     handleEdit,
     createAttachmentAction,
@@ -31,8 +29,8 @@ const CommentList = () => {
             return null;
           }
           // Item may have canUpdate/canDelete from addCommentsAccess (server) or lack them (optimistic/new)
-          const canUpdate = item?.canUpdate ?? canUpdatePermission ?? false;
-          const canDelete = item?.canDelete ?? canDeletePermission ?? false;
+          const canUpdate = item?.canUpdate ?? false;
+          const canDelete = item?.canDelete ?? false;
           if (!(canUpdate || canDelete)) {
             return null;
           }

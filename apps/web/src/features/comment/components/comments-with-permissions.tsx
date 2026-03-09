@@ -48,8 +48,6 @@ export const CommentsWithPermissions = async ({
     return (
       <Comments
         canCreate={false}
-        canDelete={false}
-        canUpdate={false}
         createAttachmentAction={createAttachmentAction}
         deleteAttachmentAction={deleteAttachmentAction}
         deleteCommentAction={deleteCommentAction}
@@ -73,8 +71,6 @@ export const CommentsWithPermissions = async ({
   return (
     <Comments
       canCreate={permission?.canCreate ?? false}
-      canDelete={permission?.canDelete ?? false}
-      canUpdate={permission?.canUpdate ?? false}
       createAttachmentAction={createAttachmentAction}
       deleteAttachmentAction={deleteAttachmentAction}
       deleteCommentAction={deleteCommentAction}

@@ -8,13 +8,11 @@ const TicketListRowActions = ({
   ticket,
   variant,
   isOwner,
-  canCreate,
   canDelete,
   canUpdate,
 }: TicketListRowActionsProps) =>
   variant === "desktop" ? (
     <TicketActionsDesktop
-      canCreate={canCreate}
       canDelete={canDelete}
       canUpdate={canUpdate}
       isOwner={isOwner}
@@ -23,7 +21,6 @@ const TicketListRowActions = ({
     />
   ) : (
     <TicketActionsMobile
-      canCreate={canCreate}
       canDelete={canDelete}
       canUpdate={canUpdate}
       isOwner={isOwner}

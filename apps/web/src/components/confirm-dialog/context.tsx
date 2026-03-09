@@ -1,13 +1,8 @@
 import { createContext, use } from "react";
-import type { useToggle } from "@/hooks/use-toggle";
 import type { Maybe } from "@/types";
+import type { ConfirmDialogContextValue } from "./types";
 
 // Follow MobileSidebar pattern - extend useToggle return type
-type ToggleState = ReturnType<typeof useToggle>;
-
-interface ConfirmDialogContextValue extends ToggleState {
-  isPending: boolean;
-}
 
 const ConfirmDialogContext =
   createContext<Maybe<ConfirmDialogContextValue>>(null);
@@ -23,4 +18,3 @@ const useConfirmDialogContext = () => {
 };
 
 export { ConfirmDialogContext, useConfirmDialogContext };
-export type { ConfirmDialogContextValue };

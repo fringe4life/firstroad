@@ -1,41 +1,16 @@
-type AttachmentPreviewKind = "image" | "pdf" | "other";
-
-interface ImageAttachmentPreview {
-  file: File;
-  id: string;
-  kind: "image";
-  objectUrl: string;
-}
-
-interface PdfAttachmentPreview {
-  file: File;
-  id: string;
-  kind: "pdf";
-}
-
-interface OtherAttachmentPreview {
-  file: File;
-  id: string;
-  kind: "other";
-}
-
-type AttachmentPreview =
-  | ImageAttachmentPreview
-  | PdfAttachmentPreview
-  | OtherAttachmentPreview;
-
-const SUPPORTED_IMAGE_TYPES = new Set<string>([
-  "image/png",
-  "image/jpeg",
-  "image/jpg",
-  "image/gif",
-  "image/webp",
-]);
+import type { Maybe } from "@/types";
+import { SUPPORTED_IMAGE_TYPES } from "../constants";
+import type {
+  AttachmentPreview,
+  ImageAttachmentPreview,
+  OtherAttachmentPreview,
+  PdfAttachmentPreview,
+} from "../types";
 
 const PDF_MIME_TYPE = "application/pdf";
 
 const createAttachmentPreviews = (
-  files: FileList | File[] | null | undefined,
+  files: Maybe<FileList | File[]>,
 ): AttachmentPreview[] => {
   if (!files) {
     return [];
@@ -77,11 +52,4 @@ const createAttachmentPreviews = (
   });
 };
 
-export type {
-  AttachmentPreview,
-  AttachmentPreviewKind,
-  ImageAttachmentPreview,
-  OtherAttachmentPreview,
-  PdfAttachmentPreview,
-};
 export { createAttachmentPreviews };

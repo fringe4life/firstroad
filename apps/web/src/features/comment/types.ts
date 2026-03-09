@@ -52,7 +52,7 @@ export type CommentListPayload = Pick<
   | "attachments"
   | "ticketId"
 > &
-  Partial<ResourcePermission>;
+  Partial<Pick<ResourcePermission, "canUpdate" | "canDelete">>;
 
 export interface Time {
   createdAt: string;
@@ -135,7 +135,7 @@ export interface CommentActions {
 
 export interface CommentsProviderProps
   extends CommentActions,
-    Partial<ResourcePermission>,
+    Partial<Omit<ResourcePermission, "canUpdate" | "canDelete">>,
     Omit<PaginatedResult<Comment>, "list"> {
   children: ReactNode;
   /** Initial list from server (minimal payload at RSC boundary). */
@@ -148,7 +148,14 @@ export interface CommentsProviderProps
 
 export type CommentsProps = Omit<CommentsProviderProps, "children">;
 
-export interface CommentsContextValue extends Partial<ResourcePermission> {
+type ContextPermission = Partial<
+  Omit<ResourcePermission, "canUpdate" | "canDelete">
+>;
+type ItemPermission = Partial<
+  Pick<ResourcePermission, "canUpdate" | "canDelete">
+>;
+
+export interface CommentsContextValue extends ContextPermission {
   createAttachmentAction: CreateAttachmentAction;
   deleteAttachmentAction: DeleteAttachmentAction;
   editingState: EditingState;
@@ -162,7 +169,7 @@ export interface CommentsContextValue extends Partial<ResourcePermission> {
   handleUpsertSuccess: (state: ActionState<CommentWithUserInfo>) => void;
   hasNextPage: boolean;
   isPending: boolean;
-  optimisticComments: Array<CommentWithUserInfo & Partial<ResourcePermission>>;
+  optimisticComments: Array<CommentWithUserInfo & ItemPermission>;
   upsertAction: (formData: FormData) => void;
   upsertState: ActionState<CommentWithUserInfo>;
   userId?: string;

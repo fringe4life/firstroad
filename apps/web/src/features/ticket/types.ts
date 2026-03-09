@@ -38,19 +38,20 @@ export interface TicketListProps {
  * supplies onActionClick internally for the mobile variant.
  */
 export interface TicketListRowActionsProps
-  extends Pick<
-    TicketWithAccess,
-    "canCreate" | "canDelete" | "canUpdate" | "isOwner"
-  > {
+  extends Pick<TicketWithAccess, "canDelete" | "canUpdate" | "isOwner"> {
   ticket: Pick<BaseTicket, "id" | "slug" | "status">;
   /** "desktop" for actions slot, "mobile" for mobileActions slot. */
   variant: "desktop" | "mobile";
 }
 
 /**
- * Access control properties for a ticket
+ * Access control properties for a ticket.
+ * Item-scoped flags (canUpdate, canDelete) live here; org-scoped canCreate
+ * should be attached at a higher level (e.g. list/page context) when needed.
  */
-export interface TicketAccess extends IsOwner, ResourcePermission {}
+export interface TicketAccess
+  extends IsOwner,
+    Pick<ResourcePermission, "canUpdate" | "canDelete"> {}
 
 /**
  * Ticket with ownership and permission information
@@ -97,3 +98,13 @@ export interface VerifyTicket
     Id,
     OrganisationId,
     Pick<TicketModel, "slug"> {}
+
+/**
+ * Options for addTicketsAccess when ownership/permissions are pre-computed
+ */
+export interface AddTicketsAccessOptions {
+  /** When true, all tickets are owned by the user (skip isOwner checks) */
+  allOwned?: boolean;
+  /** Pre-fetched permissions map to avoid additional query */
+  permissionsMap?: Map<string, ResourcePermission>;
+}

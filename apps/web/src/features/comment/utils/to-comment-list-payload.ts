@@ -14,6 +14,5 @@ const toCommentListPayload = (
   ticketId: comment.ticketId,
   canUpdate: comment.canUpdate,
   canDelete: comment.canDelete,
-  canCreate: comment.canCreate,
 });
 export { toCommentListPayload };

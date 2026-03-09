@@ -1,7 +1,8 @@
 import type { IsOwner, User } from "@/features/auth/types";
+import { addItemPermissions } from "@/features/auth/utils/add-item-permissions";
 import { isOwner } from "@/features/auth/utils/owner";
 import type { CommentWithUserInfo } from "@/features/comment/types";
-import { DEFAULT_PERMISSION } from "@/features/memberships/constants";
+import { DEFAULT_ITEM_PERMISSION } from "@/features/memberships/constants";
 import { getMemberPermissionsBatch } from "@/features/memberships/queries/get-member-permissions-batch";
 import type {
   ResourcePermission,
@@ -11,8 +12,8 @@ import type { List, Maybe } from "@/types";
 import { DEFAULT_OWNERSHIP } from "../constants";
 
 export type CommentWithAccess = CommentWithUserInfo &
-  ResourcePermission &
-  IsOwner;
+  IsOwner &
+  Pick<ResourcePermission, "canUpdate" | "canDelete">;
 
 /**
  * Add ownership and permission access to a list of comments.
@@ -39,7 +40,7 @@ const addCommentsAccess = async (
     return list.map((comment) => ({
       ...comment,
       ...DEFAULT_OWNERSHIP,
-      ...DEFAULT_PERMISSION,
+      ...DEFAULT_ITEM_PERMISSION,
     }));
   }
 
@@ -50,16 +51,9 @@ const addCommentsAccess = async (
   );
   const permission = permissionsMap.get(organizationId);
 
-  return list.map((comment) => {
-    const owns = isOwner(user, comment);
-    return {
-      ...comment,
-      isOwner: owns,
-      canCreate: owns && (permission?.canCreate ?? false),
-      canUpdate: owns && (permission?.canUpdate ?? false),
-      canDelete: owns && (permission?.canDelete ?? false),
-    };
-  });
+  return list.map((comment) =>
+    addItemPermissions(comment, isOwner(user, comment), permission),
+  );
 };
 
 export { addCommentsAccess };

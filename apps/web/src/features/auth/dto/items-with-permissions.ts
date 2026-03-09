@@ -1,4 +1,4 @@
-import { DEFAULT_PERMISSION } from "@/features/memberships/constants";
+import { DEFAULT_ITEM_PERMISSION } from "@/features/memberships/constants";
 import { getMemberPermissionsBatch } from "@/features/memberships/queries/get-member-permissions-batch";
 import type {
   OrgScopedResource,
@@ -7,24 +7,31 @@ import type {
 } from "@/features/memberships/types";
 import type { List, Maybe } from "@/types";
 import type { IsOwner, ItemsWithPermissionsOptions, User } from "../types";
+import { addItemPermissions } from "../utils/add-item-permissions";
 import { isOwner } from "../utils/owner";
 
 /**
  * DAL helper for adding permission information to a list of items.
  * Uses batch permission fetch when no permissionsMap provided.
  *
+ * Item-level access (isOwner, canUpdate, canDelete) is attached per item.
+ * Org-scoped canCreate should be derived from the ResourcePermission
+ * separately at the call site when needed.
+ *
  * @param items - List of items or a promise of the list
  * @param user - The user to check permissions against
  * @param resourceType - The resource type for permission lookup
  * @param options - Optional pre-fetched permissionsMap for optimization
- * @returns List of items with canUpdate, canDelete (canCreate: false for existing items)
+ * @returns List of items with item-scoped access flags
  */
 const itemsWithPermissions = async <T extends OrgScopedResource>(
   items: List<T> | Promise<List<T>>,
   user: Maybe<User>,
   resourceType: ResourceType,
   options?: ItemsWithPermissionsOptions,
-): Promise<List<T & ResourcePermission & IsOwner>> => {
+): Promise<
+  List<T & Pick<ResourcePermission, "canUpdate" | "canDelete"> & IsOwner>
+> => {
   const resolvedItems = await items;
 
   // dont do any async work if no items
@@ -41,7 +48,7 @@ const itemsWithPermissions = async <T extends OrgScopedResource>(
   if (!user) {
     return resolvedItems.map((item) => ({
       ...item,
-      ...DEFAULT_PERMISSION,
+      ...DEFAULT_ITEM_PERMISSION,
       isOwner: false,
     }));
   }
@@ -66,13 +73,7 @@ const itemsWithPermissions = async <T extends OrgScopedResource>(
     const owns = isOwner(user, item);
     const permission = permissionsMap.get(item.organizationId);
 
-    return {
-      ...item,
-      isOwner: owns,
-      canCreate: owns && (permission?.canCreate ?? false),
-      canUpdate: owns && (permission?.canUpdate ?? false),
-      canDelete: owns && (permission?.canDelete ?? false),
-    };
+    return addItemPermissions(item, owns, permission);
   });
 };
 

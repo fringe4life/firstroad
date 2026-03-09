@@ -1,7 +1,10 @@
 import { prisma } from "@firstroad/db";
 import type { List } from "@/types";
 import { tryCatch } from "@/utils/try-catch";
-import { DEFAULT_PERMISSION } from "../constants";
+import {
+  DEFAULT_CREATE_PERMISSION,
+  DEFAULT_ITEM_PERMISSION,
+} from "../constants";
 import type {
   OrganisationMemberRow,
   ResourcePermission,
@@ -52,8 +55,18 @@ const getMembershipsById = async (
       return {
         id: member.id,
         permissions: {
-          TICKET: permissionsByType.TICKET ?? DEFAULT_PERMISSION,
-          COMMENT: permissionsByType.COMMENT ?? DEFAULT_PERMISSION,
+          TICKET:
+            permissionsByType.TICKET ??
+            ({
+              ...DEFAULT_CREATE_PERMISSION,
+              ...DEFAULT_ITEM_PERMISSION,
+            } satisfies ResourcePermission),
+          COMMENT:
+            permissionsByType.COMMENT ??
+            ({
+              ...DEFAULT_CREATE_PERMISSION,
+              ...DEFAULT_ITEM_PERMISSION,
+            } satisfies ResourcePermission),
         },
         email: member.user.email,
         emailVerified: member.user.emailVerified,

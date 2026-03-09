@@ -18,7 +18,6 @@ const TicketListRow = ({ ticket, sortKey }: TicketListRowProps) => {
       <TicketCard
         actions={
           <TicketListRowActions
-            canCreate={ticket.canCreate}
             canDelete={ticket.canDelete}
             canUpdate={ticket.canUpdate}
             isOwner={ticket.isOwner}
@@ -28,7 +27,6 @@ const TicketListRow = ({ ticket, sortKey }: TicketListRowProps) => {
         }
         mobileActions={
           <TicketListRowActions
-            canCreate={ticket.canCreate}
             canDelete={ticket.canDelete}
             canUpdate={ticket.canUpdate}
             isOwner={ticket.isOwner}

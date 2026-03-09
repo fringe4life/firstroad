@@ -18,7 +18,6 @@ const TicketListItem = ({
   ticket,
   sortKey,
   isOwner,
-  canCreate,
   canDelete,
   canUpdate,
 }: TicketListItemProps) => {
@@ -32,7 +31,6 @@ const TicketListItem = ({
       <TicketCard
         actions={
           <TicketActionsDesktop
-            canCreate={canCreate}
             canDelete={canDelete}
             canUpdate={canUpdate}
             isOwner={isOwner}
@@ -42,7 +40,6 @@ const TicketListItem = ({
         }
         mobileActions={
           <TicketActionsMobile
-            canCreate={canCreate}
             canDelete={canDelete}
             canUpdate={canUpdate}
             isOwner={isOwner}

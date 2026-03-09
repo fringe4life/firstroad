@@ -2,16 +2,7 @@
 
 import React from "react";
 import { useConfirmDialogContext } from "./context";
-
-interface ClickableProps {
-  disabled?: boolean;
-  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
-}
-
-interface ConfirmDialogTriggerProps {
-  asChild?: boolean;
-  children: React.ReactElement<ClickableProps>;
-}
+import type { ClickableProps, ConfirmDialogTriggerProps } from "./types";
 
 const ConfirmDialogTrigger = ({
   children,

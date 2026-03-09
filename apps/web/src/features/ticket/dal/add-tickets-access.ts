@@ -1,22 +1,16 @@
+import { DEFAULT_OWNERSHIP } from "@/features/auth/constants";
 import type { User } from "@/features/auth/types";
+import { addItemPermissions } from "@/features/auth/utils/add-item-permissions";
 import { isOwner } from "@/features/auth/utils/owner";
+import { DEFAULT_ITEM_PERMISSION } from "@/features/memberships/constants";
 import { getMemberPermissionsBatch } from "@/features/memberships/queries/get-member-permissions-batch";
-import type {
-  ResourcePermission,
-  ResourceType,
-} from "@/features/memberships/types";
+import type { ResourceType } from "@/features/memberships/types";
 import type { List, Maybe } from "@/types";
-import type { BaseTicket, TicketWithAccess } from "../types";
-
-/**
- * Options for addTicketsAccess when ownership/permissions are pre-computed
- */
-interface AddTicketsAccessOptions {
-  /** When true, all tickets are owned by the user (skip isOwner checks) */
-  allOwned?: boolean;
-  /** Pre-fetched permissions map to avoid additional query */
-  permissionsMap?: Map<string, ResourcePermission>;
-}
+import type {
+  AddTicketsAccessOptions,
+  BaseTicket,
+  TicketWithAccess,
+} from "../types";
 
 /**
  * Add ownership and permission access to a list of tickets
@@ -43,10 +37,8 @@ const addTicketsAccess = async (
   if (!user) {
     return tickets.map((ticket) => ({
       ...ticket,
-      isOwner: false,
-      canCreate: false,
-      canUpdate: false,
-      canDelete: false,
+      ...DEFAULT_OWNERSHIP,
+      ...DEFAULT_ITEM_PERMISSION,
     }));
   }
 
@@ -76,15 +68,8 @@ const addTicketsAccess = async (
     const ticketIsOwner = options?.allOwned || isOwner(user, ticket);
     const permission = permissionsMap?.get(ticket.organizationId);
 
-    return {
-      ...ticket,
-      isOwner: ticketIsOwner,
-      canCreate: false,
-      canUpdate: ticketIsOwner && (permission?.canUpdate ?? false),
-      canDelete: ticketIsOwner && (permission?.canDelete ?? false),
-    };
+    return addItemPermissions(ticket, ticketIsOwner, permission);
   });
 };
 
 export { addTicketsAccess };
-export type { AddTicketsAccessOptions };

@@ -44,8 +44,6 @@ const CommentsProvider = ({
   userName,
   ticketId,
   canCreate,
-  canUpdate,
-  canDelete,
   children,
 }: CommentsProviderProps) => {
   const [commentsState, setCommentsState] = useState<CommentState>(() => ({
@@ -225,8 +223,6 @@ const CommentsProvider = ({
     upsertAction,
     userId,
     canCreate,
-    canUpdate,
-    canDelete,
     isPending,
     hasNextPage: commentsState.metadata.hasNextPage,
     handleUpsertSuccess,
