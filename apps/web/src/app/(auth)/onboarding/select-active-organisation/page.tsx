@@ -1,15 +1,11 @@
-import { LucidePlus } from "lucide-react";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
-import { Heading } from "@/components/heading";
-import { ResponsiveLabel } from "@/components/responsive-label";
 import { Suspend } from "@/components/suspend";
-import { buttonVariants } from "@/components/ui/button";
 import { getUser } from "@/features/auth/queries/get-user";
 import { Organisations } from "@/features/organisation/components/organisations";
+import { SelectActiveOrganisationHeading } from "@/features/organisation/components/select-active-organisation-heading";
 import { OrganisationsSkeleton } from "@/features/organisation/components/skeletons/organisations-skeleton";
-import { onboardingPath, organisationsPath, signInPath } from "@/path";
+import { organisationsPath, signInPath } from "@/path";
 
 const SelectActiveOrganisationPage = async () => {
   await connection();
@@ -24,19 +20,7 @@ const SelectActiveOrganisationPage = async () => {
   }
   return (
     <>
-      <Heading
-        actions={
-          <ResponsiveLabel
-            fullLabel="Create Organisation"
-            icon={<LucidePlus className="aspect-square w-4" />}
-            shortLabel="Create"
-          >
-            <Link className={buttonVariants()} href={onboardingPath()} />
-          </ResponsiveLabel>
-        }
-        description="Select your active organisation"
-        title="Select Active Organisation"
-      />
+      <SelectActiveOrganisationHeading />
       <Suspend fallback={<OrganisationsSkeleton />}>
         <Organisations limitedAccess />
       </Suspend>

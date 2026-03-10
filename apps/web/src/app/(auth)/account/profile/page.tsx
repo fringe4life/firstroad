@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { connection } from "next/server";
-import { Heading } from "@/components/heading";
 import { Suspend } from "@/components/suspend";
+import { ProfileHeading } from "@/features/auth/components/profile-heading";
 import { ProfileSkeleton } from "@/features/auth/components/profile-skeleton";
 import { UserProfileCard } from "@/features/auth/components/user-profile-card";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
@@ -31,7 +31,7 @@ const ProfilePage = async () => {
 
   return (
     <>
-      <Heading description="All your profile information" title="Profile" />
+      <ProfileHeading />
       <Suspend fallback={<ProfileSkeleton />}>
         <ProfileContent user={user} />
       </Suspend>

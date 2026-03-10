@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { connection } from "next/server";
 import { CardCompact } from "@/components/card-compact";
-import { Heading } from "@/components/heading";
 import { Suspend } from "@/components/suspend";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { canCreate } from "@/features/memberships/utils/permission";
 import { upsertTicket } from "@/features/ticket/actions/upsert-ticket";
+import { OrganisationTicketsHeading } from "@/features/ticket/components/organisation-tickets-heading";
 import { TicketsControlSkeleton } from "@/features/ticket/components/skeletons/ticket-controls-skeleton";
 import { TicketFormSkeleton } from "@/features/ticket/components/skeletons/ticket-form-skeleton";
 import { TicketListSkeleton } from "@/features/ticket/components/skeletons/ticket-list-skeleton";
@@ -35,10 +35,7 @@ const TicketsOrganisationPage = async ({
     : false;
   return (
     <>
-      <Heading
-        description="All your organisation's tickets at one place"
-        title="Our Tickets"
-      />
+      <OrganisationTicketsHeading />
       {canCreateTicket ? (
         <CardCompact
           className="max-content-narrow justify-self-center"

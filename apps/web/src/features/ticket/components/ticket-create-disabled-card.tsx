@@ -1,6 +1,7 @@
+"use cache: remote";
 import { CardCompact } from "@/components/card-compact";
 
-const TicketCreateDisabledCard = () => (
+const TicketCreateDisabledCard = async () => (
   <CardCompact
     className="max-content-narrow justify-self-center"
     content={

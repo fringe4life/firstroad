@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { connection } from "next/server";
 import { CardCompact } from "@/components/card-compact";
-import { Heading } from "@/components/heading";
 import { Suspend } from "@/components/suspend";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { canCreate } from "@/features/memberships/utils/permission";
@@ -13,6 +12,7 @@ import { TicketListSkeleton } from "@/features/ticket/components/skeletons/ticke
 import { TicketCreateDisabledCard } from "@/features/ticket/components/ticket-create-disabled-card";
 import { TicketUpsertForm } from "@/features/ticket/components/ticket-upsert-form";
 import { Tickets } from "@/features/ticket/components/tickets";
+import { TicketsHeading } from "@/features/ticket/components/tickets-heading";
 
 export const metadata: Metadata = {
   title: "My Tickets",
@@ -34,7 +34,7 @@ const TicketsPage = async ({ searchParams }: PageProps<"/tickets">) => {
     : false;
   return (
     <div className="grid h-full w-full grid-rows-[min-content_min-content_min-content_1fr] gap-y-8">
-      <Heading description="All your tickets at one place" title="My Tickets" />
+      <TicketsHeading />
       {canCreateTicket ? (
         <CardCompact
           className="max-content-narrow justify-self-center"
