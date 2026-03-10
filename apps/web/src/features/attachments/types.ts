@@ -1,5 +1,5 @@
 import type { ResourceType } from "@/features/memberships/types";
-import type { Id, List } from "@/types";
+import type { Id, List, Maybe } from "@/types";
 import type { ActionState } from "@/utils/to-action-state";
 import type { IsOwner } from "../auth/types";
 import type { OrganisationId } from "../organisation/types";
@@ -13,7 +13,7 @@ export interface AttachmentRecord extends Id {
 }
 
 export interface AttachmentWithUrl extends AttachmentRecord {
-  downloadUrl: string | null;
+  downloadUrl: Maybe<string>;
 }
 
 export interface UIAttachment extends AttachmentWithUrl {}
@@ -42,30 +42,24 @@ export interface AttachmentDeletedPayload {
 }
 
 /** Type guard: narrows state to CLIENT response with payload (for use in forms that receive union of CLIENT/SERVER-bound actions). */
-export function hasAttachmentCreatedPayload(
+export const hasAttachmentCreatedPayload = (
   state: ActionState<AttachmentCreatedPayload | unknown>,
 ): state is ActionState<AttachmentCreatedPayload> & {
   data: AttachmentCreatedPayload;
-} {
-  return (
-    state.data != null &&
-    typeof state.data === "object" &&
-    "created" in state.data
-  );
-}
+} =>
+  state.data != null &&
+  typeof state.data === "object" &&
+  "created" in state.data;
 
 /** Type guard: narrows state to CLIENT response with payload. */
-export function hasAttachmentDeletedPayload(
+export const hasAttachmentDeletedPayload = (
   state: ActionState<AttachmentDeletedPayload | unknown>,
 ): state is ActionState<AttachmentDeletedPayload> & {
   data: AttachmentDeletedPayload;
-} {
-  return (
-    state.data != null &&
-    typeof state.data === "object" &&
-    "deletedAttachmentId" in state.data
-  );
-}
+} =>
+  state.data != null &&
+  typeof state.data === "object" &&
+  "deletedAttachmentId" in state.data;
 
 /** Single signature so forms can pass union state; use type guards to narrow return. */
 export type DeleteAttachmentAction = (
@@ -135,3 +129,38 @@ export type AttachmentPreview =
   | ImageAttachmentPreview
   | PdfAttachmentPreview
   | OtherAttachmentPreview;
+
+export interface AttachmentPreviewProps {
+  onRemove: (id: string) => void;
+  preview: AttachmentPreview;
+}
+
+export interface AttachmentItemProps extends IsOwner, OwnerId {
+  attachment: UIAttachment;
+  deleteAttachmentAction: DeleteAttachmentAction;
+  onClientAttachmentDeleted?: (payload: AttachmentDeletedPayload) => void;
+}
+
+export interface AttachmentListProps extends IsOwner, OwnerId {
+  attachments: List<UIAttachment>;
+  deleteAttachmentAction: DeleteAttachmentAction;
+  onClientAttachmentDeleted?: (payload: AttachmentDeletedPayload) => void;
+}
+
+export interface AttachmentCreateFormProps extends OwnerId {
+  createAttachmentAction: CreateAttachmentAction;
+  onClientAttachmentCreated?: (payload: AttachmentCreatedPayload) => void;
+  onSuccess?: () => void;
+}
+
+export interface AttachmentInputWithPreviewsRef {
+  reset: () => void;
+}
+
+export interface AttachmentInputWithPreviewsProps {
+  disabled?: boolean;
+  fileInputId?: string;
+  label?: string;
+  name?: string;
+  onPreviewsChange?: (count: number) => void;
+}

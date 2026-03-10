@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  type ChangeEventHandler,
   forwardRef,
   useEffect,
   useEffectEvent,
@@ -12,30 +13,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AttachmentPreviewCard } from "@/features/attachments/components/attachment-preview";
+import type { Maybe } from "@/types";
 import { ACCEPTED_FILE_TYPES } from "../constants";
-import type { AttachmentPreview } from "../types";
+import type {
+  AttachmentInputWithPreviewsProps,
+  AttachmentInputWithPreviewsRef,
+  AttachmentPreview,
+} from "../types";
 import { createAttachmentPreviews } from "../utils/attachment-previews";
-
-/** Revoke object URLs for image previews so they can be garbage-collected. */
-const revokeImagePreviews = (previews: AttachmentPreview[]): void => {
-  for (const preview of previews) {
-    if (preview.kind === "image") {
-      URL.revokeObjectURL(preview.objectUrl);
-    }
-  }
-};
-
-export interface AttachmentInputWithPreviewsRef {
-  reset: () => void;
-}
-
-interface AttachmentInputWithPreviewsProps {
-  disabled?: boolean;
-  fileInputId?: string;
-  label?: string;
-  name?: string;
-  onPreviewsChange?: (count: number) => void;
-}
+import { revokeImagePreviews } from "../utils/revoke-previews";
 
 const AttachmentInputWithPreviews = forwardRef<
   AttachmentInputWithPreviewsRef,
@@ -52,7 +38,7 @@ const AttachmentInputWithPreviews = forwardRef<
 ) {
   const generatedId = useId();
   const id = fileInputId ?? generatedId;
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<Exclude<Maybe<HTMLInputElement>, undefined>>(null);
   const [previews, setPreviews] = useState<AttachmentPreview[]>([]);
 
   const hasPreviews = previews.length > 0;
@@ -73,8 +59,8 @@ const AttachmentInputWithPreviews = forwardRef<
 
   useEffect(() => () => revokeImagePreviews(previews), [previews]);
 
-  const handleFilesChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
+  const handleFilesChange: ChangeEventHandler<HTMLInputElement> = (
+    event,
   ): void => {
     const { files } = event.target;
     const nextPreviews = createAttachmentPreviews(files);

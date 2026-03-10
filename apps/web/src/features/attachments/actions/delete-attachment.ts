@@ -25,13 +25,13 @@ interface DeleteAttachmentArgs {
   ownerId: string;
 }
 
-async function deleteAttachmentImpl(
+const deleteAttachmentImpl = async (
   updateBoundary: "CLIENT" | "SERVER",
   resourceType: ResourceType,
   { attachmentId, ownerId }: DeleteAttachmentArgs,
   _prevState: ActionState<AttachmentDeletedPayload | unknown>,
   _formData: FormData,
-): Promise<ActionState<AttachmentDeletedPayload> | ActionState<unknown>> {
+): Promise<ActionState<AttachmentDeletedPayload> | ActionState<unknown>> => {
   const parseResult = safeParse(deleteAttachmentInputSchema, {
     attachmentId,
     ownerId,
@@ -96,20 +96,20 @@ async function deleteAttachmentImpl(
     return toActionState("Attachment deleted", "SUCCESS");
   }
   return toActionState("Attachment deleted", "SUCCESS", undefined, payload);
-}
+};
 
 async function deleteAttachment(
   updateBoundary: "CLIENT",
   resourceType: ResourceType,
   args: DeleteAttachmentArgs,
-  _prevState: ActionState<AttachmentDeletedPayload | unknown>,
+  _prevState: ActionState<AttachmentDeletedPayload>,
   _formData: FormData,
 ): Promise<ActionState<AttachmentDeletedPayload>>;
 async function deleteAttachment(
   updateBoundary: "SERVER",
   resourceType: ResourceType,
   args: DeleteAttachmentArgs,
-  _prevState: ActionState<AttachmentDeletedPayload | unknown>,
+  _prevState: ActionState<unknown>,
   _formData: FormData,
 ): Promise<ActionState<unknown>>;
 async function deleteAttachment(

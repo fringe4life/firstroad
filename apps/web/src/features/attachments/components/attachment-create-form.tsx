@@ -7,18 +7,12 @@ import { SubmitButton } from "@/components/form/submit-button";
 import { type ActionState, EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 import {
   type AttachmentCreatedPayload,
-  type CreateAttachmentAction,
+  type AttachmentCreateFormProps,
+  type AttachmentInputWithPreviewsRef,
   hasAttachmentCreatedPayload,
 } from "../types";
-import type { AttachmentInputWithPreviewsRef } from "./attachment-input-with-previews";
-import { AttachmentInputWithPreviews } from "./attachment-input-with-previews";
 
-interface AttachmentCreateFormProps {
-  createAttachmentAction: CreateAttachmentAction;
-  onClientAttachmentCreated?: (payload: AttachmentCreatedPayload) => void;
-  onSuccess?: () => void;
-  ownerId: string;
-}
+import { AttachmentInputWithPreviews } from "./attachment-input-with-previews";
 
 const AttachmentCreateForm = ({
   ownerId,
@@ -51,7 +45,7 @@ const AttachmentCreateForm = ({
 
       return nextState;
     },
-    EMPTY_ACTION_STATE as ActionState<AttachmentCreatedPayload | unknown>,
+    EMPTY_ACTION_STATE as ActionState<AttachmentCreatedPayload>,
   );
 
   return (

@@ -6,10 +6,8 @@ import { Form } from "@/components/form/form";
 import { SubmitButton } from "@/components/form/submit-button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  AttachmentInputWithPreviews,
-  type AttachmentInputWithPreviewsRef,
-} from "@/features/attachments/components/attachment-input-with-previews";
+import { AttachmentInputWithPreviews } from "@/features/attachments/components/attachment-input-with-previews";
+import type { AttachmentInputWithPreviewsRef } from "@/features/attachments/types";
 import type { ActionState } from "@/utils/to-action-state";
 import type { CommentCreateFormProps, CommentWithUserInfo } from "../types";
 

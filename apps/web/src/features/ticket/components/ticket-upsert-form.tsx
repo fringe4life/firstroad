@@ -9,26 +9,12 @@ import { SubmitButton } from "@/components/form/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  AttachmentInputWithPreviews,
-  type AttachmentInputWithPreviewsRef,
-} from "@/features/attachments/components/attachment-input-with-previews";
+import { AttachmentInputWithPreviews } from "@/features/attachments/components/attachment-input-with-previews";
+import type { AttachmentInputWithPreviewsRef } from "@/features/attachments/types";
 import { fromCent } from "@/utils/currency";
+import { toDeadlineString } from "@/utils/normalise-date";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 import type { upsertTicket } from "../actions/upsert-ticket";
-
-/** Normalize deadline to yyyy-MM-dd string for DatePicker (accepts string only). */
-function toDeadlineString(
-  value: string | Date | null | undefined,
-): string | undefined {
-  if (value == null) {
-    return undefined;
-  }
-  if (typeof value === "string") {
-    return value.slice(0, 10);
-  }
-  return value.toISOString().slice(0, 10);
-}
 
 interface TicketUpsertFormProps {
   ticket?: TicketModel;

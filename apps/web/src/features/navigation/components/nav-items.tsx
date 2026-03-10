@@ -23,7 +23,7 @@ const NavItems = () => {
 
         return (
           <div key={item.title}>
-            {Boolean(item.seperator) && <Separator />}
+            {item.seperator ? <Separator /> : null}
             <Link
               className={cn(
                 buttonVariants({ variant: "ghost" }),
@@ -35,8 +35,8 @@ const NavItems = () => {
             >
               {cloneElement(item.icon, {
                 className: "w-5 aspect-square",
-              } as React.HTMLAttributes<HTMLElement>)}
-              <span className="absolute left-14 text-base opacity-75 transition-opacity duration-200 hover:opacity-100 md:opacity-0 md:group-hover:opacity-75">
+              })}
+              <span className="absolute left-14 text-base opacity-75 transition-opacity duration-200 focus-within:opacity-100 hover:opacity-100 focus-visible:opacity-100 md:opacity-0 md:group-focus-visible:opacity-75 md:group-hover:opacity-75 md:group-focus-within:opacity-75">
                 {item.title}
               </span>
             </Link>

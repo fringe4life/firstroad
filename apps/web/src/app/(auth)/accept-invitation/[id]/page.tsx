@@ -5,7 +5,7 @@ import { CardCompact } from "@/components/card-compact";
 import { Suspend } from "@/components/suspend";
 import { getUser } from "@/features/auth/queries/get-user";
 import { AcceptInvitationCard } from "@/features/invitations/components/accept-invitation-card";
-import { AcceptInvitationCardSkeleton } from "@/features/invitations/components/accept-invitation-card-skeleton";
+import { AcceptInvitationCardSkeleton } from "@/features/invitations/components/skeletons/accept-invitation-card-skeleton";
 import { getInvitation } from "@/features/invitations/queries/get-invitation";
 import { acceptInvitationPath, signInPath } from "@/path";
 

@@ -20,8 +20,7 @@ import {
 import { getAttachmentsByComment } from "@/features/comment/queries/get-attachments-by-comment";
 import { TicketActionBarSkeleton } from "@/features/ticket/components/skeletons/ticket-action-bar-skeleton";
 import { TicketActionsDesktopSkeleton } from "@/features/ticket/components/skeletons/ticket-actions-desktop-skeleton";
-import { TicketDetailActionsDesktop } from "@/features/ticket/components/ticket-detail-actions-desktop";
-import { TicketDetailActionsMobile } from "@/features/ticket/components/ticket-detail-actions-mobile";
+import { TicketDetailActions } from "@/features/ticket/components/ticket-detail-actions";
 import { TicketDetailView } from "@/features/ticket/components/ticket-detail-view";
 import { TICKET_NOT_FOUND } from "@/features/ticket/constants";
 import { getAllTicketSlugs } from "@/features/ticket/queries/get-all-ticket-slugs";
@@ -104,7 +103,11 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
         actionsSlot={
           <HasAuthSuspense fallback={<TicketActionsDesktopSkeleton />}>
             {(user) => (
-              <TicketDetailActionsDesktop ticket={ticket} user={user} />
+              <TicketDetailActions
+                ticket={ticket}
+                user={user}
+                variant="desktop"
+              />
             )}
           </HasAuthSuspense>
         }
@@ -166,7 +169,11 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
         mobileActionsSlot={
           <HasAuthSuspense fallback={<TicketActionBarSkeleton />}>
             {(user) => (
-              <TicketDetailActionsMobile ticket={ticket} user={user} />
+              <TicketDetailActions
+                ticket={ticket}
+                user={user}
+                variant="mobile"
+              />
             )}
           </HasAuthSuspense>
         }

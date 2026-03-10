@@ -23,13 +23,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import type { OrganisationId } from "@/features/organisation/types";
 import { useToggle } from "@/hooks/use-toggle";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 import { createInvitation } from "../actions/create-invitation";
 
-interface InviteMemberButtonProps {
-  organizationId: string;
-}
+type InviteMemberButtonProps = OrganisationId;
 
 const InviteMemberButton = ({ organizationId }: InviteMemberButtonProps) => {
   const { value: isOpen, open, close } = useToggle(false);

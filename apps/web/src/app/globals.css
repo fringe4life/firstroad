@@ -239,7 +239,7 @@
     0.5rem
   ); /* h2 + p + separator + gap */
 
-  --side-width: 0;
+  --side-width: 0px;
   --expanded-sidebar-width: 15rem;
   --auth-nav-width: 10.5rem;
   --max-content-widest: 30rem;
@@ -264,8 +264,15 @@
 @utility main-grid-rows {
   grid-template-rows: repeat(2, min-content) 1fr;
 }
+@property --side-width {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
 @utility layout-grid-cols {
   grid-template-columns: var(--side-width) 1fr;
+  transition: --side-width 200ms ease-out;
 }
 
 @utility no-scrollbar {

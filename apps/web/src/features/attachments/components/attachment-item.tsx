@@ -8,19 +8,10 @@ import { type ActionState, EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 import { ATTACHMENT_KIND_ICONS } from "../constants";
 import {
   type AttachmentDeletedPayload,
-  type DeleteAttachmentAction,
+  type AttachmentItemProps,
   hasAttachmentDeletedPayload,
-  type UIAttachment,
 } from "../types";
 import { getAttachmentKindFromName } from "../utils/attachment-kind";
-
-interface AttachmentItemProps {
-  attachment: UIAttachment;
-  deleteAttachmentAction: DeleteAttachmentAction;
-  isOwner: boolean;
-  onClientAttachmentDeleted?: (payload: AttachmentDeletedPayload) => void;
-  ownerId: string;
-}
 
 const AttachmentItem = ({
   attachment,

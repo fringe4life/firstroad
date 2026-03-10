@@ -21,13 +21,13 @@ import { getVerifiableItem } from "../utils/get-verifiable-item";
 import { presignAttachments } from "../utils/presign-attachments";
 import { toOwnerKind } from "../utils/to-owner-kind";
 
-async function createAttachmentImpl(
+const createAttachmentImpl = async (
   updateBoundary: "CLIENT" | "SERVER",
   resourceType: ResourceType,
   ownerId: string,
   _state: ActionState<AttachmentCreatedPayload | unknown>,
   formData: FormData,
-): Promise<ActionState<AttachmentCreatedPayload> | ActionState<unknown>> {
+): Promise<ActionState<AttachmentCreatedPayload> | ActionState<unknown>> => {
   const files = Array.from(formData.getAll("files"));
 
   const parseResult = safeParse(filesSchema, files);
@@ -78,7 +78,7 @@ async function createAttachmentImpl(
       invalidateAttachmentsForComment(item.commentId);
       break;
     default:
-      break;
+      throw new Error("Invalid resource type") as never;
   }
 
   // Build payload so clients can update local state without a full refresh (CLIENT boundary only).
@@ -104,20 +104,20 @@ async function createAttachmentImpl(
     return toActionState("Attachment(s) uploaded", "SUCCESS");
   }
   return toActionState("Attachment(s) uploaded", "SUCCESS", undefined, payload);
-}
+};
 
 async function createAttachment(
   updateBoundary: "CLIENT",
   resourceType: ResourceType,
   ownerId: string,
-  _state: ActionState<AttachmentCreatedPayload | unknown>,
+  _state: ActionState<AttachmentCreatedPayload>,
   formData: FormData,
 ): Promise<ActionState<AttachmentCreatedPayload>>;
 async function createAttachment(
   updateBoundary: "SERVER",
   resourceType: ResourceType,
   ownerId: string,
-  _state: ActionState<AttachmentCreatedPayload | unknown>,
+  _state: ActionState<unknown>,
   formData: FormData,
 ): Promise<ActionState<unknown>>;
 async function createAttachment(

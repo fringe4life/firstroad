@@ -22,13 +22,13 @@ const Attachments = ({
           onClientAttachmentDeleted={onClientAttachmentDeleted}
           ownerId={ownerId}
         />
-        {isOwner && (
+        {isOwner ? (
           <AttachmentCreateForm
             createAttachmentAction={createAttachmentAction}
             onClientAttachmentCreated={onClientAttachmentCreated}
             ownerId={ownerId}
           />
-        )}
+        ) : null}
       </div>
     }
     description="Attached Images or PDFs"

@@ -1,11 +1,6 @@
 import { FileExclamationPoint, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { AttachmentPreview } from "../types";
-
-interface AttachmentPreviewProps {
-  onRemove: (id: string) => void;
-  preview: AttachmentPreview;
-}
+import type { AttachmentPreviewProps } from "../types";
 
 const AttachmentPreviewCard = ({
   preview,
@@ -68,7 +63,7 @@ const AttachmentPreviewCard = ({
         {content}
         <Button
           aria-label={`Remove ${file.name}`}
-          onClick={() => onRemove(id)}
+          onClick={onRemove.bind(null, id)}
           size="icon"
           type="button"
           variant="destructive"

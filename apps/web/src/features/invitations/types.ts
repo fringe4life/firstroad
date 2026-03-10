@@ -1,11 +1,11 @@
-import type { List, UnsuccessfulState } from "@/types";
+import type { List, Maybe, UnsuccessfulState } from "@/types";
 import type { OrganisationId } from "../organisation/types";
 
 export interface InvitationRow {
   email: string;
   id: string;
   invitedAt: Date;
-  inviterName: string | null;
+  inviterName: Maybe<string>;
 }
 
 export interface InvitationListProps extends UnsuccessfulState, OrganisationId {
