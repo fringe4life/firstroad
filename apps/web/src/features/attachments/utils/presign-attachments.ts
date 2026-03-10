@@ -1,4 +1,5 @@
 import { s3 } from "bun";
+import { getMimeTypeFromName } from "@/features/attachments/utils/attachment-mime-type";
 import type { List } from "@/types";
 import type { AttachmentRecord, AttachmentWithUrl, OwnerKind } from "../types";
 
@@ -35,10 +36,13 @@ const presignAttachments = (
       attachment.id,
       attachment.name,
     );
+    const type = getMimeTypeFromName(attachment.name);
+
     const downloadUrl = s3.file(key).presign({
       expiresIn: PRESIGN_EXPIRES_IN_SECONDS,
       // Force a clean, user‑friendly download filename
       contentDisposition: `attachment; filename="${attachment.name}"`,
+      type,
     });
     return { ...attachment, downloadUrl };
   });
