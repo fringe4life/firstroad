@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client"
-  previewFeatures = ["relationJoins"]
+  previewFeatures = ["relationJoins", "partialIndexes"]
   engineType      = "client"
   output          = "../generated/prisma"
   runtime         = "bun"

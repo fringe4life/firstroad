@@ -12,5 +12,6 @@ model Invitation {
 
   @@index([organizationId])
   @@index([email])
+  @@index([organizationId, createdAt(sort: Desc)], where: { status: "pending" })
   @@map("invitation")
 }
