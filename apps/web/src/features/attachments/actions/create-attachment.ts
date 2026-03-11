@@ -17,6 +17,7 @@ import { tryCatch } from "@/utils/try-catch";
 import { filesSchema } from "../schemas";
 import type { AttachmentCreatedPayload } from "../types";
 import { createAttachmentsForOwner } from "../utils/attachment-dal";
+import { filesWithContentType } from "../utils/files-with-content-type";
 import { getVerifiableItem } from "../utils/get-verifiable-item";
 import { presignAttachments } from "../utils/presign-attachments";
 import { toOwnerKind } from "../utils/to-owner-kind";
@@ -46,8 +47,7 @@ const createAttachmentImpl = async (
 
   const item = await getVerifiableItem(resourceType, ownerId, user);
   if (!item) {
-    const label = resourceType === "TICKET" ? "Ticket" : "Comment";
-    return toActionState(`${label} not found`, "ERROR");
+    return toActionState(`${resourceType} not found`, "ERROR");
   }
   if (!item.isOwner) {
     return toActionState(
@@ -57,12 +57,13 @@ const createAttachmentImpl = async (
   }
 
   const ownerKind = toOwnerKind(resourceType);
+
   const { data: createdRecords, error } = await tryCatch(() =>
     createAttachmentsForOwner({
       ownerKind,
       organizationId: item.organizationId,
       ownerId,
-      files: validatedFiles,
+      files: filesWithContentType(validatedFiles),
     }),
   );
 
@@ -81,27 +82,24 @@ const createAttachmentImpl = async (
       throw new Error("Invalid resource type") as never;
   }
 
-  // Build payload so clients can update local state without a full refresh (CLIENT boundary only).
+  if (updateBoundary === "SERVER") {
+    refresh();
+    return toActionState("Attachment(s) uploaded", "SUCCESS");
+  }
+
+  // Build payload only for CLIENT boundary so clients can update local state without a full refresh.
   let payload: AttachmentCreatedPayload | undefined;
   if (createdRecords && createdRecords.length > 0) {
-    const ownerKey = (
-      ownerKind === "comment" && "commentId" in item ? item.commentId : ownerId
-    ) as string;
     const withUrls = presignAttachments(
       item.organizationId,
       ownerKind,
-      ownerKey,
+      ownerId,
       createdRecords,
     );
     payload = {
       item,
       created: withUrls ?? [],
     };
-  }
-
-  if (updateBoundary === "SERVER") {
-    refresh();
-    return toActionState("Attachment(s) uploaded", "SUCCESS");
   }
   return toActionState("Attachment(s) uploaded", "SUCCESS", undefined, payload);
 };

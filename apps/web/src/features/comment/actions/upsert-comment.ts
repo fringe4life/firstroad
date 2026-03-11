@@ -13,6 +13,7 @@ import {
 } from "valibot";
 import { optionalFilesSchema } from "@/features/attachments/schemas";
 import { createAttachmentsForOwner } from "@/features/attachments/utils/attachment-dal";
+import { filesWithContentType } from "@/features/attachments/utils/files-with-content-type";
 import { getFilesFromFormData } from "@/features/attachments/utils/get-files-from-form-data";
 import { presignAttachments } from "@/features/attachments/utils/presign-attachments";
 import { itemWithPermissions } from "@/features/auth/dto/item-with-permissions";
@@ -144,7 +145,7 @@ export const upsertComment = async (
           ownerKind: "comment",
           organizationId: ticket.organizationId,
           ownerId: comment.id,
-          files: parseFiles.output,
+          files: filesWithContentType(parseFiles.output),
         }),
     );
     if (attachError) {

@@ -16,7 +16,7 @@ const getAttachmentsByComment = async (
     prisma.commentAttachment.findMany({
       where: { commentId },
       orderBy: { id: "asc" },
-      select: { id: true, name: true },
+      select: { id: true, name: true, contentType: true },
     }),
   );
 

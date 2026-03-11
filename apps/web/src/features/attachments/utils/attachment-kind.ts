@@ -1,26 +1,8 @@
-export type AttachmentKind = "image" | "document" | "archive" | "other";
+export type AttachmentKind = "image" | "document" | "other";
 
-const IMAGE_EXTENSIONS = [
-  "png",
-  "jpg",
-  "jpeg",
-  "gif",
-  "webp",
-  "bmp",
-  "svg",
-] as const;
+const IMAGE_EXTENSIONS = ["png", "jpg", "jpeg", "gif", "webp"] as const;
 
-const DOCUMENT_EXTENSIONS = [
-  "pdf",
-  "doc",
-  "docx",
-  "txt",
-  "rtf",
-  "md",
-  "odt",
-] as const;
-
-const ARCHIVE_EXTENSIONS = ["zip", "tar", "gz", "tgz", "rar", "7z"] as const;
+const DOCUMENT_EXTENSIONS = ["pdf"] as const;
 
 const hasExtension = (name: string, list: readonly string[]): boolean => {
   const ext = name.split(".").pop()?.toLowerCase() ?? "";
@@ -34,10 +16,6 @@ const getAttachmentKindFromName = (name: string): AttachmentKind => {
 
   if (hasExtension(name, DOCUMENT_EXTENSIONS)) {
     return "document";
-  }
-
-  if (hasExtension(name, ARCHIVE_EXTENSIONS)) {
-    return "archive";
   }
 
   return "other";

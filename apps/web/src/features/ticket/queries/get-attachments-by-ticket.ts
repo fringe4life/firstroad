@@ -15,7 +15,7 @@ const getAttachmentsByTicket = async (
     prisma.ticketAttachment.findMany({
       where: { ticketId },
       orderBy: { id: "asc" },
-      select: { id: true, name: true },
+      select: { id: true, name: true, contentType: true },
     }),
   );
   return rows;

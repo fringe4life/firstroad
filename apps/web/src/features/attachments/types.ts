@@ -4,11 +4,13 @@ import type { ActionState } from "@/utils/to-action-state";
 import type { IsOwner } from "../auth/types";
 import type { OrganisationId } from "../organisation/types";
 
+export type Mime = `${string}/${string}`;
 export interface OwnerId {
   ownerId: string;
 }
 
 export interface AttachmentRecord extends Id {
+  contentType: string;
   name: string;
 }
 

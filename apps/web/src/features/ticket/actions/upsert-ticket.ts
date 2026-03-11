@@ -17,6 +17,7 @@ import {
 } from "valibot";
 import { optionalFilesSchema } from "@/features/attachments/schemas";
 import { createAttachmentsForOwner } from "@/features/attachments/utils/attachment-dal";
+import { filesWithContentType } from "@/features/attachments/utils/files-with-content-type";
 import { getFilesFromFormData } from "@/features/attachments/utils/get-files-from-form-data";
 import { itemWithPermissions } from "@/features/auth/dto/item-with-permissions";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
@@ -138,7 +139,7 @@ const upsertTicket = async (
         ownerKind: "ticket",
         organizationId: ticket.organizationId,
         ownerId: ticket.id,
-        files: parseFiles.output,
+        files: filesWithContentType(parseFiles.output),
       }),
     );
     if (attachError) {

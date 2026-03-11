@@ -1,61 +1,41 @@
 import type { Maybe } from "@/types";
+import { normalizeAcceptedMime } from "../constants";
+import type { Mime } from "../types";
 
-const IMAGE_MIME_TYPES: Record<string, string> = {
+// Only map extensions we actually accept in validation.
+const EXTENSION_TO_MIME: Record<string, Mime> = {
   png: "image/png",
   jpg: "image/jpeg",
   jpeg: "image/jpeg",
   gif: "image/gif",
   webp: "image/webp",
-  bmp: "image/bmp",
-  svg: "image/svg+xml",
-};
-
-const DOCUMENT_MIME_TYPES: Record<string, string> = {
   pdf: "application/pdf",
-  txt: "text/plain",
-  md: "text/markdown",
-  rtf: "application/rtf",
-  doc: "application/msword",
-  docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  odt: "application/vnd.oasis.opendocument.text",
 };
 
-const ARCHIVE_MIME_TYPES: Record<string, string> = {
-  zip: "application/zip",
-  tar: "application/x-tar",
-  gz: "application/gzip",
-  tgz: "application/gzip",
-  rar: "application/vnd.rar",
-  "7z": "application/x-7z-compressed",
-};
+const DEFAULT_MIME_TYPE = "application/octet-stream" satisfies Mime;
 
-const DEFAULT_MIME_TYPE = "application/octet-stream";
+const getMimeTypeFromName = (name: string): Mime => {
+  const trimmed = name.trim().toLowerCase();
+  if (!trimmed || trimmed.endsWith(".")) {
+    return DEFAULT_MIME_TYPE;
+  }
 
-const getExtension = (name: string): string =>
-  name.split(".").pop()?.toLowerCase() ?? "";
-
-const getMimeTypeFromName = (name: string): string => {
-  const ext = getExtension(name);
+  const parts = trimmed.split(".");
+  const ext = parts.length > 1 ? (parts.at(-1) ?? "") : "";
   if (!ext) {
     return DEFAULT_MIME_TYPE;
   }
 
-  if (ext in IMAGE_MIME_TYPES) {
-    return IMAGE_MIME_TYPES[ext];
-  }
-
-  if (ext in DOCUMENT_MIME_TYPES) {
-    return DOCUMENT_MIME_TYPES[ext];
-  }
-
-  if (ext in ARCHIVE_MIME_TYPES) {
-    return ARCHIVE_MIME_TYPES[ext];
+  const candidate = EXTENSION_TO_MIME[ext];
+  const normalized = candidate ? normalizeAcceptedMime(candidate) : null;
+  if (normalized) {
+    return normalized;
   }
 
   return DEFAULT_MIME_TYPE;
 };
 
-const getMimeTypeFromFile = (file: File): string => {
+const getMimeTypeFromFile = (file: File): string | Mime => {
   const fromBrowser: Maybe<string> =
     file.type && file.type.trim().length > 0 ? file.type : null;
   if (fromBrowser) {

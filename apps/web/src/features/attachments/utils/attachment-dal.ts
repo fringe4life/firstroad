@@ -7,7 +7,10 @@ import type { AttachmentRecord, OwnerKind } from "../types";
 import { attachmentS3Key } from "./presign-attachments";
 
 interface CreateAttachmentsForOwnerInput {
-  files: File[];
+  files: Array<{
+    file: File;
+    contentType: string;
+  }>;
   organizationId: string;
   ownerId: string;
   ownerKind: OwnerKind;
@@ -41,25 +44,28 @@ const createAttachmentsForOwner = async ({
 
   // Create all attachment rows in parallel (one DB round-trip wave)
   const attachments: List<AttachmentRecord> = await Promise.all(
-    files.map((file) => {
-      if (ownerKind === "ticket") {
-        return prisma.ticketAttachment.create({
-          data: { name: file.name, ticketId: ownerId },
-          select: { id: true, name: true },
-        });
+    files.map(({ file, contentType }) => {
+      switch (ownerKind) {
+        case "ticket":
+          return prisma.ticketAttachment.create({
+            data: { name: file.name, ticketId: ownerId, contentType },
+            select: { id: true, name: true, contentType: true },
+          });
+        case "comment":
+          return prisma.commentAttachment.create({
+            data: { name: file.name, commentId: ownerId, contentType },
+            select: { id: true, name: true, contentType: true },
+          });
+        default:
+          throw new Error(`Invalid owner kind: ${ownerKind}`) as never;
       }
-
-      return prisma.commentAttachment.create({
-        data: { name: file.name, commentId: ownerId },
-        select: { id: true, name: true },
-      });
     }),
   );
 
   // Upload all files to S3 in parallel (one wave of concurrent writes)
   await Promise.all(
     attachments.map(async (attachment, index) => {
-      const file = files[index];
+      const { file } = files[index];
       const key = attachmentS3Key(
         organizationId,
         ownerKind,

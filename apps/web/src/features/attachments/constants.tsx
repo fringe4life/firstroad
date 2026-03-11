@@ -1,6 +1,5 @@
-type Mime = `${string}/${string}`;
-
 import { ArchiveIcon, FileIcon, FileImage, ImageIcon } from "lucide-react";
+import type { Mime } from "./types";
 
 const ATTACHMENT_KIND_ICONS = {
   image: <ImageIcon className="h-4 w-4" />,
@@ -30,6 +29,20 @@ const FILE_NAME_MAX = 255;
 const MAX_SIZE_MB = 4;
 const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 
+const NORMALIZED_MIME_FROM_BROWSER: Record<string, Mime> = {
+  "image/png": "image/png",
+  "image/jpeg": "image/jpeg",
+  "image/jpg": "image/jpeg",
+  "image/gif": "image/gif",
+  "image/webp": "image/webp",
+  "application/pdf": "application/pdf",
+};
+
+const normalizeAcceptedMime = (input: string): Mime | null => {
+  const normalized = NORMALIZED_MIME_FROM_BROWSER[input];
+  return normalized ?? null;
+};
+
 export {
   ACCEPTED_FILE_TYPES,
   FILE_NAME_MAX,
@@ -37,4 +50,6 @@ export {
   MAX_SIZE_MB,
   ATTACHMENT_KIND_ICONS,
   SUPPORTED_IMAGE_TYPES,
+  NORMALIZED_MIME_FROM_BROWSER,
+  normalizeAcceptedMime,
 };

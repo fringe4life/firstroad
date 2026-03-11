@@ -13,6 +13,7 @@ import type {
   AttachmentCreatedPayload,
   AttachmentDeletedPayload,
 } from "@/features/attachments/types";
+import { getMimeTypeFromFile } from "@/features/attachments/utils/attachment-mime-type";
 import { getFilesFromFormData } from "@/features/attachments/utils/get-files-from-form-data";
 import { commentReducer } from "@/features/comment/hooks/use-comment-optimistic";
 import type {
@@ -82,6 +83,7 @@ const CommentsProvider = ({
             ? files.map((file: File) => ({
                 id: crypto.randomUUID(),
                 name: file.name,
+                contentType: getMimeTypeFromFile(file),
                 downloadUrl: null as string | null,
               }))
             : undefined;
