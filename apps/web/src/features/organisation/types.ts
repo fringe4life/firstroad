@@ -1,7 +1,7 @@
 import type { MemberModel } from "@firstroad/db/client-types";
 import type { ActiveOrganizationId } from "@/features/auth/types";
 import type { auth } from "@/lib/auth";
-import type { List, UnsuccessfulState } from "@/types";
+import type { IsActive, List, UnsuccessfulState } from "@/types";
 
 export type Organisation = typeof auth.$Infer.Organization;
 
@@ -49,12 +49,10 @@ export interface OrganisationItemProps
 
 export interface OrganisationActionButtonProps
   extends OrganisationId,
-    LimitedAccess {
-  isActive: boolean;
+    LimitedAccess,
+    IsActive {
   isAdminOrOwner: boolean;
   organizationName: string;
 }
 
-export interface SwitchOrgButtonProps extends OrganisationId {
-  isActive: boolean;
-}
+export interface SwitchOrgButtonProps extends OrganisationId, IsActive {}

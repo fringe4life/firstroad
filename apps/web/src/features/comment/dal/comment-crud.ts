@@ -80,4 +80,4 @@ const deleteCommentRecord = async (
   await prisma.comment.delete({ where });
 };
 
-export { createComment, updateComment, deleteCommentRecord };
+export { createComment, deleteCommentRecord, updateComment };

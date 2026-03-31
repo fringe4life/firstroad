@@ -15,4 +15,5 @@ const toCommentListPayload = (
   canUpdate: comment.canUpdate,
   canDelete: comment.canDelete,
 });
+
 export { toCommentListPayload };

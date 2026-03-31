@@ -18,7 +18,7 @@ const CommentList = () => {
   return (
     <GenericComponent
       Component={CommentItem}
-      className="grid gap-y-2"
+      className="grid content-start gap-y-2"
       emptyStateMessage="No comments found"
       errorStateMessage="Failed to fetch comments"
       items={optimisticComments}

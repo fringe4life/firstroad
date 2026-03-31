@@ -12,9 +12,9 @@ import {
   ticketsByOrganisationPath,
   ticketsPath,
 } from "@/path";
-import type { NavItem } from "../types/types";
+import type { NavItemElement } from "../types/types";
 
-const navItems: NavItem[] = [
+const navItems: NavItemElement[] = [
   {
     title: "All Tickets",
     icon: <LucideLibrary />,
@@ -45,4 +45,5 @@ const navItems: NavItem[] = [
 
 const closedClassName =
   "text-background opacity-0 transition-all duration-300 group-hover:z-40 group-hover:ml-4 group-hover:rounded group-hover:bg-foreground group-hover:p-2 group-hover:opacity-100";
-export { navItems, closedClassName };
+
+export { closedClassName, navItems };

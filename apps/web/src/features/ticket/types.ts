@@ -108,3 +108,13 @@ export interface AddTicketsAccessOptions {
   /** Pre-fetched permissions map to avoid additional query */
   permissionsMap?: Map<string, ResourcePermission>;
 }
+
+interface ReferencedTicket extends Pick<BaseTicket, "slug" | "title"> {}
+
+export interface ReferencedTicketsProps {
+  referencedTickets: List<ReferencedTicket>;
+}
+
+export interface ReferencedTicketItemProps {
+  referencedTicket: ReferencedTicket;
+}

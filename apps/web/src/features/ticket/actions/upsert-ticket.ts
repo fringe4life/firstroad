@@ -159,4 +159,5 @@ const upsertTicket = async (
   await setCookieByKey("toast", "Ticket created");
   redirect(ticketPath(slug));
 };
+
 export { upsertTicket };

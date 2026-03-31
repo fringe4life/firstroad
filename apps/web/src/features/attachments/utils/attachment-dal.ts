@@ -130,8 +130,8 @@ const deleteAttachmentForOwner = async ({
 };
 
 export {
-  createAttachmentsForOwner,
-  deleteAttachmentForOwner,
   type CreateAttachmentsForOwnerInput,
+  createAttachmentsForOwner,
   type DeleteAttachmentForOwnerInput,
+  deleteAttachmentForOwner,
 };

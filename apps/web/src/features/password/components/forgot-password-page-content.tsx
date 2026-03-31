@@ -16,4 +16,5 @@ const ForgotPasswordPageContent = () => (
     title="Forgot Password"
   />
 );
+
 export { ForgotPasswordPageContent };

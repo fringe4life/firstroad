@@ -38,4 +38,5 @@ const TicketListPagination = async ({
     </>
   );
 };
+
 export { TicketListPagination };

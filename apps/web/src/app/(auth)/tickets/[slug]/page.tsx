@@ -18,6 +18,7 @@ import {
   getCommentsLoadMore,
 } from "@/features/comment/dal/get-comments";
 import { getAttachmentsByComment } from "@/features/comment/queries/get-attachments-by-comment";
+import { ReferencedTickets } from "@/features/ticket/components/referenced-tickets-list";
 import { TicketActionBarSkeleton } from "@/features/ticket/components/skeletons/ticket-action-bar-skeleton";
 import { TicketActionsDesktopSkeleton } from "@/features/ticket/components/skeletons/ticket-actions-desktop-skeleton";
 import { TicketDetailActions } from "@/features/ticket/components/ticket-detail-actions";
@@ -25,7 +26,10 @@ import { TicketDetailView } from "@/features/ticket/components/ticket-detail-vie
 import { TICKET_NOT_FOUND } from "@/features/ticket/constants";
 import { getAllTicketSlugs } from "@/features/ticket/queries/get-all-ticket-slugs";
 import { getAttachmentsByTicket } from "@/features/ticket/queries/get-attachments-by-ticket";
-import { getTicketBySlug } from "@/features/ticket/queries/get-ticket";
+import {
+  getTicketBySlug,
+  getTicketWithReferencesBySlug,
+} from "@/features/ticket/queries/get-ticket";
 import { ticketsPath } from "@/path";
 
 export const generateStaticParams = async () => await getAllTicketSlugs();
@@ -51,7 +55,7 @@ export const generateMetadata = async ({
 const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
   const { slug } = await params;
 
-  const ticketPromise = getTicketBySlug(slug);
+  const ticketPromise = getTicketWithReferencesBySlug(slug);
   const commentsPromise = getCommentsByTicketSlug(slug, undefined, 3);
 
   const [ticket, { list, metadata }] = await Promise.all([
@@ -91,8 +95,10 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
       attachments: commentAttachmentsMap.get(comment.id) ?? [],
     })) ?? list;
 
+  const { referencedTickets, ...baseTicket } = ticket;
+
   return (
-    <div className="grid h-full grid-rows-[min-content_1fr] gap-y-8">
+    <div className="grid min-h-full grid-rows-[min-content_1fr] gap-y-8">
       <Breadcrumbs
         breadcrumbs={[
           { title: "Tickets", href: ticketsPath() },
@@ -177,7 +183,10 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
             )}
           </HasAuthSuspense>
         }
-        ticket={ticket}
+        referencedTicketsSlot={
+          <ReferencedTickets referencedTickets={referencedTickets} />
+        }
+        ticket={baseTicket}
       />
     </div>
   );

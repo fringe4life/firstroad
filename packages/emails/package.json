@@ -11,10 +11,10 @@
     "export:email": "email export --dir ."
   },
   "dependencies": {
-    "@react-email/components": "^1.0.8"
+    "@react-email/components": "^1.0.10"
   },
   "devDependencies": {
-    "@react-email/preview-server": "^5.2.9",
-    "react-email": "^5.2.9"
+    "@react-email/preview-server": "^5.2.10",
+    "react-email": "^5.2.10"
   }
 }

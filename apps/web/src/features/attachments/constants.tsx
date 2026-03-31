@@ -45,11 +45,11 @@ const normalizeAcceptedMime = (input: string): Mime | null => {
 
 export {
   ACCEPTED_FILE_TYPES,
+  ATTACHMENT_KIND_ICONS,
   FILE_NAME_MAX,
   MAX_SIZE_BYTES,
   MAX_SIZE_MB,
-  ATTACHMENT_KIND_ICONS,
-  SUPPORTED_IMAGE_TYPES,
   NORMALIZED_MIME_FROM_BROWSER,
   normalizeAcceptedMime,
+  SUPPORTED_IMAGE_TYPES,
 };

@@ -65,4 +65,4 @@ const deleteTicketRecord = async (
   });
 };
 
-export { createTicket, updateTicket, deleteTicketRecord };
+export { createTicket, deleteTicketRecord, updateTicket };

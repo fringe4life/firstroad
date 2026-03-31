@@ -25,4 +25,5 @@ const Placeholder = ({ label, icon, button }: PlaceholderProps) => {
     </div>
   );
 };
+
 export { Placeholder };

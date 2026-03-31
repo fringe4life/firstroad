@@ -19,9 +19,9 @@ function subscribe(callback: () => void) {
     return emptySubscribe();
   }
   const schedule =
-    typeof queueMicrotask !== "undefined"
-      ? queueMicrotask
-      : (fn: () => void) => setTimeout(fn, 0);
+    typeof queueMicrotask === "undefined"
+      ? (fn: () => void) => setTimeout(fn, 0)
+      : queueMicrotask;
   schedule(() => {
     clientMounted = true;
     callback();

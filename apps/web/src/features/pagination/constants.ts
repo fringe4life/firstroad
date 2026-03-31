@@ -17,4 +17,4 @@ const NO_PAGINATION = {
 // Sort orders used in UI and parsers - matches Prisma.SortOrder
 const SORT_ORDERS: SortOrder[] = ["asc", "desc"] as const;
 
-export { DEFAULT_LIMIT, DEFAULT_PAGE, NO_PAGINATION, SORT_ORDERS, LIMITS };
+export { DEFAULT_LIMIT, DEFAULT_PAGE, LIMITS, NO_PAGINATION, SORT_ORDERS };

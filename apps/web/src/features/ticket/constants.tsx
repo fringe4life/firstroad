@@ -45,10 +45,22 @@ const TICKET_WITH_USER_INCLUDE = {
     },
   },
 } satisfies TicketInclude;
+
+const TICKET_WITH_USER_AND_REFERENCES_INCLUDE = {
+  ...TICKET_WITH_USER_INCLUDE,
+  referencedTickets: {
+    select: {
+      slug: true,
+      title: true,
+    },
+  },
+} satisfies TicketInclude;
+
 export {
   TICKET_ICONS,
-  TICKET_STATUS_LABELS,
-  TICKET_SORT_OPTIONS,
   TICKET_NOT_FOUND,
+  TICKET_SORT_OPTIONS,
+  TICKET_STATUS_LABELS,
+  TICKET_WITH_USER_AND_REFERENCES_INCLUDE,
   TICKET_WITH_USER_INCLUDE,
 };

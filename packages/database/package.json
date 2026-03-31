@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "type": "tsc --noEmit --project tsconfig.json",
+    "type": "tsgo --noEmit --skipLibCheck --project tsconfig.json",
     "db:generate": "prisma generate",
     "db:migrate": "bun --env-file .env prisma migrate dev",
     "db:deploy": "bun --env-file .env prisma migrate deploy",
@@ -24,15 +24,14 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
-    "@prisma/adapter-neon": "^7.5.0",
-    "@prisma/adapter-pg": "^7.5.0",
-    "@prisma/client": "^7.5.0",
+    "@prisma/adapter-neon": "^7.6.0",
+    "@prisma/adapter-pg": "^7.6.0",
+    "@prisma/client": "^7.6.0",
     "pg": "^8.20.0"
   },
   "devDependencies": {
-    "typescript": "^5.9.3",
-    "elysia": "^1.4.27",
-    "prisma": "^7.5.0",
+    "elysia": "^1.4.28",
+    "prisma": "^7.6.0",
     "prismabox": "^1.1.26"
   },
   "exports": {

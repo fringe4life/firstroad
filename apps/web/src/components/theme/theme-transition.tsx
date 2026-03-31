@@ -18,4 +18,5 @@ const ThemeTransition = ({ children }: { children: React.ReactNode }) => {
     </ViewTransition>
   );
 };
+
 export { ThemeTransition };

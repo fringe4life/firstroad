@@ -25,4 +25,5 @@ const HasAuthSuspense = ({
     <HasAuth>{children}</HasAuth>
   </Suspend>
 );
+
 export { HasAuthSuspense };

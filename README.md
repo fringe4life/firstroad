@@ -2,21 +2,21 @@
 
 <div align="center">
 
-[![Next.js](https://img.shields.io/badge/Next.js-16.1.6-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.2.1-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.2.4-61DAFB?logo=react&logoColor=white)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Prisma](https://img.shields.io/badge/Prisma-7.4.2-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
-[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.5.4-000000)](https://better-auth.com/)
-[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.2.1-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![Biome](https://img.shields.io/badge/Biome-2.4.5-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6.0.2-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Prisma](https://img.shields.io/badge/Prisma-7.6.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
+[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.5.6-000000)](https://better-auth.com/)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.2.2-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Biome](https://img.shields.io/badge/Biome-2.4.9-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.8.9-000000)](https://nuqs.47ng.com/)
-[![Valibot](https://img.shields.io/badge/Valibot-1.2.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
-[![Elysia](https://img.shields.io/badge/Elysia-1.4.27-000000)](https://elysiajs.com/)
-[![Inngest](https://img.shields.io/badge/Inngest-beta-000000)](https://www.inngest.com/)
-[![Resend](https://img.shields.io/badge/Resend-6.9.3-000000)](https://resend.com/)
-[![React Email](https://img.shields.io/badge/React%20Email-5.2.9-000000)](https://react.email/)
-[![Bun](https://img.shields.io/badge/Bun-1.3.10-FBF0DF?logo=bun&logoColor=FBF0DF)](https://bun.sh/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-7.2.5-000000)](https://ultracite.dev/)
+[![Valibot](https://img.shields.io/badge/Valibot-1.3.1-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
+[![Elysia](https://img.shields.io/badge/Elysia-1.4.28-000000)](https://elysiajs.com/)
+[![Inngest](https://img.shields.io/badge/Inngest-4.1.0-000000)](https://www.inngest.com/)
+[![Resend](https://img.shields.io/badge/Resend-6.10.0-000000)](https://resend.com/)
+[![React Email](https://img.shields.io/badge/React%20Email-5.2.10-000000)](https://react.email/)
+[![Bun](https://img.shields.io/badge/Bun-1.3.11-FBF0DF?logo=bun&logoColor=FBF0DF)](https://bun.sh/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-7.4.2-000000)](https://ultracite.dev/)
 
 </div>
 
@@ -27,6 +27,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **🔐 Authentication**: Secure user authentication with Better Auth (email/password + OTP + GitHub OAuth) with email enumeration protection
 - **🏢 Organization Management**: Create and manage organizations with membership and invitation systems, role-based access control (owner, admin, member), granular permissions (canDeleteTicket), and admin tabs for managing members and invitations
 - **🎫 Ticket Management**: Create, edit, and manage tickets with status tracking
+- **🔗 Referenced Tickets**: Link tickets to related tickets (self-referential relations; shown on ticket detail)
 - **📎 Ticket Attachments**: Owner-only file uploads with Bun S3, image previews before upload, and owner-only delete actions; presigned download URLs for all viewers (Bun runtime; on Vercel use `bunVersion: "1.x"` in vercel.json so Server Actions run on Bun and `Bun.s3` works)
 - **💬 Comments System**: Add, edit, and delete comments on tickets with infinite pagination and owner-only attachments
 - **🌙 Dark Mode**: Beautiful light/dark theme with smooth transitions
@@ -49,22 +50,22 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 16.1 (App Router) with Turbopack
-- **Language**: TypeScript 5.9 with strict type checking
-- **Database**: PostgreSQL with Prisma Client 7.4 (relationJoins preview, Neon adapter)
+- **Framework**: Next.js 16.2 (App Router) with Turbopack
+- **Language**: TypeScript 6.0 with strict type checking
+- **Database**: PostgreSQL with Prisma Client 7.6 (relationJoins + partialIndexes previews, Neon adapter)
 - **Authentication**: Better Auth 1.5 (beta) with email/password provider and session cookie caching
-- **Styling**: Tailwind CSS v4.2.1 with shadcn/ui components
+- **Styling**: Tailwind CSS v4.2 with shadcn/ui components and Tailwind v4 PostCSS pipeline
 - **Icons**: Lucide React
-- **Forms**: React Hook Form with Valibot validation
+- **Forms**: React `useActionState` + Server Actions with Valibot validation
 - **Notifications**: Sonner toast notifications
 - **Theme**: next-themes for dark/light mode
-- **URL Search Params**: nuqs 2.8 for type-safe URL parameters
-- **Email**: React Email 5.2 with Resend 6.9 for transactional emails
+- **URL Search Params**: nuqs 2.8.9 for type-safe URL parameters
+- **Email**: React Email 5.2 with Resend 6.10 for transactional emails
 - **API Framework**: Elysia 1.4 with @elysiajs/cors for unified API routes
-- **Background Jobs**: Inngest 3.52.4 for background tasks and event handling
+- **Background Jobs**: Inngest 4.1 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
 - **Shared Utilities**: `@firstroad/utils` (packages/utils) for shared helpers (e.g. `createSlug`)
-- **Linting**: Biome 2.4.5 for fast formatting and linting with Ultracite 7.2 rules
+- **Linting**: Biome 2.4.9 for fast formatting and linting with Ultracite 7.4 rules
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 
@@ -91,7 +92,7 @@ This project leverages cutting-edge Next.js 16 features for optimal performance 
 - **"use cache" Directive**: Function-level caching for data queries and static components
 - **PPR (Partial Prerendering)**: Static shell with dynamic holes for optimal performance
 - **Slug-based Routing**: Human-readable URLs with automatic slug generation
-- **Type-safe Search Parameters**: nuqs integration for URL parameter management
+- **Type-safe Search Parameters**: [nuqs](https://nuqs.47ng.com/) integration for URL parameter management
   
 ### Performance Optimizations
   
@@ -243,6 +244,10 @@ DIRECT_URL="postgresql://username:password@localhost:5432/your_database"
 BETTER_AUTH_SECRET="your-secret-key-here"
 # Public app URL used for emails and redirects
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
+
+# Session cookie name (Better Auth; must match auth — used by proxy for optimistic session checks)
+# Local HTTP: better-auth.session_token — HTTPS production often uses __Secure-better-auth.session_token
+NEXT_PUBLIC_SESSION_COOKIE_NAME="better-auth.session_token"
 
 # Email (Resend)
 # Docs: https://resend.com/
@@ -463,6 +468,7 @@ This pattern enables:
 - **Search & Filter**: Find tickets by title, description, or status
 - **Deadline Tracking**: Set and manage ticket deadlines
 - **Slug-based URLs**: Human-readable URLs using ticket slugs (e.g., `/this-ticket-title`)
+- **Referenced tickets**: Associate tickets with other tickets; listed on the ticket detail view
 - **Unified Ticket Pages**: Ticket creation form and list displayed on the same page
 - **Responsive Controls**: Desktop button groups and mobile dropdowns for filtering
 - **Batch Access Queries**: Ownership and permissions fetched in 1 batch query for list pages (vs N individual queries)
@@ -559,9 +565,9 @@ The project uses Tailwind CSS v4 with custom configuration for dark mode, theme 
 
 ### Database
 
-PostgreSQL with Prisma Client 7.4 using:
+PostgreSQL with Prisma Client 7.6 using:
 
-- **relationJoins** preview feature for optimized queries
+- **relationJoins** and **partialIndexes** preview features for optimized queries
 - **Client-side engine** for edge compatibility
 - **Neon serverless adapter** for efficient connections
 - Custom output path: `generated/prisma/` (in packages/database)
@@ -575,7 +581,7 @@ PostgreSQL with Prisma Client 7.4 using:
 - **Organization**: Organization management
 - **Member**: Organization membership with role-based permissions (owner, admin, member) and granular permissions (canDeleteTicket)
 - **Invitation**: Organization invitations with role assignment
-- **Ticket**: Ticket management with unique slug field (direct relation to User)
+- **Ticket**: Ticket management with unique slug field (direct relation to User); self-referential **referencedTickets** / **referencingTickets** for links between tickets
 - **TicketAttachment**: Ticket file attachments; S3 key convention `attachments/{ticketId}/{attachmentId}/{fileName}`
 - **Comment**: Comment system (direct relation to User)
 - **CommentAttachment**: Comment file attachments
@@ -593,7 +599,7 @@ Better Auth configured with:
 - Prisma Client with Neon driver adapter; Better Auth uses `@better-auth/prisma-adapter`.
 - Session cookie caching (5-minute cache duration)
 - Session expiration (7 days) and update age (1 day)
-- **Kysely adapter shim (required):** `@better-auth/kysely-adapter` and related entry points are aliased to a local shim in `next.config.ts` so Turbopack/Next never load `node:sqlite` or the real Kysely adapter. Bun 1.3.10 and Better Auth v1.5 have not resolved this incompatibility; the shim is still required. Builds succeed locally (Bun 1.3.10) and deploy to Vercel (Bun runtime 1.3.6) with the shim enabled.
+- **Kysely adapter shim (required):** `@better-auth/kysely-adapter` and related entry points are aliased to a local shim in `next.config.ts` so Turbopack/Next never load `node:sqlite` or the real Kysely adapter. Bun 1.3.11 and Better Auth v1.5 have not resolved this incompatibility; the shim is still required. Builds succeed locally and on Vercel (`bunVersion: "1.x"` in `apps/web/vercel.json`) with the shim enabled.
 
 Inngest provides background job processing for:
 
@@ -605,7 +611,7 @@ Inngest provides background job processing for:
 
 ### Email Templates (Resend)
 
-The application uses Resend 6.9 for transactional emails with published templates. All email sending functions use Resend's template API instead of inline React Email components.
+The application uses Resend 6.10 for transactional emails with published templates. All email sending functions use Resend's template API instead of inline React Email components.
 
 **Template IDs:**
 - `email-otp-verification` - OTP codes for sign-in, email verification, and password reset
@@ -702,7 +708,7 @@ The application uses Elysia 1.4 as a unified API framework for handling all API 
 
 - Full TypeScript support with strict configuration
 - Typed routes with Next.js 16 (`typedRoutes: true`)
-- Type-safe URL search parameters with nuqs 2.8
+- Type-safe URL search parameters with nuqs 2.8.9
 - Centralized auth types in `src/features/auth/types.ts`:
   - `ServerSession`: Full session with user object
   - `Maybe<User>`: Session or null for DAL functions
@@ -793,7 +799,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Better Auth](https://better-auth.com/) - Authentication
 - [Prisma](https://www.prisma.io/) - Database ORM
 - [Tailwind CSS](https://tailwindcss.com/) - CSS framework
-- [nuqs](https://nuqs.vercel.app/) - Type-safe URL search params
+- [nuqs](https://nuqs.47ng.com/) - Type-safe URL search params
 - [Biome](https://biomejs.dev/) - Fast formatting and linting
 - [Ultracite](https://ultracite.ai/) - Biome rules enforcement
 - [React Compiler](https://react.dev/blog/2024/02/15/react-labs-what-we-have-been-working-on-february-2024) - Performance optimization

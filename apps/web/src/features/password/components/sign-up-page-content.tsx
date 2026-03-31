@@ -16,4 +16,5 @@ const SignUpPageContent = () => (
     title="Sign Up"
   />
 );
+
 export { SignUpPageContent };

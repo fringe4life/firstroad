@@ -8,6 +8,7 @@ interface TicketDetailViewProps {
   commentsSlot?: React.ReactNode;
   /** Slot for mobile actions (bottom bar). Wrap in HasAuthSuspense with TicketActionBarSkeleton fallback. */
   mobileActionsSlot?: React.ReactNode;
+  referencedTicketsSlot?: React.ReactNode;
   ticket: BaseTicket;
 }
 
@@ -22,8 +23,9 @@ const TicketDetailView = ({
   commentsSlot,
   actionsSlot,
   mobileActionsSlot,
+  referencedTicketsSlot,
 }: TicketDetailViewProps) => (
-  <div className="max-content-widest grid h-full grid-rows-[min-content_min-content_1fr] gap-y-4 self-start justify-self-center">
+  <div className="max-content-widest grid min-h-full grid-rows-[min-content_min-content_min-content_1fr] gap-y-4 self-start justify-self-center">
     <TicketCard
       actions={actionsSlot}
       mobileActions={mobileActionsSlot}
@@ -31,6 +33,7 @@ const TicketDetailView = ({
       variant="detail"
     />
     {attachmentsSlot}
+    {referencedTicketsSlot}
     {commentsSlot}
   </div>
 );

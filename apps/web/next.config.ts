@@ -13,7 +13,6 @@ const nextConfig: NextConfig = {
   // Kysely shim required: Bun 1.3.10 and Better Auth v1.5 do not fix the adapter incompatibility; keeps Vercel (Bun 1.3.6) and local builds working.
   serverExternalPackages: ["@better-auth/kysely-adapter"],
   experimental: {
-    browserDebugInfoInTerminal: true,
     viewTransition: true,
     mcpServer: true,
     typedEnv: true,
@@ -34,6 +33,9 @@ const nextConfig: NextConfig = {
       "better-auth/dist/adapters/kysely-adapter/index.mjs":
         "./src/shims/kysely-adapter.ts",
     },
+  },
+  logging: {
+    browserToTerminal: true,
   },
 };
 

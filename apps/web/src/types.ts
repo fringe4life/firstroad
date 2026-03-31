@@ -25,3 +25,7 @@ export interface UnsuccessfulState {
 export interface Rows {
   rows?: number;
 }
+
+export interface IsActive {
+  isActive: boolean;
+}

@@ -13,10 +13,6 @@ const attachmentS3Key = (
 ): string =>
   `${organizationId}/${ownerKind}/${ownerId}/${name}-${attachmentId}`;
 
-/**
- * Presign download URLs for attachments using Bun.s3.
- * Only runs when Bun runtime is available; on Node (e.g. Vercel) returns attachments with empty downloadUrl.
- */
 const presignAttachments = (
   organizationId: string,
   ownerKind: OwnerKind,

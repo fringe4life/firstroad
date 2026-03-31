@@ -8,7 +8,7 @@ import type { CommentsProps } from "@/features/comment/types";
 
 const Comments = (props: CommentsProps) => (
   <CommentsProvider {...props}>
-    <div className="grid h-full gap-y-2 has-card:grid-rows-[min-content_1fr]">
+    <div className="grid h-full gap-y-2 has-card:grid-rows-[min-content_1fr_min-content]">
       <CommentFormCard />
       <div className="grid h-full grid-rows-[1fr_min-content] gap-y-2">
         <CommentList />

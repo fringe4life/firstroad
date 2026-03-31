@@ -71,4 +71,5 @@ const RequireAuthSuspense = ({
     <RequireAuth redirectPath={redirectPath}>{children}</RequireAuth>
   </Suspense>
 );
+
 export { RequireAuthSuspense };

@@ -92,10 +92,10 @@ export {
   invalidateComments,
   invalidateCommentsForTicket,
   invalidateInvitationsForOrganization,
+  invalidateOrganisationsForUser,
   invalidateTicket,
   invalidateTicketAndAttachments,
   invalidateTicketAndList,
-  invalidateTicketWithComments,
-  invalidateOrganisationsForUser,
   invalidateTickets,
+  invalidateTicketWithComments,
 };

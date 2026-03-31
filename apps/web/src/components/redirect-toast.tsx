@@ -17,4 +17,5 @@ const RedirectToast = () => {
   }, []);
   return null;
 };
+
 export { RedirectToast };
