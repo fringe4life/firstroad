@@ -7,14 +7,6 @@ generator client {
   compilerBuild   = "fast"
 }
 
-generator prismabox {
-  provider                    = "prismabox"
-  typeboxImportDependencyName = "elysia"
-  typeboxImportVariableName   = "t"
-  inputModel                  = true
-  output                      = "../generated/prismabox"
-}
-
 datasource db {
   provider = "postgresql"
 }

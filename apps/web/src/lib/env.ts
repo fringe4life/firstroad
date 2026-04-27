@@ -9,11 +9,6 @@ const envSchema = object({
     url("DATABASE_URL must be a valid URL"),
     minLength(1, "DATABASE_URL is required"),
   ),
-  // DIRECT_URL: pipe(
-  //   string(),
-  //   url("DIRECT_URL must be a valid URL"),
-  //   minLength(1, "DIRECT_URL is required"),
-  // ),
   NEXT_PUBLIC_APP_URL: pipe(
     string(),
     url("NEXT_PUBLIC_APP_URL must be a valid URL"),

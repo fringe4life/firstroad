@@ -16,7 +16,6 @@ Per Turborepo best practices, `.env` files belong in the **application package**
 | `NEXT_PUBLIC_RESEND_FROM` | Yes | From address for sent emails |
 | `GITHUB_CLIENT_ID` | Yes | GitHub OAuth (Better Auth) |
 | `GITHUB_CLIENT_SECRET` | Yes | GitHub OAuth (Better Auth) |
-| `DIRECT_URL` | No | Optional Prisma direct URL (currently commented in schema) |
 | `RESEND_FULL_ACCESS` | No* | Resend **Full Access** API key; only for `resend:list` / `resend:download` scripts (template management). Not the same as `RESEND_API_KEY`. |
 | `S3_ACCESS_KEY_ID` | If using attachments | Bun.s3 presign/upload/delete for ticket attachments (Bun runtime only; not on Vercel) |
 | `S3_SECRET_ACCESS_KEY` | If using attachments | |

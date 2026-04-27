@@ -2,21 +2,21 @@
 
 <div align="center">
 
-[![Next.js](https://img.shields.io/badge/Next.js-16.2.1-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
-[![React](https://img.shields.io/badge/React-19.2.4-61DAFB?logo=react&logoColor=white)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-6.0.2-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Prisma](https://img.shields.io/badge/Prisma-7.6.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
-[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.5.6-000000)](https://better-auth.com/)
-[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.2.2-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![Biome](https://img.shields.io/badge/Biome-2.4.9-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.2.4-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.2.5-61DAFB?logo=react&logoColor=white)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6.0.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Prisma](https://img.shields.io/badge/Prisma-7.8.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
+[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.6.9-000000)](https://better-auth.com/)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.2.4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Biome](https://img.shields.io/badge/Biome-2.4.12-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.8.9-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.3.1-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Elysia](https://img.shields.io/badge/Elysia-1.4.28-000000)](https://elysiajs.com/)
-[![Inngest](https://img.shields.io/badge/Inngest-4.1.0-000000)](https://www.inngest.com/)
-[![Resend](https://img.shields.io/badge/Resend-6.10.0-000000)](https://resend.com/)
-[![React Email](https://img.shields.io/badge/React%20Email-5.2.10-000000)](https://react.email/)
-[![Bun](https://img.shields.io/badge/Bun-1.3.11-FBF0DF?logo=bun&logoColor=FBF0DF)](https://bun.sh/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-7.4.2-000000)](https://ultracite.dev/)
+[![Inngest](https://img.shields.io/badge/Inngest-4.2.4-000000)](https://www.inngest.com/)
+[![Resend](https://img.shields.io/badge/Resend-6.12.2-000000)](https://resend.com/)
+[![React Email](https://img.shields.io/badge/React%20Email-6.0.0-000000)](https://react.email/)
+[![Bun](https://img.shields.io/badge/Bun-1.3.13-FBF0DF?logo=bun&logoColor=FBF0DF)](https://bun.sh/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-7.6.0-000000)](https://ultracite.dev/)
 
 </div>
 
@@ -52,20 +52,20 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 
 - **Framework**: Next.js 16.2 (App Router) with Turbopack
 - **Language**: TypeScript 6.0 with strict type checking
-- **Database**: PostgreSQL with Prisma Client 7.6 (relationJoins + partialIndexes previews, Neon adapter)
-- **Authentication**: Better Auth 1.5 (beta) with email/password provider and session cookie caching
+- **Database**: PostgreSQL with Prisma Client 7.8 (relationJoins + partialIndexes previews, Neon adapter)
+- **Authentication**: Better Auth 1.6 with email/password provider and session cookie caching
 - **Styling**: Tailwind CSS v4.2 with shadcn/ui components and Tailwind v4 PostCSS pipeline
 - **Icons**: Lucide React
 - **Forms**: React `useActionState` + Server Actions with Valibot validation
 - **Notifications**: Sonner toast notifications
 - **Theme**: next-themes for dark/light mode
 - **URL Search Params**: nuqs 2.8.9 for type-safe URL parameters
-- **Email**: React Email 5.2 with Resend 6.10 for transactional emails
+- **Email**: React Email 6.0 with Resend 6.12 for transactional emails
 - **API Framework**: Elysia 1.4 with @elysiajs/cors for unified API routes
-- **Background Jobs**: Inngest 4.1 for background tasks and event handling
+- **Background Jobs**: Inngest 4.2 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
 - **Shared Utilities**: `@firstroad/utils` (packages/utils) for shared helpers (e.g. `createSlug`)
-- **Linting**: Biome 2.4.9 for fast formatting and linting with Ultracite 7.4 rules
+- **Linting**: Biome 2.4.12 for fast formatting and linting with Ultracite 7.6 rules
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 
@@ -197,7 +197,8 @@ startTransition(() => {
 
 ## 📋 Prerequisites
 
-- Node.js 18+ or Bun
+- Bun 1.3.13 (recommended, matching `packageManager`)
+- Node.js 18+ (fallback for non-Bun tooling)
 - PostgreSQL database
 - Git
 
@@ -215,9 +216,6 @@ cd firstroad
 ```bash
 # Using Bun (recommended)
 bun install
-
-# Or using npm
-npm install
 ```
 
 ### 3. Set up environment variables
@@ -233,7 +231,6 @@ Update `apps/web/.env.local` with your configuration:
 ```env
 # Database (for Docker Postgres: postgresql://postgres:postgres@localhost:5432/firstroad)
 DATABASE_URL="postgresql://username:password@localhost:5432/your_database"
-DIRECT_URL="postgresql://username:password@localhost:5432/your_database"
 
 # Inngest (set INNGEST_DEV=1 for local dev with docker-compose inngest service)
 # INNGEST_DEV=1
@@ -275,8 +272,6 @@ S3_BUCKET="your-bucket-name"
 # S3_ENDPOINT="https://s3.us-east-1.amazonaws.com"
 ```
 
-**Note**: `DIRECT_URL` is optional and only needed for connection pooling scenarios. The application works with just `DATABASE_URL` configured. `DIRECT_URL` is not validated in the environment schema.
-
 ### 4. Set up the database
 
 **Option A: Docker Postgres (recommended for local dev)**
@@ -299,7 +294,7 @@ This keeps all dev DB traffic local and avoids Neon free-tier limits. Inngest De
 
 **Option B: External Postgres (e.g. Neon)**
 
-Use your Neon or other Postgres URL for `DATABASE_URL`. Omit `INNGEST_DEV` if using Inngest Cloud; for local Inngest, run `bun run inngest` from root and set `INNGEST_DEV=1`.
+Use your Neon or other Postgres URL for `DATABASE_URL`. Omit `INNGEST_DEV` if using Inngest Cloud; for local Inngest, run `bunx turbo run dev --filter=@firstroad/inngest` from root and set `INNGEST_DEV=1`.
 
 Prisma lives in `packages/database`. Use `.env` for production/Neon; use `.env.local` for local Docker Postgres (copy from `packages/database/env.example`).
 
@@ -525,8 +520,6 @@ bun run postinstall      # Generate Prisma client (turbo postinstall)
 bun run dev:email        # React Email preview
 bun run build:email      # Build email templates
 bun run export:email     # Export to HTML
-bun run resend:list      # List Resend templates (RESEND_FULL_ACCESS)
-bun run resend:download  # Download templates to emails/downloaded/
 
 # Database (packages/database via turbo)
 bunx turbo run db:generate --filter=@firstroad/db   # Generate Prisma client
@@ -554,7 +547,9 @@ bun run deploy:prod      # cd apps/web && vercel deploy --prod
 
 ### Build (Next.js + Bun)
 
-Production build supports Turbopack (`bun run next build --turbopack`). To avoid Better Auth Kysely adapter chunk errors with Bun + Next 16, `next.config.ts` uses `serverExternalPackages` for `node:sqlite`, `@better-auth/kysely-adapter`, and related Better Auth adapter paths (see [better-auth#6781](https://github.com/better-auth/better-auth/issues/6781)).
+Production builds run through Turborepo (`bun run build`) and use the `apps/web` build with Turbopack/Bun. To avoid Better Auth Kysely adapter chunk errors with Bun + Next 16, `next.config.ts` keeps `@better-auth/kysely-adapter` in `serverExternalPackages` and aliases related entry points to a local shim.
+
+Root `turbo.json` passes required build env vars via `tasks.build.env`: `DATABASE_URL`, `BETTER_AUTH_SECRET`, `RESEND_API_KEY`, `NEXT_PUBLIC_RESEND_FROM`, `NEXT_PUBLIC_APP_URL`, `INNGEST_SIGNING_KEY`, `INNGEST_EVENT_KEY`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_REGION`, and `S3_BUCKET`.
 
 ### Tailwind CSS
 
@@ -565,7 +560,7 @@ The project uses Tailwind CSS v4 with custom configuration for dark mode, theme 
 
 ### Database
 
-PostgreSQL with Prisma Client 7.6 using:
+PostgreSQL with Prisma Client 7.8 using:
 
 - **relationJoins** and **partialIndexes** preview features for optimized queries
 - **Client-side engine** for edge compatibility

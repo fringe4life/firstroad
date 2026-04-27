@@ -11,6 +11,6 @@
     "type": "tsgo --noEmit --skipLibCheck --project tsconfig.json"
   },
   "dependencies": {
-    "slugify": "^1.6.8"
+    "slugify": "^1.6.9"
   }
 }

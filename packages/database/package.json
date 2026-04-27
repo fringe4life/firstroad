@@ -23,16 +23,14 @@
     "seed:comment-permissions:local": "bun --env-file .env.local prisma/scripts/seed-member-permissions-comment.ts"
   },
   "dependencies": {
-    "@neondatabase/serverless": "^1.0.2",
-    "@prisma/adapter-neon": "^7.6.0",
-    "@prisma/adapter-pg": "^7.6.0",
-    "@prisma/client": "^7.6.0",
+    "@neondatabase/serverless": "^1.1.0",
+    "@prisma/adapter-neon": "^7.8.0",
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
     "pg": "^8.20.0"
   },
   "devDependencies": {
-    "elysia": "^1.4.28",
-    "prisma": "^7.6.0",
-    "prismabox": "^1.1.26"
+    "prisma": "^7.8.0"
   },
   "exports": {
     ".": "./src/index.ts",

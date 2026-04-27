@@ -3,7 +3,7 @@ import { CardCompact } from "@/components/card-compact";
 import { homePath } from "@/path";
 
 const ErrorPage = () => (
-  <main className="flex min-h-screen items-center justify-center px-4">
+  <main className="flex min-h-dvh items-center justify-center px-4">
     <CardCompact
       className="w-full max-w-md"
       content={
