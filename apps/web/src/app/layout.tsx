@@ -37,7 +37,7 @@ export const metadata: Metadata = {
 
 const RootLayout = ({ children, auth }: LayoutProps<"/">) => (
   <html
-    className="md:[--side-width:4.0625rem]"
+    className="scrollbar-thin scrollbar-gutter-stable md:[--side-width:4.0625rem]"
     data-scroll-behavior="smooth"
     lang="en"
     suppressHydrationWarning

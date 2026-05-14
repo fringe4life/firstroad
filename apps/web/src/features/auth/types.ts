@@ -1,13 +1,9 @@
 import type { TicketModel } from "@firstroad/db/client-types";
 import type { auth } from "@/lib/auth";
-import type { authClient } from "@/lib/auth-client";
 import type { ResourcePermission } from "../memberships/types";
 
 // Server-side session type (from auth instance)
 export type ServerSession = typeof auth.$Infer.Session;
-
-// Client-side session type (from authClient instance)
-export type ClientSession = typeof authClient.$Infer.Session;
 
 // Base user type (extracted from session)
 type BaseUser = ServerSession["user"];
@@ -41,12 +37,4 @@ export interface EmailSearchParams {
 
 export interface ItemsWithPermissionsOptions {
   permissionsMap?: Map<string, ResourcePermission>;
-}
-
-// Cookie cache JWT payload (better-auth session_data when cookieCache.strategy: "jwt")
-export interface SessionDataPayload {
-  session: ServerSession["session"];
-  updatedAt: number;
-  user: ServerSession["user"];
-  version?: string;
 }

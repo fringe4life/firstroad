@@ -292,8 +292,6 @@
       var(--side-width),
       var(--expanded-sidebar-width)
     );
-    scrollbar-gutter: stable;
-    scrollbar-width: thin;
   }
   .nav-scroll {
     animation: --nav-animation linear both;
@@ -341,11 +339,8 @@
   animation: --circle-in-bottom-center 0.5s;
 }
 
-::view-transition-old(.circle-out-top-center) {
-  animation-delay: 0.5s;
-}
-
-::view-transition-old(.circle-out-bottom-center) {
+::view-transition-old(.circle-in-top-center),
+::view-transition-old(.circle-in-bottom-center) {
   animation-delay: 0.5s;
 }
 

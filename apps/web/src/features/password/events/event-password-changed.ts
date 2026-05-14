@@ -9,7 +9,7 @@ const passwordChangedSchema = object({
   userName: optional(string()),
 });
 
-export const passwordChanged = eventType("password.changed", {
+const passwordChanged = eventType("password.changed", {
   schema: passwordChangedSchema,
 });
 

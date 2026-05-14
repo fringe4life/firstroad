@@ -34,7 +34,7 @@ const emailOTPSchema = object({
   userName: optional(string()),
 });
 
-export const emailOTP = eventType("email.otp", {
+const emailOTP = eventType("email.otp", {
   schema: emailOTPSchema,
 });
 

@@ -18,7 +18,7 @@ import {
   MAX_SIZE_MB,
 } from "./constants";
 
-export const fileSchema = pipe(
+const fileSchema = pipe(
   file("Please select a file."),
   mimeType(ACCEPTED_FILE_TYPES, "File type is not supported"),
   minSize(0, "File must not be empty"),

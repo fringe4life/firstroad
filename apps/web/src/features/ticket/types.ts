@@ -81,13 +81,6 @@ export interface TicketOwnerOptionsFetchProps extends IsDetail {
   >;
 }
 
-/**
- * Combined props - either pre-computed access or needs fetch
- */
-export type TicketOwnerOptionsProps =
-  | TicketOwnerOptionsWithAccessProps
-  | TicketOwnerOptionsFetchProps;
-
 export interface TicketMoreMenuProps extends Partial<ResourcePermission> {
   ticket: Pick<BaseTicket, "id" | "status">;
   trigger: React.ReactNode;

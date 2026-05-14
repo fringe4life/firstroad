@@ -136,4 +136,4 @@ const ConfirmDialog = ({
   );
 };
 
-export { ConfirmDialog };
+export { ConfirmDialog as Root };

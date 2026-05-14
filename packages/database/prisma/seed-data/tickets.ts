@@ -22,7 +22,7 @@ interface SeedUser {
 }
 
 // Base tickets list without userId assignment
-export const baseTickets: TicketWithoutUserId[] = [
+const baseTickets: TicketWithoutUserId[] = [
   {
     title: "Implement User Authentication",
     description: "Set up secure user authentication with Auth.js v5",

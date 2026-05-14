@@ -104,7 +104,7 @@ The Next.js skill describes **Eden Treaty** for isomorphic, type-safe API calls 
 
 **Recommendation (optional):** If you want type-safe API clients from the same codebase:
 
-1. Export the app type: `export type AppRoutes = typeof app` (already in `@/lib/app.ts`; ensure the full app with routes is exported from the route file if needed).
+1. Export the app type: `export type AppRoutes = typeof app`.
 2. Add a Treaty client (e.g. in `lib/eden.ts`) using `treaty` and the app type, with server vs client branching as in the skill (e.g. `typeof process` for SSR safety).
 
 ---

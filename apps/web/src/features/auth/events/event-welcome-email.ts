@@ -22,7 +22,7 @@ const welcomeEmailSchema = object({
   userName: optional(string()),
 });
 
-export const welcomeEmail = eventType("user.welcome", {
+const welcomeEmail = eventType("user.welcome", {
   schema: welcomeEmailSchema,
 });
 

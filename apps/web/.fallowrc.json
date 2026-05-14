@@ -1,0 +1,12 @@
+{
+  "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
+  "duplicates": {
+    "enabled": true,
+    "minOccurrences": 3
+  },
+  "ignoreDependencies": [
+    "next-devtools-mcp",
+    "typescript-plugin-directives",
+    "shadcn"
+  ]
+}

@@ -24,7 +24,7 @@ const emailVerificationSchema = object({
   userName: optional(string()),
 });
 
-export const emailVerification = eventType("email.verification", {
+const emailVerification = eventType("email.verification", {
   schema: emailVerificationSchema,
 });
 

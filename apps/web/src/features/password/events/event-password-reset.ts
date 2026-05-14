@@ -15,7 +15,7 @@ const passwordResetSchema = object({
   userName: pipe(string(), minLength(1, "User name is required")),
 });
 
-export const passwordReset = eventType("password.reset", {
+const passwordReset = eventType("password.reset", {
   schema: passwordResetSchema,
 });
 

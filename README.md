@@ -710,7 +710,6 @@ The application uses Elysia 1.4 as a unified API framework for handling all API 
 - Centralized auth types in `src/features/auth/types.ts`:
   - `ServerSession`: Full session with user object
   - `Maybe<User>`: Session or null for DAL functions
-  - `ClientSession`: Client-side session type
 - Discriminated union types for compile-time prop validation (e.g., `TicketItemProps`)
 - HasAuthSuspense pattern with session injection for auth-dependent components
 - Shared utilities in `src/utils/` for better organization

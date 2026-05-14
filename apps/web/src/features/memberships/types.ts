@@ -44,10 +44,6 @@ export interface MembershipItemProps extends OrganisationId {
   member: OrganisationMemberRow;
 }
 
-export interface OrganisationByIdProps {
-  members: List<OrganisationMemberRow>;
-}
-
 export interface MembershipsMoreMenuProps extends OrganisationId, MemberId {
   role: MemberRole;
 }
