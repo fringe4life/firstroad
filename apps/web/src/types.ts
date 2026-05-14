@@ -8,11 +8,6 @@ export interface SearchParamsProps {
   searchParams: Promise<SearchParams>;
 }
 
-export interface ErrorProps {
-  error: Error;
-  reset: () => void;
-}
-
 export interface Id {
   id: string;
 }

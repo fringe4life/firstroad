@@ -1,13 +1,9 @@
 import { cors } from "@elysiajs/cors";
 import { openapi } from "@elysiajs/openapi";
-import type { SortOrder } from "@firstroad/db/client-types";
-import { t } from "elysia";
-import { LIMITS } from "@/features/pagination/constants";
-import { getTicketsApi } from "@/features/ticket/dal/get-tickets-api";
-import { getTicketBySlugApi } from "@/features/ticket/queries/get-ticket-api";
 import { app } from "@/lib/app";
 import { auth } from "@/lib/auth";
 import { OpenAPI } from "./better-auth-openapi";
+import { inngestHandler } from "./inngest-plugin";
 
 // apply cors to all routes
 app.use(
@@ -32,6 +28,10 @@ app.mount(auth.handler, {
     tags: ["auth"],
     description: "Authentication endpoints from better auth",
   },
+});
+
+app.all("/inngest", ({ request }) => inngestHandler(request), {
+  detail: { tags: ["inngest"] },
 });
 
 // export the Elysia app as a Next.js route handlers

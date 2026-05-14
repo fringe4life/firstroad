@@ -27,14 +27,13 @@ const MembershipsMoreMenu = ({
 
   // 1. useActionState first to get action result
   const [state, action] = useActionState(
-    async (prevState: ActionState<MemberRole>) => {
-      return await updateMemberRole(
+    async (prevState: ActionState<MemberRole>) =>
+      await updateMemberRole(
         organizationId,
         memberId,
         nextRoleRef.current,
         prevState,
-      );
-    },
+      ),
     EMPTY_ACTION_STATE as ActionState<MemberRole>,
   );
 

@@ -1,10 +1,9 @@
 "use cache: remote";
 import { Heading } from "@/components/heading";
 import { InviteMemberButton } from "@/features/invitations/components/invite-member-button";
+import type { OrganisationId } from "@/features/organisation/types";
 
-interface MembershipsHeadingProps {
-  organizationId: string;
-}
+interface MembershipsHeadingProps extends OrganisationId {}
 
 const MembershipsHeading = async ({
   organizationId,

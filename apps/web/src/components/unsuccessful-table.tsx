@@ -8,16 +8,14 @@ interface UnsuccessfulTableProps extends PlaceholderProps {
 const UnsuccessfulTable = ({
   colSpan,
   ...placeholderProps
-}: UnsuccessfulTableProps) => {
-  return (
-    <TableBody className="h-full" data-unsuccessful="true">
-      <TableRow>
-        <TableCell colSpan={colSpan}>
-          <Placeholder {...placeholderProps} />
-        </TableCell>
-      </TableRow>
-    </TableBody>
-  );
-};
+}: UnsuccessfulTableProps) => (
+  <TableBody className="h-full" data-unsuccessful="true">
+    <TableRow>
+      <TableCell colSpan={colSpan}>
+        <Placeholder {...placeholderProps} />
+      </TableCell>
+    </TableRow>
+  </TableBody>
+);
 
 export { UnsuccessfulTable };

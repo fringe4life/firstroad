@@ -18,10 +18,10 @@ export interface OrgScopedResource extends UserVerifiable {
   organizationId: string;
 }
 
-export interface PermissionKey {
-  action: PermissionAction;
-  resourceType: ResourceType;
-}
+// export interface PermissionKey {
+//   action: PermissionAction;
+//   resourceType: ResourceType;
+// }
 
 export interface OrganisationMemberRow
   extends Omit<MemberModel, "createdAt" | "organizationId" | "userId">,

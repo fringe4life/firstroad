@@ -1,9 +1,9 @@
 "use client";
 
+import type { OnSelectHandler } from "@daypicker/react";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useImperativeHandle, useState } from "react";
-import type { PropsSingle } from "react-day-picker";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -35,7 +35,7 @@ const DatePicker = ({ id, name, defaultValue, ref }: DatePickerProps) => {
     reset: () => setDate(new Date()),
   }));
 
-  const handleSelect: PropsSingle["onSelect"] = (selected) => {
+  const handleSelect: OnSelectHandler<Date | undefined> = (selected) => {
     if (selected) {
       setDate(selected);
       setOpen(false);

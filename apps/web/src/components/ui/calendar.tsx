@@ -1,9 +1,9 @@
 /** biome-ignore-all lint/correctness/noNestedComponentDefinitions: shadcn ui component */
 "use client";
 
+import { type ChevronProps, DayPicker } from "@daypicker/react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type * as React from "react";
-import { type ChevronProps, DayPicker } from "react-day-picker";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 

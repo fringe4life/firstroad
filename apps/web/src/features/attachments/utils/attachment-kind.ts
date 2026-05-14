@@ -1,4 +1,4 @@
-export type AttachmentKind = "image" | "document" | "other";
+import type { AttachmentKind } from "../types";
 
 const IMAGE_EXTENSIONS = ["png", "jpg", "jpeg", "gif", "webp"] as const;
 

@@ -18,7 +18,8 @@
     "db:push:local": "bun --env-file .env.local prisma db push",
     "db:seed": "bun --env-file .env prisma db seed",
     "db:seed:local": "bun --env-file .env.local prisma db seed",
-    "db:restore:local": "bun --env-file .env.local pg_restore -v -d \"$DATABASE_URL\" --clean --if-exists neon-data-only.dump",
+    "db:dump:neon": "sh -c 'set -a && [ -f .env ] && . ./.env && set +a && exec pg_dump \"$DATABASE_URL\" --data-only -Fc -f neon-data-only.dump'",
+    "db:restore:local": "sh -c 'set -a && [ -f .env.local ] && . ./.env.local && set +a && exec pg_restore -v -d \"$DATABASE_URL\" --clean --if-exists neon-data-only.dump'",
     "seed:comment-permissions": "bun --env-file .env prisma/scripts/seed-member-permissions-comment.ts",
     "seed:comment-permissions:local": "bun --env-file .env.local prisma/scripts/seed-member-permissions-comment.ts"
   },

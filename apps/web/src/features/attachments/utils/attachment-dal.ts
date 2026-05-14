@@ -2,24 +2,21 @@
 
 import { prisma } from "@firstroad/db";
 import { s3 } from "bun";
+import type { OrganisationId } from "@/features/organisation/types";
 import type { List } from "@/types";
-import type { AttachmentRecord, OwnerKind } from "../types";
+import type { AttachmentRecord, OwnerId, OwnerKind } from "../types";
 import { attachmentS3Key } from "./presign-attachments";
 
-interface CreateAttachmentsForOwnerInput {
+interface CreateAttachmentsForOwnerInput extends OwnerId, OrganisationId {
   files: Array<{
     file: File;
     contentType: string;
   }>;
-  organizationId: string;
-  ownerId: string;
   ownerKind: OwnerKind;
 }
 
-interface DeleteAttachmentForOwnerInput {
+interface DeleteAttachmentForOwnerInput extends OwnerId, OrganisationId {
   attachmentId: string;
-  organizationId: string;
-  ownerId: string;
   ownerKind: OwnerKind;
 }
 

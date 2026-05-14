@@ -3,7 +3,7 @@ import { normalizeAcceptedMime } from "../constants";
 import type { Mime } from "../types";
 import { getMimeTypeFromFile } from "./attachment-mime-type";
 
-export interface FileWithContentType {
+interface FileWithContentType {
   contentType: Mime;
   file: File;
 }

@@ -15,9 +15,8 @@ const SwitchOrgButton = ({
 }: SwitchOrgButtonProps) => {
   // 1. useActionState first to get action result
   const [state, action] = useActionState(
-    async (prevState: ActionState<string>) => {
-      return await setActiveOrganisation(organizationId, prevState);
-    },
+    async (prevState: ActionState<string>) =>
+      await setActiveOrganisation(organizationId, prevState),
     EMPTY_ACTION_STATE as ActionState<string>,
   );
 

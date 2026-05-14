@@ -7,7 +7,7 @@ interface onArgs {
   state: ActionState;
 }
 
-export interface FeedBackOption {
+interface FeedBackOption {
   onError?: (onArgs: onArgs) => void;
   onSuccess?: (onArgs: onArgs) => void;
 }

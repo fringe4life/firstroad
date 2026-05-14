@@ -1,3 +1,4 @@
+import type { Ref } from "react";
 import type { ResourceType } from "@/features/memberships/types";
 import type { Id, List, Maybe } from "@/types";
 import type { ActionState } from "@/utils/to-action-state";
@@ -22,7 +23,7 @@ export interface UIAttachment extends AttachmentWithUrl {}
 
 export type OwnerKind = Lowercase<ResourceType>;
 
-export interface AttachmentDeleteArgs extends OwnerId {
+interface AttachmentDeleteArgs extends OwnerId {
   attachmentId: string;
 }
 
@@ -90,14 +91,14 @@ interface VerifiableItemBase extends IsOwner, OrganisationId, OwnerId {
   resourceType: ResourceType;
 }
 
-export interface VerifiableTicket extends VerifiableItemBase {
+interface VerifiableTicket extends VerifiableItemBase {
   commentId?: never;
   ownerLabel: "ticket";
   resourceType: "TICKET";
   slug: string;
 }
 
-export interface VerifiableComment extends VerifiableItemBase {
+interface VerifiableComment extends VerifiableItemBase {
   commentId: string;
   ownerLabel: "comment";
   resourceType: "COMMENT";
@@ -106,7 +107,7 @@ export interface VerifiableComment extends VerifiableItemBase {
 
 export type VerifiableItem = VerifiableTicket | VerifiableComment;
 
-export type AttachmentPreviewKind = "image" | "pdf" | "other";
+export type AttachmentKind = "image" | "document" | "other";
 
 export interface ImageAttachmentPreview {
   file: File;
@@ -165,4 +166,5 @@ export interface AttachmentInputWithPreviewsProps {
   label?: string;
   name?: string;
   onPreviewsChange?: (count: number) => void;
+  ref?: Ref<AttachmentInputWithPreviewsRef | null>;
 }

@@ -2,21 +2,21 @@
 
 <div align="center">
 
-[![Next.js](https://img.shields.io/badge/Next.js-16.2.4-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
-[![React](https://img.shields.io/badge/React-19.2.5-61DAFB?logo=react&logoColor=white)](https://react.dev/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.2.6-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.2.6-61DAFB?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.0.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Prisma](https://img.shields.io/badge/Prisma-7.8.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
-[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.6.9-000000)](https://better-auth.com/)
-[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.2.4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![Biome](https://img.shields.io/badge/Biome-2.4.12-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
+[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.6.10-000000)](https://better-auth.com/)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.3.0-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Biome](https://img.shields.io/badge/Biome-2.4.15-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.8.9-000000)](https://nuqs.47ng.com/)
-[![Valibot](https://img.shields.io/badge/Valibot-1.3.1-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
+[![Valibot](https://img.shields.io/badge/Valibot-1.4.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Elysia](https://img.shields.io/badge/Elysia-1.4.28-000000)](https://elysiajs.com/)
-[![Inngest](https://img.shields.io/badge/Inngest-4.2.4-000000)](https://www.inngest.com/)
-[![Resend](https://img.shields.io/badge/Resend-6.12.2-000000)](https://resend.com/)
-[![React Email](https://img.shields.io/badge/React%20Email-6.0.0-000000)](https://react.email/)
-[![Bun](https://img.shields.io/badge/Bun-1.3.13-FBF0DF?logo=bun&logoColor=FBF0DF)](https://bun.sh/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-7.6.0-000000)](https://ultracite.dev/)
+[![Inngest](https://img.shields.io/badge/Inngest-4.3.0-000000)](https://www.inngest.com/)
+[![Resend](https://img.shields.io/badge/Resend-6.12.3-000000)](https://resend.com/)
+[![React Email](https://img.shields.io/badge/React%20Email-6.1.1-000000)](https://react.email/)
+[![Bun](https://img.shields.io/badge/Bun-1.3.14-FBF0DF?logo=bun&logoColor=FBF0DF)](https://bun.sh/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-7.7.0-000000)](https://ultracite.dev/)
 
 </div>
 
@@ -28,7 +28,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **🏢 Organization Management**: Create and manage organizations with membership and invitation systems, role-based access control (owner, admin, member), granular permissions (canDeleteTicket), and admin tabs for managing members and invitations
 - **🎫 Ticket Management**: Create, edit, and manage tickets with status tracking
 - **🔗 Referenced Tickets**: Link tickets to related tickets (self-referential relations; shown on ticket detail)
-- **📎 Ticket Attachments**: Owner-only file uploads with Bun S3, image previews before upload, and owner-only delete actions; presigned download URLs for all viewers (Bun runtime; on Vercel use `bunVersion: "1.x"` in vercel.json so Server Actions run on Bun and `Bun.s3` works)
+- **📎 Ticket Attachments**: Owner-only file uploads with Bun S3, image previews before upload, and owner-only delete actions; presigned download URLs for all viewers (`Bun.s3` requires Bun — local `bun run dev` / Docker; this repo sets `bunVersion` in `apps/web/vercel.json` so Vercel builds run on Bun)
 - **💬 Comments System**: Add, edit, and delete comments on tickets with infinite pagination and owner-only attachments
 - **🌙 Dark Mode**: Beautiful light/dark theme with smooth transitions
 - **📱 Responsive Design**: Optimized for desktop and mobile devices with PPR navigation and cached components
@@ -54,18 +54,18 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **Language**: TypeScript 6.0 with strict type checking
 - **Database**: PostgreSQL with Prisma Client 7.8 (relationJoins + partialIndexes previews, Neon adapter)
 - **Authentication**: Better Auth 1.6 with email/password provider and session cookie caching
-- **Styling**: Tailwind CSS v4.2 with shadcn/ui components and Tailwind v4 PostCSS pipeline
+- **Styling**: Tailwind CSS v4.3 with shadcn/ui components and Tailwind v4 PostCSS pipeline
 - **Icons**: Lucide React
 - **Forms**: React `useActionState` + Server Actions with Valibot validation
 - **Notifications**: Sonner toast notifications
 - **Theme**: next-themes for dark/light mode
 - **URL Search Params**: nuqs 2.8.9 for type-safe URL parameters
-- **Email**: React Email 6.0 with Resend 6.12 for transactional emails
+- **Email**: React Email 6.1 with Resend 6.12 for transactional emails
 - **API Framework**: Elysia 1.4 with @elysiajs/cors for unified API routes
-- **Background Jobs**: Inngest 4.2 for background tasks and event handling
+- **Background Jobs**: Inngest 4.3 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
 - **Shared Utilities**: `@firstroad/utils` (packages/utils) for shared helpers (e.g. `createSlug`)
-- **Linting**: Biome 2.4.12 for fast formatting and linting with Ultracite 7.6 rules
+- **Linting**: Biome 2.4.15 for fast formatting and linting with Ultracite 7.7 rules
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 
@@ -81,11 +81,14 @@ This project leverages cutting-edge Next.js 16 features for optimal performance 
 - **Cache Components**: Function-level caching with `cacheComponents: true`
 - **Parallel Routes**: Authentication modals with interception routes (`@auth`)
 - **Interception Routes**: Modal overlays with graceful fallback on hard refresh
-- **Experimental Features**: 
-  - `browserDebugInfoInTerminal`: Enhanced debugging information
+- **Experimental features** (see `apps/web/next.config.ts`):
   - `viewTransition`: Smooth page transitions
   - `mcpServer`: Model Context Protocol server support
   - `typedEnv`: Type-safe environment variables
+  - `optimizePackageImports` (production): tree-shake `valibot`
+  - `serverActions.bodySizeLimit`: larger multipart payloads (attachments)
+  - `turbopackFileSystemCacheForDev`: faster Turbopack dev cache
+  - `logging.browserToTerminal`: browser logs in the terminal during dev
   
 ### Cache Components & PPR
   
@@ -197,7 +200,7 @@ startTransition(() => {
 
 ## 📋 Prerequisites
 
-- Bun 1.3.13 (recommended, matching `packageManager`)
+- Bun 1.3.14+ recommended (root `packageManager` pins a Bun 1.3.x release; use `bun -v` locally)
 - Node.js 18+ (fallback for non-Bun tooling)
 - PostgreSQL database
 - Git
@@ -237,7 +240,7 @@ DATABASE_URL="postgresql://username:password@localhost:5432/your_database"
 # When Inngest Dev Server runs in Docker and the app runs on the host, set so the dev server can sync:
 # INNGEST_SERVE_ORIGIN=http://host.docker.internal:3000
 
-# Auth (Better Auth; validated as BETTER_AUTH_SECRET in src/lib/env.ts)
+# Auth (Better Auth; validated in apps/web/src/lib/env.ts)
 BETTER_AUTH_SECRET="your-secret-key-here"
 # Public app URL used for emails and redirects
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
@@ -261,9 +264,9 @@ NEXT_PUBLIC_RESEND_FROM="Your App <onboarding@resend.dev>"
 GITHUB_CLIENT_ID="your-github-client-id"
 GITHUB_CLIENT_SECRET="your-github-client-secret"
 
-# S3 (Bun runtime only; used for ticket attachments)
+# S3 (Bun runtime; used for ticket attachments)
 # Docs: https://bun.sh/docs/runtime/s3
-# Bun.s3 works in Server Actions with Bun runtime (bun run dev/start). On Vercel, set "bunVersion": "1.x" in vercel.json so the app runs on Bun and Bun.s3 is available.
+# Required for local/Docker when using Bun. apps/web/env.example notes Vercel Node does not expose Bun.s3 — this repo sets "bunVersion": "1.x" in apps/web/vercel.json so production uses Bun.
 S3_ACCESS_KEY_ID="your-s3-access-key-id"
 S3_SECRET_ACCESS_KEY="your-s3-secret-access-key"
 S3_REGION="us-east-1"
@@ -340,7 +343,7 @@ firstroad/
 │   │   ├── src/
 │   │   │   ├── app/          # App Router: (auth), (password), @auth, api, onboarding, layout, page
 │   │   │   ├── components/  # Shared UI, form, skeletons, theme, ui
-│   │   │   ├── features/    # attachments, auth, comment, invitations, memberships, navigation, organisation, pagination, password, ticket
+│   │   │   ├── features/    # attachments, auth, comment, invitations, memberships, navigation, organisation, pagination, password, ticket (see apps/web/src/features/)
 │   │   │   ├── lib/         # auth, env, inngest, email, app
 │   │   │   ├── hooks/       # Shared client hooks
 │   │   │   ├── utils/       # cache-tags, invalidate-cache, slug, to-action-state, etc.
@@ -517,7 +520,7 @@ bun run next:analyze     # Bundle analysis
 bun run postinstall      # Generate Prisma client (turbo postinstall)
 
 # Email (packages/emails)
-bun run dev:email        # React Email preview
+bun run dev:email        # React Email preview (known upstream quirk: missing index for some .react-email paths — safe to ignore)
 bun run build:email      # Build email templates
 bun run export:email     # Export to HTML
 
@@ -594,7 +597,7 @@ Better Auth configured with:
 - Prisma Client with Neon driver adapter; Better Auth uses `@better-auth/prisma-adapter`.
 - Session cookie caching (5-minute cache duration)
 - Session expiration (7 days) and update age (1 day)
-- **Kysely adapter shim (required):** `@better-auth/kysely-adapter` and related entry points are aliased to a local shim in `next.config.ts` so Turbopack/Next never load `node:sqlite` or the real Kysely adapter. Bun 1.3.11 and Better Auth v1.5 have not resolved this incompatibility; the shim is still required. Builds succeed locally and on Vercel (`bunVersion: "1.x"` in `apps/web/vercel.json`) with the shim enabled.
+- **Kysely adapter shim (required):** `@better-auth/kysely-adapter` and related entry points are aliased to a local shim in `next.config.ts` so Turbopack/Next never load `node:sqlite` or the real Kysely adapter. The shim remains required for stable Bun + Turbopack builds. Production on Vercel uses `bunVersion: "1.x"` in `apps/web/vercel.json` with the shim enabled.
 
 Inngest provides background job processing for:
 
@@ -606,7 +609,7 @@ Inngest provides background job processing for:
 
 ### Email Templates (Resend)
 
-The application uses Resend 6.10 for transactional emails with published templates. All email sending functions use Resend's template API instead of inline React Email components.
+The application uses Resend 6.12 for transactional emails with published templates. All email sending functions use Resend's template API instead of inline React Email components.
 
 **Template IDs:**
 - `email-otp-verification` - OTP codes for sign-in, email verification, and password reset
@@ -768,12 +771,12 @@ The app uses Bun runtime (required for `Bun.s3` attachments). For production, us
 
 ### Other Platforms
 
-The application can be deployed to any platform that supports Next.js:
+The application can be deployed to any platform that supports Next.js and Bun (or Node without `Bun.s3` attachment uploads):
 
 - Netlify
-- Railway
 - DigitalOcean App Platform
 - AWS Amplify
+- Self-hosted Docker (see `apps/web/Dockerfile`)
 
 ## 🤝 Contributing
 

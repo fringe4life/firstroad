@@ -5,13 +5,11 @@ import { InvitationsListSkeleton } from "./invitations-list-skeleton";
 
 export interface InvitationsSkeletonProps extends Rows {}
 
-const InvitationsSkeleton = ({ rows = 5 }: InvitationsSkeletonProps) => {
-  return (
-    <Table>
-      <InvitationsTableHeader />
-      <InvitationsListSkeleton rows={rows} />
-    </Table>
-  );
-};
+const InvitationsSkeleton = ({ rows = 5 }: InvitationsSkeletonProps) => (
+  <Table>
+    <InvitationsTableHeader />
+    <InvitationsListSkeleton rows={rows} />
+  </Table>
+);
 
 export { InvitationsSkeleton };

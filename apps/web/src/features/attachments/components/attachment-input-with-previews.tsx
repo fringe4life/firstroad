@@ -2,7 +2,6 @@
 
 import {
   type ChangeEventHandler,
-  forwardRef,
   useEffect,
   useEffectEvent,
   useId,
@@ -17,25 +16,19 @@ import type { Maybe } from "@/types";
 import { ACCEPTED_FILE_TYPES } from "../constants";
 import type {
   AttachmentInputWithPreviewsProps,
-  AttachmentInputWithPreviewsRef,
   AttachmentPreview,
 } from "../types";
 import { createAttachmentPreviews } from "../utils/attachment-previews";
 import { revokeImagePreviews } from "../utils/revoke-previews";
 
-const AttachmentInputWithPreviews = forwardRef<
-  AttachmentInputWithPreviewsRef,
-  AttachmentInputWithPreviewsProps
->(function AttachmentInputWithPreviews(
-  {
-    disabled = false,
-    fileInputId,
-    label = "Files",
-    name = "files",
-    onPreviewsChange,
-  },
+const AttachmentInputWithPreviews = ({
+  disabled = false,
+  fileInputId,
+  label = "Files",
+  name = "files",
+  onPreviewsChange,
   ref,
-) {
+}: AttachmentInputWithPreviewsProps) => {
   const generatedId = useId();
   const id = fileInputId ?? generatedId;
   const inputRef = useRef<Exclude<Maybe<HTMLInputElement>, undefined>>(null);
@@ -121,6 +114,6 @@ const AttachmentInputWithPreviews = forwardRef<
       )}
     </div>
   );
-});
+};
 
 export { AttachmentInputWithPreviews };

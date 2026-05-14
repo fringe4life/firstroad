@@ -38,7 +38,14 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["!.next", "!dist", "!build", "!src/generated", "!!bun.lock"]
+    "includes": [
+      "!.next",
+      "!dist",
+      "!build",
+      "!src/generated",
+      "!!bun.lock",
+      "!!.bin"
+    ]
   },
   "overrides": [
     {

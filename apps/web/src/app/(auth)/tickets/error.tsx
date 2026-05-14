@@ -1,9 +1,9 @@
 "use client";
 
 import { TicketX } from "lucide-react";
+import type { ErrorInfo } from "next/error";
 import { Placeholder } from "@/components/placeholder";
 import { Button } from "@/components/ui/button";
-import type { ErrorInfo } from "next/error";
 
 const TicketError = ({ error, unstable_retry }: ErrorInfo) => (
   <Placeholder

@@ -5,7 +5,7 @@ const toDeadlineString = (
   value: Maybe<string | Date>,
 ): Exclude<Maybe<string>, null> => {
   if (value == null) {
-    return undefined;
+    return;
   }
   if (typeof value === "string") {
     return value.slice(0, 10);
