@@ -1,4 +1,4 @@
-import type { IsOwner, User, UserVerifiable } from "@/features/auth/types";
+import type { User, UserVerifiable } from "@/features/auth/types";
 import type { Maybe } from "@/types";
 
 /**
@@ -12,21 +12,4 @@ const isOwner = <T extends UserVerifiable>(
   { userId }: T,
 ): boolean => (userId ? user?.id === userId : false);
 
-/**
- * Maps entities to include isOwner property based on session
- * Generic DAL helper for adding ownership information to data
- *
- * @example
- * const ticketsWithOwnership = withOwnership(session, tickets);
- * const commentsWithOwnership = withOwnership(session, comments);
- */
-const withOwnership = <T extends UserVerifiable>(
-  user: Maybe<User>,
-  entities: T[],
-): Array<T & IsOwner> =>
-  entities.map((entity) => ({
-    ...entity,
-    isOwner: isOwner(user, entity),
-  }));
-
-export { isOwner, withOwnership };
+export { isOwner };

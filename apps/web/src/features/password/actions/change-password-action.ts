@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/style/noMagicNumbers: easy to understand zod schema */
 "use server";
 
 import { headers } from "next/headers";

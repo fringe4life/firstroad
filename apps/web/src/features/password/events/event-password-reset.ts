@@ -1,6 +1,6 @@
 import { eventType } from "inngest";
 import { email, examples, minLength, object, pipe, string, url } from "valibot";
-import { sendPasswordResetEmail } from "@/features/password/utils/send-password-reset-email";
+import { sendEmailPasswordReset } from "@/features/password/emails/send-password-reset-email";
 import { inngest } from "@/lib/inngest";
 import { tryCatch } from "@/utils/try-catch";
 
@@ -24,7 +24,7 @@ export const eventPasswordReset = inngest.createFunction(
   async ({ event }) => {
     const { email: userEmail, resetUrl, userName } = event.data;
     const { error } = await tryCatch(() =>
-      sendPasswordResetEmail(userEmail, resetUrl, userName),
+      sendEmailPasswordReset(userEmail, resetUrl, userName),
     );
     if (error) {
       throw new Error("Invalid password reset event data");

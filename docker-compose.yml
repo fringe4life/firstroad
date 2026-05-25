@@ -23,7 +23,7 @@ services:
       - postgres_data:/var/lib/postgresql
 
   inngest:
-    image: inngest/inngest:v1.17.4
+    image: inngest/inngest:v1.19.4
     command: inngest dev -u http://host.docker.internal:3000/api/inngest
     ports:
       - "8288:8288"

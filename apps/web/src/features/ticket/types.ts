@@ -62,25 +62,6 @@ export interface IsDetail {
   isDetail?: boolean;
 }
 
-/**
- * Props for TicketOwnerOptions when access is pre-computed (list pages)
- */
-export interface TicketOwnerOptionsWithAccessProps
-  extends IsDetail,
-    TicketAccess {
-  ticket: Pick<BaseTicket, "slug" | "id" | "status">;
-}
-
-/**
- * Props for TicketOwnerOptions when access needs to be fetched (detail pages)
- */
-export interface TicketOwnerOptionsFetchProps extends IsDetail {
-  ticket: Pick<
-    BaseTicket,
-    "userId" | "slug" | "id" | "status" | "organizationId"
-  >;
-}
-
 export interface TicketMoreMenuProps extends Partial<ResourcePermission> {
   ticket: Pick<BaseTicket, "id" | "status">;
   trigger: React.ReactNode;

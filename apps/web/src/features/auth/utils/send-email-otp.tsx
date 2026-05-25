@@ -26,12 +26,12 @@ export const sendEmailOTP = async (
 const getOTPSubject = (type: OTPType): string => {
   switch (type) {
     case "sign-in":
-      return "Your Sign-In Code - TicketBounty";
+      return "Your Sign-In Code - FirstTicket";
     case "email-verification":
-      return "Verify Your Email - TicketBounty";
+      return "Verify Your Email - FirstTicket";
     case "forget-password":
-      return "Reset Your Password - TicketBounty";
+      return "Reset Your Password - FirstTicket";
     default:
-      return "Your Verification Code - TicketBounty";
+      return "Your Verification Code - FirstTicket";
   }
 };

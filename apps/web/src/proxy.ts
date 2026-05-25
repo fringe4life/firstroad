@@ -1,4 +1,3 @@
-// import { getSessionCookie } from "@/features/auth/utils/get-session-cookie";
 import { getCookieCache } from "better-auth/cookies";
 import { type NextRequest, NextResponse } from "next/server";
 import {

@@ -49,7 +49,6 @@ export {
   FILE_NAME_MAX,
   MAX_SIZE_BYTES,
   MAX_SIZE_MB,
-  NORMALIZED_MIME_FROM_BROWSER,
   normalizeAcceptedMime,
   SUPPORTED_IMAGE_TYPES,
 };

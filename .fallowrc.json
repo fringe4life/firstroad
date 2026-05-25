@@ -2,6 +2,14 @@
   "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
   "duplicates": {
     "enabled": true,
-    "minOccurrences": 3
-  }
+    "minOccurrences": 3,
+    "ignoreImports": true
+  },
+  "ignoreDependencies": [
+    "next-devtools-mcp",
+    "typescript-plugin-directives",
+    "shadcn",
+    "inngest-cli",
+    "babel-plugin-react-compiler"
+  ]
 }

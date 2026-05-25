@@ -9,7 +9,7 @@ export const sendEmailVerification = async (
     // biome-ignore lint/style/noNonNullAssertion: will exist
     from: process.env.NEXT_PUBLIC_RESEND_FROM!,
     to: email,
-    subject: "Verify Your Email - TicketBounty",
+    subject: "Verify Your Email - FirstTicket",
     template: {
       id: "email-verification",
       variables: {

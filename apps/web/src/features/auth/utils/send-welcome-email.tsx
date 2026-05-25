@@ -5,7 +5,7 @@ export const sendWelcomeEmail = async (email: string, userName?: string) =>
     // biome-ignore lint/style/noNonNullAssertion: will exist
     from: process.env.NEXT_PUBLIC_RESEND_FROM!,
     to: email,
-    subject: "Welcome to TicketBounty! 🎉",
+    subject: "Welcome to FirstTicket! 🎉",
     template: {
       id: "welcome-email",
       variables: {

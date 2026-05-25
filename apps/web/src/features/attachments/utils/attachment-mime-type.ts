@@ -44,4 +44,4 @@ const getMimeTypeFromFile = (file: File): string | Mime => {
   return getMimeTypeFromName(file.name);
 };
 
-export { getMimeTypeFromFile, getMimeTypeFromName };
+export { getMimeTypeFromFile };

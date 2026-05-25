@@ -8,7 +8,7 @@ export const sendPasswordChangedEmail = async (
     // biome-ignore lint/style/noNonNullAssertion: will exist
     from: process.env.NEXT_PUBLIC_RESEND_FROM!,
     to: email,
-    subject: "Password Changed - TicketBounty",
+    subject: "Password Changed - FirstTicket",
     template: {
       id: "password-changed-email",
       variables: {

@@ -1,6 +1,6 @@
 import { eventType } from "inngest";
 import { email, object, optional, pipe, string } from "valibot";
-import { sendPasswordChangedEmail } from "@/features/auth/utils/send-password-changed-email";
+import { sendPasswordChangedEmail } from "@/features/password/emails/send-password-changed-email";
 import { inngest } from "@/lib/inngest";
 import { tryCatch } from "@/utils/try-catch";
 
