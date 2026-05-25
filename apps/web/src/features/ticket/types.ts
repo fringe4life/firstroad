@@ -58,10 +58,6 @@ export interface TicketAccess
  */
 export type TicketWithAccess = BaseTicket & TicketAccess;
 
-export interface IsDetail {
-  isDetail?: boolean;
-}
-
 export interface TicketMoreMenuProps extends Partial<ResourcePermission> {
   ticket: Pick<BaseTicket, "id" | "status">;
   trigger: React.ReactNode;

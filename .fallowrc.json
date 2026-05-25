@@ -11,5 +11,6 @@
     "shadcn",
     "inngest-cli",
     "babel-plugin-react-compiler"
-  ]
+  ],
+  "ignorePatterns": ["apps/web/src/shims/kysely-adapter.ts"]
 }
