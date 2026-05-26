@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { CardCompact } from "@/components/card-compact";
 import { sendSignInOTP } from "@/features/auth/actions/send-otp-action";
 import { OTPSendForm } from "@/features/auth/components/otp-send-form";
 import { signInPath } from "@/path";
+
+export const metadata: Metadata = {
+  title: "Sign In with OTP",
+  description:
+    "Enter your email address to receive a sign-in code for your First Road account.",
+};
 
 const SignInOTPSendPage = async () => (
   <CardCompact

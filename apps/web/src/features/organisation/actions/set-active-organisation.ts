@@ -21,13 +21,12 @@ const setActiveOrganisation = async (
   organizationId: string,
   _prevState: ActionState<string>,
 ): Promise<ActionState<string>> => {
+  const user = await getUserOrRedirect({ checkActiveOrganisation: false });
   const result = safeParse(setActiveOrganisationSchema, { organizationId });
 
   if (!result.success) {
     return fromErrorToActionState(result.issues);
   }
-
-  const user = await getUserOrRedirect({ checkActiveOrganisation: false });
 
   const { error } = await tryCatch(async () =>
     auth.api.setActiveOrganization({

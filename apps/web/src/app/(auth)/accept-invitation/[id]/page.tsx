@@ -17,10 +17,7 @@ const AcceptInvitationContent = async ({
   params,
 }: AcceptInvitationPageProps) => {
   await connection();
-  const { id } = await params;
-
-  // Check if user is logged in
-  const { user, hasUser } = await getUser();
+  const [{ id }, { user, hasUser }] = await Promise.all([params, getUser()]);
   if (!hasUser) {
     // Redirect to sign-in with return URL
     throw redirect(`${signInPath()}?callbackUrl=${acceptInvitationPath(id)}`);

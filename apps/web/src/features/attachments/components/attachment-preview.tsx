@@ -6,11 +6,11 @@ const AttachmentPreviewCard = ({
   preview,
   onRemove,
 }: AttachmentPreviewProps) => {
-  const { id, file } = preview;
+  const { id, file, kind } = preview;
 
   let content: React.ReactNode;
 
-  switch (preview.kind) {
+  switch (kind) {
     case "image": {
       // Using a background image avoids <img> lint while still rendering safely
       content = (
@@ -25,10 +25,10 @@ const AttachmentPreviewCard = ({
     }
     case "pdf": {
       content = (
-        <div className="flex h-24 w-24 items-center justify-center rounded-md bg-muted text-destructive">
+        <div className="flex aspect-square h-24 items-center justify-center rounded-md bg-muted text-destructive">
           <svg
             aria-label={file.name}
-            className="h-10 w-10"
+            className="aspect-square h-10"
             role="img"
             viewBox="0 0 24 24"
           >
@@ -68,7 +68,7 @@ const AttachmentPreviewCard = ({
           type="button"
           variant="destructive"
         >
-          <Trash2 className="h-3 w-3" />
+          <Trash2 className="aspect-square h-3" />
         </Button>
       </div>
 

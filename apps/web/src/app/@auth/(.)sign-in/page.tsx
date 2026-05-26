@@ -6,7 +6,7 @@ import { SignInPageContent } from "@/features/password/components/sign-in-page-c
 import { signInPath } from "@/path";
 
 const SignInModal = () => {
-  const router = useRouter();
+  const { back } = useRouter();
   const pathname = usePathname();
 
   if (pathname !== signInPath()) {
@@ -17,7 +17,7 @@ const SignInModal = () => {
     <Dialog
       onOpenChange={(open) => {
         if (!open) {
-          router.back();
+          back();
         }
       }}
       open={true}

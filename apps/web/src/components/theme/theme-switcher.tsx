@@ -8,7 +8,7 @@ import { Button } from "../ui/button";
 
 const ThemeSwitcher = () => {
   const { theme, setTheme } = useTheme();
-  const handleClick: MouseEventHandler<HTMLButtonElement> = () => {
+  const handleThemeChange: MouseEventHandler<HTMLButtonElement> = () => {
     const nextTheme = theme === "light" ? "dark" : "light";
     const transitionType = `${theme}-to-${nextTheme}`;
     startTransition(() => {
@@ -19,7 +19,7 @@ const ThemeSwitcher = () => {
   return (
     <Button
       className="cursor-pointer"
-      onClick={handleClick}
+      onClick={handleThemeChange}
       size="icon"
       variant="outline"
     >

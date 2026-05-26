@@ -50,19 +50,14 @@ export const upsertComment = async (
   _state: ActionState<unknown>,
   formData: FormData,
 ): Promise<ActionState<CommentWithUserInfo>> => {
+  const user = await getUserOrRedirect();
   const formDataObject = Object.fromEntries(formData.entries());
   const parsedData = safeParse(upsertCommentSchema, formDataObject);
 
   if (!parsedData.success) {
     return fromErrorToActionState(parsedData.issues, formData);
   }
-  const user = await getUserOrRedirect();
-
-  // Verify the ticket exists
-  const { data: ticket, error } = await tryCatch(() => findTicket(ticketId));
-  if (error) {
-    return fromErrorToActionState(error);
-  }
+  const ticket = await findTicket(ticketId);
   if (!ticket) {
     return toActionState("Ticket not found", "ERROR");
   }

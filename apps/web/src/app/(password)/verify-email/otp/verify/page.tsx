@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { CardCompact } from "@/components/card-compact";
 import { Suspend } from "@/components/suspend";
@@ -6,6 +7,12 @@ import { OtpVerifyFormWithConnection } from "@/features/auth/components/otp-veri
 import { OtpVerifyFormSkeleton } from "@/features/auth/components/skeletons/otp-verify-form-skeleton";
 import type { EmailSearchParams } from "@/features/auth/types";
 import { verifyEmailOTPSendPath } from "@/path";
+
+export const metadata: Metadata = {
+  title: "Verify Your Email",
+  description:
+    "Enter the verification code sent to your email to verify your First Road account.",
+};
 
 const VerifyEmailOTPVerifyPage = ({ searchParams }: EmailSearchParams) => (
   <CardCompact

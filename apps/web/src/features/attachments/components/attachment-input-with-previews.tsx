@@ -3,7 +3,6 @@
 import {
   type ChangeEventHandler,
   useEffect,
-  useEffectEvent,
   useId,
   useImperativeHandle,
   useRef,
@@ -36,7 +35,7 @@ const AttachmentInputWithPreviews = ({
 
   const hasPreviews = previews.length > 0;
 
-  const reset = useEffectEvent(() => {
+  const reset = () => {
     setPreviews((previous) => {
       revokeImagePreviews(previous);
       return [];
@@ -46,9 +45,9 @@ const AttachmentInputWithPreviews = ({
     }
     // Defer so we never update parent during render (avoids "setState in render" when parent calls reset())
     queueMicrotask(() => onPreviewsChange?.(0));
-  });
+  };
 
-  useImperativeHandle(ref, () => ({ reset }), []);
+  useImperativeHandle(ref, () => ({ reset }));
 
   useEffect(() => () => revokeImagePreviews(previews), [previews]);
 

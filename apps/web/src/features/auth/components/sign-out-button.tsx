@@ -12,7 +12,7 @@ interface SignOutButtonProps {
 }
 
 const SignOutButton = ({ className }: SignOutButtonProps) => {
-  const router = useRouter();
+  const { replace } = useRouter();
   const [isPending, startTransition] = useTransition();
   const [, action] = useActionState(signOut, null);
 
@@ -26,7 +26,7 @@ const SignOutButton = ({ className }: SignOutButtonProps) => {
           if (error) {
             unstable_rethrow(error);
           }
-          router.replace(homePath());
+          replace(homePath());
         });
       }}
       type="button"

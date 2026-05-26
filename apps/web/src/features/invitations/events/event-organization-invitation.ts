@@ -29,7 +29,7 @@ const organizationInvitationSchema = object({
   inviteUrl: pipe(string(), url()),
 });
 
-export const organizationInvitation = eventType("organization.invitation", {
+const organizationInvitation = eventType("organization.invitation", {
   schema: organizationInvitationSchema,
 });
 

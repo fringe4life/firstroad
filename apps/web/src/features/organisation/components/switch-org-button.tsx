@@ -32,7 +32,7 @@ const SwitchOrgButton = ({
     (_current, newValue: boolean) => newValue,
   );
 
-  const handleClick = () => {
+  const handleSwitchOrg = () => {
     startTransition(async () => {
       setOptimisticIsActive(true);
       await action();
@@ -43,7 +43,7 @@ const SwitchOrgButton = ({
     <Form className={isPending ? "opacity-75" : ""} state={state}>
       <Button
         disabled={optimisticIsActive}
-        onClick={handleClick}
+        onClick={handleSwitchOrg}
         size="icon"
         type="button"
         variant="outline"

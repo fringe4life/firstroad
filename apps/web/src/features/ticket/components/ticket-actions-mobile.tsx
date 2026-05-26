@@ -48,7 +48,7 @@ const TicketActionsMobile = ({
           {...clickProps}
         >
           <Link href={ticketEditPath(ticket.slug)} prefetch>
-            <LucidePencil className="h-4 w-4" />
+            <LucidePencil className="aspect-square h-4" />
             <span className="md:inline">Edit</span>
           </Link>
         </Button>
@@ -90,7 +90,7 @@ const TicketActionsMobile = ({
               variant="destructive"
               {...clickProps}
             >
-              <Trash2 className="h-4 w-4" />
+              <Trash2 className="aspect-square h-4" />
               <span className="xs:inline">Delete</span>
             </Button>
           </ConfirmDialog.Trigger>

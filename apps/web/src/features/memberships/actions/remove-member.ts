@@ -3,7 +3,6 @@
 import { refresh } from "next/cache";
 import { headers } from "next/headers";
 import { minLength, object, pipe, safeParse, string } from "valibot";
-import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import { auth } from "@/lib/auth";
 import { invalidateOrganisationsForUser } from "@/utils/invalidate-cache";
 import {
@@ -24,7 +23,7 @@ const removeMember = async (
   memberId: string,
   _prevState: ActionState<null>,
 ): Promise<ActionState<null>> => {
-  await getAdminOwnerOrRedirect(organizationId);
+  const { user } = await getAdminOwnerOrRedirect(organizationId);
 
   const result = safeParse(removeMemberSchema, {
     organizationId,
@@ -35,17 +34,14 @@ const removeMember = async (
     return fromErrorToActionState(result.issues);
   }
 
-  const user = await getUserOrRedirect();
-
-  const { error } = await tryCatch(
-    async () =>
-      await auth.api.removeMember({
-        body: {
-          organizationId: result.output.organizationId,
-          memberIdOrEmail: result.output.memberId,
-        },
-        headers: await headers(),
-      }),
+  const { error } = await tryCatch(async () =>
+    auth.api.removeMember({
+      body: {
+        organizationId: result.output.organizationId,
+        memberIdOrEmail: result.output.memberId,
+      },
+      headers: await headers(),
+    }),
   );
 
   if (error) {

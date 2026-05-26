@@ -7,7 +7,7 @@ import { ticketsPath } from "@/path";
 
 const GithubLoginButton = () => {
   const [isPending, startTransition] = useTransition();
-  const handleClick: MouseEventHandler<HTMLButtonElement> = () => {
+  const handleGithubLogin: MouseEventHandler<HTMLButtonElement> = () => {
     startTransition(
       async () =>
         //  @ts-expect-error promise
@@ -20,7 +20,7 @@ const GithubLoginButton = () => {
   return (
     <Button
       disabled={isPending}
-      onClick={handleClick}
+      onClick={handleGithubLogin}
       size="lg"
       variant="outline"
     >

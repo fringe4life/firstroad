@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  useActionState,
-  useEffect,
-  useEffectEvent,
-  useOptimistic,
-  useTransition,
-} from "react";
+import { useActionState, useOptimistic, useTransition } from "react";
 import { Form } from "@/components/form/form";
 import { SubmitButton } from "@/components/form/submit-button";
 import { Button } from "@/components/ui/button";
@@ -67,30 +61,21 @@ const ConfirmDialog = ({
   );
 
   // 5. Wrap callbacks in useEffectEvent to avoid dependency issues
-  const handleSuccess = useEffectEvent((result: ActionState) => {
+  const handleSuccess = (result: ActionState) => {
     onSuccess?.(result);
     // If not closing on submit, close after success
     if (!closeOnSubmit) {
       close();
     }
-  });
+  };
 
-  const handleError = useEffectEvent((result: ActionState) => {
+  const handleError = (result: ActionState) => {
     onError?.(result);
     // Note: We don't reopen the dialog on error
     // Error is shown via toast, reopening would be jarring UX
-  });
+  };
 
-  // 6. Handle success/error - useEffectEvent ensures callbacks are stable
-  useEffect(() => {
-    if (actionState.status === "SUCCESS") {
-      handleSuccess(actionState);
-    } else if (actionState.status === "ERROR") {
-      handleError(actionState);
-    }
-  }, [actionState]);
-
-  // 7. Handle optimistic close on form submit
+  // 6. Handle optimistic close on form submit
   const handleFormSubmit = () => {
     if (closeOnSubmit) {
       startTransition(() => {
@@ -99,7 +84,7 @@ const ConfirmDialog = ({
     }
   };
 
-  // 8. Context value - spread toggle state + add isPending
+  // 7. Context value - spread toggle state + add isPending
   const contextValue: ConfirmDialogContextValue = {
     ...toggleState,
     isPending: isPending || actionIsPending,

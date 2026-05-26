@@ -2,10 +2,10 @@ import { ArchiveIcon, FileIcon, FileImage, ImageIcon } from "lucide-react";
 import type { Mime } from "./types";
 
 const ATTACHMENT_KIND_ICONS = {
-  image: <ImageIcon className="h-4 w-4" />,
-  document: <FileImage className="h-4 w-4" />,
-  archive: <ArchiveIcon className="h-4 w-4" />,
-  other: <FileIcon className="h-4 w-4" />,
+  image: <ImageIcon className="aspect-square h-4" />,
+  document: <FileImage className="aspect-square h-4" />,
+  archive: <ArchiveIcon className="aspect-square h-4" />,
+  other: <FileIcon className="aspect-square h-4" />,
 } as const;
 
 const ACCEPTED_FILE_TYPES = [

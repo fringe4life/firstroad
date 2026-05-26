@@ -6,7 +6,7 @@ import { SignUpPageContent } from "@/features/password/components/sign-up-page-c
 import { signUpPath } from "@/path";
 
 const SignUpModal = () => {
-  const router = useRouter();
+  const { back } = useRouter();
   const pathname = usePathname();
 
   if (pathname !== signUpPath()) {
@@ -17,7 +17,7 @@ const SignUpModal = () => {
     <Dialog
       onOpenChange={(open) => {
         if (!open) {
-          router.back();
+          back();
         }
       }}
       open={true}

@@ -12,7 +12,7 @@ import { getCommentsCount } from "../queries/get-comments-count";
 import { getCommentsList } from "../queries/get-comments-list";
 import type { CommentWithUserInfo } from "../types";
 
-export const getCommentsByTicketSlugWithPermissions = async (
+const getCommentsByTicketSlugWithPermissions = async (
   ticketSlug: string,
   organizationId: string,
   user: User,

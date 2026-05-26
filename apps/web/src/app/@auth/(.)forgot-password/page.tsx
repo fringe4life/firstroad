@@ -6,7 +6,7 @@ import { ForgotPasswordPageContent } from "@/features/password/components/forgot
 import { forgotPasswordPath } from "@/path";
 
 const ForgotPasswordModal = () => {
-  const router = useRouter();
+  const { back } = useRouter();
   const pathname = usePathname();
 
   if (pathname !== forgotPasswordPath()) {
@@ -17,7 +17,7 @@ const ForgotPasswordModal = () => {
     <Dialog
       onOpenChange={(open) => {
         if (!open) {
-          router.back();
+          back();
         }
       }}
       open={true}

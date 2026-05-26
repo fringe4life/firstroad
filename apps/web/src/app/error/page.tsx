@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { CardCompact } from "@/components/card-compact";
 import { homePath } from "@/path";
+
+export const metadata: Metadata = {
+  title: "Something went wrong",
+  description:
+    "We hit an unexpected error while processing your request. Try again or return to the home page.",
+};
 
 const ErrorPage = () => (
   <main className="flex min-h-dvh items-center justify-center px-4">

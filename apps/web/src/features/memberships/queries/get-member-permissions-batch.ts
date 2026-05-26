@@ -45,14 +45,14 @@ const getMemberPermissionsBatch = async (
     return new Map();
   }
 
-  return new Map(
-    members
-      .filter((m) => m.permissions[0])
-      .map(({ organizationId, permissions }) => [
-        organizationId,
-        permissions[0],
-      ]),
-  );
+  const result = new Map<string, ResourcePermission>();
+  for (const { organizationId, permissions } of members) {
+    const permission = permissions[0];
+    if (permission) {
+      result.set(organizationId, permission);
+    }
+  }
+  return result;
 };
 
 export { getMemberPermissionsBatch };

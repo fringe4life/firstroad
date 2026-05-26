@@ -10,15 +10,15 @@ const OtpVerifyFormSkeleton = () => (
       {/* OTP slots: two groups of 3 (h-9 w-9 each) */}
       <div className="flex items-center gap-2">
         <div className="flex gap-0.5">
-          <Skeleton className="h-9 w-9 rounded-md" />
-          <Skeleton className="h-9 w-9 rounded-md" />
-          <Skeleton className="h-9 w-9 rounded-md" />
+          <Skeleton className="aspect-square h-9 rounded-md" />
+          <Skeleton className="aspect-square h-9 rounded-md" />
+          <Skeleton className="aspect-square h-9 rounded-md" />
         </div>
-        <Skeleton aria-hidden className="h-4 w-4 shrink-0" />
+        <Skeleton aria-hidden className="aspect-square h-4 shrink-0" />
         <div className="flex gap-0.5">
-          <Skeleton className="h-9 w-9 rounded-md" />
-          <Skeleton className="h-9 w-9 rounded-md" />
-          <Skeleton className="h-9 w-9 rounded-md" />
+          <Skeleton className="aspect-square h-9 rounded-md" />
+          <Skeleton className="aspect-square h-9 rounded-md" />
+          <Skeleton className="aspect-square h-9 rounded-md" />
         </div>
       </div>
     </div>

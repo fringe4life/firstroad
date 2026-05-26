@@ -18,8 +18,8 @@ const SignOutLogic = () => {
 const SignOutFallback = () => (
   <div className="flex min-h-screen items-center justify-center">
     <div className="text-center">
-      <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-primary border-b-2" />
-      <p className="text-muted-foreground">Signing out...</p>
+      <div className="mx-auto mb-4 aspect-square h-8 animate-spin rounded-full border-primary border-b-2" />
+      <p className="text-muted-foreground">Signing out&hellip;</p>
     </div>
   </div>
 );

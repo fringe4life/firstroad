@@ -24,13 +24,12 @@ const leaveOrganisation = async (
   organizationId: string,
   _prevState: ActionState,
 ): Promise<ActionState> => {
+  const user = await getUserOrRedirect();
   const result = safeParse(leaveOrganisationSchema, { organizationId });
 
   if (!result.success) {
     return fromErrorToActionState(result.issues);
   }
-
-  const user = await getUserOrRedirect();
 
   const { error } = await tryCatch(async () =>
     auth.api.leaveOrganization({

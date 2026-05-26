@@ -32,7 +32,7 @@ export const paginationParser = {
   limit: parseAsNumberLiteral(LIMITS).withDefault(DEFAULT_LIMIT),
 };
 
-export const searchParamsParsers = {
+const searchParamsParsers = {
   search: searchParser,
   ...sortParser,
   ...paginationParser,

@@ -67,7 +67,7 @@ const ChangePasswordForm = ({
         name="confirmPassword"
       />
 
-      <div className="flex items-center space-x-2 py-2">
+      <div className="flex items-center gap-x-2 py-2">
         <Checkbox id={revokeId} name="revokeOtherSessions" value="on" />
         <Label className="font-normal text-sm" htmlFor={revokeId}>
           Sign out other devices

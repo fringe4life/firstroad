@@ -26,7 +26,6 @@
 *.pem
 
 # cursor
-.cursor/mcp.json
 .cursor
 .agents
 

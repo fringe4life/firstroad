@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { CardCompact } from "@/components/card-compact";
 import { Suspend } from "@/components/suspend";
@@ -6,6 +7,12 @@ import { OtpVerifyFormWithConnection } from "@/features/auth/components/otp-veri
 import { OtpVerifyFormSkeleton } from "@/features/auth/components/skeletons/otp-verify-form-skeleton";
 import type { EmailSearchParams } from "@/features/auth/types";
 import { signInPath } from "@/path";
+
+export const metadata: Metadata = {
+  title: "Sign In with OTP",
+  description:
+    "Enter the sign-in code sent to your email to access your First Road account.",
+};
 
 const SignInOTPVerifyPage = ({ searchParams }: EmailSearchParams) => (
   <CardCompact

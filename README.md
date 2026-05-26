@@ -6,13 +6,13 @@
 [![React](https://img.shields.io/badge/React-19.2.6-61DAFB?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.0.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Prisma](https://img.shields.io/badge/Prisma-7.8.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
-[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.6.10-000000)](https://better-auth.com/)
+[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.6.11-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.3.0-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Biome](https://img.shields.io/badge/Biome-2.4.15-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.8.9-000000)](https://nuqs.47ng.com/)
 [![Valibot](https://img.shields.io/badge/Valibot-1.4.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Elysia](https://img.shields.io/badge/Elysia-1.4.28-000000)](https://elysiajs.com/)
-[![Inngest](https://img.shields.io/badge/Inngest-4.3.0-000000)](https://www.inngest.com/)
+[![Inngest](https://img.shields.io/badge/Inngest-4.4.0-000000)](https://www.inngest.com/)
 [![Resend](https://img.shields.io/badge/Resend-6.12.3-000000)](https://resend.com/)
 [![React Email](https://img.shields.io/badge/React%20Email-6.1.1-000000)](https://react.email/)
 [![Bun](https://img.shields.io/badge/Bun-1.3.14-FBF0DF?logo=bun&logoColor=FBF0DF)](https://bun.sh/)
@@ -62,7 +62,7 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **URL Search Params**: nuqs 2.8.9 for type-safe URL parameters
 - **Email**: React Email 6.1 with Resend 6.12 for transactional emails
 - **API Framework**: Elysia 1.4 with @elysiajs/cors for unified API routes
-- **Background Jobs**: Inngest 4.3 for background tasks and event handling
+- **Background Jobs**: Inngest 4.4 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
 - **Shared Utilities**: `@firstroad/utils` (packages/utils) for shared helpers (e.g. `createSlug`)
 - **Linting**: Biome 2.4.15 for fast formatting and linting with Ultracite 7.7 rules

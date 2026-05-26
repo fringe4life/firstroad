@@ -13,7 +13,7 @@ const TicketItemSkeleton = () => (
     <Card className="w-full overflow-hidden">
       <CardHeader>
         <div className="flex items-center gap-x-2">
-          <Skeleton className="h-6 w-6 shrink-0 rounded-full" />
+          <Skeleton className="aspect-square h-6 shrink-0 rounded-full" />
           <Skeleton className="h-5 flex-1 rounded" />
         </div>
       </CardHeader>
@@ -38,7 +38,7 @@ const TicketItemSkeleton = () => (
     </Card>
 
     {/* Desktop sidebar skeleton */}
-    <div className="hidden space-y-1 md:flex md:flex-col">
+    <div className="hidden gap-y-1 md:flex md:flex-col">
       <IconButtonSkeleton />
       <IconButtonSkeleton />
     </div>

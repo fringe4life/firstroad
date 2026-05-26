@@ -10,7 +10,7 @@ const ReferencedTicketItem = ({
     className="flex items-center gap-x-2 text-sm"
     href={ticketPath(referencedTicket.slug)}
   >
-    <LucideArrowUpRightFromSquare className="h-4 w-4" />
+    <LucideArrowUpRightFromSquare className="aspect-square h-4" />
     {referencedTicket.title}
   </Link>
 );

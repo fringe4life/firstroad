@@ -6,8 +6,10 @@ import type { MemberShipProps } from "../types";
 import { MembershipsTableHeader } from "./memberships-table-header";
 
 const Memberships = async ({ organizationId }: MemberShipProps) => {
-  const members = await getMembershipsById(organizationId);
-  const { user } = await getUser();
+  const [members, { user }] = await Promise.all([
+    getMembershipsById(organizationId),
+    getUser(),
+  ]);
   const currentUserEmail = user?.email ?? null;
 
   return (

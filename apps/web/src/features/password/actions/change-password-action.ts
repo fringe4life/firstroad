@@ -78,6 +78,7 @@ export async function changePassword(
   _prevState: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
+  const user = await getUserOrRedirect();
   const formDataObject = Object.fromEntries(formData.entries());
 
   // Validate form data with Valibot schema
@@ -88,7 +89,6 @@ export async function changePassword(
   }
   const { confirmPassword, ...changePasswordBody } = parsed.output;
 
-  const user = await getUserOrRedirect();
   const { error } = await tryCatch(async () => {
     await auth.api.changePassword({
       headers: await headers(),

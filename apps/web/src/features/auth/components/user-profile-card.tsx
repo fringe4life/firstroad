@@ -29,14 +29,16 @@ const getInitials = (name: Maybe<string>): string => {
   return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
 };
 
-const formatDate = (date: string | Date | null | undefined): string => {
+const DATE_FORMATTER = new Intl.DateTimeFormat("en-US", {
+  month: "long",
+  year: "numeric",
+});
+
+const formatDate = (date: Maybe<string | Date>): string => {
   if (!date) {
     return "Unknown";
   }
-  return new Intl.DateTimeFormat("en-US", {
-    month: "long",
-    year: "numeric",
-  }).format(new Date(date));
+  return DATE_FORMATTER.format(new Date(date));
 };
 
 const UserProfileCard = ({ user }: UserProfileCardProps) => {
