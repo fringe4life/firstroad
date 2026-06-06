@@ -1,7 +1,7 @@
 "use client";
 
 import type { TicketModel } from "@firstroad/db/client-types";
-import { Suspense, useActionState, useId, useRef } from "react";
+import { Suspense, useId, useRef } from "react";
 import { DatePicker, type DateReset } from "@/components/date-picker";
 import { FieldError } from "@/components/form/field-error";
 import { Form } from "@/components/form/form";
@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { AttachmentInputWithPreviews } from "@/features/attachments/components/attachment-input-with-previews";
 import type { AttachmentInputWithPreviewsRef } from "@/features/attachments/types";
+import { useActionStateWithFeedback } from "@/hooks/use-action-state-with-feedback";
 import { fromCent } from "@/utils/currency";
 import { toDeadlineString } from "@/utils/normalise-date";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
@@ -29,21 +30,22 @@ const TicketUpsertForm = ({
   const descriptionId = useId();
   const deadlineId = useId();
   const bountyId = useId();
-  const [actionState, action] = useActionState(
-    upsertTicketAction.bind(null, ticket?.id),
-    EMPTY_ACTION_STATE,
-  );
-
   const datePickerImperativeHandleRef = useRef<DateReset>(null);
   const attachmentInputRef = useRef<AttachmentInputWithPreviewsRef>(null);
 
-  const handleSuccess = () => {
-    datePickerImperativeHandleRef.current?.reset();
-    attachmentInputRef.current?.reset();
-  };
+  const [actionState, action] = useActionStateWithFeedback(
+    upsertTicketAction.bind(null, ticket?.id),
+    EMPTY_ACTION_STATE,
+    {
+      onSuccess: () => {
+        datePickerImperativeHandleRef.current?.reset();
+        attachmentInputRef.current?.reset();
+      },
+    },
+  );
 
   return (
-    <Form action={action} onSuccessState={handleSuccess} state={actionState}>
+    <Form action={action}>
       <Label htmlFor={titleId}>Title</Label>
       <Input
         defaultValue={actionState.payload?.title ?? ticket?.title}

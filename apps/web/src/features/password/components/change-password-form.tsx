@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { changePassword } from "@/features/password/actions/change-password-action";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
+import { withActionFeedback } from "@/utils/with-action-feedback";
 
 interface ChangePasswordFormProps {
   changePasswordAction: typeof changePassword;
@@ -18,7 +19,7 @@ const ChangePasswordForm = ({
   changePasswordAction,
 }: ChangePasswordFormProps) => {
   const [state, action] = useActionState(
-    changePasswordAction,
+    withActionFeedback(changePasswordAction),
     EMPTY_ACTION_STATE,
   );
   const currentId = useId();
@@ -27,7 +28,7 @@ const ChangePasswordForm = ({
   const revokeId = useId();
 
   return (
-    <Form action={action} state={state || EMPTY_ACTION_STATE}>
+    <Form action={action}>
       <Label htmlFor={currentId}>Current password</Label>
       <Input
         defaultValue={state?.payload?.currentPassword ?? ""}

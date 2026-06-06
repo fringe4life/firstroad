@@ -2,21 +2,21 @@
 
 <div align="center">
 
-[![Next.js](https://img.shields.io/badge/Next.js-16.2.6-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.2.7-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.2.6-61DAFB?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.0.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Prisma](https://img.shields.io/badge/Prisma-7.8.0-2D3748?logo=prisma&logoColor=white)](https://prisma.io/)
-[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.6.11-000000)](https://better-auth.com/)
+[![Better Auth](https://img.shields.io/badge/Better%20Auth-1.6.14-000000)](https://better-auth.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.3.0-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Biome](https://img.shields.io/badge/Biome-2.4.15-60A5FA?logo=biome&logoColor=white)](https://biomejs.dev/)
 [![nuqs](https://img.shields.io/badge/nuqs-2.8.9-000000)](https://nuqs.47ng.com/)
-[![Valibot](https://img.shields.io/badge/Valibot-1.4.0-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
+[![Valibot](https://img.shields.io/badge/Valibot-1.4.1-3E67B1?logo=valibot&logoColor=white)](https://valibot.dev/)
 [![Elysia](https://img.shields.io/badge/Elysia-1.4.28-000000)](https://elysiajs.com/)
-[![Inngest](https://img.shields.io/badge/Inngest-4.4.0-000000)](https://www.inngest.com/)
-[![Resend](https://img.shields.io/badge/Resend-6.12.3-000000)](https://resend.com/)
+[![Inngest](https://img.shields.io/badge/Inngest-4.5.0-000000)](https://www.inngest.com/)
+[![Resend](https://img.shields.io/badge/Resend-6.12.4-000000)](https://resend.com/)
 [![React Email](https://img.shields.io/badge/React%20Email-6.1.1-000000)](https://react.email/)
 [![Bun](https://img.shields.io/badge/Bun-1.3.14-FBF0DF?logo=bun&logoColor=FBF0DF)](https://bun.sh/)
-[![Ultracite](https://img.shields.io/badge/Ultracite-7.7.0-000000)](https://ultracite.dev/)
+[![Ultracite](https://img.shields.io/badge/Ultracite-7.8.1-000000)](https://ultracite.dev/)
 
 </div>
 
@@ -53,19 +53,19 @@ A full-stack collaborative platform built with Next.js 16, featuring authenticat
 - **Framework**: Next.js 16.2 (App Router) with Turbopack
 - **Language**: TypeScript 6.0 with strict type checking
 - **Database**: PostgreSQL with Prisma Client 7.8 (relationJoins + partialIndexes previews, Neon adapter)
-- **Authentication**: Better Auth 1.6 with email/password provider and session cookie caching
+- **Authentication**: Better Auth 1.6.14 with email/password provider and session cookie caching
 - **Styling**: Tailwind CSS v4.3 with shadcn/ui components and Tailwind v4 PostCSS pipeline
 - **Icons**: Lucide React
-- **Forms**: React `useActionState` + Server Actions with Valibot validation
+- **Forms**: React `useActionState` + Server Actions with Valibot validation; `useActionStateWithFeedback` hook and `withActionFeedback` server wrapper for toast/error handling
 - **Notifications**: Sonner toast notifications
 - **Theme**: next-themes for dark/light mode
 - **URL Search Params**: nuqs 2.8.9 for type-safe URL parameters
-- **Email**: React Email 6.1 with Resend 6.12 for transactional emails
+- **Email**: React Email 6.1 with Resend 6.12.4 for transactional emails
 - **API Framework**: Elysia 1.4 with @elysiajs/cors for unified API routes
-- **Background Jobs**: Inngest 4.4 for background tasks and event handling
+- **Background Jobs**: Inngest 4.5 for background tasks and event handling
 - **Package Manager**: Bun (recommended)
 - **Shared Utilities**: `@firstroad/utils` (packages/utils) for shared helpers (e.g. `createSlug`)
-- **Linting**: Biome 2.4.15 for fast formatting and linting with Ultracite 7.7 rules
+- **Linting**: Biome 2.4.15 for fast formatting and linting with Ultracite 7.8 rules
 - **Type Checking**: TypeScript native preview for fast checking
 - **React Compiler**: React 19 compiler for performance optimization
 
@@ -342,11 +342,12 @@ firstroad/
 │   ├── web/                  # Next.js app (main app)
 │   │   ├── src/
 │   │   │   ├── app/          # App Router: (auth), (password), @auth, api, onboarding, layout, page
-│   │   │   ├── components/  # Shared UI, form, skeletons, theme, ui
-│   │   │   ├── features/    # attachments, auth, comment, invitations, memberships, navigation, organisation, pagination, password, ticket (see apps/web/src/features/)
+│   │   │   ├── components/  # Shared UI, confirm-dialog, form, skeletons, theme, ui
+│   │   │   ├── features/    # attachments, auth, comment, invitations, memberships, navigation, organisation, pagination, password, ticket
 │   │   │   ├── lib/         # auth, env, inngest, email, app
-│   │   │   ├── hooks/       # Shared client hooks
-│   │   │   ├── utils/       # cache-tags, invalidate-cache, slug, to-action-state, etc.
+│   │   │   ├── hooks/       # use-action-state-with-feedback, use-toggle
+│   │   │   ├── utils/       # with-action-feedback, cache-tags, invalidate-cache, to-action-state, etc.
+│   │   │   ├── shims/       # kysely-adapter shim for Better Auth + Turbopack
 │   │   │   ├── path.ts
 │   │   │   └── proxy.ts
 │   │   ├── Dockerfile
@@ -541,6 +542,7 @@ bunx turbo run dev --filter=@firstroad/inngest   # Inngest dev server (local; -u
 bun run check            # Ultracite check
 bun run fix              # Ultracite fix (format + lint)
 bun run doctor           # Ultracite doctor
+bun run react-doctor     # React Doctor (component health scan)
 
 # Deployment
 bun run deploy:prod      # cd apps/web && vercel deploy --prod
@@ -609,7 +611,7 @@ Inngest provides background job processing for:
 
 ### Email Templates (Resend)
 
-The application uses Resend 6.12 for transactional emails with published templates. All email sending functions use Resend's template API instead of inline React Email components.
+The application uses Resend 6.12.4 for transactional emails with published templates. All email sending functions use Resend's template API instead of inline React Email components.
 
 **Template IDs:**
 - `email-otp-verification` - OTP codes for sign-in, email verification, and password reset

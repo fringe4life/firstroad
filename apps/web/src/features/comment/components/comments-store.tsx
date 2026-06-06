@@ -3,7 +3,6 @@
 import {
   createContext,
   use,
-  useActionState,
   useOptimistic,
   useRef,
   useState,
@@ -24,6 +23,7 @@ import type {
   EditingState,
 } from "@/features/comment/types";
 import { NO_PAGINATION } from "@/features/pagination/constants";
+import { useActionStateWithFeedback } from "@/hooks/use-action-state-with-feedback";
 import type { ActionState } from "@/utils/to-action-state";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 import { INITIAL_EDITING_STATE } from "../constants";
@@ -62,9 +62,36 @@ const CommentsProvider = ({
   );
 
   const formRef = useRef<HTMLDivElement>(null);
+  const formResetRef = useRef<(() => void) | null>(null);
+  const registerFormReset = (fn: () => void) => {
+    formResetRef.current = fn;
+  };
   const [isPending, startTransition] = useTransition();
 
-  const [upsertState, upsertAction] = useActionState(
+  const handleUpsertSuccess = (state: ActionState<CommentWithUserInfo>) => {
+    const { data: comment } = state;
+    if (!comment) {
+      return;
+    }
+
+    setCommentsState((prev) => ({
+      ...prev,
+      list: (() => {
+        if (editingState.commentId) {
+          return prev.list.map((c) => (c.id === comment.id ? comment : c));
+        }
+        const exists = prev.list.some((c) => c.id === comment.id);
+        if (exists) {
+          return prev.list.map((c) => (c.id === comment.id ? comment : c));
+        }
+        return [comment, ...prev.list];
+      })(),
+    }));
+
+    setEditingState(INITIAL_EDITING_STATE);
+  };
+
+  const [upsertState, upsertAction] = useActionStateWithFeedback(
     async (
       _prevState: ActionState<CommentWithUserInfo>,
       formData: FormData,
@@ -114,30 +141,13 @@ const CommentsProvider = ({
       );
     },
     EMPTY_ACTION_STATE as ActionState<CommentWithUserInfo>,
+    {
+      onSuccess: (state) => {
+        handleUpsertSuccess(state);
+        formResetRef.current?.();
+      },
+    },
   );
-
-  const handleUpsertSuccess = (state: ActionState<CommentWithUserInfo>) => {
-    const { data: comment } = state;
-    if (!comment) {
-      return;
-    }
-
-    setCommentsState((prev) => ({
-      ...prev,
-      list: (() => {
-        if (editingState.commentId) {
-          return prev.list.map((c) => (c.id === comment.id ? comment : c));
-        }
-        const exists = prev.list.some((c) => c.id === comment.id);
-        if (exists) {
-          return prev.list.map((c) => (c.id === comment.id ? comment : c));
-        }
-        return [comment, ...prev.list];
-      })(),
-    }));
-
-    setEditingState(INITIAL_EDITING_STATE);
-  };
 
   const handleEdit = (commentId: string, content: string) => {
     setEditingState({ commentId, content });
@@ -227,7 +237,7 @@ const CommentsProvider = ({
     canCreate,
     isPending,
     hasNextPage: commentsState.metadata.hasNextPage,
-    handleUpsertSuccess,
+    registerFormReset,
     handleEdit,
     handleCancelEdit,
     handleClientAttachmentCreated,

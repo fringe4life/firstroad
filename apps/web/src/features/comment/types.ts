@@ -74,7 +74,7 @@ export interface CommentCreateFormProps {
   commentId?: string;
   initialContent?: Exclude<Maybe<string>, null>;
   onCancel?: () => void;
-  onSuccessState?: (state: ActionState<CommentWithUserInfo>) => void;
+  registerFormReset: (fn: () => void) => void;
   state: ActionState<CommentWithUserInfo>;
 }
 
@@ -166,10 +166,10 @@ export interface CommentsContextValue extends ContextPermission {
   handleDelete: (commentId: string) => Promise<ActionState<string>>;
   handleEdit: (commentId: string, content: string) => void;
   handleLoadMore: () => void;
-  handleUpsertSuccess: (state: ActionState<CommentWithUserInfo>) => void;
   hasNextPage: boolean;
   isPending: boolean;
   optimisticComments: Array<CommentWithUserInfo & ItemPermission>;
+  registerFormReset: (fn: () => void) => void;
   upsertAction: (formData: FormData) => void;
   upsertState: ActionState<CommentWithUserInfo>;
   userId?: string;

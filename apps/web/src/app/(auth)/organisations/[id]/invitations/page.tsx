@@ -8,6 +8,7 @@ import { getAdminOwnerOrRedirect } from "@/features/memberships/queries/get-admi
 const InvitationsPage = async ({
   params,
 }: PageProps<"/organisations/[id]/invitations">) => {
+  // react-doctor-disable-next-line
   await connection();
   const { id } = await params;
 

@@ -8,18 +8,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { resetPassword } from "@/features/password/actions/reset-password-action";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
+import { withActionFeedback } from "@/utils/with-action-feedback";
 
 interface ResetPasswordFormProps {
   token: string;
 }
 
 const ResetPasswordForm = ({ token }: ResetPasswordFormProps) => {
-  const [state, action] = useActionState(resetPassword, EMPTY_ACTION_STATE);
+  const [state, action] = useActionState(
+    withActionFeedback(resetPassword),
+    EMPTY_ACTION_STATE,
+  );
   const passwordId = useId();
   const confirmPasswordId = useId();
 
   return (
-    <Form action={action} state={state || EMPTY_ACTION_STATE}>
+    <Form action={action}>
       <input name="token" type="hidden" value={token} />
 
       <Label htmlFor={passwordId}>New Password</Label>

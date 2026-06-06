@@ -12,8 +12,10 @@ import { ticketPath, ticketsPath } from "@/path";
 const EditTicketPage = async ({
   params,
 }: PageProps<"/tickets/[slug]/edit">) => {
+  // react-doctor-disable-next-line
   await connection();
   const user = await getUserOrRedirect();
+  // react-doctor-disable-next-line
   const { slug } = await params;
   const ticket = await itemWithPermissions(
     getTicketBySlug(slug),

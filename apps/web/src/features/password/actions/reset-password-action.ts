@@ -46,7 +46,7 @@ const resetPassword = async (
   _state: ActionState | undefined,
   formData: FormData,
 ) => {
-  const { error } = await tryCatch(async () => {
+  const { data, error } = await tryCatch(async () => {
     const formDataObj = Object.fromEntries(formData);
     const { token, password } = parse(resetPasswordSchema, formDataObj);
 
@@ -67,6 +67,8 @@ const resetPassword = async (
   if (error) {
     return fromErrorToActionState(error, formData);
   }
+
+  return data as ActionState;
 };
 
 export { resetPassword };

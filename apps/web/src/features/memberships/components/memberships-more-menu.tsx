@@ -2,7 +2,7 @@
 
 import { MemberRole } from "@firstroad/db/client-types";
 import { LucideUserCog } from "lucide-react";
-import { useActionState, useOptimistic, useRef, useTransition } from "react";
+import { useActionState, useOptimistic, useTransition } from "react";
 import { Form } from "@/components/form/form";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import type { ActionState } from "@/utils/to-action-state";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
+import { withActionFeedback } from "@/utils/with-action-feedback";
 import { updateMemberRole } from "../actions/update-member-role";
 import type { MembershipsMoreMenuProps } from "../types";
 
@@ -22,18 +23,18 @@ const MembershipsMoreMenu = ({
   memberId,
   role,
 }: MembershipsMoreMenuProps) => {
-  // Ref to capture selected role for the action
-  const nextRoleRef = useRef<MemberRole>(role);
-
-  // 1. useActionState first to get action result
   const [state, action] = useActionState(
-    async (prevState: ActionState<MemberRole>) =>
-      await updateMemberRole(
-        organizationId,
-        memberId,
-        nextRoleRef.current,
-        prevState,
-      ),
+    withActionFeedback(
+      async (prevState: ActionState<MemberRole>, formData: FormData) => {
+        const nextRole = formData.get("role") as MemberRole;
+        return await updateMemberRole(
+          organizationId,
+          memberId,
+          nextRole,
+          prevState,
+        );
+      },
+    ),
     EMPTY_ACTION_STATE as ActionState<MemberRole>,
   );
 
@@ -57,16 +58,17 @@ const MembershipsMoreMenu = ({
     }
 
     const newRole = nextRole as MemberRole;
-    nextRoleRef.current = newRole;
+    const formData = new FormData();
+    formData.set("role", newRole);
 
     startTransition(async () => {
       setOptimisticRole(newRole);
-      await action();
+      await action(formData);
     });
   };
 
   return (
-    <Form action={action} state={state}>
+    <Form action={action}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button

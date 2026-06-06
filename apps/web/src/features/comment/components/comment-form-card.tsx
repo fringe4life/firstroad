@@ -10,7 +10,7 @@ const CommentFormCard = () => {
     editingState,
     upsertAction,
     handleCancelEdit,
-    handleUpsertSuccess,
+    registerFormReset,
     upsertState,
     userId,
     canCreate,
@@ -45,7 +45,7 @@ const CommentFormCard = () => {
             commentId={editingState.commentId}
             initialContent={editingState.content}
             onCancel={handleCancelEdit}
-            onSuccessState={handleUpsertSuccess}
+            registerFormReset={registerFormReset}
             state={upsertState}
           />
         </div>

@@ -8,18 +8,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { signin } from "@/features/password/actions/signin-action";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
+import { withActionFeedback } from "@/utils/with-action-feedback";
 
 interface SignInFormProps {
   signinAction: typeof signin;
 }
 
 const SignInForm = ({ signinAction }: SignInFormProps) => {
-  const [state, action] = useActionState(signinAction, EMPTY_ACTION_STATE);
+  const [state, action] = useActionState(
+    withActionFeedback(signinAction),
+    EMPTY_ACTION_STATE,
+  );
   const emailId = useId();
   const passwordId = useId();
 
   return (
-    <Form action={action} state={state || EMPTY_ACTION_STATE}>
+    <Form action={action}>
       <Label htmlFor={emailId}>Email</Label>
       <Input
         defaultValue={state?.payload?.email ?? ""}

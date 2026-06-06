@@ -10,7 +10,8 @@
     "typescript-plugin-directives",
     "shadcn",
     "inngest-cli",
-    "babel-plugin-react-compiler"
+    "babel-plugin-react-compiler",
+    "@elysiajs/openapi"
   ],
   "ignorePatterns": ["apps/web/src/shims/kysely-adapter.ts"]
 }

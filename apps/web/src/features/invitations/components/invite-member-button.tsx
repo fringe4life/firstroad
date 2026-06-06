@@ -26,6 +26,7 @@ import {
 import type { OrganisationId } from "@/features/organisation/types";
 import { useToggle } from "@/hooks/use-toggle";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
+import { withActionFeedback } from "@/utils/with-action-feedback";
 import { createInvitation } from "../actions/create-invitation";
 
 type InviteMemberButtonProps = OrganisationId;
@@ -36,11 +37,11 @@ const InviteMemberButton = ({ organizationId }: InviteMemberButtonProps) => {
   const roleId = useId();
 
   const [state, action] = useActionState(
-    createInvitation.bind(null, organizationId),
+    withActionFeedback(createInvitation.bind(null, organizationId), {
+      onSuccess: () => close(),
+    }),
     EMPTY_ACTION_STATE,
   );
-
-  const handleSuccess = () => close();
 
   return (
     <>
@@ -61,7 +62,7 @@ const InviteMemberButton = ({ organizationId }: InviteMemberButtonProps) => {
             </DialogDescription>
           </DialogHeader>
 
-          <Form action={action} onSuccessState={handleSuccess} state={state}>
+          <Form action={action}>
             <div className="grid gap-4">
               <div className="grid gap-2">
                 <Label htmlFor={emailId}>Email</Label>

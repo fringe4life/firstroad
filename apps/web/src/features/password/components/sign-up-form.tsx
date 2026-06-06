@@ -8,20 +8,24 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { signup } from "@/features/password/actions/signup-action";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
+import { withActionFeedback } from "@/utils/with-action-feedback";
 
 interface SignUpFormProps {
   signupAction: typeof signup;
 }
 
 const SignUpForm = ({ signupAction }: SignUpFormProps) => {
-  const [state, action] = useActionState(signupAction, EMPTY_ACTION_STATE);
+  const [state, action] = useActionState(
+    withActionFeedback(signupAction),
+    EMPTY_ACTION_STATE,
+  );
   const nameId = useId();
   const emailId = useId();
   const passwordId = useId();
   const confirmPasswordId = useId();
 
   return (
-    <Form action={action} state={state || EMPTY_ACTION_STATE}>
+    <Form action={action}>
       <Label htmlFor={nameId}>Name</Label>
       <Input
         defaultValue={state?.payload?.name ?? ""}

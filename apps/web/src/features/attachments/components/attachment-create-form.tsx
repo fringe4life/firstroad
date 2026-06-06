@@ -1,9 +1,10 @@
 "use client";
 
-import { useActionState, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { FieldError } from "@/components/form/field-error";
 import { Form } from "@/components/form/form";
 import { SubmitButton } from "@/components/form/submit-button";
+import { useActionStateWithFeedback } from "@/hooks/use-action-state-with-feedback";
 import { type ActionState, EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 import {
   type AttachmentCreatedPayload,
@@ -23,33 +24,26 @@ const AttachmentCreateForm = ({
   const inputRef = useRef<AttachmentInputWithPreviewsRef>(null);
   const [previewCount, setPreviewCount] = useState(0);
 
-  const [actionState, action] = useActionState(
+  const [actionState, action] = useActionStateWithFeedback(
     async (
       prevState: ActionState<AttachmentCreatedPayload | unknown>,
       formData: FormData,
-    ) => {
-      const nextState = await createAttachmentAction(
-        ownerId,
-        prevState,
-        formData,
-      );
-
-      if (nextState.status === "SUCCESS") {
+    ) => await createAttachmentAction(ownerId, prevState, formData),
+    EMPTY_ACTION_STATE as ActionState<AttachmentCreatedPayload>,
+    {
+      onSuccess: (nextState) => {
         if (hasAttachmentCreatedPayload(nextState)) {
           onClientAttachmentCreated?.(nextState.data);
         }
         inputRef.current?.reset();
         setPreviewCount(0);
         onSuccess?.();
-      }
-
-      return nextState;
+      },
     },
-    EMPTY_ACTION_STATE as ActionState<AttachmentCreatedPayload>,
   );
 
   return (
-    <Form action={action} state={actionState}>
+    <Form action={action}>
       <AttachmentInputWithPreviews
         onPreviewsChange={setPreviewCount}
         ref={inputRef}

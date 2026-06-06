@@ -5,6 +5,7 @@ import { FieldError } from "@/components/form/field-error";
 import { Form } from "@/components/form/form";
 import { SubmitButton } from "@/components/form/submit-button";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
+import { withActionFeedback } from "@/utils/with-action-feedback";
 import { invitationDecisionAction } from "../actions/invitation-decision";
 import type { InvitationDetails } from "../queries/get-invitation";
 
@@ -14,7 +15,7 @@ interface AcceptInvitationCardProps {
 
 const AcceptInvitationCard = ({ invitation }: AcceptInvitationCardProps) => {
   const [state, action] = useActionState(
-    invitationDecisionAction.bind(null, invitation.id),
+    withActionFeedback(invitationDecisionAction.bind(null, invitation.id)),
     EMPTY_ACTION_STATE,
   );
 
@@ -63,7 +64,7 @@ const AcceptInvitationCard = ({ invitation }: AcceptInvitationCardProps) => {
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-        <Form action={action} state={state}>
+        <Form action={action}>
           <SubmitButton
             label="Accept Invitation"
             name="decision"

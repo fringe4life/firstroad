@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/input-otp";
 import { Label } from "@/components/ui/label";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
+import { withActionFeedback } from "@/utils/with-action-feedback";
 import type { verifyEmailVerificationOTP } from "../actions/verify-otp-action";
 
 export interface OTPVerifyFormProps {
@@ -24,11 +25,14 @@ const OTPVerifyForm = ({
   submitLabel,
   email,
 }: OTPVerifyFormProps) => {
-  const [state, action] = useActionState(verifyOTPAction, EMPTY_ACTION_STATE);
+  const [state, action] = useActionState(
+    withActionFeedback(verifyOTPAction),
+    EMPTY_ACTION_STATE,
+  );
   const otpId = useId();
 
   return (
-    <Form action={action} state={state || EMPTY_ACTION_STATE}>
+    <Form action={action}>
       <div className="space-y-4">
         <p className="text-muted-foreground text-sm">
           Code sent to: <span className="font-medium">{email}</span>

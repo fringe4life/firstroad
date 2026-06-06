@@ -1,9 +1,9 @@
 "use client";
 
 import { Trash2 } from "lucide-react";
-import { useActionState } from "react";
 import { Form } from "@/components/form/form";
 import { SubmitButton } from "@/components/form/submit-button";
+import { useActionStateWithFeedback } from "@/hooks/use-action-state-with-feedback";
 import { type ActionState, EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 import { ATTACHMENT_KIND_ICONS } from "../constants";
 import {
@@ -21,29 +21,26 @@ const AttachmentItem = ({
   onClientAttachmentDeleted,
 }: AttachmentItemProps) => {
   const { downloadUrl, id, name } = attachment;
-  const [state, action] = useActionState(
+  const [_state, action] = useActionStateWithFeedback(
     async (
       prevState: ActionState<AttachmentDeletedPayload> | ActionState<unknown>,
       formData: FormData,
-    ) => {
-      const nextState = await deleteAttachmentAction(
+    ) =>
+      await deleteAttachmentAction(
         { attachmentId: id, ownerId },
         prevState,
         formData,
-      );
-
-      if (
-        nextState.status === "SUCCESS" &&
-        hasAttachmentDeletedPayload(nextState)
-      ) {
-        onClientAttachmentDeleted?.(nextState.data);
-      }
-
-      return nextState;
-    },
+      ),
     EMPTY_ACTION_STATE as
       | ActionState<AttachmentDeletedPayload>
       | ActionState<unknown>,
+    {
+      onSuccess: (nextState) => {
+        if (hasAttachmentDeletedPayload(nextState)) {
+          onClientAttachmentDeleted?.(nextState.data);
+        }
+      },
+    },
   );
 
   const kind = getAttachmentKindFromName(name);
@@ -73,7 +70,7 @@ const AttachmentItem = ({
     >
       <div className="truncate">{content}</div>
       {isOwner && (
-        <Form action={action} state={state}>
+        <Form action={action}>
           <SubmitButton icon={<Trash2 />} size="icon" variant="destructive" />
         </Form>
       )}

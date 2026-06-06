@@ -8,8 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { AttachmentInputWithPreviews } from "@/features/attachments/components/attachment-input-with-previews";
 import type { AttachmentInputWithPreviewsRef } from "@/features/attachments/types";
-import type { ActionState } from "@/utils/to-action-state";
-import type { CommentCreateFormProps, CommentWithUserInfo } from "../types";
+import type { CommentCreateFormProps } from "../types";
 
 const CommentCreateForm = ({
   action,
@@ -17,11 +16,20 @@ const CommentCreateForm = ({
   commentId,
   initialContent = "",
   onCancel,
-  onSuccessState,
+  registerFormReset,
 }: CommentCreateFormProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const attachmentInputRef = useRef<AttachmentInputWithPreviewsRef>(null);
   const contentId = useId();
+
+  useEffect(() => {
+    registerFormReset(() => {
+      if (textareaRef.current) {
+        textareaRef.current.value = "";
+      }
+      attachmentInputRef.current?.reset();
+    });
+  }, [registerFormReset]);
 
   // Populate form when editing
   useEffect(() => {
@@ -37,29 +45,8 @@ const CommentCreateForm = ({
     }
   }, [commentId]);
 
-  const handleSuccess = (stateArg: ActionState<unknown>) => {
-    // Reset form on success
-    if (textareaRef.current) {
-      textareaRef.current.value = "";
-    }
-    attachmentInputRef.current?.reset();
-    // Call onSuccessState callback with the action state (includes returned comment)
-    if (onSuccessState) {
-      onSuccessState(stateArg as ActionState<CommentWithUserInfo>);
-    }
-    // Call onCancel if provided (for edit mode)
-    if (onCancel) {
-      onCancel();
-    }
-  };
-
   return (
-    <Form
-      action={action}
-      className="grid gap-y-2"
-      onSuccessState={handleSuccess}
-      state={state as ActionState<unknown>}
-    >
+    <Form action={action} className="grid gap-y-2">
       <div className="grid gap-y-4">
         <Label htmlFor={contentId}>
           {commentId ? "Edit comment" : "Add a comment"}

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { forgotPassword } from "@/features/password/actions/forgot-password-action";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
+import { withActionFeedback } from "@/utils/with-action-feedback";
 
 interface ForgotPasswordFormProps {
   forgotPasswordAction: typeof forgotPassword;
@@ -17,13 +18,13 @@ const ForgotPasswordForm = ({
   forgotPasswordAction,
 }: ForgotPasswordFormProps) => {
   const [state, action] = useActionState(
-    forgotPasswordAction,
+    withActionFeedback(forgotPasswordAction),
     EMPTY_ACTION_STATE,
   );
   const emailId = useId();
 
   return (
-    <Form action={action} state={state || EMPTY_ACTION_STATE}>
+    <Form action={action}>
       <Label htmlFor={emailId}>Email</Label>
       <Input
         defaultValue={state?.payload?.email ?? ""}

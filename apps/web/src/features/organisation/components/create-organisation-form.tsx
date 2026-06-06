@@ -6,6 +6,7 @@ import { Form } from "@/components/form/form";
 import { SubmitButton } from "@/components/form/submit-button";
 import { Input } from "@/components/ui/input";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
+import { withActionFeedback } from "@/utils/with-action-feedback";
 import type { createOrganisation } from "../actions/create-organisation";
 
 const CreateOrganisationForm = ({
@@ -14,13 +15,13 @@ const CreateOrganisationForm = ({
   createOrganisationAction: typeof createOrganisation;
 }) => {
   const [state, action] = useActionState(
-    createOrganisationAction,
+    withActionFeedback(createOrganisationAction),
     EMPTY_ACTION_STATE,
   );
   const organisationNameId = useId();
 
   return (
-    <Form action={action} state={state}>
+    <Form action={action}>
       <Input
         defaultValue={state?.payload?.name ?? ""}
         id={organisationNameId}

@@ -7,6 +7,7 @@ import { Form } from "@/components/form/form";
 import { SubmitButton } from "@/components/form/submit-button";
 import type { ActionState } from "@/utils/to-action-state";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
+import { withActionFeedback } from "@/utils/with-action-feedback";
 import { togglePermission } from "../actions/toggle-permission";
 import type { PermissionToggleProps } from "../types";
 
@@ -18,17 +19,19 @@ const PermissionToggle = ({
   permissionValue,
 }: PermissionToggleProps) => {
   const [state, formAction] = useActionState(
-    async (prevState: ActionState<boolean>, formData: FormData) => {
-      const newValue = formData.get("permissionValue") === "true";
-      return await togglePermission(
-        memberId,
-        organizationId,
-        resourceType,
-        action,
-        newValue,
-        prevState,
-      );
-    },
+    withActionFeedback(
+      async (prevState: ActionState<boolean>, formData: FormData) => {
+        const newValue = formData.get("permissionValue") === "true";
+        return await togglePermission(
+          memberId,
+          organizationId,
+          resourceType,
+          action,
+          newValue,
+          prevState,
+        );
+      },
+    ),
     EMPTY_ACTION_STATE as ActionState<boolean>,
   );
 
@@ -62,7 +65,6 @@ const PermissionToggle = ({
       action={formAction}
       className={isPending ? "opacity-75" : ""}
       onSubmit={handleSubmit}
-      state={state}
     >
       <SubmitButton
         icon={optimisticValue ? <LucideCheck /> : <LucideBan />}

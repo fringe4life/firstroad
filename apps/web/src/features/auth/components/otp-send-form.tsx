@@ -7,6 +7,7 @@ import { SubmitButton } from "@/components/form/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
+import { withActionFeedback } from "@/utils/with-action-feedback";
 import type { sendEmailVerificationOTP } from "../actions/send-otp-action";
 
 interface OTPSendFormProps {
@@ -22,11 +23,14 @@ const OTPSendForm = ({
   description,
   submitLabel,
 }: OTPSendFormProps) => {
-  const [state, action] = useActionState(sendOTPAction, EMPTY_ACTION_STATE);
+  const [state, action] = useActionState(
+    withActionFeedback(sendOTPAction),
+    EMPTY_ACTION_STATE,
+  );
   const emailId = useId();
 
   return (
-    <Form action={action} state={state || EMPTY_ACTION_STATE}>
+    <Form action={action}>
       <div className="space-y-4">
         <div>
           <h1 className="font-semibold text-2xl">{title}</h1>

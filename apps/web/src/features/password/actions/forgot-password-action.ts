@@ -31,7 +31,7 @@ const forgotPassword = async (
   _state: ActionState | undefined,
   formData: FormData,
 ) => {
-  const { error } = await tryCatch(async () => {
+  const { data, error } = await tryCatch(async () => {
     const formDataObj = Object.fromEntries(formData);
     const { email: userEmail } = parse(forgotPasswordSchema, formDataObj);
 
@@ -57,6 +57,8 @@ const forgotPassword = async (
   if (error) {
     return fromErrorToActionState(error, formData);
   }
+
+  return data as ActionState;
 };
 
 export { forgotPassword };

@@ -9,6 +9,7 @@ import { DialogClose, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
+import { withActionFeedback } from "@/utils/with-action-feedback";
 import type { updateOrganisation } from "../actions/update-organisation";
 
 const UpdateOrganisationForm = ({
@@ -23,7 +24,7 @@ const UpdateOrganisationForm = ({
   onSuccess: () => void;
 }) => {
   const [state, action] = useActionState(
-    updateOrganisationAction,
+    withActionFeedback(updateOrganisationAction, { onSuccess }),
     EMPTY_ACTION_STATE,
   );
   const [name, setName] = useState(() => organizationName);
@@ -31,7 +32,7 @@ const UpdateOrganisationForm = ({
   const isSubmitDisabled = name.trim().length === 0;
 
   return (
-    <Form action={action} onSuccessState={onSuccess} state={state}>
+    <Form action={action}>
       <input name="organizationId" type="hidden" value={organizationId} />
       <Label htmlFor={organisationNameId}>Organisation name</Label>
       <Input
