@@ -7,17 +7,17 @@
 # Socket-free alternative: podman-compose (same args as below).
 #
 # Start:
-#   podman compose up -d postgres inngest
-#   podman compose --env-file apps/web/.env up -d postgres inngest
+#   podman-compose up -d postgres inngest
+#   podman-compose --env-file apps/web/.env up -d postgres inngest
 #
 # Stop:
-#   podman compose down
+#   podman-compose down
 #
 # Build web image (uses apps/web/.env for build args):
-#   podman compose --env-file apps/web/.env build web
+#   podman-compose --env-file apps/web/.env build web
 #
 # Run web container:
-#   podman compose --env-file apps/web/.env up web
+#   podman-compose --env-file apps/web/.env up web
 #   podman run -p 8080:8080 --env-file apps/web/.env firstroad-web
 
 services:
