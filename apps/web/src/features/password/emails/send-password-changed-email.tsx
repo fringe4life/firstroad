@@ -7,14 +7,14 @@ export const sendPasswordChangedEmail = async (
   await resend.emails.send({
     // biome-ignore lint/style/noNonNullAssertion: will exist
     from: process.env.NEXT_PUBLIC_RESEND_FROM!,
-    to: email,
     subject: "Password Changed - FirstTicket",
     template: {
       id: "password-changed-email",
       variables: {
-        TO_NAME: userName ?? "User",
         // biome-ignore lint/style/noNonNullAssertion: exists
         APP_URL: process.env.NEXT_PUBLIC_APP_URL!,
+        TO_NAME: userName ?? "User",
       },
     },
+    to: email,
   });

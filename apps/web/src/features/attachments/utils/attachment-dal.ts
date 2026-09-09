@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@firstroad/db";
+import { orm } from "@firstroad/db";
 import { s3 } from "bun";
 import type { OrganisationId } from "@/features/organisation/types";
 import type { List } from "@/types";
@@ -24,7 +24,7 @@ interface DeleteAttachmentForOwnerInput extends OwnerId, OrganisationId {
  * Low-level DAL helpers for ticket & comment attachments.
  *
  * These functions hide the fact that attachments are stored in two separate
- * Prisma models (TicketAttachment, CommentAttachment) and provide a single
+ * models (TicketAttachment, CommentAttachment) and provide a single
  * API based on OwnerKind + ownerId. They are used by feature-specific DAL
  * entrypoints in `features/ticket/dal` and `features/comment/dal`, and are
  * intentionally unaware of auth, validation, or cache invalidation.
@@ -35,23 +35,32 @@ const createAttachmentsForOwner = async ({
   ownerId,
   files,
 }: CreateAttachmentsForOwnerInput): Promise<List<AttachmentRecord>> => {
-  if (!files?.length) {
+  if (files.length === 0) {
     return [];
   }
 
-  // Create all attachment rows in parallel (one DB round-trip wave)
   const attachments: List<AttachmentRecord> = await Promise.all(
     files.map(({ file, contentType }) => {
       switch (ownerKind) {
         case "ticket":
-          return prisma.ticketAttachment.create({
-            data: { name: file.name, ticketId: ownerId, contentType },
-            select: { id: true, name: true, contentType: true },
+          return orm.TicketAttachment.select(
+            "contentType",
+            "id",
+            "name",
+          ).create({
+            contentType,
+            name: file.name,
+            ticketId: ownerId,
           });
         case "comment":
-          return prisma.commentAttachment.create({
-            data: { name: file.name, commentId: ownerId, contentType },
-            select: { id: true, name: true, contentType: true },
+          return orm.CommentAttachment.select(
+            "contentType",
+            "id",
+            "name",
+          ).create({
+            commentId: ownerId,
+            contentType,
+            name: file.name,
           });
         default:
           throw new Error(`Invalid owner kind: ${ownerKind}`) as never;
@@ -59,7 +68,6 @@ const createAttachmentsForOwner = async ({
     }),
   );
 
-  // Upload all files to S3 in parallel (one wave of concurrent writes)
   await Promise.all(
     attachments.map(async (attachment, index) => {
       const { file } = files[index];
@@ -86,12 +94,14 @@ const deleteAttachmentForOwner = async ({
 }: DeleteAttachmentForOwnerInput): Promise<void> => {
   const attachment =
     ownerKind === "ticket"
-      ? await prisma.ticketAttachment.findFirst({
-          where: { id: attachmentId, ticketId: ownerId },
-        })
-      : await prisma.commentAttachment.findFirst({
-          where: { id: attachmentId, commentId: ownerId },
-        });
+      ? await orm.TicketAttachment.where({
+          id: attachmentId,
+          ticketId: ownerId,
+        }).first()
+      : await orm.CommentAttachment.where({
+          commentId: ownerId,
+          id: attachmentId,
+        }).first();
 
   if (!attachment) {
     throw new Error("Attachment not found");
@@ -107,22 +117,22 @@ const deleteAttachmentForOwner = async ({
 
   try {
     await s3.file(key).delete();
-  } catch {
-    throw new Error("Could not delete attachment from storage");
+  } catch (error) {
+    throw new Error("Could not delete attachment from storage", {
+      cause: error,
+    });
   }
 
   try {
     if (ownerKind === "ticket") {
-      await prisma.ticketAttachment.delete({
-        where: { id: attachment.id },
-      });
+      await orm.TicketAttachment.where({ id: attachment.id }).delete();
     } else {
-      await prisma.commentAttachment.delete({
-        where: { id: attachment.id },
-      });
+      await orm.CommentAttachment.where({ id: attachment.id }).delete();
     }
-  } catch {
-    throw new Error("Attachment removed from storage but not from database");
+  } catch (error) {
+    throw new Error("Attachment removed from storage but not from database", {
+      cause: error,
+    });
   }
 };
 

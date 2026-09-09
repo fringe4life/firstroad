@@ -18,12 +18,13 @@ const CommentCreateForm = ({
   onCancel,
   registerFormReset,
 }: CommentCreateFormProps) => {
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const attachmentInputRef = useRef<AttachmentInputWithPreviewsRef>(null);
   const contentId = useId();
 
   useEffect(() => {
     registerFormReset(() => {
+      // biome-ignore lint/suspicious/noUnnecessaryConditions: ref is null until mount
       if (textareaRef.current) {
         textareaRef.current.value = "";
       }
@@ -53,7 +54,7 @@ const CommentCreateForm = ({
         </Label>
         <Textarea
           className="field-sizing-content min-h-25"
-          defaultValue={state?.payload?.content ?? initialContent}
+          defaultValue={state.payload?.content ?? initialContent}
           id={contentId}
           name="content"
           placeholder="Write your comment here..."

@@ -14,8 +14,8 @@ import {
 import { tryCatch } from "@/utils/try-catch";
 
 const cancelInvitationSchema = object({
-  organizationId: pipe(string(), minLength(1)),
   invitationId: pipe(string(), minLength(1)),
+  organizationId: pipe(string(), minLength(1)),
 });
 
 const cancelInvitation = async (
@@ -24,8 +24,8 @@ const cancelInvitation = async (
 ): Promise<ActionState> => {
   // Validate input first
   const result = safeParse(cancelInvitationSchema, {
-    organizationId,
     invitationId,
+    organizationId,
   });
 
   if (!result.success) {

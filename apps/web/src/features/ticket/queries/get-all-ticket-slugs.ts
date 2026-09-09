@@ -1,13 +1,8 @@
-import { prisma } from "@firstroad/db";
+import { orm } from "@firstroad/db";
 
 const getAllTicketSlugs = async () => {
-  const tickets = await prisma.ticket.findMany({
-    select: { slug: true },
-  });
-
-  return tickets.map((ticket) => ({
-    slug: ticket.slug,
-  }));
+  const tickets = await orm.Ticket.select("slug").all();
+  return tickets.map((ticket) => ({ slug: ticket.slug }));
 };
 
 export { getAllTicketSlugs };

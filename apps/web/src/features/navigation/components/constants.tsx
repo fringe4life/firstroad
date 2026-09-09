@@ -16,34 +16,31 @@ import type { NavItemElement } from "../types/types";
 
 const navItems: NavItemElement[] = [
   {
-    title: "All Tickets",
-    icon: <LucideLibrary />,
     href: homePath(),
+    icon: <LucideLibrary />,
+    title: "All Tickets",
   },
   {
-    title: "Our Tickets",
-    icon: <LucideBookCopy />,
     href: ticketsByOrganisationPath(),
+    icon: <LucideBookCopy />,
+    title: "Our Tickets",
   },
   {
-    title: "My Tickets",
-    icon: <LucideBook />,
     href: ticketsPath(),
+    icon: <LucideBook />,
+    title: "My Tickets",
   },
   {
+    href: accountProfilePath(),
+    icon: <LucideCircleUser />,
     seperator: true,
     title: "Account",
-    icon: <LucideCircleUser />,
-    href: accountProfilePath(),
   },
   {
-    title: "Organisation",
-    icon: <LucideUsers />,
     href: organisationsPath(),
+    icon: <LucideUsers />,
+    title: "Organisation",
   },
 ];
 
-const closedClassName =
-  "text-background opacity-0 transition-all duration-300 group-hover:z-40 group-hover:ml-4 group-hover:rounded group-hover:bg-foreground group-hover:p-2 group-hover:opacity-100";
-
-export { closedClassName, navItems };
+export { navItems };

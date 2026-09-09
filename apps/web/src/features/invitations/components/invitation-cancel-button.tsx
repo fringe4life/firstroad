@@ -13,24 +13,32 @@ interface InvitationCancelButtonProps {
 const InvitationCancelButton = ({
   organizationId,
   invitationId,
-}: InvitationCancelButtonProps) => (
-  <ConfirmDialog
-    action={cancelInvitation.bind(null, organizationId, invitationId)}
-    closeOnSubmit
-    description="Are you sure you want to cancel this invitation? The invitee will no longer be able to join using this invitation."
-    title="Cancel invitation"
-  >
-    {({ isPending }) => (
-      <ConfirmDialog.Trigger>
-        <PendingIconButton
-          disabled={isPending}
-          icon={<LucideTrash />}
-          size="icon"
-          variant="destructive"
-        />
-      </ConfirmDialog.Trigger>
-    )}
-  </ConfirmDialog>
-);
+}: InvitationCancelButtonProps) => {
+  const cancelAction = cancelInvitation.bind(
+    null,
+    organizationId,
+    invitationId,
+  );
+
+  return (
+    <ConfirmDialog
+      action={cancelAction}
+      closeOnSubmit
+      description="Are you sure you want to cancel this invitation? The invitee will no longer be able to join using this invitation."
+      title="Cancel invitation"
+    >
+      {({ isPending }) => (
+        <ConfirmDialog.Trigger>
+          <PendingIconButton
+            disabled={isPending}
+            icon={<LucideTrash />}
+            size="icon"
+            variant="destructive"
+          />
+        </ConfirmDialog.Trigger>
+      )}
+    </ConfirmDialog>
+  );
+};
 
 export { InvitationCancelButton };

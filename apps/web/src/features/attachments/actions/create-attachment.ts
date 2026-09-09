@@ -60,10 +60,10 @@ const createAttachmentImpl = async (
 
   const { data: createdRecords, error } = await tryCatch(() =>
     createAttachmentsForOwner({
-      ownerKind,
+      files: filesWithContentType(validatedFiles),
       organizationId: item.organizationId,
       ownerId,
-      files: filesWithContentType(validatedFiles),
+      ownerKind,
     }),
   );
 
@@ -97,8 +97,8 @@ const createAttachmentImpl = async (
       createdRecords,
     );
     payload = {
-      item,
       created: withUrls ?? [],
+      item,
     };
   }
   return toActionState("Attachment(s) uploaded", "SUCCESS", undefined, payload);

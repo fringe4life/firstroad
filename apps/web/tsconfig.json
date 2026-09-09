@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2022",
+    "target": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "types": ["node", "bun"],
     "alwaysStrict": true,
@@ -35,5 +35,5 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules", "svelte example code"]
+  "exclude": ["node_modules"]
 }

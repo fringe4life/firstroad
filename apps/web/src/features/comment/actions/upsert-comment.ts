@@ -1,7 +1,6 @@
 /** biome-ignore-all lint/style/noMagicNumbers: are well explained zod schema */
 /** biome-ignore-all lint/complexity/noExcessiveCognitiveComplexity: upsert flow has many validation branches */
 "use server";
-import type { CommentWhereUniqueInput } from "@firstroad/db/client-types";
 import {
   maxLength,
   minLength,
@@ -99,15 +98,11 @@ export const upsertComment = async (
     output: { content },
   } = parsedData;
 
-  const whereClause: CommentWhereUniqueInput = {
-    id: commentId ?? "",
-  };
-
   const { data: comment, error: commentError } = await tryCatch(() =>
     commentId
       ? updateComment({
-          where: whereClause,
           data: { content },
+          id: commentId,
           includeUser: true,
         })
       : createComment({
@@ -137,10 +132,10 @@ export const upsertComment = async (
     const { data: createdAttachments, error: attachError } = await tryCatch(
       () =>
         createAttachmentsForOwner({
-          ownerKind: "comment",
+          files: filesWithContentType(parseFiles.output),
           organizationId: ticket.organizationId,
           ownerId: comment.id,
-          files: filesWithContentType(parseFiles.output),
+          ownerKind: "comment",
         }),
     );
     if (attachError) {

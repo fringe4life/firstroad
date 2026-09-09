@@ -41,9 +41,10 @@ const leaveOrganisation = async (
   );
 
   if (error) {
+    const errorMessage = error instanceof Error ? error.message : "";
     const message =
-      (error as Error)?.message?.includes("last member") ||
-      (error as Error)?.message?.includes("Cannot remove")
+      errorMessage.includes("last member") ||
+      errorMessage.includes("Cannot remove")
         ? "Cannot leave as the last member of an organization"
         : "Failed to leave organization";
 

@@ -4,7 +4,7 @@ import type { Maybe } from "@/types";
 const toDeadlineString = (
   value: Maybe<string | Date>,
 ): Exclude<Maybe<string>, null> => {
-  if (value == null) {
+  if (!value) {
     return;
   }
   if (typeof value === "string") {

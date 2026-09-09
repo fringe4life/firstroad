@@ -20,8 +20,8 @@ const emailVerificationSchema = object({
     minLength(1, "Email is required"),
     examples(["bob@gmail.com", "alice@yahoo.com", "john@protonmail.com"]),
   ),
-  verificationUrl: pipe(string(), url()),
   userName: optional(string()),
+  verificationUrl: pipe(string(), url()),
 });
 
 const emailVerification = eventType("email.verification", {

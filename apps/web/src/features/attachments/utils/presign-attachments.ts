@@ -32,9 +32,9 @@ const presignAttachments = (
       attachment.name,
     );
     const downloadUrl = s3.file(key).presign({
-      expiresIn: PRESIGN_EXPIRES_IN_SECONDS,
       // Force a clean, user‑friendly download filename
       contentDisposition: `attachment; filename="${attachment.name}"`,
+      expiresIn: PRESIGN_EXPIRES_IN_SECONDS,
     });
     return { ...attachment, downloadUrl };
   });

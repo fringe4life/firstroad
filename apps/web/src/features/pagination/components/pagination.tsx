@@ -45,7 +45,10 @@ const OffsetPagination = ({
     });
   };
 
-  const handleLimitChange = (value: string) => {
+  const handleLimitChange = (value: string | null) => {
+    if (!value) {
+      return;
+    }
     const valueAsLimit: LimitItem =
       LIMITS.find((l) => l.toString() === value) ?? DEFAULT_LIMIT;
     startTransition(async () => {

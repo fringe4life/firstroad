@@ -4,6 +4,10 @@ import { TicketActionsDesktop } from "@/features/ticket/components/ticket-action
 import { TicketActionsMobile } from "@/features/ticket/components/ticket-actions-mobile";
 import type { TicketListRowActionsProps } from "@/features/ticket/types";
 
+const stopPropagation = (e: React.MouseEvent) => {
+  e.stopPropagation();
+};
+
 const TicketListRowActions = ({
   ticket,
   variant,
@@ -24,7 +28,7 @@ const TicketListRowActions = ({
       canDelete={canDelete}
       canUpdate={canUpdate}
       isOwner={isOwner}
-      onActionClick={(e) => e.stopPropagation()}
+      onActionClick={stopPropagation}
       ticket={ticket}
     />
   );

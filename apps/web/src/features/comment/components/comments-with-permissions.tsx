@@ -39,10 +39,10 @@ export const CommentsWithPermissions = async ({
   if (!user) {
     const listWithAccess = list.map((comment) => ({
       ...comment,
-      isOwner: false,
       canCreate: false,
-      canUpdate: false,
       canDelete: false,
+      canUpdate: false,
+      isOwner: false,
     }));
     const listPayload = listWithAccess.map(toCommentListPayload);
     return (

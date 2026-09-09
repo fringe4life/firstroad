@@ -1,0 +1,78 @@
+[
+  {
+    "id": "dropConstraint.account.account_issuer_accountId_uidx",
+    "label": "Drop constraint \"account_issuer_accountId_uidx\" on \"account\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "account_issuer_accountId_uidx",
+        "table": "account"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"account_issuer_accountId_uidx\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "account_issuer_accountId_uidx",
+          "public",
+          "\"public\".\"account\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop constraint \"account_issuer_accountId_uidx\"",
+        "sql": "ALTER TABLE \"public\".\"account\" DROP CONSTRAINT \"account_issuer_accountId_uidx\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"account_issuer_accountId_uidx\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "account_issuer_accountId_uidx",
+          "public",
+          "\"public\".\"account\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dropColumn.account.issuer",
+    "label": "Drop column \"issuer\" from \"account\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "issuer",
+        "table": "account"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"issuer\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": ["public", "account", "issuer"]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop column \"issuer\"",
+        "sql": "ALTER TABLE \"public\".\"account\" DROP COLUMN \"issuer\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"issuer\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": ["public", "account", "issuer"]
+      }
+    ]
+  }
+]

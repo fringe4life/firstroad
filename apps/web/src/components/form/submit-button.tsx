@@ -40,10 +40,10 @@ const SubmitButton = ({
       value={value}
       variant={variant}
     >
-      {shouldShowLoader && (
+      {!!shouldShowLoader && (
         <LucideLoaderCircle className="aspect-square w-4 animate-spin" />
       )}
-      {shouldShowIcon &&
+      {!!shouldShowIcon &&
         cloneElement(icon, {
           className: "w-4 aspect-square",
         })}

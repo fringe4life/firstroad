@@ -10,7 +10,6 @@ export const sendEmailPasswordReset = async (
     // or your email that you used to sign up at Resend
     // biome-ignore lint/style/noNonNullAssertion: will exist
     from: process.env.NEXT_PUBLIC_RESEND_FROM!,
-    to: email,
     subject: "Password Reset - FirstTicket",
     template: {
       id: "password-reset-email",
@@ -19,5 +18,6 @@ export const sendEmailPasswordReset = async (
         URL: passwordResetLink,
       },
     },
+    to: email,
   });
 };

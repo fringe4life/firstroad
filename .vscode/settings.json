@@ -1,5 +1,5 @@
 {
-  "typescript.tsdk": "node_modules/typescript/lib",
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
   "editor.codeActionsOnSave": {
     "source.organizeImports.biome": "explicit",
     "source.fixAll.biome": "explicit"
@@ -96,7 +96,7 @@
     "*.css": "tailwindcss"
   },
   "editor.inlayHints.enabled": "on",
-  "typescript.inlayHints.parameterNames.enabled": "all",
+  "js/ts.inlayHints.parameterNames.enabled": "all",
   "[html]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
@@ -118,6 +118,5 @@
   "[dockercompose]": {
     "editor.defaultFormatter": "docker.docker"
   },
-  "js/ts.tsdk.path": "node_modules/typescript/lib",
   "js/ts.tsdk.promptToUseWorkspaceVersion": true
 }

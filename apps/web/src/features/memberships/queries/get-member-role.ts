@@ -1,4 +1,4 @@
-import { prisma } from "@firstroad/db";
+import { orm } from "@firstroad/db";
 import type { MemberModel } from "@firstroad/db/client-types";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
 import type { Maybe } from "@/types";
@@ -11,15 +11,12 @@ const getMemberRole = async (
   const id = userId ?? (await getUserOrRedirect()).id;
 
   const { data: member } = await tryCatch(() =>
-    prisma.member.findFirst({
-      where: {
-        organizationId,
-        userId: id,
-      },
-      select: {
-        role: true,
-      },
-    }),
+    orm.Member.where({
+      organizationId,
+      userId: id,
+    })
+      .select("role")
+      .first(),
   );
 
   return member?.role;

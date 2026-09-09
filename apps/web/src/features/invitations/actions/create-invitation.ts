@@ -40,8 +40,8 @@ const createInvitation = async (
     auth.api.createInvitation({
       body: {
         email: result.output.email,
-        role: result.output.role,
         organizationId,
+        role: result.output.role,
       },
       headers: await headers(),
     }),

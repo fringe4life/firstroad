@@ -1,6 +1,6 @@
 "use cache";
 
-import { prisma } from "@firstroad/db";
+import { orm } from "@firstroad/db";
 import { cacheTag } from "next/cache";
 import type { List } from "@/types";
 import { attachmentsForTicketCache } from "@/utils/cache-tags";
@@ -11,12 +11,11 @@ const getAttachmentsByTicket = async (
   ticketId: string,
 ): Promise<List<AttachmentRecord>> => {
   cacheTag(attachmentsForTicketCache(ticketId));
-  const { data: rows } = await tryCatch(() =>
-    prisma.ticketAttachment.findMany({
-      where: { ticketId },
-      orderBy: { id: "asc" },
-      select: { id: true, name: true, contentType: true },
-    }),
+  const { data: rows } = await tryCatch(async () =>
+    orm.TicketAttachment.where({ ticketId })
+      .select("contentType", "id", "name")
+      .orderBy((attachment) => attachment.id.asc())
+      .all(),
   );
   return rows;
 };

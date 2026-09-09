@@ -61,7 +61,7 @@ const CommentsProvider = ({
     () => INITIAL_EDITING_STATE,
   );
 
-  const formRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLDivElement | null>(null);
   const formResetRef = useRef<(() => void) | null>(null);
   const registerFormReset = (fn: () => void) => {
     formResetRef.current = fn;
@@ -97,38 +97,38 @@ const CommentsProvider = ({
       formData: FormData,
     ): Promise<ActionState<CommentWithUserInfo>> => {
       const content = formData.get("content") as string;
-      const commentId = editingState.commentId;
+      const { commentId } = editingState;
 
       if (commentId) {
         startTransition(() => {
-          addOptimisticUpdate({ type: "edit", commentId, content });
+          addOptimisticUpdate({ commentId, content, type: "edit" });
         });
       } else if (userId && userName && ticketId) {
         const files = getFilesFromFormData(formData);
         const optimisticAttachments =
           files.length > 0
             ? files.map((file: File) => ({
-                id: crypto.randomUUID(),
-                name: file.name,
                 contentType: getMimeTypeFromFile(file),
                 downloadUrl: null as string | null,
+                id: crypto.randomUUID(),
+                name: file.name,
               }))
             : undefined;
         startTransition(() => {
           addOptimisticUpdate({
-            type: "add",
             comment: {
               content,
               ticketId,
-              userId,
               user: {
                 name: userName,
               },
+              userId,
               ...(optimisticAttachments &&
                 optimisticAttachments.length > 0 && {
                   attachments: optimisticAttachments,
                 }),
             },
+            type: "add",
           });
         });
       }
@@ -151,6 +151,7 @@ const CommentsProvider = ({
 
   const handleEdit = (commentId: string, content: string) => {
     setEditingState({ commentId, content });
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: ref is null until mount
     if (formRef.current) {
       formRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
     }
@@ -182,7 +183,7 @@ const CommentsProvider = ({
     commentId: string,
   ): Promise<ActionState<string>> => {
     startTransition(() => {
-      addOptimisticUpdate({ type: "delete", commentId });
+      addOptimisticUpdate({ commentId, type: "delete" });
     });
 
     const result = await deleteCommentAction(commentId);
@@ -228,24 +229,24 @@ const CommentsProvider = ({
   };
 
   const value: CommentsContextValue = {
-    formRef,
-    optimisticComments,
-    editingState,
-    upsertState,
-    upsertAction,
-    userId,
     canCreate,
-    isPending,
-    hasNextPage: commentsState.metadata.hasNextPage,
-    registerFormReset,
-    handleEdit,
+    createAttachmentAction,
+    deleteAttachmentAction,
+    editingState,
+    formRef,
     handleCancelEdit,
     handleClientAttachmentCreated,
     handleClientAttachmentDeleted,
-    handleLoadMore,
     handleDelete,
-    createAttachmentAction,
-    deleteAttachmentAction,
+    handleEdit,
+    handleLoadMore,
+    hasNextPage: commentsState.metadata.hasNextPage,
+    isPending,
+    optimisticComments,
+    registerFormReset,
+    upsertAction,
+    upsertState,
+    userId,
   };
 
   return <CommentsContext value={value}>{children}</CommentsContext>;

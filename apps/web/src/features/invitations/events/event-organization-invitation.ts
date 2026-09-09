@@ -20,13 +20,13 @@ const organizationInvitationSchema = object({
     minLength(1, "Email is required"),
     examples(["bob@gmail.com", "alice@yahoo.com", "john@protonmail.com"]),
   ),
+  inviterName: pipe(string(), minLength(1, "Inviter name is required")),
+  inviteUrl: pipe(string(), url()),
   organizationName: pipe(
     string(),
     minLength(1, "Organization name is required"),
   ),
-  inviterName: pipe(string(), minLength(1, "Inviter name is required")),
   role: picklist(["member", "admin"]),
-  inviteUrl: pipe(string(), url()),
 });
 
 const organizationInvitation = eventType("organization.invitation", {

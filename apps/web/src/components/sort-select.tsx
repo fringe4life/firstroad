@@ -26,7 +26,10 @@ interface SortSelectProps {
 }
 
 const SortSelect = ({ options, value, onValueChange }: SortSelectProps) => {
-  const handleSortChange = (compositeKey: string) => {
+  const handleSortChange = (compositeKey: string | null) => {
+    if (!compositeKey) {
+      return;
+    }
     const [sortKey, sortValue] = compositeKey.split("_");
     if (!isSortOrder(sortValue)) {
       return;

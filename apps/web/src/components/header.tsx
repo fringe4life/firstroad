@@ -21,7 +21,7 @@ const Header = () => (
           <MobileMenuButton />
         </Suspend>
         <Link
-          className={buttonVariants({ variant: "ghost", size: "lg" })}
+          className={buttonVariants({ size: "lg", variant: "ghost" })}
           href={homePath()}
         >
           <Kanban />

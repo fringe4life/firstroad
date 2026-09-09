@@ -1,3 +1,8 @@
 
 [install]
 minimumReleaseAge = 172800
+minimumReleaseAgeExcludes = [
+  "next",
+  "@next/swc-linux-x64-gnu",
+  "@next/swc-linux-x64-musl"
+]

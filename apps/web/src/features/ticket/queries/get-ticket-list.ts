@@ -1,33 +1,21 @@
-import { prisma } from "@firstroad/db";
-import type {
-  TicketOrderByWithRelationInput,
-  TicketWhereInput,
-} from "@firstroad/db/client-types";
+import type { TicketListFilter } from "@firstroad/db/client-types";
 import { cacheTag } from "next/cache";
-import { TICKET_WITH_USER_INCLUDE } from "@/features/ticket/constants";
 import { ticketsCache } from "@/utils/cache-tags";
+import { ticketsWithUser } from "./ticket-query";
 
 // biome-ignore lint/suspicious/useAwait: needed for use cache
 const getTicketList = async ({
-  where,
-  orderBy,
+  filter,
   takeAmount,
   skip,
 }: {
-  where: TicketWhereInput;
-  orderBy: TicketOrderByWithRelationInput;
+  filter: TicketListFilter;
   takeAmount: number;
   skip: number;
 }) => {
   "use cache: remote";
   cacheTag(ticketsCache());
-  return prisma.ticket.findMany({
-    where,
-    include: TICKET_WITH_USER_INCLUDE,
-    orderBy,
-    take: takeAmount,
-    skip,
-  });
+  return ticketsWithUser(filter).offset(skip).limit(takeAmount).all();
 };
 
 export { getTicketList };

@@ -1,68 +1,72 @@
-"use server";
-
-import { prisma } from "@firstroad/db";
+import { orm } from "@firstroad/db";
 import type {
-  TicketCreateInput,
-  TicketUncheckedCreateInput,
-  TicketUncheckedUpdateInput,
-  TicketUpdateInput,
-  TicketWhereUniqueInput,
+  TicketModel,
+  TicketStatus,
+  TicketWithUserName,
 } from "@firstroad/db/client-types";
-import { TICKET_WITH_USER_INCLUDE } from "@/features/ticket/constants";
 
-type TicketCreateData = TicketCreateInput | TicketUncheckedCreateInput;
-type TicketUpdateData = TicketUpdateInput | TicketUncheckedUpdateInput;
-
-interface TicketCreateArgs {
-  data: TicketCreateData;
-  includeUser?: boolean;
+interface TicketWriteInput {
+  bounty: number;
+  deadline: string;
+  description: string;
+  organizationId: string;
+  slug: string;
+  title: string;
+  userId: string;
 }
 
-interface TicketUpdateArgs {
-  data: TicketUpdateData;
-  includeUser?: boolean;
-  where: TicketWhereUniqueInput;
+interface TicketPatchInput {
+  bounty?: number;
+  deadline?: string;
+  description?: string;
+  slug?: string;
+  status?: TicketStatus;
+  title?: string;
+  userId?: string;
 }
 
-/**
- * Low-level DAL for ticket CRUD.
- *
- * These helpers centralize Prisma access for tickets and provide an option
- * to include the common "ticket with user name" shape. Server actions
- * remain responsible for auth, validation, and cache invalidation.
- */
-const createTicket = async ({ data, includeUser }: TicketCreateArgs) => {
-  if (includeUser) {
-    return await prisma.ticket.create({
-      data,
-      include: TICKET_WITH_USER_INCLUDE,
-    });
-  }
+const withUser = () =>
+  orm.Ticket.include("user", (user) => user.select("name"));
 
-  return await prisma.ticket.create({ data });
+const requireTicket = <T>(row: T | null): T => {
+  if (!row) {
+    throw new Error("Ticket not found");
+  }
+  return row;
 };
 
-const updateTicket = async ({ where, data, includeUser }: TicketUpdateArgs) => {
+// biome-ignore lint/suspicious/useAwait: db query
+const createTicket = async ({
+  data,
+  includeUser,
+}: {
+  data: TicketWriteInput;
+  includeUser?: boolean;
+}): Promise<TicketModel | TicketWithUserName> => {
   if (includeUser) {
-    return await prisma.ticket.update({
-      where,
-      data,
-      include: TICKET_WITH_USER_INCLUDE,
-    });
+    return withUser().create(data);
   }
-
-  return await prisma.ticket.update({
-    where,
-    data,
-  });
+  return orm.Ticket.create(data);
 };
 
-const deleteTicketRecord = async (
-  where: TicketWhereUniqueInput,
-): Promise<void> => {
-  await prisma.ticket.delete({
-    where,
-  });
+const updateTicket = async ({
+  id,
+  data,
+  includeUser,
+}: {
+  id: string;
+  data: TicketPatchInput;
+  includeUser?: boolean;
+}): Promise<TicketModel | TicketWithUserName> => {
+  const payload = { ...data, updatedAt: new Date().toISOString() };
+  if (includeUser) {
+    return requireTicket(await withUser().where({ id }).update(payload));
+  }
+  return requireTicket(await orm.Ticket.where({ id }).update(payload));
+};
+
+const deleteTicketRecord = async (id: string): Promise<void> => {
+  await orm.Ticket.where({ id }).delete();
 };
 
 export { createTicket, deleteTicketRecord, updateTicket };

@@ -3,14 +3,14 @@ import { Heading } from "@/components/heading";
 import { Tickets } from "@/features/ticket/components/tickets";
 
 export const metadata: Metadata = {
-  title: "All Tickets",
   description:
     "View and manage all tickets in the First Road system. Track progress, update status, and collaborate with your team.",
   openGraph: {
-    title: "All Tickets | First Road",
     description:
       "View and manage all tickets in the First Road system. Track progress, update status, and collaborate with your team.",
+    title: "All Tickets | First Road",
   },
+  title: "All Tickets",
 };
 
 const HomePage = ({ searchParams }: PageProps<"/">) => (

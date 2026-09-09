@@ -25,6 +25,15 @@ const MembershipActionButtons = ({
   // Since this page is only accessible by admin/owner, we can show remove button
   const canRemoveMember = !isCurrentUser;
 
+  const handleRemoveMember = (
+    prevState?: ActionState<unknown>,
+  ): Promise<ActionState<unknown>> =>
+    removeMember(
+      organizationId,
+      memberId,
+      (prevState ?? EMPTY_ACTION_STATE) as ActionState<null>,
+    );
+
   return (
     <div className="flex justify-end gap-x-2">
       <MembershipsMoreMenu
@@ -34,13 +43,7 @@ const MembershipActionButtons = ({
       />
       {canRemoveMember ? (
         <ConfirmDialog
-          action={(prevState) =>
-            removeMember(
-              organizationId,
-              memberId,
-              (prevState ?? EMPTY_ACTION_STATE) as ActionState<null>,
-            )
-          }
+          action={handleRemoveMember}
           closeOnSubmit
           description="This member will lose access to the organisation. They can rejoin only if invited again."
           title="Remove member"

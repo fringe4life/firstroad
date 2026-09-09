@@ -30,7 +30,7 @@ const TicketActionsDesktop = ({
     return (
       <Link
         className={cn(
-          buttonVariants({ variant: "outline", size: "icon" }),
+          buttonVariants({ size: "icon", variant: "outline" }),
           "xs:flex hidden",
         )}
         href={ticketPath(ticket.slug)}
@@ -48,7 +48,7 @@ const TicketActionsDesktop = ({
     variant === "list" ? (
       <Link
         className={cn(
-          buttonVariants({ variant: "outline", size: "icon" }),
+          buttonVariants({ size: "icon", variant: "outline" }),
           "xs:flex hidden",
         )}
         href={ticketPath(ticket.slug)}
@@ -60,7 +60,7 @@ const TicketActionsDesktop = ({
 
   const editLink = canUpdate ? (
     <Link
-      className={buttonVariants({ variant: "outline", size: "icon" })}
+      className={buttonVariants({ size: "icon", variant: "outline" })}
       href={ticketEditPath(ticket.slug)}
       prefetch
     >

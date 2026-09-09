@@ -11,7 +11,26 @@
     "shadcn",
     "inngest-cli",
     "babel-plugin-react-compiler",
-    "@elysiajs/openapi"
+    "@elysiajs/openapi",
+    "react-doctor"
   ],
-  "ignorePatterns": ["apps/web/src/shims/kysely-adapter.ts"]
+  "ignorePatterns": [
+    "apps/web/src/shims/kysely-adapter.ts",
+    "doctor.config.ts"
+  ],
+  "ignoreExports": [
+    { "file": "apps/web/src/components/ui/**", "exports": ["*"] }
+  ],
+  "overrides": [],
+  "health": {
+    "maxCyclomatic": 20,
+    "maxCognitive": 20,
+    "maxCrap": 80
+  },
+  "rules": {
+    "prop-drilling": "warn",
+    "thin-wrapper": "warn",
+    "duplicate-prop-shape": "warn",
+    "unused-dependency-overrides": "off"
+  }
 }

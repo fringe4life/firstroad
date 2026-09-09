@@ -20,7 +20,7 @@ const isAuthRoute = (pathname: string): boolean =>
   pathname === signInPath() || pathname === signUpPath();
 
 export const proxy = (request: NextRequest) => {
-  const pathname = request.nextUrl.pathname;
+  const { pathname } = request.nextUrl;
   // No DB lookup or token validation; actual auth checks are at page level.
   const session = getSessionCookie(request);
   const hasSession = Boolean(session);

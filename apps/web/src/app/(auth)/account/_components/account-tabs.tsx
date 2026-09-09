@@ -11,11 +11,17 @@ const AccountTabs = () => {
   return (
     <Tabs className="justify-self-start" value={pathname.split("/").at(-1)}>
       <TabsList>
-        <TabsTrigger asChild value="profile">
-          <Link href={accountProfilePath()}>Profile</Link>
+        <TabsTrigger
+          render={<Link href={accountProfilePath()} />}
+          value="profile"
+        >
+          Profile
         </TabsTrigger>
-        <TabsTrigger asChild value="password">
-          <Link href={accountPasswordPath()}>Password</Link>
+        <TabsTrigger
+          render={<Link href={accountPasswordPath()} />}
+          value="password"
+        >
+          Password
         </TabsTrigger>
       </TabsList>
     </Tabs>

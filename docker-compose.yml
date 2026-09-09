@@ -1,29 +1,40 @@
-# Local development: postgres + Inngest Dev Server
-# Usage: docker compose up -d postgres inngest
-#    docker compose --env-file apps/web/.env up -d postgres inngest
-# Then: bun run dev (app runs on host, connects to postgres and inngest)
+# Local development: postgres + Inngest Dev Server (Podman)
+# App stays on host: bun run dev
+#
+# `podman compose` shells out to the docker-compose plugin, which needs the
+# Podman API socket. Once per user (or after reboot if linger is off):
+#   systemctl --user enable --now podman.socket
+# Socket-free alternative: podman-compose (same args as below).
+#
+# Start:
+#   podman compose up -d postgres inngest
+#   podman compose --env-file apps/web/.env up -d postgres inngest
+#
+# Stop:
+#   podman compose down
 #
 # Build web image (uses apps/web/.env for build args):
-#   docker compose --env-file apps/web/.env build web
+#   podman compose --env-file apps/web/.env build web
 #
 # Run web container:
-#   docker compose --env-file apps/web/.env up web
-# Or: docker run -p 8080:8080 --env-file apps/web/.env firstroad-web
+#   podman compose --env-file apps/web/.env up web
+#   podman run -p 8080:8080 --env-file apps/web/.env firstroad-web
 
 services:
   postgres:
-    image: postgres:18-alpine
+    # Fully qualified: Fedora Podman short-name search hits Fedora/RHEL first.
+    image: docker.io/library/postgres:18-alpine
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: firstroad
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql
 
   inngest:
-    image: inngest/inngest:v1.23.0
+    image: docker.io/inngest/inngest:v1.41.1
     command: inngest dev -u http://host.docker.internal:3000/api/inngest
     ports:
       - "8288:8288"

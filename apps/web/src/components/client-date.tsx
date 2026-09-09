@@ -3,51 +3,44 @@
 import { useSyncExternalStore } from "react";
 
 interface ClientDateProps {
-  date: Date;
+  date: Date | string;
   options?: Intl.DateTimeFormatOptions;
 }
 
 /**
- * "Client mounted" store: false on server and first client render, then true
- * after a microtask so server and initial client HTML match (placeholder).
- * Avoids setState-in-effect and satisfies React Compiler.
+ * Client locale/timezone as an external store.
+ * Server snapshot is null (placeholder). Client snapshot reads navigator /
+ * Intl — only runs in the browser after hydration, so HTML matches.
  */
-let clientMounted = false;
-const emptySubscribe = () => () => null;
-function subscribe(callback: () => void) {
-  if (clientMounted) {
-    return emptySubscribe();
-  }
-  const schedule =
-    typeof queueMicrotask === "undefined"
-      ? (fn: () => void) => setTimeout(fn, 0)
-      : queueMicrotask;
-  schedule(() => {
-    clientMounted = true;
-    callback();
-  });
-  return emptySubscribe();
+function subscribe(onStoreChange: () => void) {
+  window.addEventListener("languagechange", onStoreChange);
+  return () => window.removeEventListener("languagechange", onStoreChange);
 }
-function getSnapshot() {
-  return clientMounted;
+
+function getLocaleSnapshot(): string {
+  const { timeZone } = Intl.DateTimeFormat().resolvedOptions();
+  return `${navigator.language}\0${timeZone}`;
 }
-function getServerSnapshot() {
-  return false;
+
+function getServerLocaleSnapshot(): null {
+  return null;
 }
 
 /**
- * Renders a date with the user's locale only after client mount to avoid hydration
- * mismatch (server and client can format dates differently).
- * Shows a fixed-size placeholder until then to avoid layout shift.
+ * Renders a date with the user's locale after hydration to avoid mismatch
+ * (server vs browser locale/timezone). Placeholder until then avoids layout shift.
+ *
+ * Formats during render with an explicit locale + timeZone from the client
+ * store — no setState-in-effect, and no undefined-locale toLocaleString.
  */
 const ClientDate = ({ date, options }: ClientDateProps) => {
-  const mounted = useSyncExternalStore(
+  const localeKey: string | null = useSyncExternalStore(
     subscribe,
-    getSnapshot,
-    getServerSnapshot,
+    getLocaleSnapshot,
+    getServerLocaleSnapshot,
   );
 
-  if (!mounted) {
+  if (localeKey === null) {
     return (
       <span
         aria-hidden
@@ -56,9 +49,15 @@ const ClientDate = ({ date, options }: ClientDateProps) => {
     );
   }
 
+  const separator = localeKey.indexOf("\0");
+  const locale = localeKey.slice(0, separator);
+  const timeZone = localeKey.slice(separator + 1);
+
+  const dateValue = date instanceof Date ? date : new Date(date);
+
   return (
-    <time dateTime={date.toISOString()}>
-      {date.toLocaleString(undefined, options)}
+    <time dateTime={dateValue.toISOString()}>
+      {dateValue.toLocaleString(locale, { ...options, timeZone })}
     </time>
   );
 };

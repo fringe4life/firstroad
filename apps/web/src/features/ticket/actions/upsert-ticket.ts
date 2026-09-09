@@ -40,14 +40,14 @@ import { createTicket, updateTicket } from "../dal/ticket-crud";
 import { findTicket } from "../queries/find-ticket";
 
 const upsertSchema = object({
-  title: pipe(string(), minLength(1), maxLength(191)),
-  description: pipe(string(), minLength(1), maxLength(1024)),
-  deadline: pipe(string(), regex(/^\d{4}-\d{2}-\d{2}$/, "Is required")),
   bounty: pipe(
     string(),
     toNumber(),
     minValue(0, "Bounty must be greater than 0"),
   ),
+  deadline: pipe(string(), regex(/^\d{4}-\d{2}-\d{2}$/, "Is required")),
+  description: pipe(string(), minLength(1), maxLength(1024)),
+  title: pipe(string(), minLength(1), maxLength(191)),
 });
 
 const upsertTicket = async (
@@ -101,17 +101,17 @@ const upsertTicket = async (
     } = result;
 
     const dbData = {
-      title,
-      slug,
-      deadline: new Date(deadline),
       bounty: toCent(bounty),
-      userId: user.id,
+      deadline: `${deadline}T00:00:00.000Z`,
       description,
+      slug,
+      title,
+      userId: user.id,
     };
     return id
       ? await updateTicket({
-          where: { id },
           data: dbData,
+          id,
           includeUser: false,
         })
       : await createTicket({
@@ -136,10 +136,10 @@ const upsertTicket = async (
     }
     const { error: attachError } = await tryCatch(() =>
       createAttachmentsForOwner({
-        ownerKind: "ticket",
+        files: filesWithContentType(parseFiles.output),
         organizationId: ticket.organizationId,
         ownerId: ticket.id,
-        files: filesWithContentType(parseFiles.output),
+        ownerKind: "ticket",
       }),
     );
     if (attachError) {

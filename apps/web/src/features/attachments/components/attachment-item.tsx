@@ -69,7 +69,7 @@ const AttachmentItem = ({
       data-owner={isOwner}
     >
       <div className="truncate">{content}</div>
-      {isOwner && (
+      {!!isOwner && (
         <Form action={action}>
           <SubmitButton icon={<Trash2 />} size="icon" variant="destructive" />
         </Form>

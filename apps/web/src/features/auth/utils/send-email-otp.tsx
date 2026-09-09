@@ -11,16 +11,16 @@ export const sendEmailOTP = async (
   await resend.emails.send({
     // biome-ignore lint/style/noNonNullAssertion: will exist
     from: process.env.NEXT_PUBLIC_RESEND_FROM!,
-    to: email,
     subject: getOTPSubject(type),
     template: {
       id: "email-otp-verification",
       variables: {
-        TO_NAME: userName ?? "User",
         OTP: otp,
+        TO_NAME: userName ?? "User",
         TYPE: getOTPSubject(type),
       },
     },
+    to: email,
   });
 
 const getOTPSubject = (type: OTPType): string => {

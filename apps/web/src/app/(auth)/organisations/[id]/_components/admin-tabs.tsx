@@ -13,11 +13,17 @@ const AdminTabs = () => {
   return (
     <Tabs className="justify-self-start" value={pathname.split("/").at(-1)}>
       <TabsList>
-        <TabsTrigger asChild value="memberships">
-          <Link href={membershipsPath(organizationId)}>Members</Link>
+        <TabsTrigger
+          render={<Link href={membershipsPath(organizationId)} />}
+          value="memberships"
+        >
+          Members
         </TabsTrigger>
-        <TabsTrigger asChild value="invitations">
-          <Link href={invitationsPath(organizationId)}>Invitations</Link>
+        <TabsTrigger
+          render={<Link href={invitationsPath(organizationId)} />}
+          value="invitations"
+        >
+          Invitations
         </TabsTrigger>
       </TabsList>
     </Tabs>

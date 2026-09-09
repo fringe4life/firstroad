@@ -31,8 +31,8 @@ const EditTicketPage = async ({
     <>
       <Breadcrumbs
         breadcrumbs={[
-          { title: "Tickets", href: ticketsPath() },
-          { title: ticket.title, href: ticketPath(ticket.slug) },
+          { href: ticketsPath(), title: "Tickets" },
+          { href: ticketPath(ticket.slug), title: ticket.title },
           { title: "Edit" },
         ]}
       />

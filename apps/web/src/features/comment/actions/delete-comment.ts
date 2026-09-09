@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@firstroad/db";
+import { orm } from "@firstroad/db";
 import { refresh } from "next/cache";
 import { itemWithOwnership } from "@/features/auth/dto/item-with-ownership";
 import { getUserOrRedirect } from "@/features/auth/queries/get-user-or-redirect";
@@ -22,16 +22,9 @@ export const deleteComment = async (
   const { data: commentWithOwnership, error: commentError } = await tryCatch(
     () =>
       itemWithOwnership(
-        prisma.comment.findUnique({
-          where: { id: commentId },
-          include: {
-            ticket: {
-              select: {
-                slug: true,
-              },
-            },
-          },
-        }),
+        orm.Comment.where({ id: commentId })
+          .include("ticket", (ticket) => ticket.select("slug"))
+          .first(),
         user,
       ),
   );
@@ -43,7 +36,7 @@ export const deleteComment = async (
   }
 
   const { error: deleteError } = await tryCatch(() =>
-    deleteCommentRecord({ id: commentId }),
+    deleteCommentRecord(commentId),
   );
   if (deleteError) {
     return fromErrorToActionState<string>(deleteError);

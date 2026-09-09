@@ -18,9 +18,9 @@ export const commentReducer = (
       return [
         {
           ...action.comment,
+          createdAt: new Date().toISOString(),
           id: crypto.randomUUID(),
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          updatedAt: new Date().toISOString(),
         },
         ...state,
       ];
@@ -28,7 +28,11 @@ export const commentReducer = (
       // Update content and move to beginning (reflects updatedAt change)
       const updated = state.map((comment) =>
         comment.id === action.commentId
-          ? { ...comment, content: action.content, updatedAt: new Date() }
+          ? {
+              ...comment,
+              content: action.content,
+              updatedAt: new Date().toISOString(),
+            }
           : comment,
       );
       // Move edited comment to top

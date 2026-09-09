@@ -1,6 +1,11 @@
 "use client";
 
-import { useActionState, useId, useState } from "react";
+import {
+  type ChangeEventHandler,
+  useActionState,
+  useId,
+  useState,
+} from "react";
 import { FieldError } from "@/components/form/field-error";
 import { Form } from "@/components/form/form";
 import { SubmitButton } from "@/components/form/submit-button";
@@ -31,6 +36,10 @@ const UpdateOrganisationForm = ({
   const organisationNameId = useId();
   const isSubmitDisabled = name.trim().length === 0;
 
+  const handleNameChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    setName(event.target.value);
+  };
+
   return (
     <Form action={action}>
       <input name="organizationId" type="hidden" value={organizationId} />
@@ -38,17 +47,15 @@ const UpdateOrganisationForm = ({
       <Input
         id={organisationNameId}
         name="name"
-        onChange={(event) => setName(event.target.value)}
+        onChange={handleNameChange}
         placeholder="Amazon"
         type="text"
         value={name}
       />
       <FieldError actionState={state} name="name" />
       <DialogFooter>
-        <DialogClose asChild>
-          <Button type="button" variant="outline">
-            Cancel
-          </Button>
+        <DialogClose render={<Button type="button" variant="outline" />}>
+          Cancel
         </DialogClose>
         <SubmitButton disabled={isSubmitDisabled} label="Update Organisation" />
       </DialogFooter>

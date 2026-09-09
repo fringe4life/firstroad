@@ -1,7 +1,8 @@
-import { prisma } from "@firstroad/db";
-import { COMMENT_WITH_USER_INCLUDE } from "@/features/comment/constants";
+import { orm } from "@firstroad/db";
 
-// biome-ignore lint/suspicious/useAwait: needs to be for "use cache"
+const commentsWithUser = () =>
+  orm.Comment.include("user", (user) => user.select("name"));
+
 const getCommentsList = async ({
   ticketSlug,
   cursor,
@@ -11,20 +12,25 @@ const getCommentsList = async ({
   cursor?: string;
   take: number;
 }) => {
-  return prisma.comment.findMany({
-    where: {
-      ticket: { slug: ticketSlug },
-    },
-    include: COMMENT_WITH_USER_INCLUDE,
-    orderBy: [{ id: "desc" }, { updatedAt: "desc" }, { createdAt: "desc" }],
-    take: take + 1, // Take one extra to check if there are more
-    cursor: cursor
-      ? {
-          id: cursor,
-        }
-      : undefined,
-    skip: cursor ? 1 : undefined, // Skip the cursor record itself
-  });
+  const ticket = await orm.Ticket.where({ slug: ticketSlug })
+    .select("id")
+    .first();
+  if (!ticket) {
+    return [];
+  }
+
+  const query = commentsWithUser()
+    .where({ ticketId: ticket.id })
+    .orderBy((comment) => comment.id.desc());
+
+  if (cursor) {
+    return query
+      .cursor({ id: cursor })
+      .limit(take + 1)
+      .all();
+  }
+
+  return query.limit(take + 1).all();
 };
 
 export { getCommentsList };

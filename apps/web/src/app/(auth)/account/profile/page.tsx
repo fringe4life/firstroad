@@ -10,8 +10,8 @@ import { TicketStatsCard } from "@/features/ticket/components/ticket-stats-card"
 import { getUserTicketStats } from "@/features/ticket/queries/get-user-ticket-stats";
 
 export const metadata: Metadata = {
-  title: "Profile",
   description: "Manage your First Road profile and account settings.",
+  title: "Profile",
 };
 
 const ProfileContent = async ({ user }: { user: User }) => {

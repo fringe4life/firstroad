@@ -4,8 +4,8 @@ const CENTS_PER_DOLLAR = 100;
 const DECIMAL_PLACES = 2;
 
 const FORMATTER = new Intl.NumberFormat("en-US", {
-  style: "currency",
   currency: "USD",
+  style: "currency",
 });
 export const toCent = (amount: number) =>
   MyBig(amount).mul(CENTS_PER_DOLLAR).round(DECIMAL_PLACES).toNumber();

@@ -56,7 +56,7 @@ const AcceptInvitationCard = ({ invitation }: AcceptInvitationCardProps) => {
           </span>
           .
         </p>
-        {invitation.inviterName && (
+        {!!invitation.inviterName && (
           <p className="text-muted-foreground text-sm">
             Invited by: {invitation.inviterName}
           </p>

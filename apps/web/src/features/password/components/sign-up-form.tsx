@@ -33,7 +33,7 @@ const SignUpForm = ({ signupAction }: SignUpFormProps) => {
         name="name"
         placeholder="Enter your name"
       />
-      <FieldError actionState={state || EMPTY_ACTION_STATE} name="name" />
+      <FieldError actionState={state} name="name" />
 
       <Label htmlFor={emailId}>Email</Label>
       <Input
@@ -42,7 +42,7 @@ const SignUpForm = ({ signupAction }: SignUpFormProps) => {
         name="email"
         placeholder="Enter your email"
       />
-      <FieldError actionState={state || EMPTY_ACTION_STATE} name="email" />
+      <FieldError actionState={state} name="email" />
 
       <Label htmlFor={passwordId}>Password</Label>
       <Input
@@ -52,7 +52,7 @@ const SignUpForm = ({ signupAction }: SignUpFormProps) => {
         placeholder="Enter your password"
         type="password"
       />
-      <FieldError actionState={state || EMPTY_ACTION_STATE} name="password" />
+      <FieldError actionState={state} name="password" />
 
       <Label htmlFor={confirmPasswordId}>Confirm Password</Label>
       <Input
@@ -62,10 +62,7 @@ const SignUpForm = ({ signupAction }: SignUpFormProps) => {
         placeholder="Confirm your password"
         type="password"
       />
-      <FieldError
-        actionState={state || EMPTY_ACTION_STATE}
-        name="confirmPassword"
-      />
+      <FieldError actionState={state} name="confirmPassword" />
 
       <SubmitButton label="Sign up" />
     </Form>

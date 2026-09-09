@@ -8,9 +8,9 @@ import { ResetPasswordFormSkeleton } from "@/features/password/components/skelet
 import { signInPath } from "@/path";
 
 export const metadata: Metadata = {
-  title: "Reset Password",
   description:
     "Set a new password for your First Road account. Enter your new password below.",
+  title: "Reset Password",
 };
 
 interface ResetPasswordFormProps {

@@ -2,9 +2,9 @@ import { ArchiveIcon, FileIcon, FileImage, ImageIcon } from "lucide-react";
 import type { Mime } from "./types";
 
 const ATTACHMENT_KIND_ICONS = {
-  image: <ImageIcon className="aspect-square h-4" />,
-  document: <FileImage className="aspect-square h-4" />,
   archive: <ArchiveIcon className="aspect-square h-4" />,
+  document: <FileImage className="aspect-square h-4" />,
+  image: <ImageIcon className="aspect-square h-4" />,
   other: <FileIcon className="aspect-square h-4" />,
 } as const;
 
@@ -30,12 +30,12 @@ const MAX_SIZE_MB = 4;
 const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 
 const NORMALIZED_MIME_FROM_BROWSER: Record<string, Mime> = {
-  "image/png": "image/png",
+  "application/pdf": "application/pdf",
+  "image/gif": "image/gif",
   "image/jpeg": "image/jpeg",
   "image/jpg": "image/jpeg",
-  "image/gif": "image/gif",
+  "image/png": "image/png",
   "image/webp": "image/webp",
-  "application/pdf": "application/pdf",
 };
 
 const normalizeAcceptedMime = (input: string): Mime | null => {

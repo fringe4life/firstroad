@@ -22,7 +22,7 @@ const filesWithContentType = (files: List<File>): FileWithContentType[] => {
       normalizeAcceptedMime(inferred) ??
       normalizeAcceptedMime(file.type ?? "") ??
       "application/octet-stream";
-    return { file, contentType };
+    return { contentType, file };
   });
 };
 

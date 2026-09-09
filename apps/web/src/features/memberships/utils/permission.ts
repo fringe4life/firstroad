@@ -71,17 +71,17 @@ const canCreate = async (
  * Sync check for delete when permission is pre-fetched.
  */
 const canDeleteWithPermission = (
-  isOwner: boolean,
+  owner: boolean,
   permission: Maybe<ResourcePermission>,
-): boolean => isOwner && (permission?.canDelete ?? false);
+): boolean => Boolean(owner && permission?.canDelete);
 
 /**
  * Sync check for update when permission is pre-fetched.
  */
 const canUpdateWithPermission = (
-  isOwner: boolean,
+  owner: boolean,
   permission: Maybe<ResourcePermission>,
-): boolean => isOwner && (permission?.canUpdate ?? false);
+): boolean => Boolean(owner && permission?.canUpdate);
 
 export {
   canCreate,

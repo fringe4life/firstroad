@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@firstroad/db";
+import { orm } from "@firstroad/db";
 import {
   boolean,
   minLength,
@@ -20,11 +20,11 @@ import { getAdminOwnerOrRedirect } from "../queries/get-admin-owner-or-redirect"
 import type { PermissionAction, ResourceType } from "../types";
 
 const togglePermissionSchema = object({
+  action: picklist(["canCreate", "canUpdate", "canDelete"] as const),
   memberId: pipe(string(), minLength(1)),
   organizationId: pipe(string(), minLength(1)),
-  resourceType: picklist(["TICKET", "COMMENT"] as const),
-  action: picklist(["canCreate", "canUpdate", "canDelete"] as const),
   permissionValue: boolean(),
+  resourceType: picklist(["TICKET", "COMMENT"] as const),
 });
 
 const togglePermission = async (
@@ -38,11 +38,11 @@ const togglePermission = async (
   await getAdminOwnerOrRedirect(organizationId);
 
   const result = safeParse(togglePermissionSchema, {
+    action,
     memberId,
     organizationId,
-    resourceType,
-    action,
     permissionValue,
+    resourceType,
   });
 
   if (!result.success) {
@@ -57,19 +57,14 @@ const togglePermission = async (
       permissionValue: pv,
     } = result.output;
 
-    await prisma.memberPermission.upsert({
-      where: {
-        memberId_resourceType: {
-          memberId: mid,
-          resourceType: rt,
-        },
-      },
+    await orm.MemberPermission.upsert({
+      conflictOn: { memberId: mid, resourceType: rt },
       create: {
+        canCreate: act === "canCreate" ? pv : true,
+        canDelete: act === "canDelete" ? pv : true,
+        canUpdate: act === "canUpdate" ? pv : true,
         memberId: mid,
         resourceType: rt,
-        canCreate: act === "canCreate" ? pv : true,
-        canUpdate: act === "canUpdate" ? pv : true,
-        canDelete: act === "canDelete" ? pv : true,
       },
       update: {
         [act]: pv,

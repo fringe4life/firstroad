@@ -12,14 +12,14 @@ const PaginatedTransitions = <T extends Page>({
 }) => (
   <Suspend
     enter={{
-      forwards: "enter-right",
       backwards: "enter-left",
       default: "auto",
+      forwards: "enter-right",
     }}
     exit={{
-      forwards: "exit-left",
       backwards: "exit-right",
       default: "auto",
+      forwards: "exit-left",
     }}
     fallback={fallback}
     key={`models-page-${metadata.page}`}

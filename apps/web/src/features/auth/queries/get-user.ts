@@ -14,22 +14,13 @@ const getUser = cache(async (): Promise<UserProp> => {
       }),
   );
   if (authSession?.user && authSession.session) {
-    const expiresAt = new Date(authSession.session.expiresAt).getTime();
-    const now = Date.now();
-
-    // DEFENSIVE coding just to ensure session is not expired
-    // If session is expired, return no user
-    if (expiresAt < now) {
-      return DEFAULT_NO_USER;
-    }
-    // Extract activeOrganizationId from session.session and append to user
-    const activeOrganizationId = authSession.session?.activeOrganizationId;
+    const { activeOrganizationId } = authSession.session;
     return {
+      hasUser: true,
       user: {
         ...authSession.user,
         activeOrganizationId,
       },
-      hasUser: true,
     };
   }
   return DEFAULT_NO_USER;

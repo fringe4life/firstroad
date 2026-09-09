@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
+import type { ComponentProps } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { SignUpPageContent } from "@/features/password/components/sign-up-page-content";
 import { signUpPath } from "@/path";
@@ -13,15 +14,16 @@ const SignUpModal = () => {
     return null;
   }
 
+  const handleOpenChange: ComponentProps<typeof Dialog>["onOpenChange"] = (
+    open,
+  ) => {
+    if (!open) {
+      back();
+    }
+  };
+
   return (
-    <Dialog
-      onOpenChange={(open) => {
-        if (!open) {
-          back();
-        }
-      }}
-      open={true}
-    >
+    <Dialog onOpenChange={handleOpenChange} open={true}>
       <DialogTitle className="sr-only">Create an account</DialogTitle>
       <DialogContent size="wide" variant="ghost">
         <SignUpPageContent />

@@ -50,7 +50,7 @@ export const hasAttachmentCreatedPayload = (
 ): state is ActionState<AttachmentCreatedPayload> & {
   data: AttachmentCreatedPayload;
 } =>
-  state.data != null &&
+  state.data !== null &&
   typeof state.data === "object" &&
   "created" in state.data;
 
@@ -60,7 +60,7 @@ export const hasAttachmentDeletedPayload = (
 ): state is ActionState<AttachmentDeletedPayload> & {
   data: AttachmentDeletedPayload;
 } =>
-  state.data != null &&
+  state.data !== null &&
   typeof state.data === "object" &&
   "deletedAttachmentId" in state.data;
 

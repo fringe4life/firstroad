@@ -1,4 +1,12 @@
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { cn } from "cnfast";
+import { defineConfig } from "cva";
 
-export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
+// biome-ignore lint/performance/noBarrelFile: recommended way to do this
+export { cn } from "cnfast";
+export type { VariantProps } from "cva";
+
+export const { cva } = defineConfig({
+  hooks: {
+    onComplete: (className) => cn(className),
+  },
+});

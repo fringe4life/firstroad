@@ -18,10 +18,10 @@ const getVerifiableItem = async (
         return null;
       }
       return {
+        isOwner: ticket.isOwner,
         organizationId: ticket.organizationId,
         ownerId,
         ownerLabel: "ticket",
-        isOwner: ticket.isOwner,
         resourceType: "TICKET",
         slug: ticket.slug,
       };
@@ -32,11 +32,11 @@ const getVerifiableItem = async (
         return null;
       }
       return {
+        commentId: comment.id,
+        isOwner: comment.isOwner,
         organizationId: comment.organizationId,
         ownerId,
         ownerLabel: "comment",
-        isOwner: comment.isOwner,
-        commentId: comment.id,
         resourceType: "COMMENT",
       };
     }

@@ -43,15 +43,18 @@ const DatePicker = ({ id, name, defaultValue, ref }: DatePickerProps) => {
   };
   return (
     <Popover onOpenChange={setOpen} open={open}>
-      <PopoverTrigger asChild id={id}>
-        <Button
-          className="w-full justify-start text-left font-normal"
-          variant="outline"
-        >
-          <CalendarIcon />
-          {formattedDate}
-          <input name={name} type="hidden" value={formattedDate} />
-        </Button>
+      <PopoverTrigger
+        id={id}
+        render={
+          <Button
+            className="w-full justify-start text-left font-normal"
+            variant="outline"
+          />
+        }
+      >
+        <CalendarIcon />
+        {formattedDate}
+        <input name={name} type="hidden" value={formattedDate} />
       </PopoverTrigger>
       <PopoverContent align="start" className="w-auto p-0">
         <Calendar mode="single" onSelect={handleSelect} selected={date} />

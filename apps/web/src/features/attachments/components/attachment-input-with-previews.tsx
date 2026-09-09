@@ -11,7 +11,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AttachmentPreviewCard } from "@/features/attachments/components/attachment-preview";
-import type { Maybe } from "@/types";
 import { ACCEPTED_FILE_TYPES } from "../constants";
 import type {
   AttachmentInputWithPreviewsProps,
@@ -30,7 +29,7 @@ const AttachmentInputWithPreviews = ({
 }: AttachmentInputWithPreviewsProps) => {
   const generatedId = useId();
   const id = fileInputId ?? generatedId;
-  const inputRef = useRef<Exclude<Maybe<HTMLInputElement>, undefined>>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const [previews, setPreviews] = useState<AttachmentPreview[]>([]);
 
   const hasPreviews = previews.length > 0;
@@ -40,6 +39,7 @@ const AttachmentInputWithPreviews = ({
       revokeImagePreviews(previous);
       return [];
     });
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: ref is null until mount
     if (inputRef.current) {
       inputRef.current.value = "";
     }
@@ -64,27 +64,25 @@ const AttachmentInputWithPreviews = ({
   };
 
   const handleRemovePreview = (previewId: string): void => {
-    setPreviews((previousPreviews) => {
-      const removedPreview = previousPreviews.find(
-        (preview) => preview.id === previewId,
-      );
-      if (removedPreview) {
-        revokeImagePreviews([removedPreview]);
+    const removedPreview = previews.find((preview) => preview.id === previewId);
+    const nextPreviews = previews.filter((preview) => preview.id !== previewId);
+
+    if (removedPreview) {
+      revokeImagePreviews([removedPreview]);
+    }
+
+    setPreviews(nextPreviews);
+
+    const input = inputRef.current;
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: ref is null until mount
+    if (input) {
+      const dataTransfer = new DataTransfer();
+      for (const preview of nextPreviews) {
+        dataTransfer.items.add(preview.file);
       }
-      const nextPreviews = previousPreviews.filter(
-        (preview) => preview.id !== previewId,
-      );
-      const input = inputRef.current;
-      if (input) {
-        const dataTransfer = new DataTransfer();
-        for (const preview of nextPreviews) {
-          dataTransfer.items.add(preview.file);
-        }
-        input.files = dataTransfer.files;
-      }
-      onPreviewsChange?.(nextPreviews.length);
-      return nextPreviews;
-    });
+      input.files = dataTransfer.files;
+    }
+    onPreviewsChange?.(nextPreviews.length);
   };
 
   return (

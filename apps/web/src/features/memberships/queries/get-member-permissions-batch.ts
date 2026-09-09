@@ -1,4 +1,4 @@
-import { prisma } from "@firstroad/db";
+import { orm } from "@firstroad/db";
 import { tryCatch } from "@/utils/try-catch";
 import type { ResourcePermission, ResourceType } from "../types";
 
@@ -20,25 +20,17 @@ const getMemberPermissionsBatch = async (
 
   const uniqueOrgIds = [...new Set(organizationIds)];
 
-  const { data: members } = await tryCatch(() =>
-    prisma.member.findMany({
-      where: {
-        userId,
-        organizationId: { in: uniqueOrgIds },
-      },
-      select: {
-        organizationId: true,
-        permissions: {
-          where: { resourceType },
-          select: {
-            canCreate: true,
-            canUpdate: true,
-            canDelete: true,
-          },
-          take: 1,
-        },
-      },
-    }),
+  const { data: members } = await tryCatch(async () =>
+    orm.Member.where((member) => member.userId.eq(userId))
+      .where((member) => member.organizationId.in(uniqueOrgIds))
+      .select("organizationId")
+      .include("permissions", (permission) =>
+        permission
+          .where({ resourceType })
+          .select("canCreate", "canDelete", "canUpdate")
+          .limit(1),
+      )
+      .all(),
   );
 
   if (!members) {
@@ -47,7 +39,7 @@ const getMemberPermissionsBatch = async (
 
   const result = new Map<string, ResourcePermission>();
   for (const { organizationId, permissions } of members) {
-    const permission = permissions[0];
+    const [permission] = permissions;
     if (permission) {
       result.set(organizationId, permission);
     }

@@ -12,21 +12,22 @@ app.use(
       components: await OpenAPI.components,
       paths: await OpenAPI.getPaths(),
     },
+    enabled: process.env.NODE_ENV === "development",
   }),
 );
 app.use(
   cors({
-    origin: process.env.NEXT_PUBLIC_APP_URL,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    origin: process.env.NEXT_PUBLIC_APP_URL,
   }),
 );
 // mount the auth handler with Elysia
 app.mount(auth.handler, {
   detail: {
-    tags: ["auth"],
     description: "Authentication endpoints from better auth",
+    tags: ["auth"],
   },
 });
 

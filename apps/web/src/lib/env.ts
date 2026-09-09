@@ -9,19 +9,6 @@ const envSchema = object({
     url("DATABASE_URL must be a valid URL"),
     minLength(1, "DATABASE_URL is required"),
   ),
-  NEXT_PUBLIC_APP_URL: pipe(
-    string(),
-    url("NEXT_PUBLIC_APP_URL must be a valid URL"),
-    minLength(1, "NEXT_PUBLIC_APP_URL is required"),
-  ),
-  RESEND_API_KEY: pipe(string(), minLength(1, "RESEND_API_KEY is required")),
-  NEXT_PUBLIC_RESEND_FROM: pipe(
-    string(),
-    minLength(
-      1,
-      "RESEND_FROM is required (e.g. 'Your App <onboarding@resend.dev>' or 'noreply@yourdomain.com')",
-    ),
-  ),
   GITHUB_CLIENT_ID: pipe(
     string(),
     minLength(1, "GITHUB_CLIENT_ID is required"),
@@ -30,19 +17,32 @@ const envSchema = object({
     string(),
     minLength(1, "GITHUB_CLIENT_SECRET is required"),
   ),
+  NEXT_PUBLIC_APP_URL: pipe(
+    string(),
+    url("NEXT_PUBLIC_APP_URL must be a valid URL"),
+    minLength(1, "NEXT_PUBLIC_APP_URL is required"),
+  ),
+  NEXT_PUBLIC_RESEND_FROM: pipe(
+    string(),
+    minLength(
+      1,
+      "RESEND_FROM is required (e.g. 'Your App <onboarding@resend.dev>' or 'noreply@yourdomain.com')",
+    ),
+  ),
+  NEXT_PUBLIC_SESSION_COOKIE_NAME: pipe(
+    string(),
+    minLength(1, "NEXT_PUBLIC_SESSION_COOKIE_NAME is required"),
+  ),
+  RESEND_API_KEY: pipe(string(), minLength(1, "RESEND_API_KEY is required")),
   S3_ACCESS_KEY_ID: pipe(
     string(),
     minLength(1, "S3_ACCESS_KEY_ID is required"),
   ),
+  S3_BUCKET: pipe(string(), minLength(1, "S3_BUCKET is required")),
+  S3_REGION: pipe(string(), minLength(1, "S3_REGION is required")),
   S3_SECRET_ACCESS_KEY: pipe(
     string(),
     minLength(1, "S3_SECRET_ACCESS_KEY is required"),
-  ),
-  S3_REGION: pipe(string(), minLength(1, "S3_REGION is required")),
-  S3_BUCKET: pipe(string(), minLength(1, "S3_BUCKET is required")),
-  NEXT_PUBLIC_SESSION_COOKIE_NAME: pipe(
-    string(),
-    minLength(1, "NEXT_PUBLIC_SESSION_COOKIE_NAME is required"),
   ),
 });
 

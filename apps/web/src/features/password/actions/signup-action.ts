@@ -24,18 +24,18 @@ import { tryCatch } from "@/utils/try-catch";
 
 const signUpSchema = pipe(
   object({
-    name: pipe(string(), minLength(1, "Name is required"), maxLength(191)),
+    confirmPassword: pipe(
+      string(),
+      minLength(1, "Please confirm your password"),
+    ),
     email: pipe(
       string(),
       email(),
       minLength(1, "Email is required"),
       maxLength(191),
     ),
+    name: pipe(string(), minLength(1, "Name is required"), maxLength(191)),
     password: pipe(string(), minLength(6), maxLength(191)),
-    confirmPassword: pipe(
-      string(),
-      minLength(1, "Please confirm your password"),
-    ),
   }),
   forward(
     partialCheck(
@@ -56,8 +56,8 @@ const signup = async (_state: ActionState | undefined, formData: FormData) => {
   const { error } = await tryCatch(async () => {
     await auth.api.signUpEmail({
       body: {
-        name: result.output.name,
         email: result.output.email,
+        name: result.output.name,
         password: result.output.password,
       },
       headers: await headers(),

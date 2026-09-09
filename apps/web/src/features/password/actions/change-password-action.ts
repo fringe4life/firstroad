@@ -27,6 +27,11 @@ import { tryCatch } from "@/utils/try-catch";
 // Valibot schema for password change validation
 const schema = pipe(
   object({
+    // Confirm password field validation
+    confirmPassword: pipe(
+      string(),
+      minLength(8, "Please confirm your password"),
+    ),
     // Current password field validation
     currentPassword: pipe(
       string(),
@@ -36,11 +41,6 @@ const schema = pipe(
     newPassword: pipe(
       string(),
       minLength(8, "Password must be at least 8 characters"),
-    ),
-    // Confirm password field validation
-    confirmPassword: pipe(
-      string(),
-      minLength(8, "Please confirm your password"),
     ),
     // Checkbox for revoking other sessions (transforms "on" to boolean, handles null)
     revokeOtherSessions: pipe(
@@ -91,13 +91,13 @@ export async function changePassword(
 
   const { error } = await tryCatch(async () => {
     await auth.api.changePassword({
-      headers: await headers(),
       body: changePasswordBody,
+      headers: await headers(),
     });
 
     await inngest.send({
-      name: "password.changed",
       data: { email: user.email, userName: user.name },
+      name: "password.changed",
     });
   });
 

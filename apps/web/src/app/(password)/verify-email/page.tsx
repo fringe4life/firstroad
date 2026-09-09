@@ -4,9 +4,9 @@ import { CardCompact } from "@/components/card-compact";
 import { verifyEmailOTPSendPath } from "@/path";
 
 export const metadata: Metadata = {
-  title: "Verify your email",
   description:
     "Check your email for a verification link to activate your First Road account.",
+  title: "Verify your email",
 };
 
 const VerifyEmailPage = () => (

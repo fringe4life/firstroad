@@ -13,8 +13,8 @@ import { tryCatch } from "@/utils/try-catch";
 import { getAdminOwnerOrRedirect } from "../queries/get-admin-owner-or-redirect";
 
 const updateMemberRoleSchema = object({
-  organizationId: pipe(string(), minLength(1)),
   memberId: pipe(string(), minLength(1)),
+  organizationId: pipe(string(), minLength(1)),
   role: picklist(["admin", "member"]),
 });
 
@@ -27,8 +27,8 @@ const updateMemberRole = async (
   await getAdminOwnerOrRedirect(organizationId);
 
   const result = safeParse(updateMemberRoleSchema, {
-    organizationId,
     memberId,
+    organizationId,
     role,
   });
 
@@ -39,8 +39,8 @@ const updateMemberRole = async (
   const { error } = await tryCatch(async () =>
     auth.api.updateMemberRole({
       body: {
-        organizationId: result.output.organizationId,
         memberId: result.output.memberId,
+        organizationId: result.output.organizationId,
         role: result.output.role,
       },
       headers: await headers(),

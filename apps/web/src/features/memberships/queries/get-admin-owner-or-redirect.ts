@@ -23,7 +23,7 @@ const getAdminOwnerOrRedirect = async (
     redirect(organisationsPath());
   }
 
-  return { user, role };
+  return { role, user };
 };
 
 export { getAdminOwnerOrRedirect };

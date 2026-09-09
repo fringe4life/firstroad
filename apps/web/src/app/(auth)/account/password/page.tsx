@@ -7,8 +7,8 @@ import { ChangePasswordForm } from "@/features/password/components/change-passwo
 import { PasswordHeading } from "@/features/password/components/password-heading";
 
 export const metadata: Metadata = {
-  title: "Password",
   description: "Change your First Road account password securely.",
+  title: "Password",
 };
 
 const PasswordPage = async () => {

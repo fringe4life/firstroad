@@ -1,15 +1,15 @@
-import { prisma } from "@firstroad/db";
-import type {
-  TicketOrderByWithRelationInput,
-  TicketWhereInput,
-} from "@firstroad/db/client-types";
+import type { TicketListFilter } from "@firstroad/db/client-types";
+import { filteredTickets } from "./ticket-query";
 
-const getTicketsCount = ({
-  where,
-  orderBy,
+const getTicketsCount = async ({
+  filter,
 }: {
-  where: TicketWhereInput;
-  orderBy: TicketOrderByWithRelationInput;
-}) => prisma.ticket.count({ where, orderBy });
+  filter: TicketListFilter;
+}): Promise<number> => {
+  const { count } = await filteredTickets(filter).aggregate((aggregate) => ({
+    count: aggregate.count(),
+  }));
+  return count;
+};
 
 export { getTicketsCount };

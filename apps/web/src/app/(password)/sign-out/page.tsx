@@ -1,33 +1,11 @@
-"use client";
+import type { Metadata } from "next";
+import { SignOutContent } from "./_components/sign-out-content";
 
-import { useEffect } from "react";
-import { Suspend } from "@/components/suspend";
-import { signOut } from "@/features/auth/actions/signout";
-
-// Dynamic sign-out logic - calls server action to handle cookie deletion and redirect
-const SignOutLogic = () => {
-  useEffect(() => {
-    // Call server action which handles cookie deletion and redirect
-    signOut();
-  }, []);
-
-  return null;
+export const metadata: Metadata = {
+  description: "Signing out of your First Road account.",
+  title: "Sign Out",
 };
 
-// Loading fallback
-const SignOutFallback = () => (
-  <div className="flex min-h-screen items-center justify-center">
-    <div className="text-center">
-      <div className="mx-auto mb-4 aspect-square h-8 animate-spin rounded-full border-primary border-b-2" />
-      <p className="text-muted-foreground">Signing out&hellip;</p>
-    </div>
-  </div>
-);
-
-const SignOutPage = () => (
-  <Suspend fallback={<SignOutFallback />}>
-    <SignOutLogic />
-  </Suspend>
-);
+const SignOutPage = () => <SignOutContent />;
 
 export default SignOutPage;

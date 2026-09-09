@@ -12,8 +12,8 @@ const GithubLoginButton = () => {
       async () =>
         //  @ts-expect-error promise
         await authClient.signIn.social({
-          provider: "github",
           callbackURL: ticketsPath(),
+          provider: "github",
         }),
     );
   };
@@ -24,11 +24,7 @@ const GithubLoginButton = () => {
       size="lg"
       variant="outline"
     >
-      <SiGithub
-        aria-hidden
-        className="aspect-square w-4"
-        color="currentColor"
-      />{" "}
+      <SiGithub aria-hidden className="aspect-square w-4" title="" />{" "}
       {isPending ? "Signing in..." : "Login with Github"}
     </Button>
   );

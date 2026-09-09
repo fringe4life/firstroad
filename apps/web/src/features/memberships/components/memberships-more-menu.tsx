@@ -70,14 +70,16 @@ const MembershipsMoreMenu = ({
   return (
     <Form action={action}>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            className={isPending ? "opacity-75" : ""}
-            size="icon"
-            variant="outline"
-          >
-            <LucideUserCog className="aspect-square w-4" />
-          </Button>
+        <DropdownMenuTrigger
+          render={
+            <Button
+              className={isPending ? "opacity-75" : ""}
+              size="icon"
+              variant="outline"
+            />
+          }
+        >
+          <LucideUserCog className="aspect-square w-4" />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuRadioGroup

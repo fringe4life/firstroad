@@ -1,12 +1,9 @@
 "use server";
 
-import { prisma } from "@firstroad/db";
+import { orm } from "@firstroad/db";
 
 const userExists = async (email: string): Promise<boolean> => {
-  const user = await prisma.user.findUnique({
-    where: { email },
-    select: { email: true }, // Only select email to limit data transfer
-  });
+  const user = await orm.User.where({ email }).select("email").first();
   return user !== null;
 };
 

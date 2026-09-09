@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@firstroad/db";
+import { orm } from "@firstroad/db";
 import { refresh } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -22,7 +22,6 @@ const rejectInvitation = async (
   invitationId: string,
   _prevState: ActionState,
 ): Promise<ActionState> => {
-  // Validate input first
   const result = safeParse(rejectInvitationSchema, { invitationId });
 
   if (!result.success) {
@@ -42,18 +41,17 @@ const rejectInvitation = async (
     return fromErrorToActionState(error);
   }
 
-  // Invalidate invitations cache for the org (invitation was for that org)
-  const invitation = await prisma.invitation.findUnique({
-    where: { id: result.output.invitationId },
-    select: { organizationId: true },
-  });
+  const invitation = await orm.Invitation.where({
+    id: result.output.invitationId,
+  })
+    .select("organizationId")
+    .first();
   if (invitation) {
     invalidateInvitationsForOrganization(invitation.organizationId);
   }
 
   refresh();
 
-  // Redirect to home page after rejecting
   redirect(homePath());
 };
 

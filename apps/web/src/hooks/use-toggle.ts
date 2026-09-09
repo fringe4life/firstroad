@@ -8,11 +8,13 @@ export const useToggle = (initialValue = false) => {
   const toggle = () => setValue((prevValue) => !prevValue);
   const open = () => setValue(true);
   const close = () => setValue(false);
+  const onOpenChange = (nextOpen: boolean) => setValue(nextOpen);
 
   return {
-    value,
-    toggle,
-    open,
     close,
+    onOpenChange,
+    open,
+    toggle,
+    value,
   };
 };

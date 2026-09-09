@@ -6,9 +6,9 @@ import { OTPSendForm } from "@/features/auth/components/otp-send-form";
 import { verifyEmailOTPSendPath } from "@/path";
 
 export const metadata: Metadata = {
-  title: "Verify Your Email",
   description:
     "Enter your email address to receive a verification code for your First Road account.",
+  title: "Verify Your Email",
 };
 
 const VerifyEmailOTPSendPage = () => (

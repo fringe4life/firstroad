@@ -22,9 +22,12 @@ const TicketMoreMenu = ({
   canDelete = true,
   canUpdate = true,
 }: TicketMoreMenuProps) => {
+  const handleStatusChange = statusChangeWithToast.bind(null, ticket.id);
+  const handleDelete = deleteTicket.bind(null, ticket.id);
+
   const radioOptions = (
     <DropdownMenuRadioGroup
-      onValueChange={statusChangeWithToast.bind(null, ticket.id)}
+      onValueChange={handleStatusChange}
       value={ticket.status}
     >
       {(Object.keys(TICKET_STATUS_LABELS) as TicketStatus[]).map((state) => (
@@ -37,12 +40,12 @@ const TicketMoreMenu = ({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
+      <DropdownMenuTrigger render={trigger} />
       <DropdownMenuContent className="w-56" side="left">
-        {canUpdate && radioOptions}
+        {canUpdate ? radioOptions : null}
 
-        {canDelete && (
-          <ConfirmDialog action={deleteTicket.bind(null, ticket.id)}>
+        {canDelete ? (
+          <ConfirmDialog action={handleDelete}>
             {({ isPending }) => (
               <ConfirmDialog.Trigger>
                 <DropdownMenuItem className="flex justify-between px-4">
@@ -52,7 +55,7 @@ const TicketMoreMenu = ({
               </ConfirmDialog.Trigger>
             )}
           </ConfirmDialog>
-        )}
+        ) : null}
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -1,4 +1,5 @@
 import { FileExclamationPoint, Trash2 } from "lucide-react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import type { AttachmentPreviewProps } from "../types";
 
@@ -8,17 +9,22 @@ const AttachmentPreviewCard = ({
 }: AttachmentPreviewProps) => {
   const { id, file, kind } = preview;
 
+  const handleRemove = () => {
+    onRemove(id);
+  };
+
   let content: React.ReactNode;
 
   switch (kind) {
     case "image": {
-      // Using a background image avoids <img> lint while still rendering safely
       content = (
-        <div
-          aria-label={file.name}
-          className="flex aspect-square h-24 items-center justify-center rounded-md bg-center bg-cover"
-          role="img"
-          style={{ backgroundImage: `url(${preview.objectUrl})` }}
+        <Image
+          alt={file.name}
+          className="aspect-square h-24 rounded-md object-cover"
+          height={96}
+          src={preview.objectUrl}
+          unoptimized
+          width={96}
         />
       );
       break;
@@ -63,7 +69,7 @@ const AttachmentPreviewCard = ({
         {content}
         <Button
           aria-label={`Remove ${file.name}`}
-          onClick={onRemove.bind(null, id)}
+          onClick={handleRemove}
           size="icon"
           type="button"
           variant="destructive"

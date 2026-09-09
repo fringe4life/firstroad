@@ -4,9 +4,9 @@ import { CardCompact } from "@/components/card-compact";
 import { homePath } from "@/path";
 
 export const metadata: Metadata = {
-  title: "Something went wrong",
   description:
     "We hit an unexpected error while processing your request. Try again or return to the home page.",
+  title: "Something went wrong",
 };
 
 const ErrorPage = () => (

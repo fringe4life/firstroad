@@ -18,8 +18,8 @@ export const getInvitation = async (
 ): Promise<InvitationDetails | null> => {
   const { data: invitation } = await tryCatch(async () => {
     const result = await auth.api.getInvitation({
-      query: { id: invitationId },
       headers: await headers(),
+      query: { id: invitationId },
     });
     return result;
   });
@@ -29,13 +29,13 @@ export const getInvitation = async (
   }
 
   return {
-    id: invitation.id,
     email: invitation.email,
+    expiresAt: new Date(invitation.expiresAt),
+    id: invitation.id,
+    inviterName: invitation.inviterEmail ?? null,
     organizationName: invitation.organizationName,
     organizationSlug: invitation.organizationSlug,
-    inviterName: invitation.inviterEmail ?? null,
     role: invitation.role ?? "member",
     status: invitation.status,
-    expiresAt: new Date(invitation.expiresAt),
   };
 };

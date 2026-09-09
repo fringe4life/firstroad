@@ -5,8 +5,8 @@ const DEFAULT_ITEM_PERMISSION: Pick<
   ResourcePermission,
   "canUpdate" | "canDelete"
 > = {
-  canUpdate: false,
   canDelete: false,
+  canUpdate: false,
 };
 
 // Default flag for org-scoped creation permission.

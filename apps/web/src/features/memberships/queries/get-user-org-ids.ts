@@ -1,4 +1,4 @@
-import { prisma } from "@firstroad/db";
+import { orm } from "@firstroad/db";
 import { tryCatch } from "@/utils/try-catch";
 
 /**
@@ -9,18 +9,15 @@ import { tryCatch } from "@/utils/try-catch";
  * @returns Array of organization IDs
  */
 const getUserOrgIds = async (userId: string): Promise<string[]> => {
-  const { data: members } = await tryCatch(() =>
-    prisma.member.findMany({
-      where: { userId },
-      select: { organizationId: true },
-    }),
+  const { data: members } = await tryCatch(async () =>
+    orm.Member.where({ userId }).select("organizationId").all(),
   );
 
   if (!members) {
     return [];
   }
 
-  return members.map((m) => m.organizationId);
+  return members.map((member) => member.organizationId);
 };
 
 export { getUserOrgIds };

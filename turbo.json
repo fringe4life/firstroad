@@ -1,5 +1,15 @@
 {
   "$schema": "https://turborepo.dev/schema.v2.json",
+  "futureFlags": {
+    "affectedUsingTaskInputs": true,
+    "errorsOnlyShowHash": true,
+    "experimentalObservability": true,
+    "filterUsingTasks": true,
+    "globalConfiguration": true,
+    "longerSignatureKey": true,
+    "pruneIncludesGlobalFiles": true,
+    "watchUsingTaskInputs": true
+  },
   "tasks": {
     "build": {
       "dependsOn": ["^build", "^db:generate"],

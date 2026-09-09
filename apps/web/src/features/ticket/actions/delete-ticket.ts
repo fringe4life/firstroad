@@ -28,7 +28,7 @@ export const deleteTicket = async (id: string) => {
     }
 
     // delete ticket
-    await deleteTicketRecord({ id });
+    await deleteTicketRecord(id);
 
     return ticket.slug;
   });

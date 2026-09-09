@@ -1,4 +1,4 @@
-import { prisma } from "@firstroad/db";
+import { orm } from "@firstroad/db";
 import { cacheTag } from "next/cache";
 import { ticketsCache } from "@/utils/cache-tags";
 import { tryCatch } from "@/utils/try-catch";
@@ -17,28 +17,23 @@ export const getUserTicketStats = async (
   cacheTag(ticketsCache());
 
   const { data } = await tryCatch(() =>
-    prisma.ticket.groupBy({
-      by: ["status"],
-      where: { userId },
-      _count: {
-        id: true,
-      },
-    }),
+    orm.Ticket.where({ userId })
+      .groupBy("status")
+      .aggregate((aggregate) => ({ count: aggregate.count() })),
   );
 
   const stats: TicketStats = {
-    total: 0,
-    open: 0,
-    inProgress: 0,
     done: 0,
+    inProgress: 0,
+    open: 0,
+    total: 0,
   };
 
   if (data) {
-    for (const group of data) {
-      const count = group._count.id;
+    for (const { count, status } of data) {
       stats.total += count;
 
-      switch (group.status) {
+      switch (status) {
         case "OPEN":
           stats.open = count;
           break;
@@ -49,7 +44,7 @@ export const getUserTicketStats = async (
           stats.done = count;
           break;
         default:
-          throw new Error(`Invalid ticket status: ${group.status}`) as never;
+          throw new Error(`Invalid ticket status: ${status}`) as never;
       }
     }
   }

@@ -3,39 +3,49 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "scripts": {
-    "type": "tsgo --noEmit --skipLibCheck --project tsconfig.json",
-    "db:generate": "prisma generate",
-    "db:migrate": "bun --env-file .env prisma migrate dev",
-    "db:deploy": "bun --env-file .env prisma migrate deploy",
-    "clear:attachments": "bun --bun --env-file .env prisma/scripts/clear-attachments.ts",
-    "clear:attachments:local": "bun --bun --env-file .env.local prisma/scripts/clear-attachments.ts",
-    "clear:non-auth": "bun prisma/scripts/clear-non-auth-tables.ts",
-    "seed:members": "bun prisma/scripts/seed-org-members.ts",
-    "postinstall": "prisma generate",
-    "db:migrate:local": "bun --env-file .env.local prisma migrate dev",
-    "db:push": "bun --env-file .env prisma db push",
-    "db:push:local": "bun --env-file .env.local prisma db push",
-    "db:seed": "bun --env-file .env prisma db seed",
-    "db:seed:local": "bun --env-file .env.local prisma db seed",
-    "db:dump:neon": "sh -c 'set -a && [ -f .env ] && . ./.env && set +a && exec pg_dump \"$DATABASE_URL\" --data-only -Fc -f neon-data-only.dump'",
-    "db:restore:local": "sh -c 'set -a && [ -f .env.local ] && . ./.env.local && set +a && exec pg_restore -v -d \"$DATABASE_URL\" --clean --if-exists neon-data-only.dump'",
-    "seed:comment-permissions": "bun --env-file .env prisma/scripts/seed-member-permissions-comment.ts",
-    "seed:comment-permissions:local": "bun --env-file .env.local prisma/scripts/seed-member-permissions-comment.ts"
-  },
-  "dependencies": {
-    "@neondatabase/serverless": "^1.1.0",
-    "@prisma/adapter-neon": "^7.8.0",
-    "@prisma/adapter-pg": "^7.8.0",
-    "@prisma/client": "^7.8.0",
-    "@firstroad/utils": "*"
-  },
-  "devDependencies": {
-    "prisma": "^7.8.0"
-  },
   "exports": {
     ".": "./src/index.ts",
     "./client-types": "./src/client-types.ts",
-    "./member-permissions": "./src/member-permissions.ts"
+    "./member-permissions": "./src/member-permissions.ts",
+    "./uuidv7": "./src/uuidv7.ts"
+  },
+  "scripts": {
+    "clear:attachments": "bun --bun --env-file .env prisma/scripts/clear-attachments.ts",
+    "clear:attachments:local": "bun --bun --env-file .env.local prisma/scripts/clear-attachments.ts",
+    "clear:non-auth": "bun prisma/scripts/clear-non-auth-tables.ts",
+    "contract:emit": "prisma-cli contract emit",
+    "db:deploy": "bun --env-file .env prisma-cli db migrate",
+    "db:dump:neon": "sh -c 'set -a && [ -f .env ] && . ./.env && set +a && exec pg_dump \"$DATABASE_URL\" --data-only -Fc -f neon-data-only.dump'",
+    "db:generate": "prisma-cli contract emit",
+    "db:init": "bun --env-file .env prisma-cli db init",
+    "db:migrate": "bun --env-file .env prisma-cli migration plan",
+    "db:migrate:local": "bun --env-file .env.local prisma-cli migration plan",
+    "db:push": "bun --env-file .env prisma-cli db update",
+    "db:push:local": "bun --env-file .env.local prisma-cli db update",
+    "db:restore:local": "sh -c 'set -a && [ -f .env.local ] && . ./.env.local && set +a && exec pg_restore -v -d \"$DATABASE_URL\" --clean --if-exists neon-data-only.dump'",
+    "db:seed": "bun --env-file .env prisma/seed.ts",
+    "db:seed:local": "bun --env-file .env.local prisma/seed.ts",
+    "db:sign": "bun --env-file .env prisma-cli db sign",
+    "db:sign:local": "bun --env-file .env.local prisma-cli db sign",
+    "db:verify": "bun --env-file .env prisma-cli db verify",
+    "db:verify:local": "bun --env-file .env.local prisma-cli db verify",
+    "postinstall": "prisma-cli contract emit",
+    "seed:comment-permissions": "bun --env-file .env prisma/scripts/seed-member-permissions-comment.ts",
+    "seed:comment-permissions:local": "bun --env-file .env.local prisma/scripts/seed-member-permissions-comment.ts",
+    "seed:members": "bun prisma/scripts/seed-org-members.ts",
+    "type": "tsc --noEmit --skipLibCheck --project tsconfig.json"
+  },
+  "dependencies": {
+    "@firstroad/utils": "*",
+    "@neondatabase/serverless": "^1.1.0",
+    "@prisma/cli": "8.0.0-rc.13",
+    "@prisma/cli-engine": "0.3.0",
+    "@prisma/orm-postgres": "8.0.0-rc.8",
+    "pg": "^8.23.0",
+    "uuidv7": "^1.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "@types/pg": "^8.23.1"
   }
 }

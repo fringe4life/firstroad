@@ -2,9 +2,11 @@ import { LucideLock, LucideUser } from "lucide-react";
 import Link from "next/link";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -20,31 +22,40 @@ interface AccountDropdownProps {
 
 const AccountDropdown = ({ user }: AccountDropdownProps) => (
   <DropdownMenu>
-    <DropdownMenuTrigger asChild>
+    <DropdownMenuTrigger
+      render={
+        <Button className="relative size-8 rounded-full p-0" variant="ghost" />
+      }
+    >
       <Avatar>
         <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
         <AvatarImage src={user?.image || ""} />
       </Avatar>
     </DropdownMenuTrigger>
     <DropdownMenuContent className="w-56">
-      <DropdownMenuLabel>My Account</DropdownMenuLabel>
+      <DropdownMenuGroup>
+        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+      </DropdownMenuGroup>
       <DropdownMenuSeparator />
-      <DropdownMenuItem asChild>
-        <Link href={accountProfilePath()}>
+      <DropdownMenuGroup>
+        <DropdownMenuItem render={<Link href={accountProfilePath()} />}>
           <LucideUser className="mr-2 aspect-square h-4" />
           <span>Profile</span>
-        </Link>
-      </DropdownMenuItem>
-      <DropdownMenuItem asChild>
-        <Link href={accountPasswordPath()}>
+        </DropdownMenuItem>
+        <DropdownMenuItem render={<Link href={accountPasswordPath()} />}>
           <LucideLock className="mr-2 aspect-square h-4" />
           <span>Password</span>
-        </Link>
-      </DropdownMenuItem>
+        </DropdownMenuItem>
+      </DropdownMenuGroup>
       <DropdownMenuSeparator />
-      <DropdownMenuItem>
-        <SignOutButton className="flex w-full items-center" />
-      </DropdownMenuItem>
+      <DropdownMenuGroup>
+        <DropdownMenuItem
+          nativeButton
+          render={
+            <SignOutButton className="flex w-full cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-hidden" />
+          }
+        />
+      </DropdownMenuGroup>
     </DropdownMenuContent>
   </DropdownMenu>
 );

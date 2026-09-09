@@ -5,7 +5,6 @@ const appUrl = process.env.NEXT_PUBLIC_APP_URL;
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
-      userAgent: "*",
       allow: "/",
       disallow: [
         "/api/",
@@ -23,6 +22,7 @@ export default function robots(): MetadataRoute.Robots {
         "/verify-email/",
         "/sign-out",
       ],
+      userAgent: "*",
     },
     sitemap: appUrl ? `${appUrl}/sitemap.xml` : undefined,
   };

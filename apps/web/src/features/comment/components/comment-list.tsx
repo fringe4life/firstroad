@@ -15,6 +15,33 @@ const CommentList = () => {
     handleClientAttachmentCreated,
   } = useComments();
 
+  const renderProps = (item: (typeof optimisticComments)[number]) => {
+    let buttons: React.ReactNode = null;
+    if (userId === item.userId) {
+      // Item may have canUpdate/canDelete from addCommentsAccess (server) or lack them (optimistic/new)
+      const canUpdate = item?.canUpdate ?? false;
+      const canDelete = item?.canDelete ?? false;
+      if (canUpdate || canDelete) {
+        buttons = (
+          <CommentOwnerButtons
+            canDelete={canDelete}
+            canUpdate={canUpdate}
+            comment={{ content: item.content, id: item.id }}
+            createAttachmentAction={createAttachmentAction}
+            onClientAttachmentCreated={handleClientAttachmentCreated}
+            onDeleteComment={handleDelete}
+            onEdit={handleEdit}
+          />
+        );
+      }
+    }
+
+    return {
+      buttons,
+      comment: item,
+    };
+  };
+
   return (
     <GenericComponent
       Component={CommentItem}
@@ -22,31 +49,7 @@ const CommentList = () => {
       emptyStateMessage="No comments found"
       errorStateMessage="Failed to fetch comments"
       items={optimisticComments}
-      renderProps={(item) => ({
-        comment: item,
-        buttons: (() => {
-          if (userId !== item.userId) {
-            return null;
-          }
-          // Item may have canUpdate/canDelete from addCommentsAccess (server) or lack them (optimistic/new)
-          const canUpdate = item?.canUpdate ?? false;
-          const canDelete = item?.canDelete ?? false;
-          if (!(canUpdate || canDelete)) {
-            return null;
-          }
-          return (
-            <CommentOwnerButtons
-              canDelete={canDelete}
-              canUpdate={canUpdate}
-              comment={{ id: item.id, content: item.content }}
-              createAttachmentAction={createAttachmentAction}
-              onClientAttachmentCreated={handleClientAttachmentCreated}
-              onDeleteComment={handleDelete}
-              onEdit={(commentId, content) => handleEdit(commentId, content)}
-            />
-          );
-        })(),
-      })}
+      renderProps={renderProps}
     />
   );
 };

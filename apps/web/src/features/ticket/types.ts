@@ -1,14 +1,13 @@
-import type { TicketGetPayload, TicketModel } from "@firstroad/db/client-types";
+import type {
+  TicketModel,
+  TicketWithUserName,
+} from "@firstroad/db/client-types";
 import type { Id, List, Maybe, SearchParamsProps } from "@/types";
 import type { IsOwner, UserVerifiable } from "../auth/types";
 import type { ResourcePermission } from "../memberships/types";
 import type { OrganisationId } from "../organisation/types";
 
-// Base ticket with user for display
-
-export type BaseTicket = TicketGetPayload<{
-  include: { user: { select: { name: true } } };
-}>;
+export type BaseTicket = TicketWithUserName;
 
 export interface TicketCardProps {
   actions?: React.ReactNode;
@@ -60,7 +59,7 @@ export type TicketWithAccess = BaseTicket & TicketAccess;
 
 export interface TicketMoreMenuProps extends Partial<ResourcePermission> {
   ticket: Pick<BaseTicket, "id" | "status">;
-  trigger: React.ReactNode;
+  trigger: React.ReactElement;
 }
 
 export interface VerifyTicket

@@ -1,9 +1,6 @@
 "use server";
 
-import type {
-  TicketOrderByWithRelationInput,
-  TicketWhereInput,
-} from "@firstroad/db/client-types";
+import type { TicketListFilter } from "@firstroad/db/client-types";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import type { SearchParams } from "nuqs/server";
@@ -42,28 +39,25 @@ export const getTickets = async (
   }
   // Parse search params (not cached - fast and user-specific)
   const resolvedSearchParams = await searchParams;
-  const { search, sortKey, sortValue, page, limit } =
-    searchParamsCache.parse(resolvedSearchParams);
+  const {
+    search,
+    sortKey: rawSortKey,
+    sortValue,
+    page,
+    limit,
+  } = searchParamsCache.parse(resolvedSearchParams);
 
-  // Build orderBy based on sort parameter
-  let orderBy: TicketOrderByWithRelationInput = {
-    createdAt: sortValue,
-  };
+  const sortKey: TicketListFilter["sortKey"] =
+    rawSortKey === "bounty" || rawSortKey === "deadline"
+      ? rawSortKey
+      : "createdAt";
 
-  if (sortKey === "bounty") {
-    orderBy = { bounty: sortValue };
-  } else if (sortKey === "deadline") {
-    orderBy = { deadline: sortValue };
-  }
-
-  const where: TicketWhereInput = {
-    title: {
-      contains: search,
-      mode: "insensitive",
-    },
+  const filter: TicketListFilter = {
+    organizationId: byOrganisation ? organizationId : undefined,
+    search,
+    sortKey,
+    sortValue,
     userId: byOrganisation ? undefined : filterUserId,
-    // biome-ignore lint/style/noNonNullAssertion: have checked
-    organizationId: byOrganisation ? organizationId! : undefined,
   };
 
   const skip = page * limit;
@@ -76,8 +70,8 @@ export const getTickets = async (
     // Parallel fetch: tickets + user's organization IDs
     const [result, orgIds] = await Promise.all([
       paginateItems({
-        getItems: () => getTicketList({ where, orderBy, takeAmount, skip }),
-        getItemsCount: () => getTicketsCount({ where, orderBy }),
+        getItems: () => getTicketList({ filter, skip, takeAmount }),
+        getItemsCount: () => getTicketsCount({ filter }),
       }),
       getUserOrgIds(user.id),
     ]);
@@ -97,14 +91,14 @@ export const getTickets = async (
 
     return transformToPaginatedResult(
       { items: ticketsWithAccess, itemsCount: result.itemsCount },
-      { page, limit, type: "offset" },
+      { limit, page, type: "offset" },
     );
   }
 
   // Default path: byOrganisation or browsing (smart waterfall)
   const result = await paginateItems({
-    getItems: () => getTicketList({ where, orderBy, takeAmount, skip }),
-    getItemsCount: () => getTicketsCount({ where, orderBy }),
+    getItems: () => getTicketList({ filter, skip, takeAmount }),
+    getItemsCount: () => getTicketsCount({ filter }),
   });
 
   // Add ownership and permission access (batch query with smart filtering)
@@ -112,6 +106,6 @@ export const getTickets = async (
 
   return transformToPaginatedResult(
     { items: ticketsWithAccess, itemsCount: result.itemsCount },
-    { page, limit, type: "offset" },
+    { limit, page, type: "offset" },
   );
 };

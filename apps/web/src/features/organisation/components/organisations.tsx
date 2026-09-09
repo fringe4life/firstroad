@@ -15,7 +15,7 @@ const Organisations = async ({
   });
   const organisations =
     prefetchedOrganisations ?? (await getOrganisationByUser(user.id));
-  const activeOrganizationId = user.activeOrganizationId;
+  const { activeOrganizationId } = user;
 
   return (
     <Table className="has-unsuccessful:h-full">

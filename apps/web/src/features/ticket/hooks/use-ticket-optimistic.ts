@@ -29,9 +29,9 @@ export const ticketReducer = (
       return [
         {
           ...action.ticket,
+          createdAt: new Date().toISOString(),
           id: crypto.randomUUID(),
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          updatedAt: new Date().toISOString(),
         },
         ...state,
       ];
@@ -41,7 +41,7 @@ export const ticketReducer = (
           ? {
               ...ticket,
               ...action.updates,
-              updatedAt: new Date(),
+              updatedAt: new Date().toISOString(),
             }
           : ticket,
       );

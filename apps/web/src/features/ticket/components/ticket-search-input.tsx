@@ -26,21 +26,24 @@ const TicketSearchInput = ({
   const [search, setSearch] = useQueryState("search", searchParser);
   const [pagination, setPagination] = useQueryStates(paginationParser, options);
   const [, startTransition] = useTransition();
+
+  const handleSearchChange = (value: string) => {
+    startTransition(async () => {
+      await setSearch(value, {
+        limitUrlUpdates:
+          value === "" ? defaultRateLimit : debounce(DEBOUNCE_DELAY_MS),
+      });
+
+      // Reset to first page when search changes
+      if (pagination.page !== 0) {
+        await setPagination({ page: 0 });
+      }
+    });
+  };
+
   return (
     <SearchInput
-      onChange={(value) => {
-        startTransition(async () => {
-          await setSearch(value, {
-            limitUrlUpdates:
-              value === "" ? defaultRateLimit : debounce(DEBOUNCE_DELAY_MS),
-          });
-
-          // Reset to first page when search changes
-          if (pagination.page !== 0) {
-            await setPagination({ page: 0 });
-          }
-        });
-      }}
+      onChange={handleSearchChange}
       placeholder={placeholder}
       value={search}
     />

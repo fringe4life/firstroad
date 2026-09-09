@@ -11,8 +11,8 @@ export const authClient = createAuthClient({
     typeof window === "undefined"
       ? process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
       : undefined,
-  plugins: [emailOTPClient(), organizationClient()],
   fetchOptions: {
     credentials: "include",
   },
+  plugins: [emailOTPClient(), organizationClient()],
 });

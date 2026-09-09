@@ -9,9 +9,9 @@ import type { EmailSearchParams } from "@/features/auth/types";
 import { signInPath } from "@/path";
 
 export const metadata: Metadata = {
-  title: "Sign In with OTP",
   description:
     "Enter the sign-in code sent to your email to access your First Road account.",
+  title: "Sign In with OTP",
 };
 
 const SignInOTPVerifyPage = ({ searchParams }: EmailSearchParams) => (

@@ -32,10 +32,10 @@ const Breadcrumbs = <T extends BreadcrumbItemProps>({
 
         if (breadcrumb.href) {
           breadcrumbItem = (
-            <BreadcrumbLink asChild>
-              <Link className="inline-block" href={breadcrumb.href}>
-                {breadcrumb.title}
-              </Link>
+            <BreadcrumbLink
+              render={<Link className="inline-block" href={breadcrumb.href} />}
+            >
+              {breadcrumb.title}
             </BreadcrumbLink>
           );
         }

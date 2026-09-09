@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dialog";
 import { useToggle } from "@/hooks/use-toggle";
 import { membershipsPath } from "@/path";
+import type { ActionState } from "@/utils/to-action-state";
 import { EMPTY_ACTION_STATE } from "@/utils/to-action-state";
 import { deleteOrganisation } from "../actions/delete-organisation";
 import { leaveOrganisation } from "../actions/leave-organisation";
@@ -34,7 +35,13 @@ const OrganisationActionButtons = ({
   isAdminOrOwner,
   limitedAccess,
 }: OrganisationActionButtonProps) => {
-  const { value: isOpen, close, open } = useToggle(false);
+  const { value: isOpen, close, onOpenChange } = useToggle(false);
+
+  const handleDeleteOrganisation = (prevState?: ActionState) =>
+    deleteOrganisation(organizationId, prevState ?? EMPTY_ACTION_STATE);
+
+  const handleLeaveOrganisation = (prevState?: ActionState) =>
+    leaveOrganisation(organizationId, prevState ?? EMPTY_ACTION_STATE);
 
   let handleDeleteButton: React.ReactNode = (
     <Button disabled size="icon" variant="ghost" />
@@ -53,7 +60,7 @@ const OrganisationActionButtons = ({
   if (!limitedAccess && isAdminOrOwner) {
     openButton = (
       <Link
-        className={buttonVariants({ variant: "outline", size: "icon" })}
+        className={buttonVariants({ size: "icon", variant: "outline" })}
         href={membershipsPath(organizationId)}
       >
         <LucideArrowUpRightFromSquare className="aspect-square w-4" />
@@ -61,12 +68,14 @@ const OrganisationActionButtons = ({
     );
 
     editButton = (
-      <Dialog onOpenChange={open} open={isOpen}>
-        <DialogTrigger asChild>
-          <Button size="icon" variant="outline">
-            <LucidePen className="aspect-square w-4" />
-          </Button>
-        </DialogTrigger>
+      <Dialog onOpenChange={onOpenChange} open={isOpen}>
+        <DialogTrigger
+          render={
+            <Button size="icon" variant="outline">
+              <LucidePen className="aspect-square w-4" />
+            </Button>
+          }
+        />
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Rename organisation</DialogTitle>
@@ -86,9 +95,7 @@ const OrganisationActionButtons = ({
     );
     handleDeleteButton = (
       <ConfirmDialog
-        action={(prevState) =>
-          deleteOrganisation(organizationId, prevState ?? EMPTY_ACTION_STATE)
-        }
+        action={handleDeleteOrganisation}
         closeOnSubmit
         description="This will permanently delete the organisation and all its data. This action cannot be undone."
         title="Delete organisation"
@@ -111,9 +118,7 @@ const OrganisationActionButtons = ({
   if (!limitedAccess) {
     leaveButton = (
       <ConfirmDialog
-        action={(prevState) =>
-          leaveOrganisation(organizationId, prevState ?? EMPTY_ACTION_STATE)
-        }
+        action={handleLeaveOrganisation}
         closeOnSubmit
         description="You will lose access to this organisation. You can rejoin only if invited again."
         title="Leave organisation"

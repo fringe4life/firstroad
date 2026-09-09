@@ -14,7 +14,7 @@ const CommentItem = ({ comment, buttons }: CommentItemProps) => {
   const { updatedAt, createdAt, content, user, attachments, id } = comment;
   const isOwner = userId === comment.userId;
 
-  const userName = user?.name || "Anonymous";
+  const userName = user.name || "Anonymous";
   const userInitials = userName
     .split(" ")
     .map((n) => n[0])
@@ -35,10 +35,7 @@ const CommentItem = ({ comment, buttons }: CommentItemProps) => {
               </Avatar>
               <div className="grid">
                 <span className="font-medium text-sm">{userName}</span>
-                <TimeAgo
-                  createdAt={createdAt.toISOString()}
-                  updatedAt={updatedAt.toISOString()}
-                />
+                <TimeAgo createdAt={createdAt} updatedAt={updatedAt} />
               </div>
             </div>
           </CardHeader>

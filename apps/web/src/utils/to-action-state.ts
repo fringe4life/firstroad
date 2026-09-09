@@ -15,10 +15,12 @@ export interface ActionState<T = unknown> {
 }
 
 export const EMPTY_ACTION_STATE: ActionState = {
-  message: "",
   fieldErrors: {},
-  timestamp: Date.now(),
+  message: "",
+  timestamp: 0,
 };
+
+const PASSWORD_ERROR_REGEX = /PASSWORD/i;
 
 /** Convert FormData to a plain object so action state can be serialized to the client. */
 function formDataToPayload(formData: FormData): ActionStatePayload {
@@ -31,6 +33,24 @@ function formDataToPayload(formData: FormData): ActionStatePayload {
   return payload;
 }
 
+/** Pick form password field from error code + submitted payload keys. */
+function passwordFieldForError(
+  code: string | undefined,
+  payload?: ActionStatePayload,
+): string | undefined {
+  if (!(code && PASSWORD_ERROR_REGEX.test(code))) {
+    return;
+  }
+  // Change-password: wrong current password
+  if (code === "INVALID_PASSWORD" && payload && "currentPassword" in payload) {
+    return "currentPassword";
+  }
+  if (payload && "newPassword" in payload) {
+    return "newPassword";
+  }
+  return "password";
+}
+
 const fromErrorToActionState = <T = unknown>(
   err: unknown,
   formData?: FormData,
@@ -40,39 +60,20 @@ const fromErrorToActionState = <T = unknown>(
   if (err instanceof ValiError) {
     const flattened = flatten(err.issues);
     return {
-      message: "",
-      timestamp: Date.now(),
       fieldErrors: flattened.nested || {},
+      message: "",
       payload,
       status: "ERROR",
+      timestamp: Date.now(),
     };
   }
 
-  // Check for Better Auth APIError (v1.5+ uses { code, message } at top level; older versions use body)
   if (err instanceof APIError) {
-    const apiError = err as {
-      body?: { code?: string; message?: string };
-      code?: string;
-      message?: string;
-    };
-    const code = apiError.body?.code ?? (apiError as { code?: string }).code;
-    const message =
-      apiError.body?.message ?? (apiError as { message?: string }).message;
-
-    // Map Better Auth error codes to specific fields
-    const fieldErrors: Record<string, string[]> = {};
-
-    if (code === "INVALID_PASSWORD") {
-      fieldErrors.currentPassword = [message || "Invalid password"];
-    } else if (code === "PASSWORD_TOO_WEAK") {
-      fieldErrors.newPassword = [message || "Password is too weak"];
-    } else if (code === "PASSWORD_COMPROMISED") {
-      fieldErrors.newPassword = [message || "Password is compromised"];
-    }
-
+    const { code, message = "Authentication error" } = err.body ?? {};
+    const field = passwordFieldForError(code, payload);
     return {
-      message: message || "Authentication error",
-      fieldErrors,
+      fieldErrors: field ? { [field]: [message] } : {},
+      message,
       payload,
       status: "ERROR",
       timestamp: Date.now(),
@@ -81,8 +82,8 @@ const fromErrorToActionState = <T = unknown>(
 
   if (err instanceof Error) {
     return {
-      message: err.message,
       fieldErrors: {},
+      message: err.message,
       payload,
       status: "ERROR",
       timestamp: Date.now(),
@@ -104,12 +105,12 @@ const toActionState = <T = unknown>(
   formData?: FormData,
   data?: T,
 ): ActionState<T> => ({
-  message,
+  data,
   fieldErrors: {},
+  message,
+  payload: formData ? formDataToPayload(formData) : undefined,
   status,
   timestamp: Date.now(),
-  payload: formData ? formDataToPayload(formData) : undefined,
-  data,
 });
 
 export { fromErrorToActionState, toActionState };

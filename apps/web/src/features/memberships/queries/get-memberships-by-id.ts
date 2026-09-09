@@ -1,4 +1,4 @@
-import { prisma } from "@firstroad/db";
+import { orm } from "@firstroad/db";
 import type { List } from "@/types";
 import { tryCatch } from "@/utils/try-catch";
 import {
@@ -15,63 +15,51 @@ const getMembershipsById = async (
   id: string,
 ): Promise<List<OrganisationMemberRow>> => {
   const { data: members } = await tryCatch(async () => {
-    const rows = await prisma.member.findMany({
-      where: { organizationId: id },
-      select: {
-        id: true,
-        createdAt: true,
-        role: true,
-        permissions: {
-          select: {
-            resourceType: true,
-            canCreate: true,
-            canUpdate: true,
-            canDelete: true,
-          },
-        },
-        user: {
-          select: {
-            name: true,
-            email: true,
-            emailVerified: true,
-          },
-        },
-      },
-      orderBy: { createdAt: "desc" },
-    });
+    const rows = await orm.Member.where({ organizationId: id })
+      .orderBy((member) => member.createdAt.desc())
+      .include("user", (user) => user.select("email", "emailVerified", "name"))
+      .include("permissions", (permission) =>
+        permission.select(
+          "canCreate",
+          "canDelete",
+          "canUpdate",
+          "resourceType",
+        ),
+      )
+      .all();
 
     return rows.map((member) => {
       const permissionsByType = Object.fromEntries(
-        member.permissions.map((p) => [
-          p.resourceType,
+        member.permissions.map((permission) => [
+          permission.resourceType,
           {
-            canCreate: p.canCreate,
-            canUpdate: p.canUpdate,
-            canDelete: p.canDelete,
+            canCreate: permission.canCreate,
+            canDelete: permission.canDelete,
+            canUpdate: permission.canUpdate,
           } satisfies ResourcePermission,
         ]),
       ) as Record<ResourceType, ResourcePermission>;
 
       return {
+        email: member.user.email,
+        emailVerified: member.user.emailVerified,
         id: member.id,
+        joinedAt: new Date(member.createdAt),
+        name: member.user.name,
         permissions: {
-          TICKET:
-            permissionsByType.TICKET ??
-            ({
-              ...DEFAULT_CREATE_PERMISSION,
-              ...DEFAULT_ITEM_PERMISSION,
-            } satisfies ResourcePermission),
           COMMENT:
             permissionsByType.COMMENT ??
             ({
               ...DEFAULT_CREATE_PERMISSION,
               ...DEFAULT_ITEM_PERMISSION,
             } satisfies ResourcePermission),
+          TICKET:
+            permissionsByType.TICKET ??
+            ({
+              ...DEFAULT_CREATE_PERMISSION,
+              ...DEFAULT_ITEM_PERMISSION,
+            } satisfies ResourcePermission),
         },
-        email: member.user.email,
-        emailVerified: member.user.emailVerified,
-        joinedAt: member.createdAt,
-        name: member.user.name,
         role: member.role,
       } satisfies OrganisationMemberRow;
     });

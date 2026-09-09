@@ -4,12 +4,12 @@ import type { Mime } from "../types";
 
 // Only map extensions we actually accept in validation.
 const EXTENSION_TO_MIME: Record<string, Mime> = {
-  png: "image/png",
-  jpg: "image/jpeg",
-  jpeg: "image/jpeg",
   gif: "image/gif",
-  webp: "image/webp",
+  jpeg: "image/jpeg",
+  jpg: "image/jpeg",
   pdf: "application/pdf",
+  png: "image/png",
+  webp: "image/webp",
 };
 
 const DEFAULT_MIME_TYPE = "application/octet-stream" satisfies Mime;

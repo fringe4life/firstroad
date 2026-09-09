@@ -47,11 +47,11 @@ const updateOrganisation = async (
     async () =>
       await auth.api.updateOrganization({
         body: {
-          organizationId,
           data: {
             name,
             slug: createSlug(name),
           },
+          organizationId,
         },
         headers: await headers(),
       }),

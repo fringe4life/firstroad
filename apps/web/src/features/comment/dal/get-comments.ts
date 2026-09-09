@@ -20,7 +20,7 @@ const getCommentsByTicketSlugWithPermissions = async (
   take = 3,
 ): Promise<PaginatedResult<CommentWithAccess>> => {
   const result = await getCommentsByTicketSlug(ticketSlug, cursor, take);
-  const list = result?.list;
+  const { list } = result;
   if (!list) {
     return { ...result, list: null };
   }
@@ -65,7 +65,7 @@ export const getCommentsByTicketSlug = async (
   cacheTag(commentsForTicketCache(ticketSlug));
   // Only cache the database query
   const result = await paginateItems({
-    getItems: () => getCommentsList({ ticketSlug, cursor, take }),
+    getItems: () => getCommentsList({ cursor, take, ticketSlug }),
     getItemsCount: () => getCommentsCount({ ticketSlug }),
   });
 

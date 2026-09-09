@@ -27,7 +27,7 @@ const AddCommentAttachmentButton = ({
   createAttachmentAction,
   onClientAttachmentCreated,
 }: AddCommentAttachmentButtonProps) => {
-  const { value: isOpen, open, close } = useToggle(false);
+  const { value: isOpen, open, onOpenChange } = useToggle(false);
 
   return (
     <>
@@ -35,7 +35,7 @@ const AddCommentAttachmentButton = ({
         <LucidePaperclip className="aspect-square w-4" />
       </Button>
 
-      <Dialog onOpenChange={close} open={isOpen}>
+      <Dialog onOpenChange={onOpenChange} open={isOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Add attachments</DialogTitle>

@@ -3,9 +3,9 @@ import Link from "next/link";
 import { signInPath } from "@/path";
 
 export const metadata: Metadata = {
-  title: "Password Reset Successful",
   description:
     "Your First Road password has been reset. Sign in with your new password.",
+  title: "Password Reset Successful",
 };
 
 const ResetPasswordSuccessPage = () => (

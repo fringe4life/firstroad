@@ -1,7 +1,6 @@
 "use client";
 
 import { Kanban } from "lucide-react";
-import { Activity } from "react";
 import {
   Sheet,
   SheetContent,
@@ -11,26 +10,25 @@ import {
 import { useMobileSidebar } from "@/features/navigation/context/context";
 
 const SidebarClient = ({ children }: { children: React.ReactNode }) => {
-  const { value: isOpen, close } = useMobileSidebar();
+  const { value: isOpen, onOpenChange } = useMobileSidebar();
+
   return (
-    <Activity mode={isOpen ? "visible" : "hidden"}>
-      <Sheet onOpenChange={close} open={isOpen}>
-        <SheetContent className="w-full max-w-84 p-0 md:hidden" side="left">
-          <SheetHeader className="flex items-center gap-x-2 border-b py-4.15 pl-19">
-            <Kanban className="aspect-square w-4" />
-            <SheetTitle className="font-medium xs:font-semibold text-base xs:text-lg">
-              FirstTicket
-            </SheetTitle>
-          </SheetHeader>
-          <nav
-            aria-label="Mobile navigation"
-            className="space-y-2 px-3 py-2 landscape:space-x-2"
-          >
-            {children}
-          </nav>
-        </SheetContent>
-      </Sheet>
-    </Activity>
+    <Sheet onOpenChange={onOpenChange} open={isOpen}>
+      <SheetContent className="w-full max-w-84 p-0 md:hidden" side="left">
+        <SheetHeader className="flex items-center gap-x-2 border-b py-4.15 pl-19">
+          <Kanban className="aspect-square w-4" />
+          <SheetTitle className="font-medium xs:font-semibold text-base xs:text-lg">
+            FirstTicket
+          </SheetTitle>
+        </SheetHeader>
+        <nav
+          aria-label="Mobile navigation"
+          className="space-y-2 px-3 py-2 landscape:space-x-2"
+        >
+          {children}
+        </nav>
+      </SheetContent>
+    </Sheet>
   );
 };
 

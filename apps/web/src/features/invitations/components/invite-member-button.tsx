@@ -32,7 +32,7 @@ import { createInvitation } from "../actions/create-invitation";
 type InviteMemberButtonProps = OrganisationId;
 
 const InviteMemberButton = ({ organizationId }: InviteMemberButtonProps) => {
-  const { value: isOpen, open, close } = useToggle(false);
+  const { value: isOpen, open, close, onOpenChange } = useToggle(false);
   const emailId = useId();
   const roleId = useId();
 
@@ -53,7 +53,7 @@ const InviteMemberButton = ({ organizationId }: InviteMemberButtonProps) => {
         <Button onClick={open} />
       </ResponsiveLabel>
 
-      <Dialog onOpenChange={close} open={isOpen}>
+      <Dialog onOpenChange={onOpenChange} open={isOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Invite Member</DialogTitle>

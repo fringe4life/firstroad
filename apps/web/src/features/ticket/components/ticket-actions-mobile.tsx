@@ -36,38 +36,40 @@ const TicketActionsMobile = ({
   }
 
   const clickProps = onActionClick ? { onClick: onActionClick } : undefined;
+  const handleStatusChange = statusChangeWithToast.bind(null, ticket.id);
+  const handleDelete = deleteTicket.bind(null, ticket.id);
 
   return (
     <>
-      {canUpdate && (
+      {canUpdate ? (
         <Button
-          asChild
           className="flex-1 md:flex-none"
+          render={<Link href={ticketEditPath(ticket.slug)} prefetch />}
           size="sm"
           variant="outline"
           {...clickProps}
         >
-          <Link href={ticketEditPath(ticket.slug)} prefetch>
-            <LucidePencil className="aspect-square h-4" />
-            <span className="md:inline">Edit</span>
-          </Link>
+          <LucidePencil className="aspect-square h-4" />
+          <span className="md:inline">Edit</span>
         </Button>
-      )}
-      {canUpdate && (
+      ) : null}
+      {canUpdate ? (
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              className="flex-1 md:flex-none"
-              size="sm"
-              variant="outline"
-              {...clickProps}
-            >
-              Status
-            </Button>
+          <DropdownMenuTrigger
+            render={
+              <Button
+                className="flex-1 md:flex-none"
+                size="sm"
+                variant="outline"
+                {...clickProps}
+              />
+            }
+          >
+            Status
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuRadioGroup
-              onValueChange={statusChangeWithToast.bind(null, ticket.id)}
+              onValueChange={handleStatusChange}
               value={ticket.status}
             >
               {(Object.keys(TICKET_STATUS_LABELS) as TicketStatus[]).map(
@@ -80,9 +82,9 @@ const TicketActionsMobile = ({
             </DropdownMenuRadioGroup>
           </DropdownMenuContent>
         </DropdownMenu>
-      )}
-      {canDelete && (
-        <ConfirmDialog action={deleteTicket.bind(null, ticket.id)}>
+      ) : null}
+      {canDelete ? (
+        <ConfirmDialog action={handleDelete}>
           <ConfirmDialog.Trigger>
             <Button
               className="flex-1 xs:flex-none"
@@ -95,7 +97,7 @@ const TicketActionsMobile = ({
             </Button>
           </ConfirmDialog.Trigger>
         </ConfirmDialog>
-      )}
+      ) : null}
     </>
   );
 };

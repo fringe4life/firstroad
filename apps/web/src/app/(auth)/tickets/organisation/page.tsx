@@ -14,14 +14,14 @@ import { TicketUpsertForm } from "@/features/ticket/components/ticket-upsert-for
 import { Tickets } from "@/features/ticket/components/tickets";
 
 export const metadata: Metadata = {
-  title: "Our Tickets",
   description:
     "View and manage your organisation's tickets. Track your progress, update status, and collaborate with others.",
   openGraph: {
-    title: "Our Tickets | First Road",
     description:
       "View and manage your organisation's tickets. Track your progress, update status, and collaborate with others.",
+    title: "Our Tickets | First Road",
   },
+  title: "Our Tickets",
 };
 
 const TicketsOrganisationPage = async ({

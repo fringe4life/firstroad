@@ -1,26 +1,19 @@
-import { PrismaClient } from "../../generated/prisma/client";
-import { createAdapter } from "../../src/adapter";
-
-const connectionString = process.env.DATABASE_URL;
-if (!connectionString) {
-  throw new Error("DATABASE_URL is required");
-}
-const adapter = createAdapter(connectionString);
-const prisma = new PrismaClient({ adapter });
+import { all } from "@prisma/orm-postgres/orm-client";
+import { orm } from "../../src/index.ts";
 
 const main = async () => {
-  const deletedCommentAttachments = await prisma.commentAttachment.deleteMany();
-  const deletedTicketAttachments = await prisma.ticketAttachment.deleteMany();
+  const deletedCommentAttachments = await orm.CommentAttachment.where(
+    all(),
+  ).deleteAndCount();
+  const deletedTicketAttachments = await orm.TicketAttachment.where(
+    all(),
+  ).deleteAndCount();
 
   console.log(
-    `Cleared ${deletedCommentAttachments.count} comment attachments and ${deletedTicketAttachments.count} ticket attachments.`,
+    `Cleared ${deletedCommentAttachments} comment attachments and ${deletedTicketAttachments} ticket attachments.`,
   );
 };
 
-main()
-  .catch(() => {
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+main().catch(() => {
+  process.exit(1);
+});

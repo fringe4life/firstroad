@@ -3,3 +3,9 @@ generated/
 .env
 .env*
 .fallow
+node_modules/
+dist/
+
+# prisma skills sync (harnesses not covered by root .gitignore)
+.claude/
+.devin/

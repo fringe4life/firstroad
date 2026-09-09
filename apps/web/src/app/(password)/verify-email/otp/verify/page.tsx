@@ -9,9 +9,9 @@ import type { EmailSearchParams } from "@/features/auth/types";
 import { verifyEmailOTPSendPath } from "@/path";
 
 export const metadata: Metadata = {
-  title: "Verify Your Email",
   description:
     "Enter the verification code sent to your email to verify your First Road account.",
+  title: "Verify Your Email",
 };
 
 const VerifyEmailOTPVerifyPage = ({ searchParams }: EmailSearchParams) => (

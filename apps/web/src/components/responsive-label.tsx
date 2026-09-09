@@ -55,8 +55,8 @@ const ResponsiveLabel = ({
   const child = children;
   return cloneElement(child, {
     ...child.props,
-    className: cn(child.props.className, "@container/label"),
     children: labelContent,
+    className: cn(child.props.className, "@container/label"),
   });
 };
 

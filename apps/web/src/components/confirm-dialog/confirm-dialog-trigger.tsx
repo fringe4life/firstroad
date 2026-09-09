@@ -13,13 +13,13 @@ const ConfirmDialogTrigger = ({
   if (asChild && React.isValidElement(children)) {
     // Clone child and inject onClick + disabled
     return React.cloneElement(children, {
+      disabled: isPending || children.props.disabled,
       onClick: (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
         // Call original onClick if it exists
         children.props.onClick?.(e);
         open();
       },
-      disabled: isPending || children.props.disabled,
     } as ClickableProps);
   }
 

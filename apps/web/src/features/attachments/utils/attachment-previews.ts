@@ -23,8 +23,8 @@ const createAttachmentPreviews = (
 
     if (SUPPORTED_IMAGE_TYPES.has(file.type)) {
       const imagePreview: ImageAttachmentPreview = {
-        id,
         file,
+        id,
         kind: "image",
         objectUrl: URL.createObjectURL(file),
       };
@@ -34,8 +34,8 @@ const createAttachmentPreviews = (
 
     if (file.type === PDF_MIME_TYPE) {
       const pdfPreview: PdfAttachmentPreview = {
-        id,
         file,
+        id,
         kind: "pdf",
       };
 
@@ -43,8 +43,8 @@ const createAttachmentPreviews = (
     }
 
     const otherPreview: OtherAttachmentPreview = {
-      id,
       file,
+      id,
       kind: "other",
     };
 

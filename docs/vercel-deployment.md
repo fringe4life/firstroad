@@ -29,9 +29,9 @@ vercel login
 ```
 
 ### Link Project (First Time Only)
-Run from **`apps/web`** so the CLI links this directory as the project root. In the Vercel dashboard, set **Root Directory** to `apps/web` (Settings → General → Root Directory). This is required for `vercel build` and prebuilt deploys to detect Next.js correctly in the monorepo.
+Run from **repo root**. Dashboard **Root Directory** must be `apps/web` (Settings → General). Do **not** `cd apps/web` before `vercel deploy` — CLI already applies `rootDirectory`, so that becomes `apps/web/apps/web`.
 ```bash
-cd apps/web && vercel link
+vercel link
 ```
 
 ## Deployment Commands
@@ -107,9 +107,9 @@ From repo root:
 bun run deploy:prod
 ```
 
-This runs **`cd apps/web && vercel deploy --prod`**: source is uploaded and **Vercel builds on their side** using Root Directory `apps/web` and the `buildCommand` in `vercel.json`. No local build; Next.js is detected correctly.
+This runs **`vercel deploy --prod` from repo root**. Source is uploaded and **Vercel builds on their side** using Root Directory `apps/web` and the `buildCommand` in `apps/web/vercel.json`. No local build; Next.js is detected correctly.
 
-Manual: `cd apps/web && vercel deploy --prod`
+Manual: `vercel deploy --prod` (repo root)
 
 ### Prebuilt deployment (optional)
 Prebuilt uses **`vercel build`** locally then **`vercel deploy --prebuilt`**. In monorepos the CLI can fail to detect Next.js when running `vercel build` locally; the standard deploy above avoids that. If you need prebuilt: from `apps/web`, run `vercel build --prod` then `vercel deploy --prebuilt --archive=tgz --prod`. See [Build Output API](https://vercel.com/docs/build-output-api/v3).

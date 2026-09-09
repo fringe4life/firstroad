@@ -64,10 +64,10 @@ const deleteAttachmentImpl = async (
   const ownerKind = toOwnerKind(resourceType);
   const { error } = await tryCatch(() =>
     deleteAttachmentForOwner({
-      ownerKind,
+      attachmentId,
       organizationId: item.organizationId,
       ownerId,
-      attachmentId,
+      ownerKind,
     }),
   );
 
@@ -87,8 +87,8 @@ const deleteAttachmentImpl = async (
   }
 
   const payload: AttachmentDeletedPayload = {
-    item,
     deletedAttachmentId: attachmentId,
+    item,
   };
 
   if (updateBoundary === "SERVER") {

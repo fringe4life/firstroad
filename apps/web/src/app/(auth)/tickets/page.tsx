@@ -15,14 +15,14 @@ import { Tickets } from "@/features/ticket/components/tickets";
 import { TicketsHeading } from "@/features/ticket/components/tickets-heading";
 
 export const metadata: Metadata = {
-  title: "My Tickets",
   description:
     "View and manage your personal tickets. Track your progress, update status, and collaborate with others.",
   openGraph: {
-    title: "My Tickets | First Road",
     description:
       "View and manage your personal tickets. Track your progress, update status, and collaborate with others.",
+    title: "My Tickets | First Road",
   },
+  title: "My Tickets",
 };
 
 const TicketsPage = async ({ searchParams }: PageProps<"/tickets">) => {

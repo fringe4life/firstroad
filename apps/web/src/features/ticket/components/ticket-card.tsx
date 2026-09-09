@@ -25,9 +25,7 @@ const TicketCard = ({
   variant = "list",
 }: TicketCardProps) => {
   const dateToShow =
-    sortKey === "deadline"
-      ? (ticket.deadline ?? ticket.createdAt)
-      : ticket.createdAt;
+    sortKey === "deadline" ? ticket.deadline : ticket.createdAt;
   let titleElement = <span className="truncate">{ticket.title}</span>;
   if (variant === "list") {
     titleElement = (
@@ -74,17 +72,17 @@ const TicketCard = ({
                 {toCurrencyFromCent(ticket.bounty)}
               </p>
             </div>
-            {mobileActions && (
+            {mobileActions ? (
               <div className="no-scrollbar relative z-30 grid w-full auto-cols-fr grid-flow-col gap-2 overflow-x-auto md:hidden">
                 {mobileActions}
               </div>
-            )}
+            ) : null}
           </CardFooter>
         </Card>
 
-        {actions && (
+        {actions ? (
           <div className="hidden gap-y-1 self-start md:grid">{actions}</div>
-        )}
+        ) : null}
       </div>
     </ViewTransition>
   );

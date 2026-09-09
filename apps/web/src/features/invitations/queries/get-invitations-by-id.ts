@@ -1,4 +1,4 @@
-import { prisma } from "@firstroad/db";
+import { orm } from "@firstroad/db";
 import { cacheTag } from "next/cache";
 import type { List } from "@/types";
 import { invitationsForOrganizationCache } from "@/utils/cache-tags";
@@ -12,29 +12,23 @@ const getInvitationsById = async (
   cacheTag(invitationsForOrganizationCache(organizationId));
 
   const { data: invitations } = await tryCatch(async () => {
-    const rows = await prisma.invitation.findMany({
-      where: { organizationId, status: "pending" },
-      select: {
-        id: true,
-        email: true,
-        createdAt: true,
-        user: {
-          select: {
-            name: true,
-          },
-        },
-      },
-      orderBy: { createdAt: "desc" },
-    });
+    const rows = await orm.Invitation.where({
+      organizationId,
+      status: "pending",
+    })
+      .orderBy((invitation) => invitation.createdAt.desc())
+      .include("user", (user) => user.select("name"))
+      .select("createdAt", "email", "id")
+      .all();
 
     return rows.map(({ user, createdAt, ...invitation }) => ({
       ...invitation,
-      invitedAt: createdAt,
+      invitedAt: new Date(createdAt),
       inviterName: user.name,
     }));
   });
 
-  return invitations;
+  return invitations ?? [];
 };
 
 export { getInvitationsById };

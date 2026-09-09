@@ -1,6 +1,6 @@
 "use cache";
 
-import { prisma } from "@firstroad/db";
+import { orm } from "@firstroad/db";
 import { cacheTag } from "next/cache";
 import type { AttachmentRecord } from "@/features/attachments/types";
 import type { List } from "@/types";
@@ -12,12 +12,11 @@ const getAttachmentsByComment = async (
 ): Promise<List<AttachmentRecord>> => {
   cacheTag(attachmentsForCommentCache(commentId));
 
-  const { data: rows } = await tryCatch(() =>
-    prisma.commentAttachment.findMany({
-      where: { commentId },
-      orderBy: { id: "asc" },
-      select: { id: true, name: true, contentType: true },
-    }),
+  const { data: rows } = await tryCatch(async () =>
+    orm.CommentAttachment.where({ commentId })
+      .select("contentType", "id", "name")
+      .orderBy((attachment) => attachment.id.asc())
+      .all(),
   );
 
   return rows;

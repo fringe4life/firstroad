@@ -32,8 +32,8 @@ const createOrganisation = async (
   }
 
   const user = await getUserOrRedirect({
-    checkOrganistation: false,
     checkActiveOrganisation: false,
+    checkOrganistation: false,
   });
 
   const {
@@ -43,9 +43,9 @@ const createOrganisation = async (
     async () =>
       await auth.api.createOrganization({
         body: {
+          keepCurrentActiveOrganization: false,
           name, // required
           slug: createSlug(name), // required
-          keepCurrentActiveOrganization: false,
         },
         // This endpoint requires session cookies.
         headers: await headers(),

@@ -24,7 +24,6 @@ import { TicketActionsDesktopSkeleton } from "@/features/ticket/components/skele
 import { TicketDetailActions } from "@/features/ticket/components/ticket-detail-actions";
 import { TicketDetailView } from "@/features/ticket/components/ticket-detail-view";
 import { TICKET_NOT_FOUND } from "@/features/ticket/constants";
-import { getAllTicketSlugs } from "@/features/ticket/queries/get-all-ticket-slugs";
 import { getAttachmentsByTicket } from "@/features/ticket/queries/get-attachments-by-ticket";
 import {
   getTicketBySlug,
@@ -32,7 +31,30 @@ import {
 } from "@/features/ticket/queries/get-ticket";
 import { ticketsPath } from "@/path";
 
-export const generateStaticParams = async () => await getAllTicketSlugs();
+const createServerTicketAttachment = createAttachment.bind(
+  null,
+  "SERVER",
+  "TICKET",
+);
+const deleteServerTicketAttachment = deleteAttachment.bind(
+  null,
+  "SERVER",
+  "TICKET",
+);
+const createClientCommentAttachment = createAttachment.bind(
+  null,
+  // @ts-expect-error - createAttachment is not typed for CLIENT/COMMENT
+  "CLIENT",
+  "COMMENT",
+);
+const deleteClientCommentAttachment = deleteAttachment.bind(
+  null,
+  // @ts-expect-error - deleteAttachment is not typed for CLIENT/COMMENT
+  "CLIENT",
+  "COMMENT",
+);
+
+// export const generateStaticParams = async () => await getAllTicketSlugs();
 
 export const generateMetadata = async ({
   params,
@@ -47,8 +69,8 @@ export const generateMetadata = async ({
   const { title, description } = ticket;
 
   return {
-    title,
     description,
+    title,
   };
 };
 
@@ -101,7 +123,7 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
     <div className="grid min-h-full grid-rows-[min-content_1fr] gap-y-8">
       <Breadcrumbs
         breadcrumbs={[
-          { title: "Tickets", href: ticketsPath() },
+          { href: ticketsPath(), title: "Tickets" },
           { title: ticket.title },
         ]}
       />
@@ -122,16 +144,8 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
             {(user) => (
               <Attachments
                 attachments={attachmentsWithUrls}
-                createAttachmentAction={createAttachment.bind(
-                  null,
-                  "SERVER",
-                  "TICKET",
-                )}
-                deleteAttachmentAction={deleteAttachment.bind(
-                  null,
-                  "SERVER",
-                  "TICKET",
-                )}
+                createAttachmentAction={createServerTicketAttachment}
+                deleteAttachmentAction={deleteServerTicketAttachment}
                 isOwner={isOwner(user, { userId: ticket.userId })}
                 ownerId={ticket.id}
               />
@@ -149,18 +163,8 @@ const TicketDetailPage = async ({ params }: PageProps<"/tickets/[slug]">) => {
           >
             {(user) => (
               <CommentsWithPermissions
-                createAttachmentAction={createAttachment.bind(
-                  null,
-                  // @ts-expect-error - createAttachment is not typed
-                  "CLIENT",
-                  "COMMENT",
-                )}
-                deleteAttachmentAction={deleteAttachment.bind(
-                  null,
-                  // @ts-expect-error - deleteAttachment is not typed
-                  "CLIENT",
-                  "COMMENT",
-                )}
+                createAttachmentAction={createClientCommentAttachment}
+                deleteAttachmentAction={deleteClientCommentAttachment}
                 deleteCommentAction={deleteComment}
                 listWithAttachments={listWithAttachments}
                 loadMoreAction={getCommentsLoadMore}

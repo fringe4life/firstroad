@@ -1,12 +1,12 @@
-import { defineConfig } from "prisma/config";
+import { definePrismaConfig } from "@prisma/cli-engine";
+import { defineConfig as ormConfig } from "@prisma/orm-postgres/config";
 
-export default defineConfig({
-  schema: "./prisma",
-  migrations: {
-    seed: "bun run prisma/seed.ts",
-  },
-  datasource: {
-    // @ts-expect-error
-    url: process.env.DATABASE_URL,
-  },
+export default definePrismaConfig({
+  orm: ormConfig({
+    contract: "./src/prisma/contract.prisma",
+    db: {
+      // biome-ignore lint/style/noNonNullAssertion: DATABASE_URL required for Prisma CLI
+      connection: process.env.DATABASE_URL!,
+    },
+  }),
 });

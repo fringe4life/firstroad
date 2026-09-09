@@ -7,16 +7,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const entries: MetadataRoute.Sitemap = [
     {
-      url: `${process.env.NEXT_PUBLIC_APP_URL}${homePath()}`,
-      lastModified: new Date(),
       changeFrequency: "daily",
+      lastModified: new Date(),
       priority: 1,
+      url: `${process.env.NEXT_PUBLIC_APP_URL}${homePath()}`,
     },
     ...slugs.map(({ slug }) => ({
-      url: `${process.env.NEXT_PUBLIC_APP_URL}${ticketPath(slug)}`,
-      lastModified: new Date(),
       changeFrequency: "weekly" as const,
+      lastModified: new Date(),
       priority: 0.8,
+      url: `${process.env.NEXT_PUBLIC_APP_URL}${ticketPath(slug)}`,
     })),
   ];
 

@@ -1,6 +1,6 @@
 import type {
-  CommentGetPayload,
   CommentModel,
+  CommentWithUserName,
 } from "@firstroad/db/client-types";
 import type { ReactNode, RefObject } from "react";
 import type {
@@ -23,9 +23,7 @@ export interface VerifyComment
     OrganisationId,
     Pick<CommentModel, "ticketId"> {}
 
-type CommentModelWithUserInfo = CommentGetPayload<{
-  include: { user: { select: { name: true } } };
-}>;
+type CommentModelWithUserInfo = CommentWithUserName;
 
 // Comment type with additional properties for UI
 export type Comment = CommentModelWithUserInfo & {

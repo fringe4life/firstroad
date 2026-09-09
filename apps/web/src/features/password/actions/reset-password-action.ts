@@ -21,16 +21,16 @@ import { tryCatch } from "@/utils/try-catch";
 
 const resetPasswordSchema = pipe(
   object({
-    token: pipe(string(), minLength(1, "Token is required")),
+    confirmPassword: pipe(
+      string(),
+      minLength(1, "Please confirm your password"),
+    ),
     password: pipe(
       string(),
       minLength(6, "Password must be at least 6 characters"),
       maxLength(191),
     ),
-    confirmPassword: pipe(
-      string(),
-      minLength(1, "Please confirm your password"),
-    ),
+    token: pipe(string(), minLength(1, "Token is required")),
   }),
   forward(
     partialCheck(

@@ -29,7 +29,9 @@ const itemWithPermissions = async <T extends OrgScopedResource>(
   Maybe<T & Pick<ResourcePermission, "canUpdate" | "canDelete"> & IsOwner>
 > => {
   const [currentUser, resolvedItem] = await Promise.all([
-    user == null ? getUser().then(({ user: u }) => u) : Promise.resolve(user),
+    user === null || user === undefined
+      ? getUser().then(({ user: u }) => u)
+      : Promise.resolve(user),
     Promise.resolve(item),
   ]);
 

@@ -1,18 +1,17 @@
-import type { TicketInclude } from "@firstroad/db/client-types";
 import { Check, File, Pencil } from "lucide-react";
 import type { Metadata } from "next";
 import type { SortOption } from "@/components/sort-select";
 
 const TICKET_ICONS = {
-  OPEN: <File />,
   DONE: <Check />,
   IN_PROGRESS: <Pencil />,
+  OPEN: <File />,
 } as const;
 
 const TICKET_STATUS_LABELS = {
-  OPEN: "Open",
   DONE: "Done",
   IN_PROGRESS: "In Progress",
+  OPEN: "Open",
 } as const;
 
 const TICKET_SORT_OPTIONS: readonly SortOption[] = [
@@ -34,33 +33,13 @@ const TICKET_SORT_OPTIONS: readonly SortOption[] = [
 ];
 
 const TICKET_NOT_FOUND: Metadata = {
-  title: "Ticket Not Found",
   description: "The requested ticket could not be found.",
+  title: "Ticket Not Found",
 };
-
-const TICKET_WITH_USER_INCLUDE = {
-  user: {
-    select: {
-      name: true,
-    },
-  },
-} satisfies TicketInclude;
-
-const TICKET_WITH_USER_AND_REFERENCES_INCLUDE = {
-  ...TICKET_WITH_USER_INCLUDE,
-  referencedTickets: {
-    select: {
-      slug: true,
-      title: true,
-    },
-  },
-} satisfies TicketInclude;
 
 export {
   TICKET_ICONS,
   TICKET_NOT_FOUND,
   TICKET_SORT_OPTIONS,
   TICKET_STATUS_LABELS,
-  TICKET_WITH_USER_AND_REFERENCES_INCLUDE,
-  TICKET_WITH_USER_INCLUDE,
 };

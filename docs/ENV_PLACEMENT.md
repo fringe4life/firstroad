@@ -17,7 +17,7 @@ Per Turborepo best practices, `.env` files belong in the **application package**
 | `GITHUB_CLIENT_ID` | Yes | GitHub OAuth (Better Auth) |
 | `GITHUB_CLIENT_SECRET` | Yes | GitHub OAuth (Better Auth) |
 | `RESEND_FULL_ACCESS` | No* | Resend **Full Access** API key; only for `resend:list` / `resend:download` scripts (template management). Not the same as `RESEND_API_KEY`. |
-| `S3_ACCESS_KEY_ID` | If using attachments | Bun.s3 presign/upload/delete for ticket attachments (Bun runtime only; not on Vercel) |
+| `S3_ACCESS_KEY_ID` | If using attachments | Bun.s3 presign/upload/delete for ticket attachments (Bun runtime; Vercel via `bunVersion: "1.4.x"`) |
 | `S3_SECRET_ACCESS_KEY` | If using attachments | |
 | `S3_REGION` | If using attachments | e.g. `us-east-1` |
 | `S3_BUCKET` | If using attachments | Bucket name |

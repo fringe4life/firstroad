@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "skills": {
+    "prisma-8": {
+      "source": "prisma/orm",
+      "ref": "v8.0.0-rc.8",
+      "sourceType": "github",
+      "skillPath": "skills/prisma-8/SKILL.md",
+      "computedHash": "96e691ccc83fc2830b33dcd3b65d6722de30f0a5757522f877f423301e7bfc7a"
+    }
+  }
+}

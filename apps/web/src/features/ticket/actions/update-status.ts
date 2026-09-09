@@ -26,8 +26,8 @@ export const updateStatus = async (newValue: TicketStatus, id: string) => {
 
     // is owner and can update ticket, update status
     await updateTicket({
-      where: { id },
       data: { status: newValue },
+      id,
       includeUser: false,
     });
     // return slug to invalidate cache

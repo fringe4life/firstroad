@@ -29,7 +29,7 @@ export const addItemPermissions = <T>(
   permission: Maybe<ResourcePermission>,
 ): T & ItemPermission & IsOwner => ({
   ...item,
+  canDelete: Boolean(owns && permission?.canDelete),
+  canUpdate: Boolean(owns && permission?.canUpdate),
   isOwner: owns,
-  canUpdate: owns && (permission?.canUpdate ?? false),
-  canDelete: owns && (permission?.canDelete ?? false),
 });

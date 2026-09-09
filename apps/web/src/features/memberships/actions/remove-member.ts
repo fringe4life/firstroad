@@ -14,8 +14,8 @@ import { tryCatch } from "@/utils/try-catch";
 import { getAdminOwnerOrRedirect } from "../queries/get-admin-owner-or-redirect";
 
 const removeMemberSchema = object({
-  organizationId: pipe(string(), minLength(1)),
   memberId: pipe(string(), minLength(1)),
+  organizationId: pipe(string(), minLength(1)),
 });
 
 const removeMember = async (
@@ -26,8 +26,8 @@ const removeMember = async (
   const { user } = await getAdminOwnerOrRedirect(organizationId);
 
   const result = safeParse(removeMemberSchema, {
-    organizationId,
     memberId,
+    organizationId,
   });
 
   if (!result.success) {
@@ -37,17 +37,18 @@ const removeMember = async (
   const { error } = await tryCatch(async () =>
     auth.api.removeMember({
       body: {
-        organizationId: result.output.organizationId,
         memberIdOrEmail: result.output.memberId,
+        organizationId: result.output.organizationId,
       },
       headers: await headers(),
     }),
   );
 
   if (error) {
+    const errorMessage = error instanceof Error ? error.message : "";
     const message =
-      (error as Error)?.message?.includes("last member") ||
-      (error as Error)?.message?.includes("Cannot remove")
+      errorMessage.includes("last member") ||
+      errorMessage.includes("Cannot remove")
         ? "Cannot remove the last member from an organization"
         : "Failed to remove member";
 

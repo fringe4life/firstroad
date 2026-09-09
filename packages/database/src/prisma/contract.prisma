@@ -1,0 +1,222 @@
+// use prisma-next
+
+enum TicketStatus {
+  @@type("pg/text@1")
+  OPEN         = "OPEN"
+  IN_PROGRESS  = "IN_PROGRESS"
+  DONE         = "DONE"
+}
+
+enum MemberRole {
+  @@type("pg/text@1")
+  owner  = "owner"
+  admin  = "admin"
+  member = "member"
+}
+
+enum ResourceType {
+  @@type("pg/text@1")
+  TICKET  = "TICKET"
+  COMMENT = "COMMENT"
+}
+
+model User {
+  id            Uuid      @id @default(uuid(7))
+  name          String
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     TimestamptzString  @default(now())
+  updatedAt     TimestamptzString  @default(now())
+  sessions      Session[]
+  accounts      Account[]
+  members       Member[]
+  invitations   Invitation[]
+  tickets       Ticket[]
+  comments      Comment[]
+
+  @@map("user")
+}
+
+model Session {
+  id                   Uuid     @id @default(uuid(7))
+  expiresAt            TimestamptzString
+  token                String   @unique
+  createdAt            TimestamptzString @default(now())
+  updatedAt            TimestamptzString @default(now())
+  ipAddress            String?
+  userAgent            String?
+  userId               Uuid
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activeOrganizationId Uuid?
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    Uuid      @id @default(uuid(7))
+  accountId             String
+  providerId            String
+  userId                Uuid
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  TimestamptzString?
+  refreshTokenExpiresAt TimestamptzString?
+  scope                 String?
+  password              String?
+  createdAt             TimestamptzString  @default(now())
+  updatedAt             TimestamptzString  @default(now())
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         Uuid     @id @default(uuid(7))
+  identifier String
+  value      String
+  expiresAt  TimestamptzString
+  createdAt  TimestamptzString @default(now())
+  updatedAt  TimestamptzString @default(now())
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model Organization {
+  id          Uuid         @id @default(uuid(7))
+  name        String
+  slug        String       @unique
+  logo        String?
+  createdAt   TimestamptzString @default(now())
+  metadata    String?
+  members     Member[]
+  invitations Invitation[]
+  tickets     Ticket[]
+
+  @@map("organization")
+}
+
+model Member {
+  id             Uuid               @id @default(uuid(7))
+  organizationId Uuid
+  organization   Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         Uuid
+  user           User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role           MemberRole         @default(member)
+  createdAt      TimestamptzString  @default(now())
+  permissions    MemberPermission[]
+
+  @@index([organizationId])
+  @@index([userId])
+  @@map("member")
+}
+
+model MemberPermission {
+  id           Uuid         @id @default(uuid(7))
+  memberId     Uuid
+  member       Member       @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  resourceType ResourceType
+  canCreate    Boolean      @default(true)
+  canUpdate    Boolean      @default(true)
+  canDelete    Boolean      @default(true)
+
+  @@unique([memberId, resourceType])
+  @@index([memberId])
+  @@map("member_permission")
+}
+
+model Invitation {
+  id             Uuid         @id @default(uuid(7))
+  organizationId Uuid
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  email          String
+  role           MemberRole?
+  status         String       @default("pending")
+  expiresAt      TimestamptzString
+  createdAt      TimestamptzString @default(now())
+  inviterId      Uuid
+  user           User         @relation(fields: [inviterId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([email])
+  @@index([organizationId, createdAt], where: "(status = 'pending')", name: "invitation_org_pending")
+  @@map("invitation")
+}
+
+model Ticket {
+  id             Uuid              @id @default(uuid(7))
+  title          String            @unique
+  slug           String            @unique
+  description    String            @default("No description provided")
+  status         TicketStatus      @default(OPEN)
+  bounty         Int
+  userId         Uuid
+  user           User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organizationId Uuid
+  organization   Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt      TimestamptzString @default(now())
+  updatedAt      TimestamptzString @default(now())
+  deadline       TimestamptzString
+  comments       Comment[]
+  attachments    TicketAttachment[]
+  outgoingReferences TicketReference[] @relation("TicketReferenceFrom")
+  incomingReferences TicketReference[] @relation("TicketReferenceTo")
+
+  @@index([userId])
+  @@index([organizationId])
+  @@map("ticket")
+}
+
+model TicketReference {
+  fromId Uuid
+  toId   Uuid
+  from   Ticket @relation("TicketReferenceFrom", fields: [fromId], references: [id], onDelete: Cascade)
+  to     Ticket @relation("TicketReferenceTo", fields: [toId], references: [id], onDelete: Cascade)
+
+  @@id([fromId, toId])
+  @@index([toId])
+  @@map("ticket_reference")
+}
+
+model Comment {
+  id          Uuid      @id @default(uuid(7))
+  content     VarChar(1024)
+  createdAt   TimestamptzString @default(now())
+  updatedAt   TimestamptzString @default(now())
+  ticketId    Uuid
+  ticket      Ticket    @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  userId      Uuid
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  attachments CommentAttachment[]
+
+  @@index([userId])
+  @@index([ticketId])
+  @@index([id, createdAt], name: "comment_id_createdAt")
+  @@map("comment")
+}
+
+model TicketAttachment {
+  id          Uuid   @id @default(uuid(7))
+  name        String
+  contentType String
+  ticketId    Uuid
+  ticket      Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@index([ticketId])
+  @@map("ticket_attachment")
+}
+
+model CommentAttachment {
+  id          Uuid    @id @default(uuid(7))
+  name        String
+  contentType String
+  commentId   Uuid
+  comment     Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@index([commentId])
+  @@map("comment_attachment")
+}

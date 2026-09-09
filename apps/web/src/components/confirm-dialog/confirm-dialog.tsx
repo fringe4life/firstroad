@@ -44,19 +44,19 @@ const ConfirmDialog = ({
 }: ConfirmDialogProps) => {
   // 1. Use toggle hook (same pattern as MobileSidebarProvider)
   const toggleState = useToggle(false);
-  const { value: isOpen, close } = toggleState;
+  const { value: isOpen, close, onOpenChange } = toggleState;
 
   // 2. Action state
   const [_actionState, formAction, actionIsPending] =
     useActionStateWithFeedback(action, EMPTY_ACTION_STATE, {
+      onError: (result) => {
+        onError?.(result);
+      },
       onSuccess: (result) => {
         onSuccess?.(result);
         if (!closeOnSubmit) {
           close();
         }
-      },
-      onError: (result) => {
-        onError?.(result);
       },
     });
 
@@ -78,17 +78,29 @@ const ConfirmDialog = ({
     }
   };
 
+  const handleOpenChange = (nextOpen: boolean) => {
+    onOpenChange(nextOpen);
+    if (!nextOpen) {
+      startTransition(() => {
+        setOptimisticIsOpen(false);
+      });
+    }
+  };
+
   // 6. Context value - spread toggle state + add isPending
   const contextValue: ConfirmDialogContextValue = {
     ...toggleState,
     isPending: isPending || actionIsPending,
   };
 
+  const renderedChildren =
+    typeof children === "function" ? children(contextValue) : children;
+
   return (
     <ConfirmDialogContext value={contextValue}>
-      {typeof children === "function" ? children(contextValue) : children}
+      {renderedChildren}
 
-      <Dialog onOpenChange={close} open={optimisticIsOpen}>
+      <Dialog onOpenChange={handleOpenChange} open={optimisticIsOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>

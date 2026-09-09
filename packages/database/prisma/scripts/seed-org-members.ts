@@ -1,70 +1,62 @@
-import { addMemberPermissions } from "@firstroad/db/member-permissions";
-import { PrismaClient } from "../../generated/prisma/client";
-import { createAdapter } from "../../src/adapter";
-
-const connectionString = process.env.DATABASE_URL;
-if (!connectionString) {
-  throw new Error("DATABASE_URL is required");
-}
-const adapter = createAdapter(connectionString);
-const prisma = new PrismaClient({ adapter });
+import { db, orm, pool, uuidv7 } from "../../src/index.ts";
+import { addMemberPermissions } from "../../src/member-permissions.ts";
 
 const main = async () => {
-  // Fetch all users with their current memberships
-  const users = await prisma.user.findMany({
-    select: {
-      id: true,
-      email: true,
-      members: { select: { organizationId: true } },
-    },
-  });
+  const users = await orm.User.select("email", "id")
+    .include("members", (member) => member.select("organizationId"))
+    .all();
 
-  // Fetch all organizations
-  const organizations = await prisma.organization.findMany({
-    select: { id: true, name: true },
-  });
+  const organizations = await orm.Organization.select("id", "name").all();
 
   console.log(
     `Found ${users.length} users and ${organizations.length} organizations`,
   );
 
+  const pendingMemberships = users.flatMap((user) => {
+    const userOrgIds = new Set(
+      user.members.map((member) => member.organizationId),
+    );
+    return organizations
+      .filter((organization) => !userOrgIds.has(organization.id))
+      .map((organization) => ({ organization, user }));
+  });
+
+  const results = await Promise.allSettled(
+    pendingMemberships.map(async ({ user, organization }) => {
+      const member = await orm.Member.create({
+        id: uuidv7(),
+        organizationId: organization.id,
+        role: "member",
+        userId: user.id,
+      });
+      await addMemberPermissions(member.id, ["TICKET", "COMMENT"]);
+      return { email: user.email, orgName: organization.name };
+    }),
+  );
+
   let added = 0;
-
-  for (const user of users) {
-    const userOrgIds = new Set(user.members.map((m) => m.organizationId));
-
-    for (const org of organizations) {
-      if (!userOrgIds.has(org.id)) {
-        try {
-          // Direct Prisma insert (Better Auth's auth.api.addMember requires
-          // server-only context which isn't available in standalone scripts)
-          const member = await prisma.member.create({
-            data: {
-              id: crypto.randomUUID(),
-              userId: user.id,
-              organizationId: org.id,
-              role: "member",
-              createdAt: new Date(),
-            },
-          });
-          await addMemberPermissions(prisma, member.id, ["TICKET", "COMMENT"]);
-          console.log(`Added ${user.email} to ${org.name}`);
-          added++;
-        } catch (error) {
-          console.error(`Failed to add ${user.email} to ${org.name}:`, error);
-        }
-      }
+  for (const [index, result] of results.entries()) {
+    if (result.status === "fulfilled") {
+      added += 1;
+      console.log(`Added ${result.value.email} to ${result.value.orgName}`);
+      continue;
     }
+    const pending = pendingMemberships[index];
+    console.error(
+      `Failed to add ${pending?.user.email ?? "unknown"} to ${pending?.organization.name ?? "unknown"}:`,
+      result.reason,
+    );
   }
 
   console.log(`Done! Added ${added} memberships.`);
 };
 
 main()
-  .catch((err) => {
-    console.error(err);
-    process.exit(1);
+  .catch((error: unknown) => {
+    console.error(error);
+    process.exitCode = 1;
   })
   .finally(async () => {
-    await prisma.$disconnect();
+    await db.close();
+    await pool.end();
   });

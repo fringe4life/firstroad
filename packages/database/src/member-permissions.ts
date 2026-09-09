@@ -1,15 +1,10 @@
-import type { PrismaClient } from "../generated/prisma/client";
+import { orm } from "./prisma/db";
 
 type ResourceType = "TICKET" | "COMMENT";
 
 const DEFAULT_RESOURCE_TYPES: ResourceType[] = ["TICKET", "COMMENT"];
 
-/**
- * Add MemberPermission records for given resource types with model defaults
- * (canCreate, canUpdate, canDelete = true). Skips resource types that already exist.
- */
 export const addMemberPermissions = async (
-  prisma: PrismaClient,
   memberId: string,
   resourceTypes: ResourceType[],
 ): Promise<void> => {
@@ -17,23 +12,27 @@ export const addMemberPermissions = async (
     return;
   }
 
-  await prisma.memberPermission.createMany({
-    data: resourceTypes.map((resourceType) => ({
-      memberId,
-      resourceType,
-      canCreate: true,
-      canUpdate: true,
-      canDelete: true,
-    })),
-    skipDuplicates: true,
-  });
+  const existing = await orm.MemberPermission.where({ memberId })
+    .select("resourceType")
+    .all();
+  const have = new Set(existing.map((row) => row.resourceType));
+  const missing = resourceTypes.filter(
+    (resourceType) => !have.has(resourceType),
+  );
+  await Promise.all(
+    missing.map((resourceType) =>
+      orm.MemberPermission.create({
+        canCreate: true,
+        canDelete: true,
+        canUpdate: true,
+        memberId,
+        resourceType,
+      }),
+    ),
+  );
 };
 
-/**
- * Remove MemberPermission records for given resource types.
- */
 export const removeMemberPermissions = async (
-  prisma: PrismaClient,
   memberId: string,
   resourceTypes: ResourceType[],
 ): Promise<void> => {
@@ -41,12 +40,11 @@ export const removeMemberPermissions = async (
     return;
   }
 
-  await prisma.memberPermission.deleteMany({
-    where: {
-      memberId,
-      resourceType: { in: resourceTypes },
-    },
-  });
+  await orm.MemberPermission.where((permission) =>
+    permission.memberId.eq(memberId),
+  )
+    .where((permission) => permission.resourceType.in(resourceTypes))
+    .delete();
 };
 
 export { DEFAULT_RESOURCE_TYPES };

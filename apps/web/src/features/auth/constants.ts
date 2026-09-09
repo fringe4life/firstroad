@@ -1,6 +1,6 @@
 import type { IsOwner, UserProp } from "./types";
 
-const DEFAULT_NO_USER = { user: null, hasUser: false } satisfies UserProp;
+const DEFAULT_NO_USER = { hasUser: false, user: null } satisfies UserProp;
 
 const DEFAULT_OWNERSHIP = { isOwner: false } satisfies IsOwner;
 
