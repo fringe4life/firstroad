@@ -62,7 +62,6 @@ coverage
 # ------------------------------------------------------------------------------
 # Root-level docs and config not required for build
 # ------------------------------------------------------------------------------
-update-readme.md
 git-commit-msg.md
 env.example
 lint-staged.config.ts
